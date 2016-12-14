@@ -28,4 +28,4 @@ Contribution are welcome to the project - whether they are feature requests, imp
 
 ## License
 
-[MIT license]https://opensource.org/licenses/MIT)
+[MIT license](https://opensource.org/licenses/MIT)
