@@ -11,6 +11,7 @@ permissions and limitations under the License.
 
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IInputProps.ts" />
+/// <reference path="../interfaces/datetimepicker.ts" />
 
 declare var manywho: any;
 declare var moment: any;
