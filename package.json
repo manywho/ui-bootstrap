@@ -20,7 +20,7 @@
     "gulp-rename": "^1.2.0",
     "gulp-replace": "^0.5.2",
     "gulp-rev": "^7.0.0",
-    "gulp-sourcemaps": "^1.9.1",
+    "gulp-sourcemaps": "^2.4.0",
     "gulp-tslint": "^7.0.1",
     "gulp-typescript": "^2.13.4",
     "gulp-uglify": "^1.1.0",

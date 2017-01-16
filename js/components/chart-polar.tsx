@@ -5,19 +5,19 @@ declare var manywho: any;
 
 class ChartPolar extends React.Component<IItemsComponentProps, any> {
 
-	displayName = 'ChartPolar';
+    displayName = 'ChartPolar';
 
-	constructor(props: any) {
-		super(props);
-	}
+    constructor(props: any) {
+        super(props);
+    }
 
-	render() {
-		const props: any = $.extend({}, this.props, {
-			type: 'polarArea'
-		});
+    render() {
+        const props: any = $.extend({}, this.props, {
+            type: 'polarArea'
+        });
 
-		return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-	}
+        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
+    }
 
 }
 

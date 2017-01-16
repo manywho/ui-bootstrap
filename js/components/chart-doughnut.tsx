@@ -5,19 +5,19 @@ declare var manywho: any;
 
 class ChartDoughnut extends React.Component<IItemsComponentProps, any> {
 
-	displayName = 'ChartDoughnut';
+    displayName = 'ChartDoughnut';
 
-	constructor(props: any) {
-		super(props);
-	}
+    constructor(props: any) {
+        super(props);
+    }
 
-	render() {
-		const props: any = $.extend({}, this.props, {
-			type: 'doughnut'
-		});
+    render() {
+        const props: any = $.extend({}, this.props, {
+            type: 'doughnut'
+        });
 
-		return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-	}
+        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
+    }
 
 }
 

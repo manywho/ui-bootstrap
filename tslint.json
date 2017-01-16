@@ -9,7 +9,7 @@
         "eofline": true,
         "indent": [
             true,
-            "tabs"
+            "spaces"
         ],
         "interface-name": [
             true,

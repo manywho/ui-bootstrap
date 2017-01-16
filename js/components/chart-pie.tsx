@@ -5,19 +5,19 @@ declare var manywho: any;
 
 class ChartPie extends React.Component<IItemsComponentProps, any> {
 
-	displayName = 'ChartPie';
+    displayName = 'ChartPie';
 
-	constructor(props: any) {
-		super(props);
-	}
+    constructor(props: any) {
+        super(props);
+    }
 
-	render() {
-		const props: any = $.extend({}, this.props, {
-			type: 'pie'
-		});
+    render() {
+        const props: any = $.extend({}, this.props, {
+            type: 'pie'
+        });
 
-		return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-	}
+        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
+    }
 
 }
 

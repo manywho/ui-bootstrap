@@ -13,7 +13,7 @@ permissions and limitations under the License.
 
     var debugViewer = React.createClass({
 
-        toggleValue: function(e) {
+        toggleValue: function (e) {
 
             e.stopPropagation();
 
@@ -22,20 +22,24 @@ permissions and limitations under the License.
 
             toggle[valueElementId] = !toggle[valueElementId];
 
-            this.setState({ toggle: toggle });
+            this.setState({
+                toggle: toggle
+            });
 
         },
 
-        toggleHeader: function(e) {
+        toggleHeader: function (e) {
 
             var toggle = this.state.toggle;
             toggle[e.currentTarget.id] = !toggle[e.currentTarget.id];
 
-            this.setState({ toggle: toggle });
+            this.setState({
+                toggle: toggle
+            });
 
         },
 
-        onBreadcrumbClick: function(e) {
+        onBreadcrumbClick: function (e) {
 
             e.preventDefault();
             e.stopPropagation();
@@ -51,8 +55,7 @@ permissions and limitations under the License.
 
                     paths[valueElementId] = '';
 
-                }
-                else {
+                } else {
 
                     paths[valueElementId] = paths[valueElementId].split('.').slice(0, index).join('.');
 
@@ -60,11 +63,13 @@ permissions and limitations under the License.
 
             }
 
-            this.setState({ paths: paths });
+            this.setState({
+                paths: paths
+            });
 
         },
 
-        onValueViewClick: function(e) {
+        onValueViewClick: function (e) {
 
             var paths = this.state.paths;
             var valueElementId = e.currentTarget.getAttribute('data-value-id');
@@ -72,22 +77,38 @@ permissions and limitations under the License.
 
             paths[valueElementId] = ((paths[valueElementId] || '') + '.' + pathPart).replace(/^\./gi, '');
 
-            this.setState({ paths: paths });
+            this.setState({
+                paths: paths
+            });
 
         },
 
-        renderValues: function(title, id, values, name, idName) {
+        renderValues: function (title, id, values, name, idName) {
 
             var isExpanded = this.state.toggle[id] || false;
             values = values || [];
 
-            return React.DOM.div({ className: 'debug-root' }, [
-                React.DOM.div({ className: 'debug-root-toggle', id: id, onClick: this.toggleHeader }, [
-                    React.DOM.span({ className: 'glyphicon glyphicon-triangle-' + ((isExpanded) ? 'bottom' : 'right') }, null),
-                    React.DOM.h5({ className: 'debug-title' }, title),
-                    React.DOM.span({ className: 'label label-info' }, values.length)
+            return React.DOM.div({
+                className: 'debug-root'
+            }, [
+                React.DOM.div({
+                    className: 'debug-root-toggle',
+                    id: id,
+                    onClick: this.toggleHeader
+                }, [
+                    React.DOM.span({
+                        className: 'glyphicon glyphicon-triangle-' + ((isExpanded) ? 'bottom' : 'right')
+                    }, null),
+                    React.DOM.h5({
+                        className: 'debug-title'
+                    }, title),
+                    React.DOM.span({
+                        className: 'label label-info'
+                    }, values.length)
                 ]),
-                React.DOM.ul({ className: 'list-unstyled debug-values ' + ((isExpanded) ? '' : 'hidden') }, values.map(function (value) {
+                React.DOM.ul({
+                    className: 'list-unstyled debug-values ' + ((isExpanded) ? '' : 'hidden')
+                }, values.map(function (value) {
 
                     return this.renderValue(this.state.paths[value[idName]] || '', value, name, idName);
 
@@ -96,31 +117,48 @@ permissions and limitations under the License.
 
         },
 
-        renderValue: function(path, value, name, idName) {
+        renderValue: function (path, value, name, idName) {
 
             var isExpanded = this.state.toggle[value[idName]] || false;
             var properties = manywho.utils.getValueByPath(value, path);
 
             path = value[name] + '.' + path;
 
-            return React.DOM.li({ className: 'clearfix' }, [
-                    React.DOM.span({ className: 'glyphicon debug-value-toggle glyphicon-triangle-' + ((isExpanded) ? 'bottom' : 'right'), 'data-value-id': value[idName], onClick: this.toggleValue }, null),
-                    React.DOM.div({ className: 'debug-value' }, [
-                        React.DOM.ol({ className: 'breadcrumb debug-value-breadcrumb', 'data-value-id': value[idName], onClick: this.toggleValue }, path.split('.').map(function (part) {
+            return React.DOM.li({
+                className: 'clearfix'
+            }, [
+                React.DOM.span({
+                    className: 'glyphicon debug-value-toggle glyphicon-triangle-' + ((isExpanded) ? 'bottom' : 'right'),
+                    'data-value-id': value[idName],
+                    onClick: this.toggleValue
+                }, null),
+                React.DOM.div({
+                    className: 'debug-value'
+                }, [
+                    React.DOM.ol({
+                        className: 'breadcrumb debug-value-breadcrumb',
+                        'data-value-id': value[idName],
+                        onClick: this.toggleValue
+                    }, path.split('.').map(function (part) {
 
                         if (!manywho.utils.isNullOrWhitespace(part)) {
 
-                            return React.DOM.li(null, React.DOM.a({ href: '#', onClick: this.onBreadcrumbClick, 'data-value-id': value[idName] }, part));
+                            return React.DOM.li(null, React.DOM.a({
+                                href: '#',
+                                onClick: this.onBreadcrumbClick,
+                                'data-value-id': value[idName]
+                            }, part));
 
-                        }
-                        else {
+                        } else {
 
                             return null;
 
                         }
 
                     }, this)),
-                    React.DOM.table({ className: 'table table-striped table-bordered debug-value-table ' + ((isExpanded) ? '' : 'hidden') },
+                    React.DOM.table({
+                            className: 'table table-striped table-bordered debug-value-table ' + ((isExpanded) ? '' : 'hidden')
+                        },
                         React.DOM.tbody(null, Object.keys(properties).map(function (propertyName) {
 
                             var propertyValue = properties[propertyName];
@@ -131,7 +169,12 @@ permissions and limitations under the License.
                                 if (propertyValue.developerName)
                                     propertyCaption = propertyValue.developerName;
 
-                                propertyValue = React.DOM.button({ className: 'btn btn-primary btn-sm', 'data-value-id': value[idName], 'data-path-part': propertyName, onClick: this.onValueViewClick }, 'View')
+                                propertyValue = React.DOM.button({
+                                    className: 'btn btn-primary btn-sm',
+                                    'data-value-id': value[idName],
+                                    'data-path-part': propertyName,
+                                    onClick: this.onValueViewClick
+                                }, 'View')
 
                             }
 
@@ -151,14 +194,30 @@ permissions and limitations under the License.
 
             var isExpanded = this.state.toggle['executionlog'];
 
-            return React.DOM.div({ className: 'debug-root' }, [
-                React.DOM.div({ className: 'debug-root-toggle', id: 'executionlog', onClick: this.toggleHeader }, [
-                    React.DOM.span({ className: 'glyphicon glyphicon-triangle-' + ((isExpanded) ? 'bottom' : 'right') }, null),
-                    React.DOM.h5({ className: 'debug-title' }, 'Execution Log'),
-                    React.DOM.span({ className: 'label label-info' }, entries.length)
+            return React.DOM.div({
+                className: 'debug-root'
+            }, [
+                React.DOM.div({
+                    className: 'debug-root-toggle',
+                    id: 'executionlog',
+                    onClick: this.toggleHeader
+                }, [
+                    React.DOM.span({
+                        className: 'glyphicon glyphicon-triangle-' + ((isExpanded) ? 'bottom' : 'right')
+                    }, null),
+                    React.DOM.h5({
+                        className: 'debug-title'
+                    }, 'Execution Log'),
+                    React.DOM.span({
+                        className: 'label label-info'
+                    }, entries.length)
                 ]),
-                React.DOM.div({ className: ((isExpanded) ? null : 'hidden') },
-                    React.DOM.table({ className: 'table table-striped' }, [
+                React.DOM.div({
+                        className: ((isExpanded) ? null : 'hidden')
+                    },
+                    React.DOM.table({
+                        className: 'table table-striped'
+                    }, [
                         React.DOM.tr(null, [React.DOM.th(null, 'Timestamp'), React.DOM.th(null, 'Message'), React.DOM.th(null, 'Data')])
                     ].concat(manywho.utils.convertToArray(entries).map(function (entry) {
 
@@ -176,7 +235,7 @@ permissions and limitations under the License.
 
         },
 
-        getInitialState: function() {
+        getInitialState: function () {
 
             return {
                 paths: {},
@@ -215,9 +274,17 @@ permissions and limitations under the License.
                     this.renderLogEntries(executionLog.entries || [])
                 ];
 
-                return React.DOM.div({ className: 'panel panel-default debug' }, [
-                    React.DOM.div({ className: 'panel-heading' }, React.DOM.h3({ className: 'panel-title' }, 'Debug')),
-                    React.DOM.div({ className: 'panel-body' }, children)
+                return React.DOM.div({
+                    className: 'panel panel-default debug'
+                }, [
+                    React.DOM.div({
+                        className: 'panel-heading'
+                    }, React.DOM.h3({
+                        className: 'panel-title'
+                    }, 'Debug')),
+                    React.DOM.div({
+                        className: 'panel-body'
+                    }, children)
                 ]);
 
             }

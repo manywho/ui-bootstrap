@@ -17,15 +17,15 @@ permissions and limitations under the License.
         skipSetContent: false,
         editor: null,
 
-        initializeEditor: function() {
+        initializeEditor: function () {
 
             var self = this;
             var model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
             var customPlugins = manywho.settings.global('richtext.custom_plugins', this.props.flowKey, null);
             if (customPlugins)
-                Object.keys(customPlugins).forEach(function(name) {
-                    tinymce.PluginManager.add(name, customPlugins[name]) 
+                Object.keys(customPlugins).forEach(function (name) {
+                    tinymce.PluginManager.add(name, customPlugins[name])
                 });
 
             tinymce.init({
@@ -42,7 +42,7 @@ permissions and limitations under the License.
                 importcss_file_filter: manywho.settings.global('richtext.importcss_file_filter', this.props.flowKey, null),
                 nanospell_server: manywho.settings.global('richtext.nanospell_server', this.props.flowKey, null),
                 moxiemanager_title: manywho.settings.global('richtext.moxiemanager_title', this.props.flowKey, null),
-                moxiemanager_fullscreen:  manywho.settings.global('richtext.moxiemanager_fullscreen', this.props.flowKey, null),
+                moxiemanager_fullscreen: manywho.settings.global('richtext.moxiemanager_fullscreen', this.props.flowKey, null),
 
                 setup: function (editor) {
 
@@ -55,7 +55,9 @@ permissions and limitations under the License.
                                 title: 'Images',
                                 icon: 'image',
                                 onclick: function () {
-                                    self.setState({ isImageUploadOpen: true });
+                                    self.setState({
+                                        isImageUploadOpen: true
+                                    });
                                     self.render();
                                 }
                             });
@@ -67,9 +69,9 @@ permissions and limitations under the License.
                     }
 
                     editor.on('init', function () {
-                         this.getDoc().body.style.fontSize = manywho.settings.global('richtext.fontsize', self.props.flowKey, '13px');
+                        this.getDoc().body.style.fontSize = manywho.settings.global('richtext.fontsize', self.props.flowKey, '13px');
                     });
-                 }
+                }
             });
         },
 
@@ -96,7 +98,7 @@ permissions and limitations under the License.
 
         },
 
-        getInitialState: function() {
+        getInitialState: function () {
 
             return {
                 isImageUploadOpen: false
@@ -120,8 +122,7 @@ permissions and limitations under the License.
 
                     });
 
-                }
-                else {
+                } else {
 
                     var loaderInterval = setInterval(function () {
 
@@ -136,8 +137,7 @@ permissions and limitations under the License.
 
                 }
 
-            }
-            else {
+            } else {
 
                 self.initializeEditor();
 
@@ -149,8 +149,7 @@ permissions and limitations under the License.
             if (this.editor) {
                 try {
                     this.editor.remove();
-                }
-                catch (ex) {
+                } catch (ex) {
                     manywho.log.error(ex);
                 }
             }
@@ -158,7 +157,9 @@ permissions and limitations under the License.
 
         handleChange: function (e) {
             var content = this.editor.getContent();
-            manywho.state.setComponent(this.props.id, { contentValue: content }, this.props.flowKey, true);
+            manywho.state.setComponent(this.props.id, {
+                contentValue: content
+            }, this.props.flowKey, true);
             this.forceUpdate();
         },
 
@@ -183,33 +184,71 @@ permissions and limitations under the License.
             };
 
             if (!this.props.isDesignTime) {
-                tableAttributes = manywho.utils.extend(tableAttributes,  { onRowClicked: this.onFileTableRowClicked });
-                uploadAttributes = manywho.utils.extend(tableAttributes,  { uploadComplete: this.onUploadComplete });
+                tableAttributes = manywho.utils.extend(tableAttributes, {
+                    onRowClicked: this.onFileTableRowClicked
+                });
+                uploadAttributes = manywho.utils.extend(tableAttributes, {
+                    uploadComplete: this.onUploadComplete
+                });
             }
 
-            return React.DOM.div({ className: 'modal show' }, [
-                React.DOM.div({ className: 'modal-dialog full-screen', onKeyUp: this.onEnter }, [
-                    React.DOM.div({ className: 'modal-content full-screen' }, [
-                        React.DOM.div({ className: 'modal-body' }, [
-                            React.DOM.ul({ className: 'nav nav-tabs' }, [
-                                React.DOM.li({ className: 'active' }, [
-                                    React.DOM.a({ href: '#files', 'data-toggle': 'tab'}, 'File List')
+            return React.DOM.div({
+                className: 'modal show'
+            }, [
+                React.DOM.div({
+                    className: 'modal-dialog full-screen',
+                    onKeyUp: this.onEnter
+                }, [
+                    React.DOM.div({
+                        className: 'modal-content full-screen'
+                    }, [
+                        React.DOM.div({
+                            className: 'modal-body'
+                        }, [
+                            React.DOM.ul({
+                                className: 'nav nav-tabs'
+                            }, [
+                                React.DOM.li({
+                                    className: 'active'
+                                }, [
+                                    React.DOM.a({
+                                        href: '#files',
+                                        'data-toggle': 'tab'
+                                    }, 'File List')
                                 ]),
-                                React.DOM.li({ className: '' }, [
-                                    React.DOM.a({ href: '#upload', 'data-toggle': 'tab'}, 'Direct Upload')
+                                React.DOM.li({
+                                    className: ''
+                                }, [
+                                    React.DOM.a({
+                                        href: '#upload',
+                                        'data-toggle': 'tab'
+                                    }, 'Direct Upload')
                                 ])
                             ]),
-                            React.DOM.div({ className: 'tab-content'}, [
-                                React.DOM.div({ className: 'tab-pane active', id: 'files'}, [
+                            React.DOM.div({
+                                className: 'tab-content'
+                            }, [
+                                React.DOM.div({
+                                    className: 'tab-pane active',
+                                    id: 'files'
+                                }, [
                                     React.createElement(manywho.component.getByName('table'), tableAttributes)
                                 ]),
-                                React.DOM.div({  className: 'tab-pane', id: 'upload'}, [
+                                React.DOM.div({
+                                    className: 'tab-pane',
+                                    id: 'upload'
+                                }, [
                                     React.createElement(manywho.component.getByName('file-upload'), uploadAttributes)
                                 ])
                             ])
                         ]),
-                        React.DOM.div({ className: 'modal-footer' }, [
-                            React.DOM.button({ className: 'btn btn-default', onClick: this.onFileCancel }, 'Cancel')
+                        React.DOM.div({
+                            className: 'modal-footer'
+                        }, [
+                            React.DOM.button({
+                                className: 'btn btn-default',
+                                onClick: this.onFileCancel
+                            }, 'Cancel')
                         ])
                     ])
                 ])
@@ -226,7 +265,9 @@ permissions and limitations under the License.
 
                 tinymce.activeEditor.execCommand('mceInsertContent', false, '<img src="' + imageUri.contentValue + '" alt="' + imageName.contentValue + '"/>');
 
-                this.setState({ isImageUploadOpen: false });
+                this.setState({
+                    isImageUploadOpen: false
+                });
 
             }
 
@@ -234,7 +275,9 @@ permissions and limitations under the License.
 
         onFileCancel: function (event) {
 
-            this.setState({ isImageUploadOpen: false });
+            this.setState({
+                isImageUploadOpen: false
+            });
 
         },
 
@@ -248,7 +291,9 @@ permissions and limitations under the License.
 
                 tinymce.activeEditor.execCommand('mceInsertContent', false, '<img src="' + imageUri + '" alt="' + imageName + '"/>');
 
-                this.setState({ isImageUploadOpen: false });
+                this.setState({
+                    isImageUploadOpen: false
+                });
 
             }
 
@@ -288,22 +333,32 @@ permissions and limitations under the License.
                 attributes.readOnly = 'readonly';
 
             var classNames = [
-                'form-group',
-                (model.isVisible == false) ? 'hidden' : '',
-                (isValid) ? '' : 'has-error'
-            ]
-            .concat(manywho.styling.getClasses(this.props.parentId, this.props.id, 'content', this.props.flowKey))
-            .join(' ');
+                    'form-group',
+                    (model.isVisible == false) ? 'hidden' : '',
+                    (isValid) ? '' : 'has-error'
+                ]
+                .concat(manywho.styling.getClasses(this.props.parentId, this.props.id, 'content', this.props.flowKey))
+                .join(' ');
 
-            var childElements = [React.DOM.label({ htmlFor: 'content-' + this.props.id }, [
+            var childElements = [React.DOM.label({
+                    htmlFor: 'content-' + this.props.id
+                }, [
                     model.label,
-                    (model.isRequired) ? React.DOM.span({ className: 'input-required' }, ' *') : null
+                    (model.isRequired) ? React.DOM.span({
+                        className: 'input-required'
+                    }, ' *') : null
                 ]),
                 React.DOM.textarea(attributes, null),
-                React.DOM.span({ className: 'help-block' }, model.validationMessage || state.validationMessage),
+                React.DOM.span({
+                    className: 'help-block'
+                }, model.validationMessage || state.validationMessage),
                 outcomes && outcomes.map(function (outcome) {
-                    return React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: this.props.flowKey });
-                }, this)];
+                    return React.createElement(manywho.component.getByName('outcome'), {
+                        id: outcome.id,
+                        flowKey: this.props.flowKey
+                    });
+                }, this)
+            ];
 
             if (this.state.isImageUploadOpen) {
 
@@ -311,7 +366,10 @@ permissions and limitations under the License.
 
             }
 
-            return React.DOM.div({ className: classNames, id: this.props.id }, childElements);
+            return React.DOM.div({
+                className: classNames,
+                id: this.props.id
+            }, childElements);
 
         }
 

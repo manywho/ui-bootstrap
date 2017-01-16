@@ -10,12 +10,10 @@ module.exports = function(gulp, plugins, argv) {
             .pipe(plugins.tslint.report({
                 summarizeFailureOutput: true
             }))
-            .pipe(plugins.addSrc(['js/components/*.js']))
+            .pipe(plugins.addSrc(['js/components/*.js', 'js/lib/*.js']))
             .pipe(plugins.sourcemaps.init())
             .pipe(plugins.typescript(tsProject))
-            .pipe(plugins.sourcemaps.write('.'))
-			.pipe(plugins.addSrc.prepend(['js/lib/*.*']))
-			.pipe(plugins.concat(tsProject.options.outFile))
+            .pipe(plugins.sourcemaps.write())
             .pipe(gulp.dest(argv.jsDir || 'build/js'));
     }
 };
