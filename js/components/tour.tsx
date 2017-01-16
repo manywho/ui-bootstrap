@@ -28,13 +28,16 @@ class Tour extends React.Component<ITourProps, ITourState> {
 
         this.onNext = this.onNext.bind(this);
         this.onBack = this.onBack.bind(this);
+        this.onDone = this.onDone.bind(this);
     }
 
     onInterval(stepIndex) {
-        if (document.getElementById(this.props.tour.steps[stepIndex].target)) {
-            clearInterval(this.domWatcher);
+        const targetElement = manywho.tours.getTargetElement(this.props.tour.steps[stepIndex]);
+
+        if (targetElement && !this.state.foundTarget)
             this.setState({ foundTarget: true, style: this.state.style });
-        }
+        else if (!targetElement && this.state.foundTarget)
+            this.setState({ foundTarget: false, style: this.state.style });
     }
 
     onNext() {
@@ -45,9 +48,12 @@ class Tour extends React.Component<ITourProps, ITourState> {
         manywho.tours.previous(this.props.tour);
     }
 
+    onDone() {
+        manywho.tours.done(this.props.tour);
+    }
+
     componentWillReceiveProps(nextProps) {
         if (this.props.stepIndex !== nextProps.stepIndex) {
-            clearInterval(this.domWatcher);
             this.setState({ foundTarget: false, style: this.state.style });
             this.domWatcher = setInterval(() => { this.onInterval(this.props.stepIndex); }, 500);
         }
@@ -62,7 +68,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
             const step = this.props.tour.steps[this.props.tour.currentStep];
             const stepRect = (this.refs['step'] as HTMLElement).getBoundingClientRect();
 
-            const target = document.getElementById(step.target);
+            const target = manywho.tours.getTargetElement(step);
             const targetRect = target.getBoundingClientRect();
 
             let style = {
@@ -170,7 +176,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
             transitionLeaveTimeout={250}>
             <div className={className} ref="step" style={this.state.style} key={this.props.stepIndex} id={`tour-${this.props.tour.id}-step${this.props.stepIndex}`}>
                 <div className="arrow" style={arrowStyle} />
-                {manywho.utils.isNullOrWhitespace(step.title) ? null : <div className="popover-title">{step.title}</div>}
+                {manywho.utils.isNullOrWhitespace(step.title) ? null : <div className="popover-title">{step.title}<button className="close" onClick={this.onDone}><span>&times;</span></button></div>}
                 <div className="popover-content">
                     <p>{step.content}</p>
                     <div className="popover-buttons">
@@ -184,3 +190,13 @@ class Tour extends React.Component<ITourProps, ITourState> {
 }
 
 manywho.component.register('mw-tour', Tour);
+
+manywho.tours.getTargetElement = function (step: ITourStep) {
+    if (!step)
+        return null;
+
+    if (step.querySelector)
+        return document.querySelector(step.target);
+    else
+        return document.getElementById(step.target);
+};

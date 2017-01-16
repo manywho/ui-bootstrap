@@ -39,10 +39,14 @@ permissions and limitations under the License.
 
 .mw-bs .mw-tour-step.popover {
     display: block;
-    max-width: 400px;
-    min-width: 100px;
     position: relative;
-    z-index: 1000000;
+    min-width: 400px;
+    z-index: 5000;
+
+	.popover-title .close {
+		color: black;
+		pointer-events: all;
+	}
 
 	.popover-buttons {
 		display: flex;
