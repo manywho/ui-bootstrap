@@ -19,8 +19,9 @@ gulp.task('dev-fonts', function () {
 });
 
 gulp.task('watch', ['dev-ts', 'dev-less', 'dev-bootstrap', 'dev-bootstrap-themes', 'dev-fonts'], function() {
-    gulp.watch('css/*.less', ['dev-less', 'dev-bootstrap']);
-    gulp.watch('css/themes/*.less', ['dev-bootstrap-themes']);
+    gulp.watch(['css/*.less', '!css/mw-bootstrap.less'], ['dev-less']);
+    gulp.watch(['css/mw-bootstrap.less'], ['dev-bootstrap']);
+    gulp.watch(['css/themes/*.less'], ['dev-bootstrap-themes']);
     gulp.watch(['js/**/*.*'], ['dev-ts']);
 });
 
