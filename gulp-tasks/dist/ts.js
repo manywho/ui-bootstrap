@@ -11,6 +11,10 @@ module.exports = function(gulp, plugins, argv) {
                 preserveComments: 'license'
             }).on('error', plugins.util.log))
             .pipe(plugins.rev())
+            .pipe(plugins.rename(function(path) {
+                if (argv.jsOrder)
+                    path.basename = argv.jsOrder + '-' + path.basename;
+            }))
             .pipe(plugins.sourcemaps.write('.'))
             .pipe(gulp.dest(argv.jsDir || './dist/js'))       
     }
