@@ -87,6 +87,7 @@ class Textarea extends React.Component<IComponentProps, any> {
             <textarea {...props} />
             <span className="help-block">{model.validationMessage || state.validationMessage}</span>
             <span className="help-block">{model.helpInfo}</span>
+            {outcomeButtons}
         </div>;
     }
 
