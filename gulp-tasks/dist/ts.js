@@ -15,7 +15,11 @@ module.exports = function(gulp, plugins, argv) {
                 if (argv.jsOrder)
                     path.basename = argv.jsOrder + '-' + path.basename;
             }))
-            .pipe(plugins.sourcemaps.write('.'))
+            .pipe(plugins.sourcemaps.write('.', {
+                sourceMappingURL: function(file) {
+                    return argv.sourceMapUrlPrefixJs + file.relative + '.map';
+                }
+            }))
             .pipe(gulp.dest(argv.jsDir || './dist/js'))       
     }
 }
