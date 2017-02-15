@@ -8,7 +8,8 @@ module.exports = function(gulp, plugins, argv) {
                 formatter: 'verbose'
             }))
             .pipe(plugins.tslint.report({
-                summarizeFailureOutput: true
+                summarizeFailureOutput: true,
+                emitError: false
             }))
             .pipe(plugins.addSrc(['js/components/*.js', 'js/lib/*.js']))
             .pipe(plugins.sourcemaps.init())
