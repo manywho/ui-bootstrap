@@ -4,7 +4,7 @@ module.exports = function(gulp, plugins, argv) {
             typescript: require('typescript')
         });
 
-        return gulp.src(['js/components/*.*', 'js/lib/*.*'])
+        return gulp.src(['js/components/*.*', 'js/lib/*.*'], { base: 'js' })
             .pipe(plugins.sourcemaps.init())
             .pipe(plugins.typescript(tsProject))
             .pipe(plugins.uglify({
@@ -18,7 +18,8 @@ module.exports = function(gulp, plugins, argv) {
             .pipe(plugins.sourcemaps.write('.', {
                 sourceMappingURL: function(file) {
                     return argv.sourceMapUrlPrefixJs + file.relative + '.map';
-                }
+                },
+                includeContent: true
             }))
             .pipe(gulp.dest(argv.jsDir || './dist/js'))       
     }
