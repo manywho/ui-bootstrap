@@ -1,4 +1,6 @@
-﻿.mw-bs {
+﻿@import (reference) 'variables';
+
+.mw-bs {
 
     .file-upload .input-group {
         width: 100%;
@@ -10,17 +12,17 @@
     }
 
     .filenames {
-        padding-left: 1em !important;
+        padding-left: @v-3 !important;
     }
 
     .files-progress {
-        margin-top: 0.5em;
+        margin-top: @v-2;
     }
 
     .dropzone {
         border: 2px dashed #dddddd;
-        font-size: 1.1em;
-        margin-bottom: 0.5em;
+        font-size: @fs-3;
+        margin-bottom: @v-2;
         text-align: center;
     }
 
@@ -29,7 +31,7 @@
     }
 
     .dropzone > div {
-        padding: 5px;
+        padding: @h-2;
         white-space: normal;
     }
 

@@ -1,3 +1,5 @@
+@import (reference) 'variables';
+
 .mw-bs {
 
     .table-container {
@@ -18,7 +20,7 @@
         }
 
         & > label {
-            font-size: 1.5em;
+            font-size: @fs-4;
         }
 
         .mw-pagination {
@@ -30,11 +32,6 @@
         text-align: center;
         white-space: nowrap;
         width: 1px;
-
-        button,
-        a {
-            margin-bottom: 0 !important;
-        }
     }
 
     .table-search {
@@ -51,7 +48,7 @@
     .table-refresh {
         float: right;
         margin-bottom: 0;
-        margin-left: 1em;
+        margin-left: @h-3;
     }
 
     .table-error {
@@ -60,7 +57,7 @@
     }
 
     .table-header {
-        margin-bottom: 1em;
+        margin-bottom: @v-3;
     }
 
     .table-container-small .table-search {
@@ -69,7 +66,7 @@
 
     .table-container-small .table-outcomes {
         float: none;
-        margin-bottom: 1em;
+        margin-bottom: @v-3;
         width: 100%;
     }
 
@@ -97,7 +94,7 @@
 
     .table-small-chevron {
         float: right;
-        font-size: 2em;
+        font-size: @fs-5;
     }
 
     .table td > span:empty {

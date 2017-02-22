@@ -1,40 +1,35 @@
-﻿.mw-bs {
+﻿@import (reference) 'variables';
+
+.mw-bs {
 
     .outcome {
-        margin-bottom: 1em !important;
-        margin-right: 1em;
-    }
-
-    .outcome > .glyphicon {
-        margin-right: 0.5em;
-    }
-
-    .outcome > .glyphicon:last-child {
-        margin-right: 0;
-    }
-
-    .modal-footer > .outcome,
-    .table-outcomes > .outcome {
-        margin-bottom: 0 !important;
-    }
-
-    .form-group > .outcome {
-        margin-bottom: 0 !important;
-        margin-right: 0;
+        margin-right: @h-3;
     }
 
     .outcome:last-child {
         margin-right: 0;
     }
 
-    .mw-vertical_flow > .outcome,
-    .mw-inline_flow > .outcome {
-        margin-top: 0.5em;
+    .outcome > .glyphicon {
+        margin-right: @h-2;
     }
 
-     .mw-horizontal_flow > .outcome {
-         margin-top: 1em;
-     }
+    .outcome > .glyphicon:last-child {
+        margin-right: 0;
+    }
+
+    .mw-container > .outcome,
+    .mw-footer > .outcome {
+        margin-bottom: @v-3;
+    }
+
+    .form-group > .outcome {
+        margin-top: @v-2;
+    }
+
+    .help-block:not(:empty) ~ .outcome {
+        margin-top: @v-2;
+    }
 
     .btn-icons {
         background-color: transparent;
@@ -43,7 +38,7 @@
         box-shadow: none;
         color: #4f4f4f;
         margin-bottom: 0 !important;
-        margin-right: 0.5em;
+        margin-right: @h-2;
         padding: 0;
 
         span {
@@ -56,9 +51,9 @@
         border: 1px solid transparent;
         color: #888888;
         cursor: pointer;
-        font-size: 1.5em;
+        font-size: @fs-4;
         margin-right: 0;
-        padding: 0.25em 0.5em;
+        padding: @v-1 @h-2;
     }
 
     .btn.btn-nobackground:hover {

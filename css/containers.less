@@ -1,6 +1,4 @@
-﻿@container-margin: 20px;
-
-html,
+﻿html,
 body {
     width: 100%;
 }
@@ -49,19 +47,18 @@ body {
         width: 100%;
     }
 
-    .mw-container {
-        margin-bottom: @container-margin;
+    .auto-width {
+        width: auto;
+    }
 
+    .mw-container {
         & > h3 {
             cursor: pointer;
+            margin: @v-2 0;
 
             & > .glyphicon {
                 font-size: 75%;
             }
-        }
-
-        .label-hidden > h3 {
-            display: none;
         }
     }
 
@@ -89,104 +86,17 @@ body {
 
     .main {
         flex-grow: 1;
-        margin-bottom: @container-margin;
-    }
-
-    .main:nth-of-type(1) {
-        margin-top: @container-margin;
-    }
-
-    .main-empty:nth-of-type(1) {
-        margin-bottom: 0;
-        margin-top: 0;
-    }
-
-    .row {
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-    }
-
-    .mw-vertical_flow:last-child {
-        margin-bottom: 0;
-    }
-
-    .mw-horizontal_flow > div > .row > * {
-        margin-bottom: 0;
-        padding-left: 0;
     }
 
     .mw-inline_flow > div > * {
         display: inline-block;
-        margin-right: @container-margin;
+        margin-right: @h-3;
     }
 
-    .mw-inline_flow > div > *:last-child {
-        margin-right: 0;
-    }
-
-    .tab-pane > .container-label {
+    label:empty,
+    .help-block:empty,
+    .page-label,
+    .label-hidden > h3 {
         display: none;
     }
-
-    .container-label {
-        margin-top: 0;
-    }
-
-    .container-label:empty {
-        display: none;
-        margin: 0;
-    }
-
-    .clickable-section {
-        cursor: pointer;
-    }
-
-    .toggle-icon {
-        font-size: 0.5em;
-        margin-right: 0.6em;
-        margin-top: -0.5em;
-        vertical-align: middle;
-    }
-
-    .collapsible-container {
-        transition: height 0.3s;
-        transition-timing-function: ease-in;
-    }
-
-    .collapsed-container {
-        overflow: hidden;
-        transition: height 0.3s;
-        transition-timing-function: ease-in;
-    }
-
-    .page-label {
-        display: none;
-        margin-top: 0;
-    }
-
-    .page-label:empty {
-        display: none;
-        margin: 0;
-    }
-
-    .auto-width {
-        width: auto;
-    }
-}
-
-@media(max-width: 768px) {
-
-    .mw-bs {
-
-        .mw-horizontal_flow > * {
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-        }
-
-        .mw-horizontal_flow > .row > * {
-            padding-left: 0;
-        }
-
-    }
-
 }
