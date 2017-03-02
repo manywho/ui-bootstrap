@@ -4,7 +4,7 @@ module.exports = function(gulp, plugins, argv) {
             typescript: require('typescript')
         });
 
-        return gulp.src(['js/components/*.*', 'js/lib/*.*'], { base: 'js' })
+        return gulp.src(['js/components/*.*', 'js/lib/*.*', 'js/services/*.ts'], { base: 'js' })
             .pipe(plugins.sourcemaps.init())
             .pipe(plugins.typescript(tsProject))
             .pipe(plugins.uglify({
