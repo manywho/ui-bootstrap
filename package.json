@@ -8,13 +8,15 @@
     "url": "https://github.com/manywho/ui-bootstrap.git"
   },
   "devDependencies": {
+    "git-guppy": "^2.0.0",
     "glob": "^7.0.3",
     "gulp": "^3.8.11",
     "gulp-add-src": "^0.2.0",
     "gulp-clean-css": "^2.0.7",
     "gulp-concat": "^2.4.3",
+    "gulp-filter": "^5.0.0",
     "gulp-less": "3.0.1",
-    "gulp-lesshint": "^1.1.0",
+    "gulp-lesshint": "^3.0.0",
     "gulp-load-plugins": "^1.2.2",
     "gulp-order": "^1.1.1",
     "gulp-rename": "^1.2.0",
@@ -25,6 +27,7 @@
     "gulp-typescript": "^2.13.4",
     "gulp-uglify": "^1.1.0",
     "gulp-util": "^3.0.4",
+    "guppy-pre-commit": "^0.4.0",
     "tslint": "^4.0.2",
     "typescript": "^2.0.2",
     "yargs": "^2.3.0"
