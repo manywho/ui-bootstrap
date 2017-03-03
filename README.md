@@ -15,11 +15,27 @@ npm install
 typings install
 ```
 
-Then run the dev build `gulp watch` or dist build `gulp dist`
+Then run the dev build:
+
+```
+gulp watch
+```
+
+Or dist build:
+
+```
+gulp dist
+```
 
 ### Running
 
-You can run `gulp watch` which will re-run the relevant dev tasks whenever a change to the script or less files is made.
+You can run:
+
+```
+gulp watch
+```
+
+Which will re-run the relevant dev tasks whenever a change to the script or less files is made.
 
 ## Contributing
 
@@ -28,4 +44,4 @@ Contribution are welcome to the project - whether they are feature requests, imp
 
 ## License
 
-[MIT license](https://opensource.org/licenses/MIT)
+This service is released under the [MIT license](https://opensource.org/licenses/MIT).
