@@ -39,9 +39,9 @@ Which will re-run the relevant dev tasks whenever a change to the script or less
 
 ## Contributing
 
-Contribution are welcome to the project - whether they are feature requests, improvements or bug fixes! Refer to 
+Contributions are welcome to the project - whether they are feature requests, improvements or bug fixes! Refer to 
 [CONTRIBUTING.md](CONTRIBUTING.md) for our contribution requirements.
 
 ## License
 
-This service is released under the [MIT license](https://opensource.org/licenses/MIT).
+ui-bootstrap is released under our shared source license: https://manywho.com/sharedsource
