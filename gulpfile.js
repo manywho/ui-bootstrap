@@ -7,8 +7,10 @@ function getTask(task) {
     return require('./gulp-tasks/' + task)(gulp, plugins, argv);
 }
 
-// Dev
+// Hooks
+gulp.task('pre-commit', getTask('hooks/pre-commit'));  
 
+// Dev
 gulp.task('dev-less', getTask('dev/less'));
 gulp.task('dev-ts', getTask('dev/ts'));
 gulp.task('dev-bootstrap', getTask('dev/bootstrap'));
