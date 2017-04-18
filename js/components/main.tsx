@@ -55,6 +55,8 @@ declare var manywho: any;
             if (manywho.settings.isDebugEnabled(this.props.flowKey) || manywho.settings.global('history', this.props.flowKey))
                 classNames += ' auto-width';
 
+            const staticComponents = manywho.settings.global('components.static', this.props.flowKey, []);
+
             return (<div className="main-container">
                 <div className="main-container-inner">
                     {(isFixedNav) ? navElement : null}
@@ -74,6 +76,7 @@ declare var manywho: any;
                     {React.createElement(manywho.component.getByName('notifications'), { flowKey: this.props.flowKey, position: 'center' })}
                     {React.createElement(manywho.component.getByName('notifications'), { flowKey: this.props.flowKey, position: 'right' })}
                     {React.createElement(manywho.component.getByName('wait'), { isVisible: state.loading, message: state.loading && state.loading.message }, null)}
+                    {staticComponents.map(component => React.createElement(component, { flowKey: this.props.flowKey }))}
                 </div>
                 {React.createElement(manywho.component.getByName('debug'), { flowKey: this.props.flowKey })}
                 {React.createElement(manywho.component.getByName('history'), { flowKey: this.props.flowKey })}
