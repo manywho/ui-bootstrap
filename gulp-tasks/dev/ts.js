@@ -14,7 +14,7 @@ module.exports = function(gulp, plugins, argv) {
             .pipe(plugins.addSrc(['js/components/*.js', 'js/lib/*.js']))
             .pipe(plugins.sourcemaps.init())
             .pipe(plugins.typescript(tsProject))
-            .pipe(plugins.sourcemaps.write())
-            .pipe(gulp.dest(argv.jsDir || 'build/js'));
+            .pipe(plugins.sourcemaps.write('.'))
+            .pipe(gulp.dest((argv.build || 'build') + '/js'));
     }
 };
