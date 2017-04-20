@@ -2,7 +2,6 @@ var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var argv = require('yargs').argv;
 var path = require('path');
-var filelist = require('gulp-filelist');
 var del = require('del');
 
 function getTask(task) {
@@ -44,8 +43,13 @@ gulp.task('dist-fonts', ['dist-clean'], function () {
 });
 
 gulp.task('dist-hashes', ['dist-ts', 'dist-less', 'dist-bootstrap', 'dist-bootstrap-themes', 'dist-fonts'], function() {
-    return gulp.src(['./dist/css/*.css', './dist/js/*.js'])
-        .pipe(filelist('ui-bootstrap-hashes.json', { relative: true }))
+    return gulp.src(['css/*.css', 'js/*.js'], { cwd: './dist' })
+        .pipe(plugins.filelist('ui-bootstrap-hashes.json'))
+        .pipe(plugins.jsonEditor(function(hashes) {
+            return hashes.map(function(hash) {
+                return '/' + hash;
+            });
+        }))
         .pipe(gulp.dest('./dist'));  
 });
 
