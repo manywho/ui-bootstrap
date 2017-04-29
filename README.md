@@ -18,7 +18,11 @@ typings install
 Then run the dev build:
 
 ```
-gulp watch
+gulp dev-less
+gulp dev-ts
+gulp dev-bootstrap
+gulp dev-bootstrap-themes
+gulp dev-fonts
 ```
 
 Or dist build:
@@ -36,6 +40,13 @@ gulp watch
 ```
 
 Which will re-run the relevant dev tasks whenever a change to the script or less files is made.
+
+By default the compiled assets will be output to the `build` folder, you can override this using the `--build` arg:
+
+```
+gulp dev-* --build="custom-folder"
+gulp watch --build="custom-folder"
+```
 
 ## Contributing
 
