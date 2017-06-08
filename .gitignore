@@ -4,6 +4,7 @@
 /dist
 /build
 /typings
+bundles.json
 
 ### VisualStudioCode ###
 .vscode/*
