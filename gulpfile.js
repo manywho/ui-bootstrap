@@ -8,10 +8,6 @@ function getTask(task) {
     return require('./gulp-tasks/' + task)(gulp, plugins, argv);
 }
 
-function getDeployTask(task, cacheControl, src) {
-    return require('./gulp-tasks/deploy/' + task)(gulp, plugins, argv, cacheControl, src);
-}
-
 // Hooks
 gulp.task('pre-commit', getTask('hooks/pre-commit'));  
 
@@ -42,13 +38,13 @@ gulp.task('dist-fonts', ['dist-clean'], function () {
     return gulp.src('css/fonts/*.*').pipe(gulp.dest('./dist/css/fonts'));
 });
 
-gulp.task('dist-hashes', ['dist-ts', 'dist-less', 'dist-bootstrap', 'dist-bootstrap-themes', 'dist-fonts'], function() {
+gulp.task('dist-bundle', ['dist-ts', 'dist-less', 'dist-bootstrap', 'dist-bootstrap-themes', 'dist-fonts'], function() {
     return gulp.src(['css/*.css', 'js/*.js'], { cwd: './dist' })
-        .pipe(plugins.filelist('ui-bootstrap-hashes.json'))
-        .pipe(plugins.jsonEditor(function(hashes) {
-            return hashes.map(function(hash) {
-                return '/' + hash;
-            });
+        .pipe(plugins.filelist('bundle.json'))
+        .pipe(plugins.jsonEditor(resources => {
+            return {
+                'bootstrap3': resources.map(resource => '/' + resource)
+            }
         }))
         .pipe(gulp.dest('./dist'));  
 });
@@ -57,8 +53,4 @@ gulp.task('dist-clean', function() {
     return del('./dist/**/*');
 })
 
-gulp.task('dist', ['dist-hashes']);
-
-// Deploy
-gulp.task('deploy-assets', getDeployTask('cdn', 'max-age=315360000, no-transform, public', ['dist/js/*.js', 'dist/js/*.js.map', 'dist/css/*.css', 'dist/css/*.css.map', 'dist/css/themes/*.css', 'dist/css/fonts/*.*']));
-gulp.task('deploy-hashes', getDeployTask('cdn', 'no-cache', ['dist/ui-bootstrap-hashes.json']));
+gulp.task('dist', ['dist-bundle']);

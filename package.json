@@ -13,7 +13,6 @@
     "glob": "^7.0.3",
     "gulp": "^3.8.11",
     "gulp-add-src": "^0.2.0",
-    "gulp-awspublish": "^3.3.0",
     "gulp-clean-css": "^2.0.7",
     "gulp-concat": "^2.4.3",
     "gulp-filelist": "^1.0.0",
