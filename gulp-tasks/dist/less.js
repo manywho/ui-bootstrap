@@ -13,11 +13,7 @@ module.exports = function(gulp, plugins, argv) {
                 processImportFrom: ['!fonts.googleapis.com']
             }))
             .pipe(plugins.rev())
-            .pipe(plugins.sourcemaps.write('.', {
-                sourceMappingURL: function(file) {
-                    return argv.sourceMapUrlPrefixCss + file.relative + '.map';
-                }
-            }))
+            .pipe(plugins.sourcemaps.write('.'))
             .pipe(gulp.dest(argv.cssDir || './dist/css'));
     }
 }

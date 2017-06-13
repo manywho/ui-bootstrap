@@ -4,6 +4,6 @@ module.exports = function(gulp, plugins, argv) {
             .pipe(plugins.less())
             .pipe(plugins.replace('.mw-bs html {', '.mw-bs {'))
             .pipe(plugins.replace('.mw-bs body {', '.mw-bs {'))
-            .pipe(gulp.dest(argv.cssDir || 'build/css'));
+            .pipe(gulp.dest((argv.build || 'build') + '/css'));
     }
 }

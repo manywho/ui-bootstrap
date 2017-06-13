@@ -2,9 +2,7 @@ var path = require('path');
 
 module.exports = function(gulp, plugins, argv) {
     return function() {
-        var outputDir = './build/css/themes';
-        if (argv.cssDir)
-            outputDir = path.join(argv.cssDir, '/themes');
+        var outputDir = (argv.build || 'build') + '/css/themes';
 
         return gulp.src('css/themes/*.less')
             .pipe(plugins.less())
