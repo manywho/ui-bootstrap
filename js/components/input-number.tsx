@@ -83,6 +83,7 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
 
         return <input id={this.props.id}
             value={this.state.value}
+            placeholder={this.props.placeholder}
             className="form-control"
             type="number"
             style={style}

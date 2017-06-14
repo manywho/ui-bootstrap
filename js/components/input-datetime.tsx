@@ -99,6 +99,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     render() {
         return <input id={this.props.id}
             value={this.state.value}
+            placeholder={this.props.placeholder}
             className="form-control datepicker"
             ref="datepicker"
             type="datetime"
