@@ -136,9 +136,9 @@ class Input extends React.Component<IComponentProps, IInputState> {
 
             default:
                 if (manywho.utils.isNullOrEmpty(mask))
-                    inputElement = <input {...props} className="form-control" type="text" />;
+                    inputElement = <input {...props} className="form-control" type={model.attributes.type ? model.attributes.type : 'text'} />;
                 else
-                    inputElement = <MaskedInput {...props} className="form-control" type="text" />;
+                    inputElement = <MaskedInput {...props} className="form-control" type={model.attributes.type ? model.attributes.type : 'text'} />;
                 break;
         }
 
