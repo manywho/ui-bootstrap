@@ -60,6 +60,8 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
     componentWillReceiveProps(nextProps) {
         if (!manywho.utils.isNullOrUndefined(nextProps.value) && parseFloat(this.state.value) !== nextProps.value)
             this.setState({ value: nextProps.value.toString() });
+        else if (manywho.utils.isNullOrUndefined(nextProps.value))
+            this.setState({ value: null });
     }
 
     render() {
