@@ -107,7 +107,8 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
             readOnly={this.props.readOnly}
             disabled={this.props.disabled}
             required={this.props.required}
-            onBlur={this.props.onBlur} />;
+            onBlur={this.props.onBlur}
+            autoComplete={this.props.autocomplete} />;
     }
 
 }

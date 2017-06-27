@@ -96,7 +96,8 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
             disabled={this.props.disabled}
             required={this.props.required}
             onChange={!this.props.isDesignTime && this.onChange}
-            onBlur={this.props.onBlur} />;
+            onBlur={this.props.onBlur}
+            autoComplete={this.props.autocomplete} />;
     }
 
 }

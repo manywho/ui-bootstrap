@@ -11,5 +11,6 @@ interface IInputProps extends IComponentProps {
     readOnly: boolean,
     size: number,
     format: string,
-    isDesignTime: boolean
+    isDesignTime: boolean,
+    autocomplete: string
 }

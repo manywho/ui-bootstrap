@@ -69,6 +69,10 @@ class Input extends React.Component<IComponentProps, IInputState> {
         if (model.attributes && model.attributes.mask)
             mask = model.attributes.mask;
 
+        let autocomplete = null;
+        if (model.attributes && model.attributes.autocomplete)
+            autocomplete = model.attributes.autocomplete;
+
         const props: any = {
             value: contentValue,
             id: this.props.id,
@@ -81,7 +85,8 @@ class Input extends React.Component<IComponentProps, IInputState> {
             onBlur: this.onBlur,
             flowKey: this.props.flowKey,
             format: model.contentFormat,
-            mask: mask
+            mask: mask,
+            autocomplete: autocomplete
         };
 
         if (this.props.isDesignTime) {
