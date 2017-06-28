@@ -86,7 +86,7 @@ class Input extends React.Component<IComponentProps, IInputState> {
             flowKey: this.props.flowKey,
             format: model.contentFormat,
             mask: mask,
-            autocomplete: autocomplete
+            autoComplete: autocomplete
         };
 
         if (this.props.isDesignTime) {
