@@ -3,6 +3,7 @@
 
 interface IInputProps extends IComponentProps {
     value: string | boolean,
+    placeholder: string,
     onChange: any,
     onBlur: any,
     required: boolean,
@@ -10,5 +11,6 @@ interface IInputProps extends IComponentProps {
     readOnly: boolean,
     size: number,
     format: string,
-    isDesignTime: boolean
+    isDesignTime: boolean,
+    autocomplete: string
 }

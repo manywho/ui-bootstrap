@@ -69,6 +69,10 @@ class Input extends React.Component<IComponentProps, IInputState> {
         if (model.attributes && model.attributes.mask)
             mask = model.attributes.mask;
 
+        let autocomplete = null;
+        if (model.attributes && model.attributes.autocomplete)
+            autocomplete = model.attributes.autocomplete;
+
         const props: any = {
             value: contentValue,
             id: this.props.id,
@@ -81,7 +85,8 @@ class Input extends React.Component<IComponentProps, IInputState> {
             onBlur: this.onBlur,
             flowKey: this.props.flowKey,
             format: model.contentFormat,
-            mask: mask
+            mask: mask,
+            autoComplete: autocomplete
         };
 
         if (this.props.isDesignTime) {
@@ -136,9 +141,9 @@ class Input extends React.Component<IComponentProps, IInputState> {
 
             default:
                 if (manywho.utils.isNullOrEmpty(mask))
-                    inputElement = <input {...props} className="form-control" type="text" />;
+                    inputElement = <input {...props} className="form-control" type={model.attributes.type ? model.attributes.type : 'text'} />;
                 else
-                    inputElement = <MaskedInput {...props} className="form-control" type="text" />;
+                    inputElement = <MaskedInput {...props} className="form-control" type={model.attributes.type ? model.attributes.type : 'text'} />;
                 break;
         }
 

@@ -60,6 +60,8 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
     componentWillReceiveProps(nextProps) {
         if (!manywho.utils.isNullOrUndefined(nextProps.value) && parseFloat(this.state.value) !== nextProps.value)
             this.setState({ value: nextProps.value.toString() });
+        else if (manywho.utils.isNullOrUndefined(nextProps.value))
+            this.setState({ value: null });
     }
 
     render() {
@@ -83,6 +85,7 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
 
         return <input id={this.props.id}
             value={this.state.value}
+            placeholder={this.props.placeholder}
             className="form-control"
             type="number"
             style={style}
@@ -93,7 +96,8 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
             disabled={this.props.disabled}
             required={this.props.required}
             onChange={!this.props.isDesignTime && this.onChange}
-            onBlur={this.props.onBlur} />;
+            onBlur={this.props.onBlur}
+            autoComplete={this.props.autocomplete} />;
     }
 
 }

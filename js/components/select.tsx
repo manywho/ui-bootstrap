@@ -186,6 +186,7 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
             props.onFocus = this.onFocus;
             props.value = null;
             props.options = this.state.options;
+            props.disabled = (model.isEnabled === false || model.isEditable === false);
 
             if (model.attributes && manywho.utils.isEqual(model.attributes.isTethered, 'true', true))
                 props.tether = true;
