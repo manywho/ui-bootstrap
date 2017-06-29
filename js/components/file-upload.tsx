@@ -147,11 +147,19 @@
 
                 if (model.isVisible === false)
                     componentClassName += ' hidden';
+
+                if (model.isValid === false || state.isValid === false)
+                    componentClassName += ' has-error';
+            }
+
+            if (this.state.error) {
+                componentClassName += ' has-error';
+                validationMessage = <span className="help-block">{this.state.error}</span>;
             }
 
             const dropzoneProps: any = {
                 ref: 'upload',
-                multiple: (null !== this.props.multiple) ? this.props.multiple : model.isMultiSelect,
+                multiple: manywho.utils.isNullOrUndefined(this.props.multiple) ? model.isMultiSelect : this.props.multiple,
                 className: 'dropzone'
             };
 
