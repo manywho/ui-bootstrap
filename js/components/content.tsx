@@ -28,7 +28,7 @@ declare var tinymce: any;
                 isImageUploadOpen: false
             };
 
-            this.id = `content-${this.props.id}-${manywho.utils.guid()}`;
+            this.id = `content-${this.props.id}_${manywho.utils.guid()}`;
         }
 
         changeInterval: Function;
