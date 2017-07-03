@@ -169,7 +169,8 @@ declare var manywho: any;
                                             value: selectedProperty.contentValue,
                                             contentType: column.contentType,
                                             contentFormat: column.contentFormat,
-                                            onCommitted: this.onCellEditCommitted
+                                            onCommitted: this.onCellEditCommitted,
+                                            flowKey: this.props.flowKey
                                         })
                                     }
                                 </td>;
