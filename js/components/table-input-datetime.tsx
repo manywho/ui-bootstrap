@@ -7,7 +7,7 @@ declare var manywho: any;
     class TableInputDateTime extends React.Component<any, any> {
 
         onChange = (e) => {
-            this.props.onChange(e.date.format());
+            this.props.onChange(this.props.format ? e.date.format(this.props.format) : e.date.format());
         }
 
         componentDidMount() {

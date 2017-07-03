@@ -72,7 +72,10 @@ declare var manywho: any;
             if (manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.datetime, true)) {
                 this.setState({ currentValue: this.state.value });
                 manywho.model.setModal(this.props.flowKey, {
-                    content: React.createElement(manywho.component.getByName('table-input-datetime'), { onChange: this.onChange }),
+                    content: React.createElement(manywho.component.getByName('table-input-datetime'), { 
+                        onChange: this.onChange,
+                        format: manywho.formatting.toMomentFormat(this.props.contentFormat)
+                    }),
                     onConfirm: this.onCommit,
                     onCancel: this.onCloseDateTimePicker,
                     flowKey: this.props.flowKey,
