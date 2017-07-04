@@ -10,6 +10,8 @@ interface IInputState {
 
 class Input extends React.Component<IComponentProps, IInputState> {
 
+    validationRegex: RegExp;
+
     constructor(props) {
         super(props);
 
@@ -27,11 +29,11 @@ class Input extends React.Component<IComponentProps, IInputState> {
 
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
 
-        if (model.attributes && model.attributes.validation && manywho.settings.global('validation.isenabled', this.props.flowKey, false)) {
+        if (this.validationRegex && manywho.settings.global('validation.isenabled', this.props.flowKey, false)) {
             try {
-                const regex = new RegExp(model.attributes.validation);
-
-                if (!regex.test(state.contentValue))
+                if (this.validationRegex.test(state.contentValue))
+                    manywho.state.setComponent(this.props.id, { isValid: true, validationMessage: null }, this.props.flowKey, true);
+                else
                     manywho.state.setComponent(this.props.id, { isValid: false, validationMessage: model.attributes.validationMessage || `Value is invalid` }, this.props.flowKey, true);
             }
             catch (ex) {
@@ -53,6 +55,12 @@ class Input extends React.Component<IComponentProps, IInputState> {
             callback = () => relatedElement.click();
 
         manywho.component.handleEvent(this, manywho.model.getComponent(this.props.id, this.props.flowKey), this.props.flowKey, callback);
+    }
+
+    componentWillMount() {
+        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+        if (model && model.attributes && model.attributes.validation)
+            this.validationRegex = new RegExp(model.attributes.validation);
     }
 
     render() {
