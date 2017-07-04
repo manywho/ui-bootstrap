@@ -12,10 +12,13 @@ declare var manywho: any;
 
         componentDidMount() {
             const target = ReactDOM.findDOMNode(this.refs['datetime']);
-            
+            const defaultDate = this.props.value ? moment(this.props.value, ["MM/DD/YYYY hh:mm:ss A ZZ", moment.ISO_8601, this.props.contentFormat || '']) : null;
+
             $(target).datetimepicker({
                 inline: true,
-                sideBySide: true
+                sideBySide: true,
+                useCurrent: false,
+                defaultDate: defaultDate
             })
             .on('dp.change', this.onChange);
         }
