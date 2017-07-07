@@ -56,6 +56,7 @@ declare var manywho: any;
                 classNames += ' auto-width';
 
             const staticComponents = manywho.settings.global('components.static', this.props.flowKey, []);
+            const modal = manywho.model.getModal(this.props.flowKey);
 
             return (<div className="main-container">
                 <div className="main-container-inner">
@@ -77,6 +78,7 @@ declare var manywho: any;
                     {React.createElement(manywho.component.getByName('notifications'), { flowKey: this.props.flowKey, position: 'right' })}
                     {React.createElement(manywho.component.getByName('wait'), { isVisible: state.loading, message: state.loading && state.loading.message }, null)}
                     {staticComponents.map(component => React.createElement(component, { flowKey: this.props.flowKey }))}
+                    {modal ? React.createElement(manywho.component.modalContainer, modal) : null}
                 </div>
                 {React.createElement(manywho.component.getByName('debug'), { flowKey: this.props.flowKey })}
                 {React.createElement(manywho.component.getByName('history'), { flowKey: this.props.flowKey })}

@@ -1,8 +1,12 @@
+/// <reference path="../../typings/index.d.ts" />
+
+declare var manywho: any;
+
 (function (manywho) {
 
-    var tableInput = React.createClass({
+    class TableInput extends React.Component<any, any> {
 
-        getInputType: function(contentType) {
+        getInputType(contentType) {
 
             switch(contentType.toUpperCase())
             {
@@ -19,142 +23,109 @@
                 default:
                     return 'text';
             }
+        }
 
-        },
-
-        isEmptyDate: function(date) {
+        isEmptyDate(date) {
 
             if (date == null
                 || date.indexOf('01/01/0001') != -1
                 || date.indexOf('1/1/0001') != -1
-                || date.indexOf('0001-01-01') != -1) {
-
+                || date.indexOf('0001-01-01') != -1)
                 return true;
 
-            }
-
             return false;
+        }
 
-        },
-
-        onChange: function(e) {
-
+        onChange = (e) => {
             if (manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.boolean, true)) {
-                var checked = typeof this.state.value === 'string' && manywho.utils.isEqual(this.state.value, 'false', true) ? false : (new Boolean(this.state.value)).valueOf();
+                const checked = typeof this.state.value === 'string' && manywho.utils.isEqual(this.state.value, 'false', true) ? false : (new Boolean(this.state.value)).valueOf();
                 this.setState({ value: !checked });
-            } 
+            }
+            else if ((manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.datetime, true)))
+                this.setState({ value: e });
             else
                 this.setState({ value: e.currentTarget.value });
+        }
 
-        },
-
-        onKeyUp: function(e) {
-
+        onKeyUp = (e) => {
             if (e.keyCode == 13 && !this.props.isDesignTime && !e.shiftKey) {
-
                 e.preventDefault();
                 e.stopPropagation();
-
                 this.onCommit();
-
             }
+        }
 
-        },
-
-        onFocus: function(e) {
-
+        onFocus = (e) => {
             this.setState({ isFocused: true });
+        }
 
-        },
-
-        onBlur: function() {
-
+        onBlur = () => {
             this.setState({ isFocused: false });
 
             if (!this.props.isDesignTime)
                 this.onCommit();
+        }
 
-        },
-
-        onClick: function(e) {
-
+        onClick = (e) => {
             e.stopPropagation();
 
-        },
-
-        onCommit: function() {
-
-            if (manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.datetime, true) && !this.isEmptyDate(this.state.value)) {
-
-                var dateTime = moment(this.state.value, ["MM/DD/YYYY hh:mm:ss A ZZ", moment.ISO_8601, this.props.contentFormat || '']);
-                this.props.onCommitted(this.props.id, this.props.propertyId, dateTime.format());
-
-            }
-            else {
-
-                this.props.onCommitted(this.props.id, this.props.propertyId, this.state.value);
-
-            }
-
-        },
-
-        componentWillMount: function() {
-
-            this.setState({ value: this.props.value });
-
-        },
-
-        componentDidMount: function () {
-
             if (manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.datetime, true)) {
-
-                var input = ReactDOM.findDOMNode(this.refs.input);
-
-                $(input).datetimepicker({
-                    locale: 'en-us',
-                    format: this.props.contentFormat || 'MM/DD/YYYY'
-                })
-                .on('dp.change', this.onChange);
-
-                if (!this.isEmptyDate(this.state.value)) {
-
-                    var dateTime = moment(this.state.value, ["MM/DD/YYYY hh:mm:ss A ZZ", moment.ISO_8601, this.props.contentFormat || '']);
-                    $(input).data("DateTimePicker").date(dateTime);
-
-                }
-
+                this.setState({ currentValue: this.state.value });
+                manywho.model.setModal(this.props.flowKey, {
+                    content: React.createElement(manywho.component.getByName('table-input-datetime'), {
+                        value: this.state.value, 
+                        onChange: this.onChange,
+                        format: manywho.formatting.toMomentFormat(this.props.contentFormat)
+                    }),
+                    onConfirm: this.onCommit,
+                    onCancel: this.onCloseDateTimePicker,
+                    flowKey: this.props.flowKey,
+                });
             }
+        }
 
-        },
+        onCommit = () => {
+            if (manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.datetime, true) && !this.isEmptyDate(this.state.value)) {
+                const dateTime = moment(this.state.value, ["MM/DD/YYYY hh:mm:ss A ZZ", moment.ISO_8601, this.props.contentFormat || '']);
+                this.props.onCommitted(this.props.id, this.props.propertyId, dateTime.format());
+                manywho.model.setModal(this.props.flowKey, null);
+            }
+            else
+                this.props.onCommitted(this.props.id, this.props.propertyId, this.state.value);
+        }
 
-        render: function () {
+        onCloseDateTimePicker = (e) => {
+            this.setState({ value: this.state.currentValue, currentValue: null });
+            manywho.model.setModal(this.props.flowKey, null);
+        }
 
+        componentWillMount = () => {
+            this.setState({ value: this.props.value });
+        }
+
+        render() {
             manywho.log.info('Rendering Table Input: ' + this.props.id);
 
-            var classNames = ['input-sm'];
+            let className = 'input-sm';
 
-            if (!this.state.isFocused) {
+            if (!this.state.isFocused)
+                className += ' table-input-display';
 
-                classNames.push('table-input-display');
-
-            }
-
-            if (!manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.boolean, true)) {
-
-                classNames.push('form-control');
-
-            }
+            if (!manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.boolean, true))
+                className += ' form-control';
             
-            var props = {
-                className: classNames.join(' '),
+            const props: any = {
+                className: className,
                 onClick: this.onClick,
                 onChange: this.onChange,
                 onKeyUp: this.onKeyUp,
                 value: this.state.value,
                 onFocus: this.onFocus,
-                onBlur: this.onBlur,
                 ref: 'input'
             }
+
+            if (!manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.datetime, true))
+                props.onBlur = this.onBlur;
 
             if (manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.boolean, true))
                 props.checked = this.state.value === true || manywho.utils.isEqual(this.state.value, 'true', true);
@@ -167,11 +138,9 @@
                 props.type = this.getInputType(this.props.contentType);
                 return React.DOM.input(props);
             }
-
         }
+    }
 
-    });
-
-    manywho.component.register("table-input", tableInput);
+    manywho.component.register("table-input", TableInput);
 
 }(manywho));
