@@ -56,6 +56,10 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
+        let useCurrent = true;
+        if (model.attributes && model.attributes.useCurrent !== undefined)
+            useCurrent = model.attributes.useCurrent;
+
         let stateDate = null;
         const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
 
@@ -66,7 +70,8 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
                 'delete': function () {
                     this.clear();
                 }
-            }
+            },
+            useCurrent: useCurrent
         })
         .on('dp.change', !this.props.isDesignTime && this.onChange);
 
