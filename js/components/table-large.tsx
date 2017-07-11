@@ -90,7 +90,7 @@ declare var manywho: any;
             manywho.state.setComponent(this.props.id, { objectData: objectData }, this.props.flowKey, false);
         },
 
-        renderRows: function (flowKey, objectData, outcomes, displayColumns, selectedRows, onRowClicked, outcomeDisplay) {
+        renderRows: function (flowKey, objectData, outcomes, displayColumns, selectedRows, onRowClicked, onSelect, outcomeDisplay) {
             const outcomeComponent = manywho.component.getByName('outcome');
 
             return objectData.map(item => {
@@ -102,11 +102,11 @@ declare var manywho: any;
 
                 if (this.props.model.isMultiSelect)
                     columns.push(<td className="checkbox-cell">
-                        <input id={item.externalId} type="checkbox" checked={isSelected}></input>
+                        <input id={item.externalId} type="checkbox" checked={isSelected} onClick={onSelect}></input>
                     </td>);
                 else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true))
                     columns.push(<td className="checkbox-cell">
-                        <input id={item.externalId} type="radio" checked={isSelected}></input>
+                        <input id={item.externalId} type="radio" checked={isSelected} onClick={onSelect}></input>
                     </td>);
 
                 columns = columns.concat(displayColumns.map(column => {
@@ -216,7 +216,7 @@ declare var manywho: any;
             ].join(' ');
 
             let rows = [this.renderHeaderRow(this.props.displayColumns)];
-            rows = rows.concat(this.renderRows(this.props.flowKey, this.props.objectData || [], this.props.outcomes, this.props.displayColumns, this.props.selectedRows, this.props.onRowClicked, this.props.model.attributes));
+            rows = rows.concat(this.renderRows(this.props.flowKey, this.props.objectData || [], this.props.outcomes, this.props.displayColumns, this.props.selectedRows, this.props.onRowClicked, this.props.onSelect, this.props.model.attributes));
 
             return <div className="table-responsive">
                 <table className={tableClassName}>
