@@ -43,6 +43,15 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         }
     }
 
+    onKeyDown = (e) => {
+        if (e.keyCode === 8) {
+            $(ReactDOM.findDOMNode(this.refs['datepicker'])).data("DateTimePicker").clear();
+            this.props.onChange(null);
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+
     componentDidMount() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
@@ -52,9 +61,14 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
 
         $(datepickerElement).datetimepicker({
             locale: model.attributes.dateTimeLocale || 'en-us',
-            format: model.attributes.dateTimeFormat || manywho.formatting.toMomentFormat(model.contentFormat) || 'MM/DD/YYYY'
+            format: model.attributes.dateTimeFormat || manywho.formatting.toMomentFormat(model.contentFormat) || 'MM/DD/YYYY',
+            keyBinds: {
+                'delete': function () {
+                    this.clear();
+                }
+            }
         })
-            .on('dp.change', !this.props.isDesignTime && this.onChange);
+        .on('dp.change', !this.props.isDesignTime && this.onChange);
 
         if (!this.props.isDesignTime) {
             if (this.isEmptyDate(state.contentValue))
@@ -108,7 +122,8 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
             disabled={this.props.disabled}
             required={this.props.required}
             onBlur={this.props.onBlur}
-            autoComplete={this.props.autocomplete} />;
+            autoComplete={this.props.autocomplete}
+            onKeyDown={this.onKeyDown} />;
     }
 
 }
