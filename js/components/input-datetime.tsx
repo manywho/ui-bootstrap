@@ -58,7 +58,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
 
         let useCurrent = true;
         if (model.attributes && model.attributes.useCurrent !== undefined)
-            useCurrent = model.attributes.useCurrent;
+            useCurrent = manywho.utils.isEqual(model.attributes.useCurrent, 'true', true) ? true : false;
 
         let stateDate = null;
         const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
