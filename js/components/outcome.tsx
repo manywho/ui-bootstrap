@@ -178,7 +178,7 @@ declare var manywho: any;
                 content = this.getContent(model, this.props.display);
 
             if (uri)
-                return <a id={this.props.id} className={className} title={model.label} href={uri} target={target} disabled={this.props.disabled}>{content}</a>;
+                return <a id={this.props.id} className={className} title={model.label} href={uri} target={target} rel="noopener noreferrer" disabled={this.props.disabled}>{content}</a>;
             else
                 return <button id={this.props.id} className={className} onClick={this.onClick} title={model.label} disabled={this.props.disabled}>{content}</button>;
         }
