@@ -35,12 +35,12 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
                 this.props.onChange(null);
             else if (e.date.isValid()) {
                 if (this.isDateOnly)
-                    e.date.hour(12);
-
-                if (manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey))
-                    this.props.onChange(e.date.format());
+                    this.props.onChange(e.date.format('YYYY-MM-DD'));
                 else
-                    this.props.onChange(e.date.utc().format());
+                    if (manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey))
+                        this.props.onChange(e.date.format());
+                    else
+                        this.props.onChange(e.date.utc().format());
             }
             else
                 this.props.onChange(e.target.value);
@@ -49,7 +49,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
 
     onKeyDown = (e) => {
         if (e.keyCode === 8) {
-            $(ReactDOM.findDOMNode(this.refs['datepicker'])).data("DateTimePicker").clear();
+            $(ReactDOM.findDOMNode(this.refs['datepicker'])).data('DateTimePicker').clear();
             this.props.onChange(null);
             e.preventDefault();
             e.stopPropagation();
