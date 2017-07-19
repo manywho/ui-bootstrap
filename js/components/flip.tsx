@@ -12,6 +12,9 @@ declare var manywho: any;
         },
 
         setHeight() {
+            if (this.props.isDesignTime)
+                return;
+
             const element = ReactDOM.findDOMNode(this) as HTMLElement;
 
             if (this.state.isFlipped) {
