@@ -100,6 +100,11 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
             this.props.onNext();
     }
 
+    onWindowBlur = (e) => {
+        if (this && this.refs && this.refs['select'])
+            (this.refs['select'] as any).blur();
+    }
+
     componentWillReceiveProps(nextProps) {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
@@ -143,6 +148,11 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
 
     componentWillMount() {
         this.setState({ options: this.getOptions(this.props.objectData || []) });
+        window.addEventListener('blur', this.onWindowBlur);
+    }
+
+    componentWillUnMount() {
+        window.removeEventListener('blur', this.onWindowBlur);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -174,7 +184,8 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
             search: this.state.search,
             open: this.state.isOpen,
             theme: 'default',
-            placeholder: model.hintValue
+            placeholder: model.hintValue,
+            ref: 'select'
         };
 
         if (!this.props.isDesignTime) {

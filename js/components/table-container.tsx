@@ -35,7 +35,8 @@ declare var manywho: any;
             this.props.sort(e.currentTarget.id);
         },
 
-        onRowClicked: function (e) {
+        onSelect: function (e) {
+            e.stopPropagation();
             this.props.select(e.currentTarget.id);
         },
 
@@ -105,7 +106,7 @@ declare var manywho: any;
 
             const selectedRows = (state.objectData || []).filter(objectData => objectData.isSelected);
 
-            let props = {
+            let props: any = {
                 id: this.props.id,
                 model: model,
                 objectData: this.props.objectData,
@@ -126,10 +127,13 @@ declare var manywho: any;
             if (!this.props.isDesignTime) {
                 props = manywho.utils.extend(props, {
                     onOutcome: this.props.onOutcome,
-                    onRowClicked: this.onRowClicked,
+                    onSelect: this.onSelect,
                     selectAll: this.props.selectAll,
                     onHeaderClick: this.onHeaderClick
                 });
+
+                if (model.attributes && !model.attributes.isRowSelectionDisabled)
+                    props.onRowClicked = this.onSelect
             }
 
             let contentElement = this.props.contentElement;

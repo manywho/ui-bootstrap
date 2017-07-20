@@ -150,6 +150,7 @@ declare var manywho: any;
             let className = `outcome btn ${getType(model)} ${this.getSize(model)}`;
             let content = this.getContent(model, manywho.settings.global('outcomes.display', this.props.flowKey));
             let uri = null;
+            let target = '_blank';
 
             if (model.attributes) {
                 if (model.attributes.classes)
@@ -164,6 +165,9 @@ declare var manywho: any;
 
                 if (model.attributes.uri)
                     uri = model.attributes.uri;
+
+                if (model.attributes.target)
+                    target = model.attributes.target;
             }
 
             if (!manywho.utils.isNullOrWhitespace(this.props.className))
@@ -174,7 +178,7 @@ declare var manywho: any;
                 content = this.getContent(model, this.props.display);
 
             if (uri)
-                return <a id={this.props.id} className={className} title={model.label} href={uri} target="_blank" disabled={this.props.disabled}>{content}</a>;
+                return <a id={this.props.id} className={className} title={model.label} href={uri} target={target} rel="noopener noreferrer" disabled={this.props.disabled}>{content}</a>;
             else
                 return <button id={this.props.id} className={className} onClick={this.onClick} title={model.label} disabled={this.props.disabled}>{content}</button>;
         }
