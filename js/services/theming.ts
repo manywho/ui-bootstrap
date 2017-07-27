@@ -8,10 +8,14 @@ manywho.theming = (function (manywho) {
         const link = document.getElementById('theme');
         const img = document.createElement('img');
 
-        link.setAttribute('href', url);
+        if (link) {
+            link.setAttribute('href', url);
 
-        img.onerror = () => { manywho.log.info('Finished loading theme: ' + url); };
-        img.src = url;
+            img.onerror = () => { manywho.log.info('Finished loading theme: ' + url); };
+            img.src = url;
+        }
+        else
+            manywho.log.error(`Failed loading theme ${url}. A <link> element with id "theme" could not be found`);
     }
 
     return {
