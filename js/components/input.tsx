@@ -28,18 +28,7 @@ class Input extends React.Component<IComponentProps, IInputState> {
             manywho.state.setComponent(this.props.id, { contentValue: (e.target as HTMLInputElement).value }, this.props.flowKey, true);
 
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
-
-        if (this.validationRegex && manywho.settings.global('validation.isenabled', this.props.flowKey, false)) {
-            try {
-                if (this.validationRegex.test(state.contentValue))
-                    manywho.state.setComponent(this.props.id, { isValid: true, validationMessage: null }, this.props.flowKey, true);
-                else
-                    manywho.state.setComponent(this.props.id, { isValid: false, validationMessage: model.attributes.validationMessage || `Value is invalid` }, this.props.flowKey, true);
-            }
-            catch (ex) {
-                manywho.log.error(ex.toString());
-            }
-        }
+        manywho.state.setComponent(this.props.id, manywho.validation.validate(model, state, this.props.flowKey), this.props.flowKey, true);
 
         if (model.contentType.toUpperCase() === manywho.component.contentTypes.boolean)
             this.onBlur(e);
