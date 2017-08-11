@@ -29,19 +29,16 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         return false;
     }
 
+    format(date) {
+        return date.utc().format(this.isDateOnly ? 'YYYY-MM-DD' : undefined);
+    }
+
     onChange = (e) => {
         if (!this.props.isDesignTime) {
             if (!e.date)
                 this.props.onChange(null);
-            else if (e.date.isValid()) {
-                if (this.isDateOnly)
-                    this.props.onChange(e.date.format('YYYY-MM-DD'));
-                else
-                    if (manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey))
-                        this.props.onChange(e.date.format());
-                    else
-                        this.props.onChange(e.date.utc().format());
-            }
+            else if (e.date.isValid())
+                this.props.onChange(this.format(e.date));
             else
                 this.props.onChange(e.target.value);
         }
@@ -58,7 +55,6 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
 
     componentDidMount() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
         let useCurrent = true;
         let customFormat = null;
@@ -74,7 +70,6 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         if (customFormat)
             this.isDateOnly = customFormat.toLowerCase().indexOf('h') === -1 && customFormat.toLowerCase().indexOf('m') === -1 && customFormat.toLowerCase().indexOf('s') === -1;
 
-        let stateDate = null;
         const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
 
         $(datepickerElement).datetimepicker({
@@ -85,17 +80,22 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
                     this.clear();
                 }
             },
-            useCurrent: useCurrent
+            useCurrent: useCurrent,
+            timeZone: 'UTC'
         })
         .on('dp.change', !this.props.isDesignTime && this.onChange);
 
         if (!this.props.isDesignTime) {
-            if (this.isEmptyDate(state.contentValue))
+            if (this.isEmptyDate(this.props.value))
                 manywho.state.setComponent(this.props.id, { contentValue: null }, this.props.flowKey, true);
             else {
-                stateDate = moment(state.contentValue, ['MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', moment.ISO_8601]);
-                manywho.state.setComponent(this.props.id, { contentValue: stateDate.format(customFormat || 'MM/DD/YYYY') }, this.props.flowKey, true);
-                $(datepickerElement).data('DateTimePicker').date(stateDate);
+                let date = moment(this.props.value, ['MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', moment.ISO_8601]);
+                manywho.state.setComponent(this.props.id, { contentValue: this.format(date) }, this.props.flowKey, true);
+
+                if (manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey) && !this.isDateOnly)
+                    $(datepickerElement).data('DateTimePicker').date(date.local());
+                else
+                    $(datepickerElement).data('DateTimePicker').date(date.utc());
             }
         }
     }
@@ -105,30 +105,8 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
             $(ReactDOM.findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.value === null) {
-            this.setState({ value: null });
-            return;
-        }
-
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        const formats = [moment.ISO_8601, 'MM/DD/YYYY hh:mm:ss A ZZ'];
-        let customFormat = null;
-
-        if (model.attributes && model.attributes.dateTimeFormat) {
-            customFormat = model.attributes.dateTimeFormat;
-            formats.push(customFormat);
-        }
-
-        const dateTime = moment(nextProps.value, formats);
-
-        if (dateTime.isValid())
-            this.setState({ value: dateTime.format(customFormat || 'MM/DD/YYYY') });
-    }
-
     render() {
         return <input id={this.props.id}
-            value={this.state.value}
             placeholder={this.props.placeholder}
             className="form-control datepicker"
             ref="datepicker"
