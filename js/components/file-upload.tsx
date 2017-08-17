@@ -70,7 +70,12 @@
                     if (this.props.uploadComplete)
                         this.props.uploadComplete(response);
                     else if (!this.props.uploadComplete && response && !manywho.utils.isNullOrWhitespace(this.props.id)) {
-                        manywho.state.setComponent(this.props.id, { objectData: response.objectData }, this.props.flowKey, true);
+                        const objectData = response.objectData.map(item => {
+                            item.isSelected = true;
+                            return item;
+                        });
+
+                        manywho.state.setComponent(this.props.id, { objectData }, this.props.flowKey, true);
                         manywho.component.handleEvent(this, manywho.model.getComponent(this.props.id, this.props.flowKey), this.props.flowKey);
                     }
                 })
