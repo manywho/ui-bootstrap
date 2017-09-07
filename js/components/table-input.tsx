@@ -103,6 +103,10 @@ declare var manywho: any;
             this.setState({ value: this.props.value });
         }
 
+        componentWillReceiveProps = (nextProps) => {
+            this.setState({ value: nextProps.value });
+        }
+
         render() {
             manywho.log.info('Rendering Table Input: ' + this.props.id);
 
