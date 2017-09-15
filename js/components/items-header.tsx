@@ -56,7 +56,7 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
             </div>;
 
         if (this.props.isRefreshable)
-            if (this.state.isEnabled === false || this.props.isLoading)
+            if (this.props.model.isEnabled === false || this.props.model.isLoading)
                 isDisabled = true;
 
             refresh = <button className="btn btn-sm btn-default" onClick={this.props.refresh} disabled={isDisabled}><span className="glyphicon glyphicon-refresh" /></button>;
