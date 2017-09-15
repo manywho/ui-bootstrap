@@ -37,7 +37,7 @@ declare var manywho: any;
             return <div className="navbar-header">{children}</div>;
         },
 
-        getNavElements: function (items, isTopLevel) {
+        getNavElements: function (items, isTopLevel, hasGrandParent) {
             let elements = [];
 
             for (const itemId in items) {
@@ -52,15 +52,18 @@ declare var manywho: any;
                 ];
 
                 if (item.items != null) {
-                    classNames.push('dropdown');
+
+                    if (hasGrandParent === true) {
+                        classNames.push('dropdown-submenu');
+                    }
 
                     element = <li className={classNames.join(' ')}>
-                        <a href="#" id={item.id} data-toggle="dropdown">
+                        <a href="#" id={item.id} className="dropdown-toggle" data-toggle="dropdown">
                             {item.label}
                             <span className="caret" />
                         </a>
                         <ul className="dropdown-menu">
-                            {this.getNavElements(item.items, false)}
+                            {this.getNavElements(item.items, false, true)}
                         </ul>
                     </li>;
                 }
@@ -92,7 +95,7 @@ declare var manywho: any;
 
                 manywho.log.info('Rendering Navigation');
 
-                let navElements = this.getNavElements(navigation.items, true);
+                let navElements = this.getNavElements(navigation.items, true, false);
 
                 navElements = navElements.concat(manywho.settings.global('navigation.components') || []);
                 navElements = navElements.concat(manywho.settings.flow('navigation.components', this.props.flowKey) || []);
