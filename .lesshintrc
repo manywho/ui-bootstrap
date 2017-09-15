@@ -2,5 +2,8 @@
     "importantRule": false,
     "zeroUnit": false,
     "qualifyingElement": false,
-    "idSelector": false
+    "idSelector": false,
+    "maxCharPerLine": {
+        "linit": 120
+    }
 }
