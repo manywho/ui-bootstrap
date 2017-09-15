@@ -181,7 +181,8 @@ declare var manywho: any;
                 isRefreshable: (model.objectDataRequest || model.fileDataRequest),
                 onSearch: this.props.onSearch,
                 outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
-                refresh: this.props.refresh
+                refresh: this.props.refresh,
+                model: model,
             });
 
             return <div className={classNames} id={this.props.id}>

@@ -111,7 +111,8 @@ class Tiles extends React.Component<ITilesProps, any> {
             isRefreshable: (model.objectDataRequest || model.fileDataRequest),
             onSearch: this.onSearch,
             outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
-            refresh: this.props.refresh
+            refresh: this.props.refresh,
+            model: model,
         });
 
         const footerOutcomes: Array<JSX.Element> = outcomes && outcomes

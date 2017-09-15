@@ -48,7 +48,8 @@ class ChartComponent extends React.Component<IChartComponentProps, any> {
                 isSearchable: false,
                 isRefreshable: (model.objectDataRequest || model.fileDataRequest),
                 outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
-                refresh: this.props.refresh
+                refresh: this.props.refresh,
+                model: model,
             });
 
         let contentElement = this.props.contentElement;
