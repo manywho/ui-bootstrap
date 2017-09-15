@@ -234,7 +234,7 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
             let className = 'glyphicon glyphicon-refresh';
 
             let isDisabled = false;
-            if (model.isEnabled === false || this.props.isLoading)
+            if (model.isEnabled === false || this.props.isLoading || model.isEditable === false)
                 isDisabled = true;
 
             if (this.props.isLoading)
