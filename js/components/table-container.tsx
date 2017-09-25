@@ -175,6 +175,10 @@ declare var manywho: any;
             if (!props.isValid)
                 validationElement = <div className="has-error"><span className="help-block">{model.validationMessage || state.validationMessage}</span></div>;
 
+            let isDisabled = false;
+            if (model.isEnabled === false || this.props.isLoading)
+                isDisabled = true;
+
             const headerElement = React.createElement(manywho.component.getByName('mw-items-header'), {
                 flowKey: this.props.flowKey,
                 isSearchable: model.isSearchable,
@@ -182,7 +186,7 @@ declare var manywho: any;
                 onSearch: this.props.onSearch,
                 outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
                 refresh: this.props.refresh,
-                isEnabled: model.isEnabled,
+                isDisabled: isDisabled
             });
 
             return <div className={classNames} id={this.props.id}>

@@ -38,7 +38,6 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
         let search = null;
         let outcomes = null;
         let refresh = null;
-        let isDisabled = false;
 
         if (this.props.isSearchable)
             search = <div className="mw-items-header-search input-group">
@@ -55,11 +54,7 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
                     .map((outcome) => React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: this.props.flowKey }))}
             </div>;
 
-        if (this.props.isRefreshable)
-            if (this.props.isEnabled === false || this.props.isLoading)
-                isDisabled = true;
-
-            refresh = <button className="btn btn-sm btn-default" onClick={this.props.refresh} disabled={isDisabled}><span className="glyphicon glyphicon-refresh" /></button>;
+            refresh = <button className="btn btn-sm btn-default" onClick={this.props.refresh} disabled={this.props.isDisabled}><span className="glyphicon glyphicon-refresh" /></button>;
 
         return (<div className="mw-items-header">
             {search}
