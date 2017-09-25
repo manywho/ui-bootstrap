@@ -49,7 +49,7 @@ class ChartComponent extends React.Component<IChartComponentProps, any> {
                 isRefreshable: (model.objectDataRequest || model.fileDataRequest),
                 outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
                 refresh: this.props.refresh,
-                model: model,
+                isEnabled: model.isEnabled,
             });
 
         let contentElement = this.props.contentElement;

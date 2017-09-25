@@ -112,7 +112,7 @@ class Tiles extends React.Component<ITilesProps, any> {
             onSearch: this.onSearch,
             outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
             refresh: this.props.refresh,
-            model: model,
+            isEnabled: model.isEnabled,
         });
 
         const footerOutcomes: Array<JSX.Element> = outcomes && outcomes
