@@ -233,10 +233,14 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
         if (model.objectDataRequest || model.fileDataRequest) {
             let className = 'glyphicon glyphicon-refresh';
 
+            let isDisabled = false;
+            if (model.isEnabled === false || this.props.isLoading || model.isEditable === false)
+                isDisabled = true;
+
             if (this.props.isLoading)
                 className += ' spin';
 
-            refreshButton = <button className="btn btn-default refresh-button" onClick={this.props.refresh} disabled={this.props.isLoading}>
+            refreshButton = <button className="btn btn-default refresh-button" onClick={this.props.refresh} disabled={isDisabled}>
                 <span className={className} />
             </button>;
         }

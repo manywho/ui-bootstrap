@@ -105,13 +105,18 @@ class Tiles extends React.Component<ITilesProps, any> {
         if (!manywho.utils.isNullOrWhitespace(model.label))
             labelElement = <label>{model.label}</label>;
 
+        let isDisabled = false;
+        if (model.isEnabled === false || this.props.isLoading)
+            isDisabled = true;
+
         const headerElement = React.createElement(manywho.component.getByName('mw-items-header'), {
             flowKey: this.props.flowKey,
             isSearchable: model.isSearchable,
             isRefreshable: (model.objectDataRequest || model.fileDataRequest),
             onSearch: this.onSearch,
             outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
-            refresh: this.props.refresh
+            refresh: this.props.refresh,
+            isDisabled: isDisabled
         });
 
         const footerOutcomes: Array<JSX.Element> = outcomes && outcomes

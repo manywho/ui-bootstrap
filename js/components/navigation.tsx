@@ -52,10 +52,13 @@ declare var manywho: any;
                 ];
 
                 if (item.items != null) {
-                    classNames.push('dropdown');
+
+                    if (isTopLevel === false) {
+                        classNames.push('dropdown-submenu');
+                    }
 
                     element = <li className={classNames.join(' ')}>
-                        <a href="#" id={item.id} data-toggle="dropdown">
+                        <a href="#" id={item.id} className="dropdown-toggle" data-toggle="dropdown">
                             {item.label}
                             <span className="caret" />
                         </a>
