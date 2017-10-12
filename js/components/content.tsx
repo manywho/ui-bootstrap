@@ -51,12 +51,12 @@ declare var tinymce: any;
                 width: model.width * 19, // Multiply the width by a "best guess" font-size as the manywho width is columns and tinymce width is pixels
                 height: model.height * 16, // Do the same for the height
                 readonly: !model.isEditable,
-                menubar: 'edit insert view format table tools',
+                menubar: 'edit insert view format table',
+                browser_spellcheck: true,
                 toolbar: manywho.settings.global('richtext.toolbar', this.props.flowKey, []),
                 content_css: manywho.settings.global('richtext.content_css', this.props.flowKey, []),
                 importcss_append: manywho.settings.global('richtext.importcss_append', this.props.flowKey, false),
                 importcss_file_filter: manywho.settings.global('richtext.importcss_file_filter', this.props.flowKey, null),
-                nanospell_server: manywho.settings.global('richtext.nanospell_server', this.props.flowKey, null),
                 moxiemanager_title: manywho.settings.global('richtext.moxiemanager_title', this.props.flowKey, null),
                 moxiemanager_fullscreen: manywho.settings.global('richtext.moxiemanager_fullscreen', this.props.flowKey, null),
 
