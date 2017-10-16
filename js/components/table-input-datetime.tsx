@@ -12,7 +12,7 @@ declare var manywho: any;
 
         componentDidMount() {
             const target = ReactDOM.findDOMNode(this.refs['datetime']);
-            const defaultDate = this.props.value ? moment(this.props.value, ["MM/DD/YYYY hh:mm:ss A ZZ", moment.ISO_8601, this.props.contentFormat || '']) : null;
+            const defaultDate = this.props.value ? moment(this.props.value, ['MM/DD/YYYY hh:mm:ss A ZZ', moment.ISO_8601, this.props.contentFormat || '']) : null;
 
             $(target).datetimepicker({
                 inline: true,
@@ -24,10 +24,10 @@ declare var manywho: any;
         }
 
         render() {
-            return <div ref="datetime" />
+            return <div ref="datetime" />;
         }
     }
 
-    manywho.component.register("table-input-datetime", TableInputDateTime);
+    manywho.component.register('table-input-datetime', TableInputDateTime);
 
 }(manywho));

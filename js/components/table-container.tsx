@@ -133,7 +133,7 @@ declare var manywho: any;
                 });
 
                 if (model.attributes && !model.attributes.isRowSelectionDisabled)
-                    props.onRowClicked = this.onSelect
+                    props.onRowClicked = this.onSelect;
             }
 
             let contentElement = this.props.contentElement;

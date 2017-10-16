@@ -7,7 +7,7 @@ declare var manywho: any;
     class ModalContainer extends React.Component<any, any> {
 
         onKeyUp = (e) => {
-            if (e.keyCode == 27)
+            if (e.keyCode === 27)
                 manywho.model.setModal(this.props.flowKey, null);
         }
 
@@ -28,7 +28,7 @@ declare var manywho: any;
                 footer = <div className="modal-footer">
                     {this.props.onCancel ? <button className="btn btn-default" onClick={this.props.onCancel}>{this.props.cancelLabel || 'Cancel'}</button> : null}
                     {this.props.onConfirm ? <button className="btn btn-primary" onClick={this.props.onConfirm}>{this.props.confirmLabel || 'OK'}</button> : null}                    
-                </div> 
+                </div>;
 
             return <div onKeyUp={this.onKeyUp}>
                 <div className="modal-backdrop full-height" onClick={this.onClickBackdrop} />
@@ -43,7 +43,7 @@ declare var manywho: any;
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>;
         }
     }
 

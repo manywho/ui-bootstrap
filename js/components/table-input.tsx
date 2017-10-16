@@ -8,8 +8,7 @@ declare var manywho: any;
 
         getInputType(contentType) {
 
-            switch(contentType.toUpperCase())
-            {
+            switch (contentType.toUpperCase()) {
                 case manywho.component.contentTypes.string:
                     return 'text';
                 case manywho.component.contentTypes.number:
@@ -28,9 +27,9 @@ declare var manywho: any;
         isEmptyDate(date) {
 
             if (date == null
-                || date.indexOf('01/01/0001') != -1
-                || date.indexOf('1/1/0001') != -1
-                || date.indexOf('0001-01-01') != -1)
+                || date.indexOf('01/01/0001') !== -1
+                || date.indexOf('1/1/0001') !== -1
+                || date.indexOf('0001-01-01') !== -1)
                 return true;
 
             return false;
@@ -48,7 +47,7 @@ declare var manywho: any;
         }
 
         onKeyUp = (e) => {
-            if (e.keyCode == 13 && !this.props.isDesignTime && !e.shiftKey) {
+            if (e.keyCode === 13 && !this.props.isDesignTime && !e.shiftKey) {
                 e.preventDefault();
                 e.stopPropagation();
                 this.onCommit();
@@ -73,7 +72,7 @@ declare var manywho: any;
                 this.setState({ currentValue: this.state.value });
                 manywho.model.setModal(this.props.flowKey, {
                     content: React.createElement(manywho.component.getByName('table-input-datetime'), {
-                        value: this.state.value, 
+                        value: this.state.value,
                         onChange: this.onChange,
                         format: manywho.formatting.toMomentFormat(this.props.contentFormat)
                     }),
@@ -86,7 +85,7 @@ declare var manywho: any;
 
         onCommit = () => {
             if (manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.datetime, true) && !this.isEmptyDate(this.state.value)) {
-                const dateTime = moment(this.state.value, ["MM/DD/YYYY hh:mm:ss A ZZ", moment.ISO_8601, this.props.contentFormat || '']);
+                const dateTime = moment(this.state.value, ['MM/DD/YYYY hh:mm:ss A ZZ', moment.ISO_8601, this.props.contentFormat || '']);
                 this.props.onCommitted(this.props.id, this.props.propertyId, dateTime.format());
                 manywho.model.setModal(this.props.flowKey, null);
             }
@@ -117,7 +116,7 @@ declare var manywho: any;
 
             if (!manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.boolean, true))
                 className += ' form-control';
-            
+
             const props: any = {
                 className: className,
                 onClick: this.onClick,
@@ -126,14 +125,14 @@ declare var manywho: any;
                 value: this.state.value,
                 onFocus: this.onFocus,
                 ref: 'input'
-            }
+            };
 
             if (!manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.datetime, true))
                 props.onBlur = this.onBlur;
 
             if (manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.boolean, true))
                 props.checked = this.state.value === true || manywho.utils.isEqual(this.state.value, 'true', true);
-            
+
             if (manywho.utils.isEqual(this.props.contentType, manywho.component.contentTypes.string, true)) {
                 props.rows = 1;
                 return React.DOM.textarea(props);
@@ -145,6 +144,6 @@ declare var manywho: any;
         }
     }
 
-    manywho.component.register("table-input", TableInput);
+    manywho.component.register('table-input', TableInput);
 
 }(manywho));
