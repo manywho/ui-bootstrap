@@ -57,8 +57,7 @@ declare var tinymce: any;
                 content_css: manywho.settings.global('richtext.content_css', this.props.flowKey, []),
                 importcss_append: manywho.settings.global('richtext.importcss_append', this.props.flowKey, false),
                 importcss_file_filter: manywho.settings.global('richtext.importcss_file_filter', this.props.flowKey, null),
-                moxiemanager_title: manywho.settings.global('richtext.moxiemanager_title', this.props.flowKey, null),
-                moxiemanager_fullscreen: manywho.settings.global('richtext.moxiemanager_fullscreen', this.props.flowKey, null),
+                file_browser_callback: null,
 
                 setup: function(editor) {
                     self.editor = editor;
