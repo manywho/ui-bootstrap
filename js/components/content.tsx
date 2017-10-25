@@ -57,7 +57,7 @@ declare var tinymce: any;
                 content_css: manywho.settings.global('richtext.content_css', this.props.flowKey, []),
                 importcss_append: manywho.settings.global('richtext.importcss_append', this.props.flowKey, false),
                 importcss_file_filter: manywho.settings.global('richtext.importcss_file_filter', this.props.flowKey, null),
-                file_browser_callback: null,
+                file_picker_callback: null,
 
                 setup: function(editor) {
                     self.editor = editor;
