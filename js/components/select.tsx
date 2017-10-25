@@ -2,283 +2,201 @@
 /// <reference path="../interfaces/IItemsComponentProps.ts" />
 
 declare var manywho: any;
-declare var reactSelectize: any;
+
+declare var ReactBootstrapTypeahead: any;
 
 interface IDropDownState {
-    options?: Array<any>,
-    search?: string,
-    isOpen?: boolean
+    inputText: string,
+    options: Array<any>,
+    page: number
 }
 
 class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
 
-    debouncedOnSearch = null;
+    config: any
 
     constructor(props) {
         super(props);
-        this.state = { options: [], search: '', isOpen: false };
 
-        this.getOptions = this.getOptions.bind(this);
-        this.onValueChange = this.onValueChange.bind(this);
-        this.onValuesChange = this.onValuesChange.bind(this);
-        this.onSearchChange = this.onSearchChange.bind(this);
-        this.onOpenChange = this.onOpenChange.bind(this);
-        this.onFocus = this.onFocus.bind(this);
-        this.onBlur = this.onBlur.bind(this);
-        this.isScrollLimit = this.isScrollLimit.bind(this);
+        this.config = {
+            delay: 750,
+            useCache: false,
+            clearButton: true
+        };
 
-        this.debouncedOnSearch = manywho.utils.debounce(this.props.onSearch, 750);
+        this.state = { 
+            inputText: '',
+            options: [],
+            page: 1
+        };
+
+        this.handlePagination = this.handlePagination.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleRefresh = this.handleRefresh.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+
+        const page = nextProps.page;
+        
+        const pagingOutcomes = {
+            FIRST: page === 1,
+            NOT_CHANGED: page === this.state.page,
+            NEXT: page > this.state.page
+        };
+
+        const optionsFromProps = this.getOptions(this.props.objectData);
+        const optionsFromState = this.state.options;
+        const allOptions = optionsFromState.concat(optionsFromProps);
+
+        const newOptions = pagingOutcomes.FIRST ? optionsFromProps 
+                         : pagingOutcomes.NOT_CHANGED ? optionsFromState
+                         : allOptions;        
+        
+        this.setState({
+            inputText: this.state.inputText,
+            options: newOptions,
+            page
+        });
     }
 
     getOptions(objectData) {
+
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const columns = manywho.component.getDisplayColumns(model.columns);
 
         if (columns && columns.length > 0) {
             const columnTypeElementPropertyId = columns[0].typeElementPropertyId;
 
-            return objectData.map((item) => {
+            return objectData === null ? [] : objectData.map((item) => {
                 const label = item.properties.filter(function (value) { return manywho.utils.isEqual(value.typeElementPropertyId, columnTypeElementPropertyId, true); })[0];
                 return { value: item, label: manywho.formatting.format(label.contentValue, label.contentFormat, label.contentType, this.props.flowKey) };
             });
         }
     }
 
-    onValueChange(option) {
-        if (!this.props.isLoading) {
-            if (option)
-                this.props.select(option.value);
-            else
-                this.props.clearSelection();
+    // events
 
-            this.setState({ isOpen: false });
+    handleChange(selection) {
+
+        if(selection.length === 0) {
+            return this.props.clearSelection();
         }
+
+        this.props.setSelection(selection.map(({ value }) => value));
     }
 
-    onValuesChange(options) {
-        if (!this.props.isLoading) {
-            if (options.length > 0) {
-                const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-                this.props.select(options[options.length - 1].value);
-            }
-            else
-                this.props.clearSelection();
-        }
+    handleInputChange(inputText: string) {
+        this.setState({ inputText, options: this.state.options, page: this.state.page });
     }
 
-    onSearchChange(search) {
-        if (!this.props.isLoading && this.state.search !== search) {
-            this.setState({ search: search });
-            this.debouncedOnSearch(search);
-        }
+    handleRefresh() {
+        this.props.onSearch(this.state.inputText);
     }
 
-    onOpenChange(isOpen) {
-        if (!this.props.isLoading)
-            this.setState({ isOpen: isOpen });
+    handlePagination() {
+        this.props.onNext();
     }
 
-    onFocus() {
-        if (!this.props.isLoading)
-            this.setState({ isOpen: true });
+    // rendering
+
+    renderRefreshButton(isDisabled, isLoading, onRefresh) {
+        const refreshClassName = `glyphicon glyphicon-refresh ${isLoading ? 'spin' : ''}`;
+
+        return (
+            <button className="btn btn-default refresh-button" onClick={onRefresh} disabled={isDisabled}>
+                <span className={refreshClassName} />
+            </button>
+        );
     }
 
-    onBlur() {
-        this.setState({ isOpen: false });
+    renderSelect(options, selectedOptions, isMultiSelect, isDisabled) {
+        return (
+            <ReactBootstrapTypeahead.AsyncTypeahead
+                onChange={this.handleChange}
+                onInputChange={this.handleInputChange}
+                onSearch={this.props.onSearch}
+                options={options} 
+                selected={selectedOptions}
+                multiple={isMultiSelect}
+                disabled={isDisabled}
+                clearButton={this.config.clearButton}
+                delay={this.config.delay}
+                useCache={this.config.useCache}
+                paginate={this.props.hasMoreResults} 
+                onPaginate={this.handlePagination}
+            />
+        );
     }
+    
+    render() {
 
-    filterOptions(options, search) {
-        return options;
-    }
-
-    getUid(option) {
-        return option.value.externalId;
-    }
-
-    isScrollLimit(e) {
-        if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight && this.props.hasMoreResults)
-            this.props.onNext();
-    }
-
-    onWindowBlur = (e) => {
-        if (this && this.refs && this.refs['select'])
-            (this.refs['select'] as any).blur();
-    }
-
-    componentWillReceiveProps(nextProps) {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
-        const doneLoading = this.props.isLoading && !nextProps.isLoading;
-        const hasRequest = model.objectDataRequest !== null || model.fileDataRequest !== null;
+        const options = this.state.options;
+        const isMultiSelect = model.isMultiSelect;
+        const isDisabled = model.isEnabled === false || this.props.isLoading || model.isEditable === false;        
+        const isLoading = this.props.isLoading;
+        const onRefresh = this.handleRefresh;
+        const hasSetWidth = model.width && model.width > 0;
 
-        if ((doneLoading || !hasRequest) && nextProps.objectData && !nextProps.isDesignTime) {
-            let options = [];
+        const containerClassName = `form-group 
+                                    ${manywho.styling.getClasses(this.props.parentId, this.props.id, 'select', this.props.flowKey).join(' ')}
+                                    ${model.isVisible === false ? ' hidden' : ''}
+                                    ${model.isValid === false || state.isValid === false || state.error ? ' has-error' : ''}
+                                    `;
+        const innerStyle = !hasSetWidth ? {} : { 
+            width: model.width,
+            minWidth: model.width
+         }
 
-            if (nextProps.page > 1 && this.state.options.length < nextProps.limit * nextProps.page) {
-                options = this.state.options.concat(this.getOptions(nextProps.objectData)),
-                    this.setState({ isOpen: true });
+        let externalIds = [];        
 
-                const index = this.state.options.length + 1;
-
-                setTimeout(() => {
-                    const dropdown = ReactDOM.findDOMNode(this).querySelector('.dropdown-menu') as HTMLDivElement;
-                    const scrollTarget = dropdown.children.item(index) as HTMLElement;
-                    dropdown.scrollTop = scrollTarget.offsetTop;
-                });
-            }
-            else
-                options = this.getOptions(nextProps.objectData);
+        if (this.props.objectData) {
 
             if (state && state.objectData) {
-                const selectedOptions = state.objectData.filter(item => options.find(option => option.value.externalId === item.externalId));
-                if (selectedOptions.length === 0)
-                    options = (this.getOptions(state.objectData) || []).concat(options);
-            }
-
-            this.setState({ options: options });
-        }
-
-        if (!this.props.isLoading && nextProps.isLoading)
-            this.setState({ isOpen: false });
-
-        if (this.props.isLoading && !nextProps.isLoading && !manywho.utils.isNullOrWhitespace(this.state.search))
-            this.setState({ isOpen: true });
-    }
-
-    componentWillMount() {
-        this.setState({ options: this.getOptions(this.props.objectData || []) });
-        window.addEventListener('blur', this.onWindowBlur);
-    }
-
-    componentWillUnMount() {
-        window.removeEventListener('blur', this.onWindowBlur);
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (!prevState.isOpen && this.state.isOpen) {
-            const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-            const element = (ReactDOM.findDOMNode(this) as HTMLElement);
-
-            if (model.attributes && manywho.utils.isEqual(model.attributes.isTethered, 'true', true)) {
-                const dropdown: HTMLElement = document.querySelector('.tether-element .dropdown-menu') as HTMLElement;
-                const selectize: HTMLElement = element.querySelector('.react-selectize') as HTMLElement;
-
-                dropdown.addEventListener('scroll', this.isScrollLimit);
-                dropdown.style.setProperty('width', selectize.offsetWidth + 'px');
-            }
-            else
-                element.querySelector('.dropdown-menu').addEventListener('scroll', this.isScrollLimit);
-        }
-    }
-
-    render() {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-
-        manywho.log.info(`Rendering Select: ${this.props.id}, ${model.developerName}`);
-
-        const state = this.props.isDesignTime ? { error: null, loading: null } : manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
-        const props: any = {
-            filterOptions: this.filterOptions,
-            uid: this.getUid,
-            search: this.state.search,
-            open: this.state.isOpen,
-            theme: 'default',
-            placeholder: model.hintValue,
-            ref: 'select'
-        };
-
-        if (!this.props.isDesignTime) {
-            props.onValueChange = this.onValueChange;
-            props.onValuesChange = this.onValuesChange;
-            props.onSearchChange = this.onSearchChange;
-            props.onOpenChange = this.onOpenChange;
-            props.onBlur = this.onBlur;
-            props.onFocus = this.onFocus;
-            props.value = null;
-            props.options = this.state.options;
-            props.disabled = (model.isEnabled === false || model.isEditable === false);
-
-            if (model.attributes && manywho.utils.isEqual(model.attributes.isTethered, 'true', true))
-                props.tether = true;
-
-            if (this.props.objectData) {
-
-                let externalIds = null;
-
-                if (state && state.objectData)
-                    externalIds = state.objectData.map((item) => item.externalId);
-                else
-                    externalIds = this.props.objectData.filter((item) => item.isSelected)
-                        .map((item) => item.externalId);
-
-                let values = null;
-
-                if (externalIds && externalIds.length > 0)
-                    values = this.state.options.filter(option => externalIds.indexOf(option.value.externalId) !== -1);
-
-                if (values)
-                    if (!model.isMultiSelect)
-                        props.value = values[0];
-                    else {
-                        props.values = values;
-                        props.anchor = values[values.length - 1];
-                    }
+                externalIds = 
+                    state.objectData
+                    .map((item) => item.externalId);
+            } else {
+                externalIds = 
+                    this.props.objectData
+                    .filter((item) => item.isSelected)
+                    .map((item) => item.externalId);
             }
         }
+        
+        const selectedOptions = options
+            .filter(option => externalIds.indexOf(option.value.externalId) !== -1);
 
-        const selectElement = (model.isMultiSelect) ? <reactSelectize.MultiSelect {...props} /> : <reactSelectize.SimpleSelect {...props} />;
+        const outcomeButtons = this.props.outcomes && this.props.outcomes.map((outcome) => {
+                return React.createElement(manywho.component.getByName('outcome'), { 
+                    id: outcome.id, 
+                    flowKey: this.props.flowKey, 
+                });
+            }
+        );        
+        
+        return (
+            <div className={containerClassName} id={this.props.id}>
+                <label>
+                    {model.label}
+                    {(model.isRequired) ? <span className="input-required"> * </span> : null}
+                </label>
+                <div style={innerStyle} className={'flex-container'}>
+                    { this.renderSelect(options, selectedOptions, isMultiSelect, false) }
+                    { this.renderRefreshButton(isDisabled, isLoading, onRefresh) }
+                </div>
+                <span className="help-block">{(state.error && state.error.message) || model.validationMessage || state.validationMessage}</span>
+                <span className="help-block">{model.helpInfo}</span>
 
-        let refreshButton = null;
-        if (model.objectDataRequest || model.fileDataRequest) {
-            let className = 'glyphicon glyphicon-refresh';
-
-            let isDisabled = false;
-            if (model.isEnabled === false || this.props.isLoading || model.isEditable === false)
-                isDisabled = true;
-
-            if (this.props.isLoading)
-                className += ' spin';
-
-            refreshButton = <button className="btn btn-default refresh-button" onClick={this.props.refresh} disabled={isDisabled}>
-                <span className={className} />
-            </button>;
-        }
-
-        const outcomeButtons = this.props.outcomes && this.props.outcomes.map((outcome) => React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: this.props.flowKey, }));
-
-        let className = manywho.styling.getClasses(this.props.parentId, this.props.id, 'select', this.props.flowKey).join(' ');
-        className += ' form-group';
-
-        if (model.isVisible === false)
-            className += ' hidden';
-
-        if (model.isValid === false || state.isValid === false || state.error)
-            className += ' has-error';
-
-        let style: any = {};
-        let widthClassName = null;
-
-        if (model.width && model.width > 0) {
-            style.width = model.width + 'px';
-            style.minWidth = style.width;
-            widthClassName = 'width-specified';
-        }
-
-        return <div className={className} id={this.props.id}>
-            <label>
-                {model.label}
-                {(model.isRequired) ? <span className="input-required"> * </span> : null}
-            </label>
-            <div style={style} className={widthClassName}>
-                {selectElement}
-                {refreshButton}
+                {outcomeButtons}            
             </div>
-            <span className="help-block">{(state.error && state.error.message) || model.validationMessage || state.validationMessage}</span>
-            <span className="help-block">{model.helpInfo}</span>
-            {outcomeButtons}
-        </div>;
+        );
     }
-}
+    
+} 
 
 manywho.component.registerItems('select', DropDown);

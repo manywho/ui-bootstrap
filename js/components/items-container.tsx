@@ -3,6 +3,26 @@
 
 declare var manywho: any;
 
+interface IObjectData {
+    developerName: string,
+    externalId: string,
+    internalId: string,
+    isSelected: boolean,
+    order: number,
+    properties: Array<IObjectDataProperty>,
+    typeElementId: string
+}
+
+interface IObjectDataProperty {
+    contentFormat: string,
+    contentType: string,
+    contentValue: string,
+    developerName: string,
+    objectData: IObjectData,
+    typeElementId: string,
+    typeElementProprtyId: string
+}
+
 class ItemsContainer extends React.Component<IComponentProps, any> {
 
     constructor(props: IComponentProps) {
@@ -17,6 +37,7 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
         this.select = this.select.bind(this);
         this.selectAll = this.selectAll.bind(this);
         this.clearSelection = this.clearSelection.bind(this);
+        this.setSelection = this.setSelection.bind(this);
         this.onPaginate = this.onPaginate.bind(this);
         this.onNext = this.onNext.bind(this);
         this.onPrev = this.onPrev.bind(this);
@@ -119,6 +140,24 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
 
     refresh(e) {
         this.search(null, true);
+    }
+
+    setSelectedState(selectedState: boolean, list: Array<IObjectData>) {
+        return list.map(item => {
+            return Object.assign({}, item, { isSelected: selectedState })
+        });
+    }
+
+    setSelection(newSelection: Array<IObjectData>) {
+
+        if(newSelection.length === 0) {
+            return this.clearSelection(false);
+        }
+
+        const newSelectionUpdated = this.setSelectedState(true, newSelection);
+
+        this.updateState(newSelectionUpdated, false);
+        manywho.component.handleEvent(this, manywho.model.getComponent(this.props.id, this.props.flowKey), this.props.flowKey);
     }
 
     select(item: string | Object, clearSearch: boolean) {
@@ -301,6 +340,7 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
             select: this.select,
             selectAll: this.selectAll,
             clearSelection: this.clearSelection,
+            setSelection: this.setSelection,
             objectData: objectData,
             onSearch: this.search,
             outcomes: outcomes,

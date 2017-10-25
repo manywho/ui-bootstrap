@@ -2,46 +2,27 @@
 
     .mw-select {
 
-        & > div {
-            display: flex;
-        }
-
-        &.has-error .resizable-input {
-            box-shadow: none;
-        }
-
-        .width-specified .react-selectize.default.root-node {
+        .bootstrap-typeahead {
             width: 100%;
         }
 
-        .react-selectize.default.root-node {
+        .bootstrap-typeahead-clear-button {
+            color: #000;
+            margin-top: -12px;
+            opacity: 0.2;
+        }
+
+        .has-aux {
+            padding-right: 32px;
+        }
+
+        .flex-container {
+            display: flex;
             width: 300px;
         }
 
-        .react-selectize.root-node .react-selectize-control .react-selectize-reset-button-container {
-            margin-left: 1em;
-        }
-
-        .react-selectize.default.root-node .react-selectize-control {
-            border-radius: 0;
-        }
-
-        .react-selectize.dropdown-menu.default:not(.flipped) {
-            border-radius: 0;
-        }
-
-        .simple-select.react-selectize.default.root-node:not(.open).disabled .react-selectize-control {
-            background: #efefef;
-        }
-
-        .simple-select.react-selectize.default.root-node:not(.open) .react-selectize-control {
-            background: #ffffff;
-        }
-
         .refresh-button {
-            border-bottom-left-radius: 0;
             border-left: 0;
-            border-top-left-radius: 0;
         }
 
     }
@@ -61,9 +42,12 @@
 
     .mw-bs {
 
-        .react-selectize.root-node {
-            min-width: 0;
-            width: calc(~'100% - 40px');
+        .mw-select {
+
+            .flex-container {
+                width: auto;
+                max-width: 300px;
+            }
         }
 
     }

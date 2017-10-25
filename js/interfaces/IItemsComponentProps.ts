@@ -12,6 +12,7 @@ interface IItemsComponentProps extends IComponentProps {
     select: Function,
     selectAll: Function,
     clearSelection: Function,
+    setSelection: Function,
     objectData: Array<any>,
     onSearch: Function,
     outcomes: Array<any>,
