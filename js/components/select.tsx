@@ -21,7 +21,8 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
         this.config = {
             delay: 750,
             useCache: false,
-            clearButton: true
+            clearButton: true,
+            minLength: 0
         };
 
         this.state = { 
@@ -126,6 +127,7 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
                 useCache={this.config.useCache}
                 paginate={this.props.hasMoreResults} 
                 onPaginate={this.handlePagination}
+                minLength={this.config.minLength}
             />
         );
     }
