@@ -58,14 +58,14 @@ declare var manywho: any;
                     return <th className="table-outcome-column" key="actions">Actions</th>;
                 else {
                     const headerProps = {
-                        id: column.developerName,
-                        key: 'header-' + column.developerName,
+                        id: column.typeElementPropertyId,
+                        key: 'header-' + column.typeElementPropertyId,
                         onClick: (this.props.onHeaderClick) ? this.props.onHeaderClick : null
                     };
 
                     const headerChildren = [column.label];
 
-                    if (manywho.utils.isEqual(this.props.sortedBy, column.developerName, true)) {
+                    if (manywho.utils.isEqual(this.props.sortedBy, column.typeElementPropertyId, true)) {
 
                         let iconClassName = 'table-header-icon glyphicon ';
                         iconClassName += this.props.sortedIsAscending ? 'glyphicon-menu-down' : 'glyphicon-menu-up';
