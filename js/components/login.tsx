@@ -46,7 +46,7 @@ declare var manywho: any;
                         manywho.authorization.setAuthenticationToken(response, this.props.flowKey);
 
                         if (this.props.callback)
-                            this.props.callback.execute.apply(undefined, [this.props.callback].concat(this.props.callback.args));
+                            this.props.callback.execute.apply(this.props.callback.context, [this.props.callback].concat(this.props.callback.args));
 
                         this.setState({ loading: null });
                     })

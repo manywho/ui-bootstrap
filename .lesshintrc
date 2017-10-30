@@ -3,7 +3,8 @@
     "zeroUnit": false,
     "qualifyingElement": false,
     "idSelector": false,
+    "universalSelector": false,
     "maxCharPerLine": {
-        "linit": 120
+        "limit": 120
     }
 }
