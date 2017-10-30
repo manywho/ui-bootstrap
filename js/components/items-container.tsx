@@ -144,13 +144,13 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
 
     setSelectedState(selectedState: boolean, list: Array<IObjectData>) {
         return list.map(item => {
-            return Object.assign({}, item, { isSelected: selectedState })
+            return Object.assign({}, item, { isSelected: selectedState });
         });
     }
 
     setSelection(newSelection: Array<IObjectData>) {
 
-        if(newSelection.length === 0) {
+        if (newSelection.length === 0) {
             return this.clearSelection(false);
         }
 

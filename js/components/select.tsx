@@ -13,7 +13,7 @@ interface IDropDownState {
 
 class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
 
-    config: any
+    config: any;
 
     constructor(props) {
         super(props);
@@ -25,7 +25,7 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
             minLength: 0
         };
 
-        this.state = { 
+        this.state = {
             inputText: '',
             options: [],
             page: 1
@@ -40,7 +40,7 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
     componentWillReceiveProps(nextProps) {
 
         const page = nextProps.page;
-        
+
         const pagingOutcomes = {
             FIRST: page === 1,
             NOT_CHANGED: page === this.state.page,
@@ -51,10 +51,10 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
         const optionsFromState = this.state.options;
         const allOptions = optionsFromState.concat(optionsFromProps);
 
-        const newOptions = pagingOutcomes.FIRST ? optionsFromProps 
+        const newOptions = pagingOutcomes.FIRST ? optionsFromProps
                          : pagingOutcomes.NOT_CHANGED ? optionsFromState
-                         : allOptions;        
-        
+                         : allOptions;
+
         this.setState({
             inputText: this.state.inputText,
             options: newOptions,
@@ -77,11 +77,11 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
         }
     }
 
-    // events
+    // Events
 
     handleChange(selection) {
 
-        if(selection.length === 0) {
+        if (selection.length === 0) {
             return this.props.clearSelection();
         }
 
@@ -100,7 +100,7 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
         this.props.onNext();
     }
 
-    // rendering
+    // Rendering
 
     renderRefreshButton(isDisabled, isLoading, onRefresh) {
         const refreshClassName = `glyphicon glyphicon-refresh ${isLoading ? 'spin' : ''}`;
@@ -118,20 +118,20 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
                 onChange={this.handleChange}
                 onInputChange={this.handleInputChange}
                 onSearch={this.props.onSearch}
-                options={options} 
+                options={options}
                 selected={selectedOptions}
                 multiple={isMultiSelect}
                 disabled={isDisabled}
                 clearButton={this.config.clearButton}
                 delay={this.config.delay}
                 useCache={this.config.useCache}
-                paginate={this.props.hasMoreResults} 
+                paginate={this.props.hasMoreResults}
                 onPaginate={this.handlePagination}
                 minLength={this.config.minLength}
             />
         );
     }
-    
+
     render() {
 
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
@@ -139,7 +139,7 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
 
         const options = this.state.options;
         const isMultiSelect = model.isMultiSelect;
-        const isDisabled = model.isEnabled === false || this.props.isLoading || model.isEditable === false;        
+        const isDisabled = model.isEnabled === false || this.props.isLoading || model.isEditable === false;
         const isLoading = this.props.isLoading;
         const onRefresh = this.handleRefresh;
         const hasSetWidth = model.width && model.width > 0;
@@ -149,38 +149,38 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
                                     ${model.isVisible === false ? ' hidden' : ''}
                                     ${model.isValid === false || state.isValid === false || state.error ? ' has-error' : ''}
                                     `;
-        const innerStyle = !hasSetWidth ? {} : { 
+        const innerStyle = !hasSetWidth ? {} : {
             width: model.width,
             minWidth: model.width
-         }
+        };
 
-        let externalIds = [];        
+        let externalIds = [];
 
         if (this.props.objectData) {
 
             if (state && state.objectData) {
-                externalIds = 
+                externalIds =
                     state.objectData
                     .map((item) => item.externalId);
             } else {
-                externalIds = 
+                externalIds =
                     this.props.objectData
                     .filter((item) => item.isSelected)
                     .map((item) => item.externalId);
             }
         }
-        
+
         const selectedOptions = options
             .filter(option => externalIds.indexOf(option.value.externalId) !== -1);
 
         const outcomeButtons = this.props.outcomes && this.props.outcomes.map((outcome) => {
-                return React.createElement(manywho.component.getByName('outcome'), { 
-                    id: outcome.id, 
-                    flowKey: this.props.flowKey, 
+                return React.createElement(manywho.component.getByName('outcome'), {
+                    id: outcome.id,
+                    flowKey: this.props.flowKey,
                 });
             }
-        );        
-        
+        );
+
         return (
             <div className={containerClassName} id={this.props.id}>
                 <label>
@@ -198,7 +198,7 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
             </div>
         );
     }
-    
-} 
+
+}
 
 manywho.component.registerItems('select', DropDown);
