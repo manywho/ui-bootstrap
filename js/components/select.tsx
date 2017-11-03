@@ -47,13 +47,13 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
             NEXT: page > this.state.page
         };
 
-        const optionsFromProps = this.getOptions(this.props.objectData);
+        const optionsFromProps = this.getOptions(nextProps.objectData);
         const optionsFromState = this.state.options;
         const allOptions = optionsFromState.concat(optionsFromProps);
 
         const newOptions = pagingOutcomes.FIRST ? optionsFromProps
-                         : pagingOutcomes.NOT_CHANGED ? optionsFromState
-                         : allOptions;
+                            : pagingOutcomes.NOT_CHANGED ? optionsFromState
+                            : allOptions;
 
         this.setState({
             inputText: this.state.inputText,
