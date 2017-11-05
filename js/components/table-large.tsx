@@ -120,7 +120,7 @@ declare var manywho: any;
 
                         if (!manywho.utils.isNullOrWhitespace(column.typeElementPropertyToDisplayId)) {
 
-                            if (selectedProperty != null && selectedProperty.objectData != null)
+                            if (selectedProperty != null && selectedProperty.objectData != null && selectedProperty.objectData.length)
                                 selectedProperty = selectedProperty.objectData[0].properties.find(childProperty => childProperty.typeElementPropertyId === column.typeElementPropertyToDisplayId);
                         }
 
