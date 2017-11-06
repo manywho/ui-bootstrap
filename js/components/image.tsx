@@ -2,40 +2,33 @@
 
 declare var manywho: any;
 
-interface IImageState {
-}
+// Cannot use 'Image' for component name as it clashes with the browser native window.Image class
+const MWImage: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
 
-// Cannot use 'Image' for class name as it clashes with the browser native window.Image class
-class MWImage extends React.Component<IComponentProps, IImageState> {
+    const classes = manywho.styling.getClasses(parentId, id, 'image', flowKey);
+    const model = manywho.model.getComponent(id, flowKey);
+    const outcomes = manywho.model.getOutcomes(id, flowKey);
+    const label = model.label;
 
-    render () {
+    const outcomeButtons = outcomes && outcomes.map(function (outcome) {
+        return React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: flowKey });
+    }, this);
 
-        const classes = manywho.styling.getClasses(this.props.parentId, this.props.id, 'image', this.props.flowKey);
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
-        const label = model.label;
+    if (model.isVisible !== true) {
 
-        const outcomeButtons = outcomes && outcomes.map(function (outcome) {
-            return React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: this.props.flowKey });
-        }, this);
-
-        if (model.isVisible !== true) {
-
-            classes.push('hidden');
-
-        }
-
-        return (
-            <div className={classes.join(' ')} id={this.props.id}>
-                {
-                    !manywho.utils.isNullOrWhitespace(label) ? <label className={'img-label'}>{label}</label> : null
-                }
-                <img className="img-responsive" src={model.imageUri} alt={model.developerName} id={this.props.id} />
-                {outcomeButtons}
-            </div>
-        );
+        classes.push('hidden');
 
     }
-}
+
+    return (
+        <div className={classes.join(' ')} id={id}>
+            {
+                !manywho.utils.isNullOrWhitespace(label) ? <label className={'img-label'}>{label}</label> : null
+            }
+            <img className="img-responsive" src={model.imageUri} alt={model.developerName} id={id} />
+            {outcomeButtons}
+        </div>
+    );
+};
 
 manywho.component.register('image', MWImage);
