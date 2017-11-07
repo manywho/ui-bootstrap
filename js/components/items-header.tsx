@@ -26,12 +26,12 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
     onSearchEnter(e) {
         if (e.keyCode === 13) {
             e.stopPropagation();
-            this.props.onSearch(this.state.search, true);
+            this.props.onSearch(this.state.search, false);
         }
     }
 
     onSearch(e) {
-        this.props.onSearch(this.state.search, true);
+        this.props.onSearch(this.state.search, false);
     }
 
     render() {
