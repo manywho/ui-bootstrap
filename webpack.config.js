@@ -1,8 +1,10 @@
-const path = require('path');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+var path = require('path');
+var fs = require( 'fs' );
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const extractThemes = new ExtractTextPlugin('theme.css');
-const extractLibs = new ExtractTextPlugin('lib.css');
+var extractLibs = new ExtractTextPlugin('lib.css');
+
+var themeDir = path.resolve(__dirname, 'css/themes2/');
 
 var config = {
   entry: './js/index.js',
@@ -19,24 +21,10 @@ var config = {
       },      
       {
         test: /\.css$/,
-        //exclude: path.resolve(__dirname, 'css/lib/bootstrap.css'),
         include: [
           path.resolve(__dirname, 'css/lib/'),
         ],
         use: extractLibs.extract(
-          {
-            fallback: "style-loader",
-            use: "css-loader"
-          }
-        )
-      },
-      {
-        test: /\.css$/,
-        //exclude: path.resolve(__dirname, 'css/lib/bootstrap.css'),
-        include: [
-          path.resolve(__dirname, 'css/theme/'),
-        ],
-        use: extractThemes.extract(
           {
             fallback: "style-loader",
             use: "css-loader"
@@ -60,7 +48,6 @@ var config = {
     'react-motion': 'react-motion'
   },
   plugins: [
-    extractThemes,
     extractLibs
   ],
   output: {
@@ -68,12 +55,30 @@ var config = {
   }
 };
 
-module.exports = function(env) {
-  var dir = 'build';
+const configPromise = new Promise(function(resolve, reject) {
+  
+  fs.readdir(themeDir, function( err, files ) {
+    files.forEach(function(file, index) {
+      extractInstance = new ExtractTextPlugin('compiled-' + file);
+      ruleObj = {
+        test: /\.css$/,
+        include: path.resolve(__dirname, 'css/themes/'),
+        use: extractInstance.extract(
+          {
+            fallback: "style-loader",
+            use: "css-loader"
+          }
+        )
+      };
+      
+      config.module.rules.push(ruleObj);
+      config.plugins.push(extractInstance);
+    });
 
-  if (env && env.build)
-      dir = env.build;
-
-  config.output.path = path.resolve(__dirname, 'build2', 'js');
-  return config;
-};
+    config.output.path = path.resolve(__dirname, 'build2', 'js');
+    return resolve(config);
+  })
+  
+  })
+  
+  module.exports = configPromise
