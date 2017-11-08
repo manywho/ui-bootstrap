@@ -1,6 +1,9 @@
 const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
+const extractThemes = new ExtractTextPlugin('theme.css');
+const extractLibs = new ExtractTextPlugin('lib.css');
+
 var config = {
   entry: './js/index.js',
   module: {
@@ -16,10 +19,29 @@ var config = {
       },      
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: "css-loader"
-        })
+        //exclude: path.resolve(__dirname, 'css/lib/bootstrap.css'),
+        include: [
+          path.resolve(__dirname, 'css/lib/'),
+        ],
+        use: extractLibs.extract(
+          {
+            fallback: "style-loader",
+            use: "css-loader"
+          }
+        )
+      },
+      {
+        test: /\.css$/,
+        //exclude: path.resolve(__dirname, 'css/lib/bootstrap.css'),
+        include: [
+          path.resolve(__dirname, 'css/theme/'),
+        ],
+        use: extractThemes.extract(
+          {
+            fallback: "style-loader",
+            use: "css-loader"
+          }
+        )
       }
     ]
   },
@@ -38,7 +60,8 @@ var config = {
     'react-motion': 'react-motion'
   },
   plugins: [
-    new ExtractTextPlugin("styles.css"),
+    extractThemes,
+    extractLibs
   ],
   output: {
     filename: 'ui-bundle.js'
@@ -51,6 +74,6 @@ module.exports = function(env) {
   if (env && env.build)
       dir = env.build;
 
-  config.output.path = path.resolve(__dirname, '../ui-html5/build', 'js');
+  config.output.path = path.resolve(__dirname, 'build2', 'js');
   return config;
 };
