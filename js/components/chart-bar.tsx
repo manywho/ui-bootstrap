@@ -3,33 +3,26 @@
 
 declare var manywho: any;
 
-class ChartBar extends React.Component<IItemsComponentProps, any> {
+/* tslint:disable-next-line:variable-name */
+const ChartBar: React.SFC<IItemsComponentProps> = (props) => {
 
-    displayName = 'ChartBar';
+    const { id, parentId, flowKey } = props;
+    const model = manywho.model.getComponent(id, flowKey);
+    let label = null;
 
-    constructor(props: any) {
-        super(props);
-    }
+    if (model.attributes)
+        label = model.attributes.label;
 
-    render() {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        let label = null;
+    const chartProps: any = $.extend({}, props, {
+        type: 'bar',
+        options: {
+            legend: {
+                display: !manywho.utils.isNullOrWhitespace(label)
+            },
+        },
+    });
 
-        if (model.attributes)
-            label = model.attributes.label;
-
-        const props: any = $.extend({}, this.props, {
-            type: 'bar',
-            options: {
-                legend: {
-                    display: !manywho.utils.isNullOrWhitespace(label)
-                }
-            }
-        });
-
-        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-    }
-
-}
+    return React.createElement(manywho.component.getByName('mw-chart'), chartProps, null);
+};
 
 manywho.component.registerItems('chart-bar', ChartBar);

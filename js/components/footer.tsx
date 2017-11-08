@@ -4,20 +4,24 @@ declare var manywho: any;
 
 (function (manywho) {
 
-    const footer = React.createClass({
-        render: function () {
-            if (this.props.children) {
-                manywho.log.info('Rendering Footer');
+    /* tslint:disable-next-line:variable-name */
+    const Footer: React.SFC<IComponentProps> = ({ children, flowKey }) => {
 
-                let className = 'mw-footer';
-                className += (manywho.settings.global('isFullWidth', this.props.flowKey, false)) ? ' container-fluid' : ' container';
+        if (children) {
+            manywho.log.info('Rendering Footer');
 
-                return <div className={className}>{this.props.children}</div>;
-            }
-            return null;
+            let className = 'mw-footer';
+            className += 
+                manywho.settings.global('isFullWidth', flowKey, false) ? 
+                ' container-fluid' : 
+                ' container';
+
+            return <div className={className}>{children}</div>;
         }
-    });
 
-    manywho.component.register('footer', footer);
+        return null;
+    };
+
+    manywho.component.register('footer', Footer);
 
 } (manywho));

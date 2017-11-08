@@ -3,22 +3,14 @@
 
 declare var manywho: any;
 
-class ChartPie extends React.Component<IItemsComponentProps, any> {
+/* tslint:disable-next-line:variable-name */
+const ChartPie: React.SFC<IItemsComponentProps> = (props) => {
 
-    displayName = 'ChartPie';
+    const chartProps: any = $.extend({}, props, {
+        type: 'pie',
+    });
 
-    constructor(props: any) {
-        super(props);
-    }
-
-    render() {
-        const props: any = $.extend({}, this.props, {
-            type: 'pie'
-        });
-
-        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-    }
-
-}
+    return React.createElement(manywho.component.getByName('mw-chart'), chartProps, null);
+};
 
 manywho.component.registerItems('chart-pie', ChartPie);

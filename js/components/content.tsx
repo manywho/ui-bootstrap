@@ -25,7 +25,7 @@ declare var tinymce: any;
         constructor(props) {
             super(props);
             this.state = {
-                isImageUploadOpen: false
+                isImageUploadOpen: false,
             };
 
             this.id = `content-${this.props.id}_${manywho.utils.guid()}`;
@@ -40,41 +40,71 @@ declare var tinymce: any;
             const self = this;
             const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
-            const customPlugins = manywho.settings.global('richtext.custom_plugins', this.props.flowKey, null);
+            const customPlugins = 
+                manywho.settings.global('richtext.custom_plugins', this.props.flowKey, null);
+
             if (customPlugins)
-                Object.keys(customPlugins).forEach(name => tinymce.PluginManager.add(name, customPlugins[name]));
+                Object.keys(customPlugins).forEach(name => 
+                    tinymce.PluginManager.add(name, customPlugins[name])
+                );
 
             tinymce.init({
                 selector: `textarea#${this.id}`,
                 plugins: manywho.settings.global('richtext.plugins', this.props.flowKey, []),
-                external_plugins: manywho.settings.global('richtext.external_plugins', this.props.flowKey, []),
-                width: model.width * 19, // Multiply the width by a "best guess" font-size as the manywho width is columns and tinymce width is pixels
-                height: model.height * 16, // Do the same for the height
+                external_plugins: manywho.settings.global(
+                    'richtext.external_plugins', 
+                    this.props.flowKey, 
+                    [],
+                ),
+                // Multiply the width by a "best guess" font-size as the manywho width is columns 
+                // and tinymce width is pixels
+                width: model.width * 19, 
+                // Do the same for the height
+                height: model.height * 16, 
                 readonly: !model.isEditable,
                 menubar: 'edit insert view format table',
                 browser_spellcheck: true,
-                toolbar: manywho.settings.global('richtext.toolbar', this.props.flowKey, []),
-                content_css: manywho.settings.global('richtext.content_css', this.props.flowKey, []),
-                importcss_append: manywho.settings.global('richtext.importcss_append', this.props.flowKey, false),
-                importcss_file_filter: manywho.settings.global('richtext.importcss_file_filter', this.props.flowKey, null),
+                toolbar: manywho.settings.global(
+                    'richtext.toolbar', 
+                    this.props.flowKey, 
+                    [],
+                ),
+                content_css: manywho.settings.global(
+                    'richtext.content_css', 
+                    this.props.flowKey, 
+                    [],
+                ),
+                importcss_append: manywho.settings.global(
+                    'richtext.importcss_append', 
+                    this.props.flowKey, 
+                    false,
+                ),
+                importcss_file_filter: manywho.settings.global(
+                    'richtext.importcss_file_filter',
+                    this.props.flowKey, 
+                    null,
+                ),
                 file_picker_callback: null,
 
-                setup: function(editor) {
+                setup: (editor) => {
                     self.editor = editor;
 
                     if (!self.props.isDesignTime) {
 
-                        if (manywho.settings.global('richtext.imageUploadEnabled', self.props.flowKey, true))
+                        if (
+                            manywho.settings.global(
+                                'richtext.imageUploadEnabled', self.props.flowKey, true,
+                            )
+                        ) {
                             editor.addButton('mwimage', {
                                 title: 'Images',
                                 icon: 'image',
-                                onclick: function () {
-                                    self.setState({
-                                        isImageUploadOpen: true
-                                    });
+                                onclick: () => {
+                                    self.setState({isImageUploadOpen: true });
                                     self.render();
                                 }
                             });
+                        }
 
                         editor.on('change', self.onChange);
 
@@ -83,34 +113,39 @@ declare var tinymce: any;
                     }
 
                     editor.on('init', function () {
-                        this.getDoc().body.style.fontSize = manywho.settings.global('richtext.fontsize', self.props.flowKey, '13px');
+                        this.getDoc().body.style.fontSize = manywho.settings.global(
+                            'richtext.fontsize', self.props.flowKey, '13px',
+                        );
                     });
                 }
             });
         }
 
         componentDidMount = () => {
-            if (!(window as any).tinymce)
-                if (!Content.isLoadingTinyMce)
+            if (!(window as any).tinymce) {
+                if (!Content.isLoadingTinyMce) {
                     Content.loadTinyMce(() => this.initializeEditor());
-                else {
-                    let loaderInterval = setInterval(() => {
-                        if ((window as any).tinymce) {
-                            this.initializeEditor();
-                            clearInterval(loaderInterval);
-                        }
-                    }, 50);
+                } else {
+                    const loaderInterval = setInterval(
+                        () => {
+                            if ((window as any).tinymce) {
+                                this.initializeEditor();
+                                clearInterval(loaderInterval);
+                            }
+                        }, 
+                        50,
+                    );
                 }
-            else
+            } else {
                 this.initializeEditor();
+            }
         }
 
         componentWillUnmount = () => {
             if (this.editor) {
                 try {
                     this.editor.remove();
-                }
-                catch (ex) {
+                } catch (ex) {
                     manywho.log.error(ex);
                 }
             }
@@ -123,20 +158,24 @@ declare var tinymce: any;
         }
 
         onEvent = (e) => {
-            manywho.component.handleEvent(this, manywho.model.getComponent(this.props.id, this.props.flowKey), this.props.flowKey);
+            manywho.component.handleEvent(
+                this, 
+                manywho.model.getComponent(this.props.id, this.props.flowKey), 
+                this.props.flowKey,
+            );
         }
 
         renderFileDialog = () => {
             const tableProps: any = {
                 flowKey: this.props.flowKey,
                 id: this.props.id,
-                selectionEnabled: true
+                selectionEnabled: true,
             };
 
             const uploadProps: any = {
                 flowKey: this.props.flowKey,
                 id: this.props.id,
-                multiple: true
+                multiple: true,
             };
 
             if (!this.props.isDesignTime) {
@@ -158,15 +197,27 @@ declare var tinymce: any;
                             </ul>
                             <div className="tab-content">
                                 <div className="tab-pane active" id="files">
-                                    {React.createElement(manywho.component.getByName('table'), tableProps)}
+                                    {
+                                        React.createElement(
+                                            manywho.component.getByName('table'), 
+                                            tableProps,
+                                        )
+                                    }
                                 </div>
                                 <div className="tab-pane" id="upload">
-                                    {React.createElement(manywho.component.getByName('file-upload'), uploadProps)}
+                                    {
+                                        React.createElement(
+                                            manywho.component.getByName('file-upload'), 
+                                            uploadProps
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button className="btn btn-default" onClick={this.onFileCancel}>Cancel</button>
+                            <button className="btn btn-default" onClick={this.onFileCancel}>
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -174,21 +225,30 @@ declare var tinymce: any;
         }
 
         onUploadComplete = (response) => {
-            const imageUri = manywho.utils.getObjectDataProperty(response.objectData[0].properties, 'Download Uri');
-            const imageName = manywho.utils.getObjectDataProperty(response.objectData[0].properties, 'Name');
+            const imageUri = manywho.utils.getObjectDataProperty(
+                response.objectData[0].properties, 'Download Uri',
+            );
+            const imageName = manywho.utils.getObjectDataProperty(
+                response.objectData[0].properties, 'Name',
+            );
 
             if (imageUri) {
-                tinymce.activeEditor.execCommand('mceInsertContent', false, '<img src="' + imageUri.contentValue + '" alt="' + imageName.contentValue + '"/>');
+                tinymce.activeEditor.execCommand(
+                    'mceInsertContent', 
+                    false, 
+                    '<img src="' + imageUri.contentValue + '" alt="' + 
+                        imageName.contentValue + '"/>',
+                );
 
                 this.setState({
-                    isImageUploadOpen: false
+                    isImageUploadOpen: false,
                 });
             }
         }
 
         onFileCancel = (event) => {
             this.setState({
-                isImageUploadOpen: false
+                isImageUploadOpen: false,
             });
         }
 
@@ -197,10 +257,14 @@ declare var tinymce: any;
             const imageName = event.currentTarget.firstChild.innerText;
 
             if (imageUri != null && imageUri.length > 0) {
-                tinymce.activeEditor.execCommand('mceInsertContent', false, '<img src="' + imageUri + '" alt="' + imageName + '"/>');
+                tinymce.activeEditor.execCommand(
+                    'mceInsertContent', 
+                    false, 
+                    '<img src="' + imageUri + '" alt="' + imageName + '"/>'
+                );
 
                 this.setState({
-                    isImageUploadOpen: false
+                    isImageUploadOpen: false,
                 });
             }
         }
@@ -213,7 +277,10 @@ declare var tinymce: any;
             const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
             const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
-            const contentValue = state && state.contentValue !== undefined ? state.contentValue : model.contentValue;
+            const contentValue = 
+                state && state.contentValue !== undefined ? 
+                state.contentValue : 
+                model.contentValue;
 
             const props: any = {
                 id: this.id,
@@ -232,7 +299,9 @@ declare var tinymce: any;
             if (!this.props.isDesignTime)
                 props.defaultValue = contentValue;
 
-            let className = manywho.styling.getClasses(this.props.parentId, this.props.id, 'input', this.props.flowKey).join(' ');
+            let className = manywho.styling.getClasses(
+                this.props.parentId, this.props.id, 'input', this.props.flowKey,
+            ).join(' ');
 
             if (model.isValid === false || state.isValid === false)
                 className += ' has-error';
@@ -242,12 +311,28 @@ declare var tinymce: any;
 
             className += ' form-group';
 
-            const outcomeButtons = outcomes && outcomes.map(outcome => React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: this.props.flowKey }));
+            const outcomeButtons = outcomes && outcomes.map((outcome) => {
+                return React.createElement(
+                    manywho.component.getByName('outcome'), 
+                    { id: outcome.id, flowKey: this.props.flowKey },
+                );
+            });
 
             return <div className={className} id={this.props.id}>
-                <label>{model.label}{model.isRequired ? <span className="input-required"> *</span> : null}</label>
+                <label>
+                    {model.label}
+                    {
+                        model.isRequired ? 
+                            <span className="input-required"> *</span> : 
+                            null
+                    }
+                </label>
                 <textarea {...props} />
-                <span className="help-block">{model.validationMessage || state.validationMessage}</span>
+                <span className="help-block">
+                {
+                    model.validationMessage || state.validationMessage
+                }
+                </span>
                 <span className="help-block">{model.helpInfo}</span>
                 {outcomeButtons}
                 {this.state.isImageUploadOpen ? this.renderFileDialog() : null}

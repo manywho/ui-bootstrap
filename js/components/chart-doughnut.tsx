@@ -3,22 +3,14 @@
 
 declare var manywho: any;
 
-class ChartDoughnut extends React.Component<IItemsComponentProps, any> {
+/* tslint:disable-next-line:variable-name */
+const ChartDoughnut: React.SFC<IItemsComponentProps> = (props) => {
 
-    displayName = 'ChartDoughnut';
+    const chartProps: any = $.extend({}, props, {
+        type: 'doughnut',
+    });
 
-    constructor(props: any) {
-        super(props);
-    }
-
-    render() {
-        const props: any = $.extend({}, this.props, {
-            type: 'doughnut'
-        });
-
-        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-    }
-
-}
+    return React.createElement(manywho.component.getByName('mw-chart'), chartProps, null);
+};
 
 manywho.component.registerItems('chart-doughnut', ChartDoughnut);

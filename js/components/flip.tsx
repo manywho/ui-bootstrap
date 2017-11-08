@@ -2,14 +2,31 @@
 
 declare var manywho: any;
 
+interface IFlipState {
+    isFlipped: boolean;
+    animationStyle?: string;
+}
+
 // Stolen From: http://davidwalsh.name/css-flip
 (function (manywho) {
 
-    const flip = React.createClass({
+    class Flip extends React.Component<any, IFlipState> {
 
-        toggleFlip: function () {
+        constructor(props) {
+            super(props);
+
+            this.state = {
+                isFlipped: false,
+                animationStyle: 'rotateY',
+            };
+
+            this.toggleFlip = this.toggleFlip.bind(this);
+            this.setHeight = this.setHeight.bind(this);
+        }
+
+        toggleFlip() {
             this.setState({ isFlipped: !this.state.isFlipped });
-        },
+        }
 
         setHeight() {
             if (this.props.isDesignTime)
@@ -20,35 +37,28 @@ declare var manywho: any;
             if (this.state.isFlipped) {
                 const back = ReactDOM.findDOMNode(this.refs['back']).firstChild as HTMLElement;
                 element.style.setProperty('height', back.offsetHeight + 'px');
-            }
-            else {
+            } else {
                 const front = ReactDOM.findDOMNode(this.refs['front']).firstChild as HTMLElement;
                 element.style.setProperty('height', front.offsetHeight + 'px');
             }
-        },
+        }
 
-        getInitialState: function () {
-            return {
-                isFlipped: false,
-                animationStyle: 'rotateY'
-            };
-        },
-
-        componentDidUpdate: function () {
+        componentDidUpdate() {
             this.setHeight();
-        },
+        }
 
-        componentDidMount: function () {
+        componentDidMount() {
             this.setHeight();
-        },
+        }
 
-        render: function () {
+        render() {
             if (this.props.isDesignTime)
                 return <div className="clearfix"></div>;
 
             const model = manywho.model.getContainer(this.props.id, this.props.flowKey);
             const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
-            const childComponents = manywho.component.getChildComponents(children, this.props.id, this.props.flowKey);
+            const childComponents = 
+                manywho.component.getChildComponents(children, this.props.id, this.props.flowKey);
 
             let className = 'flip-container clearfix';
 
@@ -67,8 +77,8 @@ declare var manywho: any;
             </div>;
         }
 
-    });
+    }
 
-    manywho.component.registerContainer('flip', flip);
+    manywho.component.registerContainer('flip', Flip);
 
 } (manywho));
