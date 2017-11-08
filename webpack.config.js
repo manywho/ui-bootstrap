@@ -51,18 +51,18 @@ var config = {
     extractLibs
   ],
   output: {
-    filename: 'ui-bundle.js'
+    filename: 'js/ui-bundle.js'
   }
 };
 
 const configPromise = new Promise(function(resolve, reject) {
   
-  fs.readdir(themeDir, function( err, files ) {
+  fs.readdir(themeDir, function(err, files) {
     files.forEach(function(file, index) {
-      extractInstance = new ExtractTextPlugin('compiled-' + file);
+      extractInstance = new ExtractTextPlugin('css/themes/mw-' + file);
       ruleObj = {
         test: /\.css$/,
-        include: path.resolve(__dirname, 'css/themes/'),
+        include: path.resolve(__dirname, 'css/themes/' + file),
         use: extractInstance.extract(
           {
             fallback: "style-loader",
@@ -75,10 +75,10 @@ const configPromise = new Promise(function(resolve, reject) {
       config.plugins.push(extractInstance);
     });
 
-    config.output.path = path.resolve(__dirname, 'build2', 'js');
+    config.output.path = path.resolve(__dirname, 'build2');
     return resolve(config);
   })
   
-  })
+})
   
-  module.exports = configPromise
+module.exports = configPromise

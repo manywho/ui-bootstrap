@@ -16,6 +16,18 @@ import './lib/140-react-maskedinput.js';
 
 import "../css/lib/bootstrap.css";
 
+// Themes
+//import "../css/themes/cosmo.css";
+//import "../css/themes/cyborg.css";
+import "../css/themes/darkly.css";
+//import "../css/themes/flatly.css";
+//import "../css/themes/journal.css";
+//import "../css/themes/lumen.css";
+//import "../css/themes/paper.css";
+//import "../css/themes/slate.css";
+//import "../css/themes/spacelab.css";
+
+// Components
 import './components/image.js';
 import './components/chart-bar.tsx';
 import './components/chart-base.tsx';
