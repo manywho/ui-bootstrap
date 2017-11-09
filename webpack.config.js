@@ -4,7 +4,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var extractLibs = new ExtractTextPlugin('lib.css');
 
-var themeDir = path.resolve(__dirname, 'css/themes2/');
+var themeDir = path.resolve(__dirname, 'css/themes/');
 
 var config = {
   entry: './js/index.js',
@@ -16,8 +16,12 @@ var config = {
         exclude: /node_modules/
       },
       {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: 'file-loader'
+        test: /\.(woff|woff2|eot|ttf|svg|otf)$/,
+        use: 'file-loader?name=[path][name].[ext]'
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: 'file-loader?name=[path][name].[ext]'
       },      
       {
         test: /\.css$/,
@@ -59,20 +63,24 @@ const configPromise = new Promise(function(resolve, reject) {
   
   fs.readdir(themeDir, function(err, files) {
     files.forEach(function(file, index) {
-      extractInstance = new ExtractTextPlugin('css/themes/mw-' + file);
-      ruleObj = {
-        test: /\.css$/,
-        include: path.resolve(__dirname, 'css/themes/' + file),
-        use: extractInstance.extract(
-          {
-            fallback: "style-loader",
-            use: "css-loader"
-          }
-        )
-      };
-      
-      config.module.rules.push(ruleObj);
-      config.plugins.push(extractInstance);
+      if(file.includes('less')) {
+        fileName = file.split('.')[0];
+        extractInstance = new ExtractTextPlugin('css/themes/' + fileName + '.css');
+        ruleObj = {
+          test: /\.less$/,
+          include: path.resolve(__dirname, 'css/themes/' + file),
+          use: extractInstance.extract({
+            use: [{
+                loader: "css-loader"
+            }, {
+                loader: "less-loader"
+            }],
+          })
+        };
+        
+        config.module.rules.push(ruleObj);
+        config.plugins.push(extractInstance);
+      }
     });
 
     config.output.path = path.resolve(__dirname, 'build2');

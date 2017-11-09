@@ -14,18 +14,63 @@ import './lib/130-jquery.textcomplete.js';
 import './lib/140-react-maskedinput.js';
 */
 
+// Icons
+import * as Icons from '../css/icons';
+
+// Fonts
+import '../css/fonts/glyphicons-halflings-regular.eot';
+import '../css/fonts/glyphicons-halflings-regular.svg';
+import '../css/fonts/glyphicons-halflings-regular.ttf';
+import '../css/fonts/glyphicons-halflings-regular.woff';
+import '../css/fonts/glyphicons-halflings-regular.woff2';
+
+import '../css/fonts/icon-utility.dev.svg';
+import '../css/fonts/icon-utility.eot';
+import '../css/fonts/icon-utility.svg';
+import '../css/fonts/icon-utility.ttf';
+import '../css/fonts/icon-utility.woff';
+
+import '../css/fonts/ProximaNovaSoft-Bold.otf';
+import '../css/fonts/ProximaNovaSoft-Bold.ttf';
+
+import '../css/fonts/ProximaNovaSoft-Medium.eot';
+import '../css/fonts/ProximaNovaSoft-Medium.otf';
+import '../css/fonts/ProximaNovaSoft-Medium.svg';
+import '../css/fonts/ProximaNovaSoft-Medium.ttf';
+import '../css/fonts/ProximaNovaSoft-Medium.woff';
+
+import '../css/fonts/ProximaNovaSoft-Regular.eot';
+import '../css/fonts/ProximaNovaSoft-Regular.otf';
+import '../css/fonts/ProximaNovaSoft-Regular.svg';
+import '../css/fonts/ProximaNovaSoft-Regular.ttf';
+import '../css/fonts/ProximaNovaSoft-Regular.woff';
+
+import '../css/fonts/ProximaNovaSoft-Semibold.otf';
+import '../css/fonts/ProximaNovaSoft-Semibold.ttf';
+
+
+// CSS
 import "../css/lib/bootstrap.css";
 
 // Themes
-//import "../css/themes/cosmo.css";
-//import "../css/themes/cyborg.css";
-import "../css/themes/darkly.css";
-//import "../css/themes/flatly.css";
-//import "../css/themes/journal.css";
-//import "../css/themes/lumen.css";
-//import "../css/themes/paper.css";
-//import "../css/themes/slate.css";
-//import "../css/themes/spacelab.css";
+import "../css/themes/mw-cerulean.less";
+import "../css/themes/mw-cosmo.less";
+import "../css/themes/mw-cyborg.less";
+import "../css/themes/mw-darkly.less";
+import "../css/themes/mw-flatly.less";
+import "../css/themes/mw-journal.less";
+import "../css/themes/mw-lumen.less";
+import "../css/themes/mw-paper.less";
+import "../css/themes/mw-readable.less";
+import "../css/themes/mw-sandstone.less";
+import "../css/themes/mw-sf1.less";
+import "../css/themes/mw-simplex.less";
+import "../css/themes/mw-slate.less";
+import "../css/themes/mw-spacelab.less";
+import "../css/themes/mw-superhero.less";
+import "../css/themes/mw-tooling.less";
+import "../css/themes/mw-united.less";
+import "../css/themes/mw-yeti.less";
 
 // Components
 import './components/image.js';
