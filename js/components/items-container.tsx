@@ -256,7 +256,7 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
 
         let contentElement = null;
 
-        if (!state.loading && !this.props.isDesignTime && (!objectData || objectData.length === 0)) {
+        if (!state.loading && (!this.props.isDesignTime && columns.length > 0) && (!objectData || objectData.length === 0)) {
             let noResultsCaption = manywho.settings.global('localization.noResults', this.props.flowKey);
 
             if (model.attributes && !manywho.utils.isNullOrUndefined(model.attributes.noResults))
