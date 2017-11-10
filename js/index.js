@@ -105,6 +105,20 @@ import "../css/themes/mw-tooling.less";
 import "../css/themes/mw-united.less";
 import "../css/themes/mw-yeti.less";
 
+// Interfaces
+import './interfaces/datetimepicker.ts';
+import './interfaces/IChartBaseProps.ts';
+import './interfaces/IChartComponentProps.ts';
+import './interfaces/IComponentProps.ts';
+import './interfaces/IInputProps.ts';
+import './interfaces/IItemsComponentProps.ts';
+import './interfaces/IItemsHeaderProps.ts';
+import './interfaces/ITilesProps.ts';
+import './interfaces/ITour.ts';
+
+// Services
+import './services/theming.ts';
+
 // Components
 import './components/image.js';
 import './components/chart-bar.tsx';
