@@ -100,7 +100,7 @@
                         });
 
                         manywho.state.setComponent(
-                            this.props.id, { objectData }, this.props.flowKey, true
+                            this.props.id, { objectData }, this.props.flowKey, true,
                         );
 
                         manywho.component.handleEvent(
