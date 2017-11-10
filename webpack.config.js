@@ -24,7 +24,6 @@ var config = {
         use: 'file-loader?name=[path][name].[ext]'
       },   
       {
-        //test: /\/(bootstrap-datetimepicker.css|jquery.textcomplete.css|react-selectize.css)$/,
         test: /\.(less|css)$/,
         include: [
           path.resolve(__dirname, 'css/lib/bootstrap-datetimepicker.css'),

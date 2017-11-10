@@ -1,18 +1,17 @@
-/*
-import './lib/000-react-height.js';
-import './lib/010-pollyfills.js';
-import './lib/020-chart.js';
-import './lib/040-react-dropzone.js';
-import './lib/060-prelude-browser.js';
-import './lib/070-prelude-extension.js';
-import './lib/080-tether.js';
-import './lib/090-react-selectize.js';
-import './lib/100-datetimepicker.js';
-import './lib/110-react-motion.js';
-import './lib/120-react-collapse.js';
-import './lib/130-jquery.textcomplete.js';
-import './lib/140-react-maskedinput.js';
-*/
+
+import 'script-loader!./lib/000-react-height.js';
+import 'script-loader!./lib/010-pollyfills.js';
+import 'script-loader!./lib/020-chart.js';
+import 'script-loader!./lib/040-react-dropzone.js';
+import 'script-loader!./lib/060-prelude-browser.js';
+import 'script-loader!./lib/070-prelude-extension.js';
+import 'script-loader!./lib/080-tether.js';
+import 'script-loader!./lib/090-react-selectize.js';
+import 'script-loader!./lib/100-datetimepicker.js';
+import 'script-loader!./lib/110-react-motion.js';
+import 'script-loader!./lib/120-react-collapse.js';
+import 'script-loader!./lib/130-jquery.textcomplete.js';
+import 'script-loader!./lib/140-react-maskedinput.js';
 
 // Icons
 //import * as Icons from '../css/icons';
