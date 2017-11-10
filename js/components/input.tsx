@@ -115,7 +115,7 @@ class Input extends React.Component<IComponentProps, IInputState> {
             else if (Array.isArray(model.valueElementValueBindingReferenceId) && model.valueElementValueBindingReferenceId.length > 0 && model.valueElementValueBindingReferenceId[0].properties)
                 contentType = (manywho.utils.getObjectDataProperty(model.valueElementValueBindingReferenceId[0].properties, 'ContentType') || {}).contentValue;
 
-        let label = <label>{model.label}{model.isRequired ? <span className="input-required"> *</span> : null}</label>;
+        let label = <label>{model.label}{model.isRequired === 'True' ? <span className="input-required"> *</span> : null}</label>;
         let inputElement = null;
 
         switch (contentType.toUpperCase()) {
