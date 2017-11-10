@@ -115,7 +115,12 @@ class Input extends React.Component<IComponentProps, IInputState> {
             else if (Array.isArray(model.valueElementValueBindingReferenceId) && model.valueElementValueBindingReferenceId.length > 0 && model.valueElementValueBindingReferenceId[0].properties)
                 contentType = (manywho.utils.getObjectDataProperty(model.valueElementValueBindingReferenceId[0].properties, 'ContentType') || {}).contentValue;
 
-        let label = <label>{model.label}{model.isRequired === 'True' ? <span className="input-required"> *</span> : null}</label>;
+        const isRequired =
+            typeof model.isRequired === 'string' ?
+                manywho.utils.isEqual(model.isRequired, 'True', true) :
+                model.isRequired;
+
+        let label = <label>{model.label}{isRequired ? <span className="input-required"> *</span> : null}</label>;
         let inputElement = null;
 
         switch (contentType.toUpperCase()) {
