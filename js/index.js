@@ -17,6 +17,7 @@ import 'script-loader!./lib/140-react-maskedinput.js';
 //import * as Icons from '../css/icons';
 
 // Fonts
+/*
 import '../css/fonts/glyphicons-halflings-regular.eot';
 import '../css/fonts/glyphicons-halflings-regular.svg';
 import '../css/fonts/glyphicons-halflings-regular.ttf';
@@ -45,7 +46,7 @@ import '../css/fonts/ProximaNovaSoft-Regular.ttf';
 import '../css/fonts/ProximaNovaSoft-Regular.woff';
 
 import '../css/fonts/ProximaNovaSoft-Semibold.otf';
-import '../css/fonts/ProximaNovaSoft-Semibold.ttf';
+import '../css/fonts/ProximaNovaSoft-Semibold.ttf';*/
 
 // Lib CSS
 import "../css/lib/bootstrap-datetimepicker.css";
@@ -85,7 +86,7 @@ import "../css/toggle.less";
 import "../css/tours.less";
 
 // Themes
-import "../css/themes/mw-bootstrap.less";
+import "../css/mw-bootstrap.less";
 import "../css/themes/mw-cerulean.less";
 import "../css/themes/mw-cosmo.less";
 import "../css/themes/mw-cyborg.less";
