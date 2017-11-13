@@ -5,19 +5,17 @@ declare var ReactCollapse: any;
 
 (function (manywho) {
 
-    const horizontal = React.createClass({
+    /* tslint:disable-next-line:variable-name */
+    const Horizontal: React.SFC<IComponentProps> = ({ id, flowKey }) => {
 
-        render: function () {
-            const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
+        const children = manywho.model.getChildren(id, flowKey);
 
-            return <div className="row clearfix">
-                {this.props.children || manywho.component.getChildComponents(children, this.props.id, this.props.flowKey)}
-            </div>;
-        }
+        return <div className="row clearfix">
+            {children || manywho.component.getChildComponents(children, id, flowKey)}
+        </div>;
+    };
 
-    });
-
-    manywho.component.registerContainer('horizontal_flow', horizontal);
+    manywho.component.registerContainer('horizontal_flow', Horizontal);
 
     manywho.styling.registerContainer('horizontal_flow', (item, container) => {
         const columnSpan = Math.floor(12 / Math.max(1, container.childCount));

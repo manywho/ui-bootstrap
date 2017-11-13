@@ -3,22 +3,14 @@
 
 declare var manywho: any;
 
-class ChartPolar extends React.Component<IItemsComponentProps, any> {
+/* tslint:disable-next-line:variable-name */
+const ChartPolar: React.SFC<IItemsComponentProps> = (props) => {
 
-    displayName = 'ChartPolar';
+    const chartProps: any = $.extend({}, props, {
+        type: 'polarArea',
+    });
 
-    constructor(props: any) {
-        super(props);
-    }
-
-    render() {
-        const props: any = $.extend({}, this.props, {
-            type: 'polarArea'
-        });
-
-        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-    }
-
+    return React.createElement(manywho.component.getByName('mw-chart'), chartProps, null);
 }
 
 manywho.component.registerItems('chart-polar', ChartPolar);

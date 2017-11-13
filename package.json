@@ -7,6 +7,10 @@
     "type": "git",
     "url": "https://github.com/manywho/ui-bootstrap.git"
   },
+  "scripts": {
+    "docs": "typedoc --mode modules --module es2015 --excludeExternals --excludePrivate --excludeNotExported --ignoreCompilerErrors --out ./docs ./js",
+    "lint": "tslint -c tslint.json js/**/*.ts --fix"
+  },
   "devDependencies": {
     "del": "^2.2.2",
     "git-guppy": "^2.0.0",
@@ -34,5 +38,8 @@
     "tslint": "^4.0.2",
     "typescript": "^2.0.2",
     "yargs": "^2.3.0"
+  },
+  "dependencies": {
+    "tslint-config-airbnb": "^5.3.0"
   }
 }
