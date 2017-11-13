@@ -1,31 +1,30 @@
 (function (manywho) {
 
-    /* tslint:disable-next-line:variable-name */
-    const Feed: React.SFC<IItemsComponentProps> = ({ flowKey }) => {
+    class Feed extends React.Component<IItemsComponentProps, null> {
 
-        const onToggleFollow = (e) => {
+        onToggleFollow(e) {
 
-            manywho.social.toggleFollow(flowKey);
-        };
+            manywho.social.toggleFollow(this.props.flowKey);
+        }
 
-        const onRefresh = (e) => {
+        onRefresh(e) {
 
-            manywho.social.refreshMessages(flowKey);
-        };
+            manywho.social.refreshMessages(this.props.flowKey);
+        }
 
-        const onGetNextPage = (e) => {
+        onGetNextPage(e) {
 
-            manywho.social.getMessages(flowKey);
-        };
+            manywho.social.getMessages(this.props.flowKey);
+        }
 
-        const onSendMessage = (message, messageId, mentionedUsers, attachments) => {
+        onSendMessage(message, messageId, mentionedUsers, attachments) {
 
             return manywho.social.sendMessage(
-                flowKey, message, messageId, mentionedUsers, attachments
+                this.props.flowKey, message, messageId, mentionedUsers, attachments,
             );
-        };
+        }
 
-        const renderThread = (messages, isCommentingEnabled, isAttachmentsEnabled) => {
+        renderThread(messages, isCommentingEnabled, isAttachmentsEnabled?) {
 
             if (messages) {
 
@@ -76,8 +75,8 @@
                                                 React.createElement(
                                                     manywho.component.getByName('feed-input'), 
                                                     { 
-                                                        flowKey, 
                                                         isAttachmentsEnabled, 
+                                                        flowKey: this.props.flowKey, 
                                                         caption: 'Reply', 
                                                         messageId: message.id, 
                                                         send: this.onSendMessage, 
@@ -98,9 +97,9 @@
 
             return null;
 
-        };
+        }
 
-        const renderFollowers = (followers) => {
+        renderFollowers(followers) {
 
             if (followers) {
 
@@ -126,74 +125,77 @@
 
             return null;
 
-        };
+        }
 
-        const stream = manywho.social.getStream(flowKey);
-
-        if (stream && stream.me) {
-
-            manywho.log.info('Rendering Feed');
-
-            const streamMessages = stream.messages || {};
-            const state = manywho.state.getComponent('feed', flowKey) || {};
-
-            const followCaption = (stream.me.isFollower) ? 'Un-Follow' : 'Follow';
-            const isFooterVisible = streamMessages.nextPage && streamMessages.nextPage > 1;
-
-            return <div className={'panel panel-default feed'} onKeyUp={this.onEnter}>
-                <div className={ 'panel-heading clearfix' }>
-                    <h3 className={'panel-title pull-left' }>Feed</h3>
-                    <div className={'pull-right btn-group' }>
-                        <button className={'btn btn-default btn-sm'}
-                            onClick={this.onToggleFollow }>
-                            <span className={'glyphicon glyphicon-pushpin'} />
-                            followCaption
-                        </button>
-                        <button className={'btn btn-default btn-sm'}
-                            onClick={this.onRefresh }>
-                            <span className={'glyphicon glyphicon-refresh' } />
-                            Refresh
+        render() {
+            
+            const stream = manywho.social.getStream(this.props.flowKey);
+            
+            if (stream && stream.me) {
+                
+                manywho.log.info('Rendering Feed');
+                
+                const streamMessages = stream.messages || {};
+                const state = manywho.state.getComponent('feed', this.props.flowKey) || {};
+                
+                const followCaption = (stream.me.isFollower) ? 'Un-Follow' : 'Follow';
+                const isFooterVisible = streamMessages.nextPage && streamMessages.nextPage > 1;
+                
+                return <div className={'panel panel-default feed'}>
+                    <div className={ 'panel-heading clearfix' }>
+                        <h3 className={'panel-title pull-left' }>Feed</h3>
+                        <div className={'pull-right btn-group' }>
+                            <button className={'btn btn-default btn-sm'}
+                                onClick={this.onToggleFollow }>
+                                <span className={'glyphicon glyphicon-pushpin'} />
+                                followCaption
+                            </button>
+                            <button className={'btn btn-default btn-sm'}
+                                onClick={this.onRefresh }>
+                                <span className={'glyphicon glyphicon-refresh' } />
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+                    <div className={ 'panel-body' }>
+                        {this.renderFollowers(stream.followers)}
+                        {
+                            React.createElement(
+                                manywho.component.getByName('feed-input'), 
+                                { 
+                                    flowKey: this.props.flowKey, 
+                                    caption: 'Post', 
+                                    send: this.onSendMessage, 
+                                    isAttachmentsEnabled: true,
+                                }, 
+                                null,
+                            )
+                        }
+                        {this.renderThread(streamMessages.messages, true)}
+                    </div>
+                    <div className={'panel-heading clearfix ' + (!isFooterVisible) ? 'hidden' : ''}>
+                        <button 
+                            className={'btn btn-default pull-right'}
+                            onClick={this.onGetNextPage }>
+                            More
                         </button>
                     </div>
-                </div>
-                <div className={ 'panel-body' }>
-                    {this.renderFollowers(stream.followers)}
                     {
                         React.createElement(
-                            manywho.component.getByName('feed-input'), 
+                            manywho.component.getByName('wait'), 
                             { 
-                                flowKey, 
-                                caption: 'Post', 
-                                send: this.onSendMessage, 
-                                isAttachmentsEnabled: true,
-                            }, 
+                                isVisible: state.loading != null, 
+                                message: state.loading && state.loading.message, 
+                                isSmall: true,
+                            },
                             null,
                         )
                     }
-                    {this.renderThread(streamMessages.messages, true)}
-                </div>
-                <div className={ 'panel-heading clearfix ' + (!isFooterVisible) ? 'hidden' : '' }>
-                    <button 
-                        className={'btn btn-default pull-right'}
-                        onClick={this.onGetNextPage }>
-                        More
-                    </button>
-                </div>
-                {
-                    React.createElement(
-                        manywho.component.getByName('wait'), 
-                        { 
-                            isVisible: state.loading != null, 
-                            message: state.loading && state.loading.message, 
-                            isSmall: true,
-                        },
-                        null,
-                    )
-                }
-            </div>;
+                </div>;
+            }
+        
+            return null;
         }
-
-        return null;
     };
 
     manywho.component.register('feed', Feed);

@@ -36,7 +36,7 @@ interface IFeedInputState {
                     fileUploadElement.getDOMNode().value, 
                     self.props.messageId, 
                     self.state.mentionedUsers, 
-                    response && response.files
+                    response && response.files,
                 );
 
             })
