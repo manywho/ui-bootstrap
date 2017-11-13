@@ -18,11 +18,11 @@ interface IFeedInputState {
 
             let deferred = null;
             const self = this;
-            const fileUploadElement = (this.refs.files as HTMLElement);
+            const fileUploadElement = (this.refs.files as any);
 
-            if (this.refs.files && this.refs.files.state.fileNames.length > 0) {
+            if (this.refs.files && fileUploadElement.state.fileNames.length > 0) {
 
-                deferred = this.refs.files.onUpload();
+                deferred = fileUploadElement.onUpload();
 
             } else {
 
@@ -33,7 +33,7 @@ interface IFeedInputState {
             deferred.done((response) => {
 
                 return self.props.send(
-                    self.refs.textarea.getDOMNode().value, 
+                    fileUploadElement.getDOMNode().value, 
                     self.props.messageId, 
                     self.state.mentionedUsers, 
                     response && response.files
@@ -42,7 +42,7 @@ interface IFeedInputState {
             })
             .then(() => {
 
-                self.refs.textarea.getDOMNode().value = '';
+                fileUploadElement.getDOMNode().value = '';
             });
         }
     
@@ -62,7 +62,9 @@ interface IFeedInputState {
 
             const self = this;
 
-            $(this.refs.textarea.getDOMNode()).textcomplete(
+            const textarea = (this.refs.textarea as any);
+
+            $(textarea.getDOMNode()).textcomplete(
                 [{
                     match: /@([A-Za-z]{2,})$/,
                     index: 1,

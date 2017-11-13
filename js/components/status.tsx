@@ -9,16 +9,16 @@ declare var manywho: any;
 
         const isVisible: boolean = 
             manywho.utils
-                .isEqual(manywho.model.getInvokeType(this.props.flowKey), 'wait', true)
+                .isEqual(manywho.model.getInvokeType(flowKey), 'wait', true)
             || manywho.utils
-                .isEqual(manywho.model.getInvokeType(this.props.flowKey), 'status', true);
+                .isEqual(manywho.model.getInvokeType(flowKey), 'status', true);
 
         if (isVisible) {
             manywho.log.info('Rendering Status');
 
             const message: string = 
-                manywho.settings.global('localization.status', this.props.flowKey, null)
-                || manywho.model.getWaitMessage(this.props.flowKey) || '';
+                manywho.settings.global('localization.status', flowKey, null)
+                || manywho.model.getWaitMessage(flowKey) || '';
 
             let content = <p className="lead status-message status-content">{message}</p>;
 

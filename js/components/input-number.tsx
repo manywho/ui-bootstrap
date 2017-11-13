@@ -5,7 +5,7 @@ declare var manywho: any;
 declare var moment: any;
 
 interface IInputNumberState {
-    value: string
+    value: string;
 }
 
 class InputNumber extends React.Component<IInputProps, IInputNumberState> {
@@ -48,20 +48,27 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
                 this.setState({ value: parsedValue.toString() });
 
             setTimeout(() => this.props.onChange(parsedValue));
-        }
-        else if (isNaN(value) && !manywho.utils.isNullOrWhitespace(value))
+        } else if (isNaN(value) && !manywho.utils.isNullOrWhitespace(value))
             manywho.state.setComponent(this.props.id, { isValid: false }, this.props.flowKey, true);
     }
 
     componentWillMount() {
-        this.setState({ value: !manywho.utils.isNullOrUndefined(this.props.value) ? manywho.formatting.number(this.props.value, this.props.format) : null });
+        this.setState({ 
+            value: !manywho.utils.isNullOrUndefined(this.props.value) ? 
+                manywho.formatting.number(this.props.value, this.props.format) : 
+                null,
+        });
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!manywho.utils.isNullOrUndefined(nextProps.value) && parseFloat(this.state.value) !== nextProps.value)
+        if (
+            !manywho.utils.isNullOrUndefined(nextProps.value) && 
+            parseFloat(this.state.value) !== nextProps.value
+        ) {
             this.setState({ value: nextProps.value.toString() });
-        else if (manywho.utils.isNullOrUndefined(nextProps.value))
+        } else if (manywho.utils.isNullOrUndefined(nextProps.value)) {
             this.setState({ value: null });
+        }
     }
 
     render() {
