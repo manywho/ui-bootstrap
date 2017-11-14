@@ -60,60 +60,62 @@ class Tour extends React.Component<ITourProps, ITourState> {
             const target = manywho.tours.getTargetElement(step);
             const targetRect = target.getBoundingClientRect();
 
-            let style = {
+            const style = {
                 left: 0,
-                top: 0
+                top: 0,
             };
 
             switch (step.placement.toUpperCase()) {
+            case 'LEFT':
+                style.left = targetRect.left - stepRect.width - 16;
+                break;
+
+            case 'RIGHT':
+                style.left = targetRect.right + 16;
+                break;
+
+            case 'BOTTOM':
+                style.top = targetRect.bottom + 16;
+                break;
+
+            case 'TOP':
+                style.top = targetRect.top - stepRect.height - 16;
+                break;
+            }
+
+            if (manywho.utils.isEqual(step.placement, 'bottom', true) ||
+                manywho.utils.isEqual(step.placement, 'top', true))
+                switch (step.align.toUpperCase()) {
                 case 'LEFT':
-                    style.left = targetRect.left - stepRect.width - 16;
+                    style.left = targetRect.left;
+                    break;
+
+                case 'CENTER':
+                    style.left = targetRect.left + (targetRect.width / 2);
                     break;
 
                 case 'RIGHT':
-                    style.left = targetRect.right + 16;
+                    style.left = targetRect.left + (targetRect.width - stepRect.width);
+                    break;
+                }
+
+            if (manywho.utils.isEqual(step.placement, 'left', true) ||
+                manywho.utils.isEqual(step.placement, 'right', true))
+                switch (step.align.toUpperCase()) {
+                case 'TOP':
+                    style.top = targetRect.top;
+                    break;
+
+                case 'CENTER':
+                    style.top = (targetRect.top + (targetRect.height / 2)) - (stepRect.height / 2);
                     break;
 
                 case 'BOTTOM':
-                    style.top = targetRect.bottom + 16;
+                    style.top = targetRect.bottom - stepRect.height;
                     break;
-
-                case 'TOP':
-                    style.top = targetRect.top - stepRect.height - 16;
-                    break;
-            }
-
-            if (manywho.utils.isEqual(step.placement, 'bottom', true) || manywho.utils.isEqual(step.placement, 'top', true))
-                switch (step.align.toUpperCase()) {
-                    case 'LEFT':
-                        style.left = targetRect.left;
-                        break;
-
-                    case 'CENTER':
-                        style.left = targetRect.left + (targetRect.width / 2);
-                        break;
-
-                    case 'RIGHT':
-                        style.left = targetRect.left + (targetRect.width - stepRect.width);
-                        break;
                 }
 
-            if (manywho.utils.isEqual(step.placement, 'left', true) || manywho.utils.isEqual(step.placement, 'right', true))
-                switch (step.align.toUpperCase()) {
-                    case 'TOP':
-                        style.top = targetRect.top;
-                        break;
-
-                    case 'CENTER':
-                        style.top = (targetRect.top + (targetRect.height / 2)) - (stepRect.height / 2);
-                        break;
-
-                    case 'BOTTOM':
-                        style.top = targetRect.bottom - stepRect.height;
-                        break;
-                }
-
-            this.setState({ style: style, foundTarget: this.state.foundTarget });
+            this.setState({ style, foundTarget: this.state.foundTarget });
         }
     }
 
@@ -134,27 +136,27 @@ class Tour extends React.Component<ITourProps, ITourState> {
         let offset = manywho.utils.isNullOrUndefined(step.offset) ? 16 : step.offset;
 
         switch (step.placement.toUpperCase()) {
-            case 'LEFT':
-            case 'RIGHT':
-                let top = '50%';
-                if (manywho.utils.isEqual(step.align, 'top', true))
-                    top = `calc(0% + ${offset.toString()}px)`;
-                else if (manywho.utils.isEqual(step.align, 'top', true))
-                    top = `calc(100% - ${offset.toString()}px)`;
+        case 'LEFT':
+        case 'RIGHT':
+            let top = '50%';
+            if (manywho.utils.isEqual(step.align, 'top', true))
+                top = `calc(0% + ${offset.toString()}px)`;
+            else if (manywho.utils.isEqual(step.align, 'top', true))
+                top = `calc(100% - ${offset.toString()}px)`;
 
-                arrowStyle = { top: top };
-                break;
+            arrowStyle = { top };
+            break;
 
-            case 'TOP':
-            case 'BOTTOM':
-                let left = '50%';
-                if (manywho.utils.isEqual(step.align, 'left', true))
-                    left = `calc(0% + ${offset.toString()}px)`;
-                else if (manywho.utils.isEqual(step.align, 'right', true))
-                    left = `calc(100% - ${offset.toString()}px)`;
+        case 'TOP':
+        case 'BOTTOM':
+            let left = '50%';
+            if (manywho.utils.isEqual(step.align, 'left', true))
+                left = `calc(0% + ${offset.toString()}px)`;
+            else if (manywho.utils.isEqual(step.align, 'right', true))
+                left = `calc(100% - ${offset.toString()}px)`;
 
-                arrowStyle = { left: left };
-                break;
+            arrowStyle = { left };
+            break;
         }
 
         return <React.addons.CSSTransitionGroup transitionName="mw-tour-step"
@@ -163,14 +165,30 @@ class Tour extends React.Component<ITourProps, ITourState> {
             transitionEnter={false}
             transitionLeave={true}
             transitionLeaveTimeout={250}>
-            <div className={className} ref="step" style={this.state.style} key={this.props.stepIndex} id={`tour-${this.props.tour.id}-step${this.props.stepIndex}`}>
+
+            <div className={className}
+                ref="step"
+                style={this.state.style}
+                key={this.props.stepIndex}
+                id={`tour-${this.props.tour.id}-step${this.props.stepIndex}`}>
+
                 <div className="arrow" style={arrowStyle} />
-                {manywho.utils.isNullOrWhitespace(step.title) ? null : <div className="popover-title">{step.title}<button className="close" onClick={this.onDone}><span>&times;</span></button></div>}
+                {manywho.utils.isNullOrWhitespace(step.title) ? null :
+                    <div className="popover-title">
+                        {step.title}
+                        <button className="close"
+                            onClick={this.onDone}>
+                            <span>&times;</span>
+                        </button>
+                    </div>}
+
                 <div className="popover-content">
                     <p>{step.content}</p>
                     <div className="popover-buttons">
-                        {step.showBack ? <button className="btn btn-default btn-sm" onClick={this.onBack}>Back</button> : null}
-                        {step.showNext ? <button className="btn btn-primary btn-sm" onClick={this.onNext}>Next</button> : null}
+                        {step.showBack ? <button className="btn btn-default btn-sm"
+                            onClick={this.onBack}>Back</button> : null}
+                        {step.showNext ? <button className="btn btn-primary btn-sm"
+                            onClick={this.onNext}>Next</button> : null}
                     </div>
                 </div>
             </div>

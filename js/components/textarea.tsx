@@ -14,7 +14,11 @@ class Textarea extends React.Component<IComponentProps, any> {
     }
 
     onChange(e) {
-        manywho.state.setComponent(this.props.id, { contentValue: e.target.value }, this.props.flowKey, true);
+        manywho.state.setComponent(
+            this.props.id,
+            { contentValue: e.target.value },
+            this.props.flowKey, true
+        );
         this.forceUpdate();
     }
 
@@ -24,7 +28,10 @@ class Textarea extends React.Component<IComponentProps, any> {
     }
 
     onBlur(e) {
-        manywho.component.handleEvent(this, manywho.model.getComponent(this.props.id, this.props.flowKey), this.props.flowKey);
+        manywho.component.handleEvent(
+            this, manywho.model.getComponent(this.props.id, this.props.flowKey),
+            this.props.flowKey
+        );
     }
 
     render() {
@@ -32,7 +39,10 @@ class Textarea extends React.Component<IComponentProps, any> {
 
         manywho.log.info(`Rendering Textarea: ${model.developerName}, ${this.props.id}`);
 
-        const state = this.props.isDesignTime ? { contentValue: '' } : manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
+        const state = this.props.isDesignTime ? { contentValue: '' } : manywho.state.getComponent(
+            this.props.id,
+            this.props.flowKey
+        ) || {};
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
         const props: any = {
@@ -57,7 +67,13 @@ class Textarea extends React.Component<IComponentProps, any> {
                 props.onBlur = this.onBlur;
         }
 
-        let className = manywho.styling.getClasses(this.props.parentId, this.props.id, 'textarea', this.props.flowKey).join(' ');
+        let className = manywho.styling.getClasses(
+            this.props.parentId,
+            this.props.id,
+            'textarea',
+            this.props.flowKey
+        ).join(' ');
+
         className += ' form-group';
 
         if (model.isVisible === false)
@@ -66,7 +82,10 @@ class Textarea extends React.Component<IComponentProps, any> {
         if (model.isValid === false || state.isValid === false)
             className += ' has-error';
 
-        const outcomeButtons = outcomes && outcomes.map(outcome => React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: this.props.flowKey }));
+        const outcomeButtons = outcomes && outcomes.map(outcome => React.createElement(
+            manywho.component.getByName('outcome'),
+            { id: outcome.id, flowKey: this.props.flowKey }
+        ));
 
         return <div className={className}>
             <label>
