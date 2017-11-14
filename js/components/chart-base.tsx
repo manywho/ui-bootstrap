@@ -40,7 +40,7 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
 
         const data: any = {
             labels: [],
-            datasets: []
+            datasets: [],
         };
 
         this.props.objectData.forEach((objectData, index) => {

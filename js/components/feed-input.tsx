@@ -17,7 +17,6 @@ interface IFeedInputState {
         send() {
 
             let deferred = null;
-            const self = this;
             const fileUploadElement = (this.refs.files as any);
 
             if (this.refs.files && fileUploadElement.state.fileNames.length > 0) {
@@ -32,10 +31,10 @@ interface IFeedInputState {
 
             deferred.done((response) => {
 
-                return self.props.send(
+                return this.props.send(
                     fileUploadElement.getDOMNode().value, 
-                    self.props.messageId, 
-                    self.state.mentionedUsers, 
+                    this.props.messageId, 
+                    this.state.mentionedUsers, 
                     response && response.files,
                 );
 
@@ -60,8 +59,6 @@ interface IFeedInputState {
 
         componentDidMount() {
 
-            const self = this;
-
             const textarea = (this.refs.textarea as any);
 
             $(textarea.getDOMNode()).textcomplete(
@@ -70,7 +67,7 @@ interface IFeedInputState {
                     index: 1,
                     search(term, callback) {
 
-                        manywho.social.getUsers(self.props.flowKey, term)
+                        manywho.social.getUsers(this.props.flowKey, term)
                             .done(response => callback(response || []))
                             .fail(response => callback([]));
 
@@ -82,7 +79,7 @@ interface IFeedInputState {
                     },
                     replace(value) {
 
-                        self.state.mentionedUsers[value.id] = value;
+                        this.state.mentionedUsers[value.id] = value;
                         return '@[' + value.fullName + '] ';
                     },
                 }],
@@ -118,7 +115,6 @@ interface IFeedInputState {
                         className={'form-control feed-message-text'}
                         rows={2}
                         onKeyPress={this.onKeyPress}
-                        onChange={this.onChange}
                         defaultValue={''}
                         ref={'textarea'} />
                     fileUpload

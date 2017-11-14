@@ -11,6 +11,6 @@ const ChartPolar: React.SFC<IItemsComponentProps> = (props) => {
     });
 
     return React.createElement(manywho.component.getByName('mw-chart'), chartProps, null);
-}
+};
 
 manywho.component.registerItems('chart-polar', ChartPolar);

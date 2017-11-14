@@ -58,7 +58,7 @@ const ChartContainer: React.SFC<IItemsComponentProps> = ({ id, flowKey, isDesign
             {
                 children || 
                 manywho.component.getChildComponents(
-                    children, id, flowKey
+                    children, id, flowKey,
                 )
             }
         </div>;

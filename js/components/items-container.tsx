@@ -111,7 +111,7 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
 
         this.setState({
             sortedBy: null,
-            sortedIsAscending: null
+            sortedIsAscending: null,
         });
 
         setTimeout(() => this.load());
@@ -130,7 +130,7 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
 
             this.setState({
                 sortedIsAscending: isAscending,
-                sortedBy: by
+                sortedBy: by,
             });
 
             setTimeout(() => this.load());
@@ -168,7 +168,7 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
         selectedItem = JSON.parse(JSON.stringify(selectedItem));
 
         const isSelected = selectedItems.filter(
-            item => item.externalId === selectedItem.externalId
+            item => item.externalId === selectedItem.externalId,
         ).length > 0;
 
         selectedItem.isSelected = !isSelected;
@@ -207,7 +207,7 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
             manywho.component.handleEvent(
                 this, 
                 manywho.model.getComponent(this.props.id, this.props.flowKey), 
-                this.props.flowKey
+                this.props.flowKey,
             );
         }
     }
@@ -416,7 +416,7 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
             isLoading: state.loading !== null && typeof state.loading !== 'undefined',
             sort: this.sort,
             sortedBy: this.state.sortedBy,
-            sortedIsAscending: this.state.sortedIsAscending
+            sortedIsAscending: this.state.sortedIsAscending,
         };
 
         const component = manywho.component.getByName('mw-' + model.componentType);

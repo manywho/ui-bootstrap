@@ -4,32 +4,40 @@ declare var manywho: any;
 
 (function (manywho) {
 
-    const presentation = React.createClass({
+    class Presentation extends React.Component<any, any> {
 
-        replaceContent: function () {
+        replaceContent() {
             const node = ReactDOM.findDOMNode(this.refs.content);
 
             const imgs = node.querySelectorAll('img');
             if (imgs && imgs.length > 0)
-                for (let i = 0; i < imgs.length; i++) {
+                for (let i = 0; i < imgs.length; i += 1) {
                     imgs[i].className += ' img-responsive';
                 }
-        },
+        }
 
-        componentDidUpdate: function () { this.replaceContent(); },
-        componentDidMount: function () { this.replaceContent(); },
+        componentDidUpdate() { this.replaceContent(); }
+        componentDidMount() { this.replaceContent(); }
 
-        render: function () {
+        render() {
             const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
             manywho.log.info(`Rendering Presentation: ${this.props.id}, ${model.developerName}`);
 
             const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
             const outcomes: any = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
-            const outcomeElements: Array<JSX.Element> = outcomes && outcomes
-                .map((outcome) => React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: this.props.flowKey }));
+            const outcomeElements: JSX.Element[] = outcomes && outcomes
+                .map(outcome => React.createElement(
+                    manywho.component.getByName('outcome'), 
+                    { id: outcome.id, flowKey: this.props.flowKey },
+                ));
 
-            let className = (manywho.styling.getClasses(this.props.parentId, this.props.id, 'presentation', this.props.flowKey)).join(' ');
+            let className = manywho.styling.getClasses(
+                this.props.parentId, 
+                this.props.id, 
+                'presentation', 
+                this.props.flowKey,
+            ).join(' ');
 
             if (model.isVisible === false)
                 className += ' hidden';
@@ -46,14 +54,16 @@ declare var manywho: any;
             return <div className={className} id={this.props.id}>
                 <label>{model.label}</label>
                 <div ref="content" dangerouslySetInnerHTML={{ __html: html }} />
-                <span className="help-block">{model.validationMessage || state.validationMessage}</span>
+                <span className="help-block">
+                    {model.validationMessage || state.validationMessage}
+                </span>
                 <span className="help-block">{model.helpInfo}</span>
                 {outcomeElements}
             </div>;
         }
 
-    });
+    }
 
-    manywho.component.register('presentation', presentation);
+    manywho.component.register('presentation', Presentation);
 
 } (manywho));

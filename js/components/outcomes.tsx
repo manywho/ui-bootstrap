@@ -20,7 +20,11 @@ class Outcomes extends React.Component<IOutcomesProps, IOutcomesState> {
     }
 
     handleEvent(e) {
-        manywho.component.handleEvent(this, manywho.model.getComponent(this.props.id, this.props.flowKey), this.props.flowKey);
+        manywho.component.handleEvent(
+            this, 
+            manywho.model.getComponent(this.props.id, this.props.flowKey), 
+            this.props.flowKey,
+        );
     }
 
     render() {
@@ -30,7 +34,9 @@ class Outcomes extends React.Component<IOutcomesProps, IOutcomesState> {
 
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
 
-        let className = (manywho.styling.getClasses(this.props.parentId, this.props.id, 'outcomes', this.props.flowKey)).join(' ');
+        let className = manywho.styling.getClasses(
+            this.props.parentId, this.props.id, 'outcomes', this.props.flowKey,
+        ).join(' ');
 
         if (model.isValid === false || state.isValid === false)
             className += ' has-error';
@@ -55,24 +61,26 @@ class Outcomes extends React.Component<IOutcomesProps, IOutcomesState> {
                 rowClassName += ' block';
         }
 
-        const outcomes: Array<any> = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
+        const outcomes: any[] = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
         let size = 'default';
         if (model.attributes && !manywho.utils.isNullOrWhitespace(model.attributes.size))
             size = model.attributes.size;
 
-        let outcomeElements: Array<JSX.Element> = outcomes && outcomes
+        let outcomeElements: JSX.Element[] = outcomes && outcomes
             .map((outcome) => {
                 const element = React.createElement(manywho.component.getByName('outcome'), {
+                    size,
                     id: outcome.id,
-                    size: size,
                     className: model.attributes.outcomeClasses,
                     disabled: !model.isEnabled,
-                    flowKey: this.props.flowKey
+                    flowKey: this.props.flowKey,
                 });
 
                 if (model.attributes && !manywho.utils.isNullOrWhitespace(model.attributes.columns))
-                    return <div className={'column col-' + model.attributes.columns}>{element}</div>;
+                    return <div className={'column col-' + model.attributes.columns}>
+                        {element}
+                    </div>;
                 else
                     return element;
             });
@@ -81,7 +89,7 @@ class Outcomes extends React.Component<IOutcomesProps, IOutcomesState> {
             outcomeElements = [
                 <button className="btn btn-primary outcome" key="outcome1">Outcome 1</button>,
                 <button className="btn btn-success outcome" key="outcome2">Outcome 2</button>,
-                <button className="btn btn-danger outcome" key="outcome3">Outcome 3</button>
+                <button className="btn btn-danger outcome" key="outcome3">Outcome 3</button>,
             ];
 
         if (!manywho.utils.isNullOrWhitespace(model.attributes.group))

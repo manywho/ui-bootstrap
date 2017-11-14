@@ -77,7 +77,7 @@ interface IContainerState {
             if (collapseGroup) {
                 localStorage.setItem(
                     this.getCollapseGroupKey(collapseGroup), 
-                    JSON.stringify(!this.state.isCollapsed)
+                    JSON.stringify(!this.state.isCollapsed),
                 );
                 manywho.engine.render(this.props.flowKey);
             }
@@ -194,7 +194,7 @@ interface IContainerState {
                         manywho.component.getByName('mw-' + model.containerType), 
                         this.props,
                     ), 
-                    outcomeButtons
+                    outcomeButtons,
                 ];
 
             return <div className={className} id={this.props.id}>

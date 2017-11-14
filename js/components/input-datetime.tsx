@@ -84,7 +84,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
                 manywho.formatting.toMomentFormat(model.contentFormat) || 
                 'MM/DD/YYYY',
             keyBinds: {
-                delete() { this.clear(); }
+                delete() { this.clear(); },
             },
             timeZone: 'UTC',
         })

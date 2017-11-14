@@ -15,45 +15,44 @@
             let classes = 'outcome-info alert ';
             if (outcome.id === selectedOutcome) classes += ' selected-outcome';
 
-            return React.DOM.div({ className: classes, style: { width: outcomeWidth }}, [
-                React.DOM.p({ align: 'center' }, outcome.label)
-            ]);
+            return (
+                <div className={classes} style={{ width: outcomeWidth }}>
+                    <p align={'center'}>
+                    { outcome.label }
+                    </p>                        
+                </div>
+            );
         }
 
         renderSteps(history) {
 
-            const self = this;
+            return history.map((step, index) => {
 
-            return history.map(
-                function (step, index) {
+                if (index < history.length - 1 && step.name) {
 
-                    if (index < history.length - 1 && step.name) {
+                    const outcomes = step.outcomes || [];
 
-                        const outcomes = step.outcomes || [];
+                    const outcomeWidth = Math.floor(100 / outcomes.length) - 2 + '%';
 
-                        const outcomeWidth = Math.floor(100 / outcomes.length) - 2 + '%';
-
-                        return <div className={'history-row'}>
-                            <div id={step.id} className={'step bg-primary'} onClick={self.onClick}>
-                                <div className={'step-title'}>{step.label || step.name}</div>
-                                <div className={'step-content'} 
-                                    dangerouslySetInnerHTML={ {__html: step.content || '' } } />
-                            </div>
-                            {
-                                outcomes.map(
-                                    function (outcome) {
-                                        return this.renderOutcome(
-                                            outcome, step.selectedOutcome, outcomeWidth,
-                                        );
-                                    }, 
-                                    this,
-                                )
-                            }
-                        </div>;
-                    }
-                }, 
-                this,
-            );
+                    return <div className={'history-row'}>
+                        <div id={step.id} className={'step bg-primary'} onClick={this.onClick}>
+                            <div className={'step-title'}>{step.label || step.name}</div>
+                            <div className={'step-content'} 
+                                dangerouslySetInnerHTML={ { __html: step.content || '' } } />
+                        </div>
+                        {
+                            outcomes.map(
+                                function (outcome) {
+                                    return this.renderOutcome(
+                                        outcome, step.selectedOutcome, outcomeWidth,
+                                    );
+                                }, 
+                                this,
+                            )
+                        }
+                    </div>;
+                }
+            });
         }
 
         render() {

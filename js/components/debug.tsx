@@ -261,7 +261,7 @@ interface IDebugViewerState {
                     if (manywho.state.getComponents(this.props.flowKey)[id].error) {
 
                         componentErrors.push(
-                            manywho.state.getComponents(this.props.flowKey)[id].error
+                            manywho.state.getComponents(this.props.flowKey)[id].error,
                         );
 
                     }
