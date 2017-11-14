@@ -256,7 +256,7 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
 
         let contentElement = null;
 
-        if (!state.loading && (!objectData || objectData.length === 0)) {
+        if (!state.loading && (!this.props.isDesignTime && columns.length > 0) && (!objectData || objectData.length === 0)) {
             let noResultsCaption = manywho.settings.global('localization.noResults', this.props.flowKey);
 
             if (model.attributes && !manywho.utils.isNullOrUndefined(model.attributes.noResults))
@@ -289,6 +289,8 @@ class ItemsContainer extends React.Component<IComponentProps, any> {
                 <p className="lead">{state.error.message}</p>
                 <button className="btn btn-danger" onClick={this.refresh}>Retry</button>
             </div>);
+
+        // if contentElement remains null when passed into the child props the child component will decide what gets rendered as the content
 
         const props = {
             id: this.props.id,
