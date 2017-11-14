@@ -4,51 +4,54 @@ declare var manywho: any;
 
 (function (manywho) {
 
-    const navigation = React.createClass({
+    class Navigation extends React.Component<any, any> {
 
         getItem(items: any, id: string) {
             for (const itemId in items) {
-                if (itemId === id)
+                if (itemId === id) {
                     return items[id];
-                else {
+                } else {
                     const item = items[itemId];
                     if (item.items) {
-                        let foundItem = this.getItem(item.items, id);
+                        const foundItem = this.getItem(item.items, id);
                         if (foundItem)
                             return foundItem;
                     }
                 }
             }
-        },
+        }
 
-        getHeaderElement: function (id, navigation) {
-            let children = [
-                <button className="navbar-toggle collapsed" data-toggle="collapse" data-target={'#' + id} ref="toggle">
+        getHeaderElement(id, navigation) {
+            const children = [
+                <button className="navbar-toggle collapsed" 
+                    data-toggle="collapse" 
+                    data-target={'#' + id} 
+                    ref="toggle">
                     <span className="sr-only">Toggle Navigation</span>
                     <span className="icon-bar" />
                     <span className="icon-bar" />
                     <span className="icon-bar" />
-                </button>
+                </button>,
             ];
 
             if (navigation.label != null && navigation.label.trim().length > 0)
                 children.push(<a className="navbar-brand" href="#">{navigation.label}</a>);
 
             return <div className="navbar-header">{children}</div>;
-        },
+        }
 
-        getNavElements: function (items, isTopLevel) {
-            let elements = [];
+        getNavElements(items, isTopLevel) {
+            const elements = [];
 
             for (const itemId in items) {
-                let item = items[itemId];
+                const item = items[itemId];
                 let element = null;
 
-                let classNames = [
+                const classNames = [
                     (item.isCurrent) ? 'active' : '',
                     (item.isVisible === false) ? 'hidden' : '',
                     (item.isEnabled) ? '' : 'disabled',
-                    (isTopLevel) ? 'top-nav-element' : ''
+                    (isTopLevel) ? 'top-nav-element' : '',
                 ];
 
                 if (item.items != null) {
@@ -66,30 +69,44 @@ declare var manywho: any;
                             {this.getNavElements(item.items, false)}
                         </ul>
                     </li>;
-                }
-                else
+                } else {
                     element = <li className={classNames.join(' ')}>
-                        <a href="#" onClick={this.onClick.bind(null, item)} id={item.id}>{item.label}</a>
+                        <a href="#" onClick={this.onClick.bind(null, item)} id={item.id}>
+                            {item.label}
+                        </a>
                     </li>;
+                }
 
                 elements.push(element);
             }
 
             return elements;
-        },
+        }
 
-        onClick: function (item) {
+        onClick(item) {
+
+            const toggleButton : HTMLButtonElement = 
+                this.refs.toggle ?
+                ReactDOM.findDOMNode(this.refs.toggle) :
+                null;
+
+
             if (!item.isEnabled)
                 return false;
 
-            if (this.refs.toggle && !manywho.utils.isEqual(window.getComputedStyle(this.refs.toggle).display, 'none', true))
-                this.refs.toggle.click();
+            if (
+                this.refs.toggle && 
+                manywho.utils.isEqual(
+                    window.getComputedStyle(toggleButton).display, 'none', true)
+            ) {
+                toggleButton.click();
+            }
 
             manywho.engine.navigate(this.props.id, item.id, null, this.props.flowKey);
-        },
+        }
 
-        render: function () {
-            let navigation = manywho.model.getNavigation(this.props.id, this.props.flowKey);
+        render() {
+            const navigation = manywho.model.getNavigation(this.props.id, this.props.flowKey);
 
             if (navigation && navigation.isVisible) {
 
@@ -97,8 +114,12 @@ declare var manywho: any;
 
                 let navElements = this.getNavElements(navigation.items, true);
 
-                navElements = navElements.concat(manywho.settings.global('navigation.components') || []);
-                navElements = navElements.concat(manywho.settings.flow('navigation.components', this.props.flowKey) || []);
+                navElements = navElements.concat(
+                    manywho.settings.global('navigation.components') || [],
+                );
+                navElements = navElements.concat(
+                    manywho.settings.flow('navigation.components', this.props.flowKey) || [],
+                );
 
                 const returnToParent = navigation.returnToParent || null;
 
@@ -111,20 +132,26 @@ declare var manywho: any;
                     return (<nav className="navbar navbar-default" ref="navigationBar">
                         <div className={innerClassName}>
                             {this.getHeaderElement(this.props.id, navigation)}
-                            <div className="collapse navbar-collapse" id={this.props.id} ref="container">
-                                <ul className="nav navbar-nav">{navElements}</ul>
+                            <div className="collapse navbar-collapse" 
+                                id={this.props.id} ref="container">
+                                <ul className="nav navbar-nav">
+                                    {navElements}
+                                </ul>
                                 {returnToParent}
                             </div>
                         </div>
                     </nav>);
-                }
-                else {
+                }  else {
                     return <div className="navbar-wizard">
-                        {(!manywho.utils.isNullOrWhitespace(navigation.label) ? <span className="navbar-brand">{navigation.label}</span> : null)}
+                        {
+                            !manywho.utils.isNullOrWhitespace(navigation.label) ? 
+                            <span className="navbar-brand">{navigation.label}</span> : 
+                            null
+                        }
                         <ul className="steps">
                             {manywho.utils.convertToArray(navigation.items)
                                 .filter(item => item.isVisible)
-                                .map(item => {
+                                .map((item) => {
                                     let className = null;
 
                                     if (item.isCurrent)
@@ -134,12 +161,27 @@ declare var manywho: any;
                                         className += ' disabled';
 
                                     if (item.tags) {
-                                        const tag = item.tags.find(tag => manywho.utils.isEqual(tag.developerName, 'isComplete', true));
-                                        if (tag && manywho.utils.isEqual(tag.contentValue, 'false', true))
+                                        const tag = item.tags.find((tag) => {
+                                            return manywho.utils.isEqual(
+                                                tag.developerName, 'isComplete', true,
+                                            );
+                                        });
+                                        if (tag && manywho.utils.isEqual(
+                                            tag.contentValue, 'false', true,
+                                        )) {
                                             className += ' active';
+                                        }
                                     }
 
-                                    return <li onClick={this.onClick.bind(null, item)} id={item.id} className={className}><span className="indicator" /><span className="glyphicon glyphicon-ok" />{item.label}</li>;
+                                    return (
+                                        <li onClick={this.onClick.bind(null, item)} 
+                                            id={item.id} 
+                                            className={className}>
+                                            <span className="indicator" />
+                                            <span className="glyphicon glyphicon-ok" />
+                                            {item.label}
+                                        </li>
+                                    );
                                 })}
                         </ul>
                         {returnToParent}
@@ -150,8 +192,8 @@ declare var manywho: any;
             return null;
         }
 
-    });
+    }
 
-    manywho.component.register('navigation', navigation);
+    manywho.component.register('navigation', Navigation);
 
 } (manywho));

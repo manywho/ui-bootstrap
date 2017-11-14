@@ -17,7 +17,7 @@ const ChartBar: React.SFC<IItemsComponentProps> = (props) => {
         type: 'bar',
         options: {
             legend: {
-                display: !manywho.utils.isNullOrWhitespace(label)
+                display: !manywho.utils.isNullOrWhitespace(label),
             },
         },
     });

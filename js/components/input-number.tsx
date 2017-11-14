@@ -22,7 +22,7 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
         this.setState({ value: e.target.value });
 
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        let value = e.target.value.replace(/^\s+|\s+$/g, '');
+        const value = e.target.value.replace(/^\s+|\s+$/g, '');
         let parsedValue = parseFloat(value);
 
         if (manywho.utils.isNullOrWhitespace(value))

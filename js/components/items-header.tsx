@@ -4,7 +4,7 @@
 declare var manywho: any;
 
 interface IItemsHeaderState {
-    search: string
+    search: string;
 }
 
 class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> {
@@ -41,20 +41,41 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
 
         if (this.props.isSearchable)
             search = <div className="mw-items-header-search input-group">
-                <input className="form-control" value={this.state.search} onChange={this.onSearchChanged} onKeyUp={this.onSearchEnter} placeholder="Search" />
+                <input className="form-control" 
+                    value={this.state.search} 
+                    onChange={this.onSearchChanged} 
+                    onKeyUp={this.onSearchEnter} 
+                    placeholder="Search" 
+                />
                 <span className="input-group-btn">
-                    <button className="btn btn-default" onClick={this.onSearch}><span className="glyphicon glyphicon-search" /></button>
+                    <button className="btn btn-default" onClick={this.onSearch}>
+                        <span className="glyphicon glyphicon-search" />
+                    </button>
                 </span>
             </div>;
 
-        if (this.props.outcomes)
+        if (this.props.outcomes) {
             outcomes = <div className="mw-items-header-outcomes">
-                {this.props.outcomes
-                    .filter((outcome) => outcome.isBulkAction)
-                    .map((outcome) => React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: this.props.flowKey }))}
+                {
+                    this.props.outcomes
+                    .filter(outcome => outcome.isBulkAction)
+                    .map((outcome) => {
+                        return React.createElement(
+                            manywho.component.getByName('outcome'), 
+                            { id: outcome.id, flowKey: this.props.flowKey },
+                        );
+                    })
+                }
             </div>;
+        }
 
-            refresh = <button className="btn btn-sm btn-default" onClick={this.props.refresh} disabled={this.props.isDisabled}><span className="glyphicon glyphicon-refresh" /></button>;
+        refresh = (
+            <button className="btn btn-sm btn-default" 
+                onClick={this.props.refresh} 
+                disabled={this.props.isDisabled}>
+                <span className="glyphicon glyphicon-refresh" />
+            </button>
+        );
 
         return (<div className="mw-items-header">
             {search}

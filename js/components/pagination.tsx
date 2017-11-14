@@ -4,21 +4,38 @@ declare var manywho: any;
 
 (function (manywho) {
 
-    const pagination = React.createClass({
+    /* tslint:disable-next-line:variable-name */
+    const Pagination: React.SFC<any> = (
+        { onFirstPage, pageIndex, isDesignTime, onPrev, onNext, hasMoreResults },
+    ) => {
 
-        render: function () {
-            manywho.log.info('Rendering Pagination');
+        manywho.log.info('Rendering Pagination');
 
-            return (<div className="mw-pagination">
-                <button className="btn btn-default" onClick={this.props.onFirstPage} disabled={this.props.pageIndex <= 1 || this.props.isDesignTime}><span className="glyphicon glyphicon-backward" /></button>
-                <button className="btn btn-default" onClick={this.props.onPrev} disabled={this.props.pageIndex <= 1 || this.props.isDesignTime}><span className="glyphicon glyphicon-chevron-left" /></button>
-                <span className="page-counter">{this.props.pageIndex}</span>
-                <button className="btn btn-default" onClick={this.props.onNext} disabled={!this.props.hasMoreResults || this.props.isDesignTime}><span className="glyphicon glyphicon-chevron-right" /></button>
-            </div>);
-        }
+        return (
+            <div className="mw-pagination">
+                <button className="btn btn-default" 
+                    onClick={onFirstPage} 
+                    disabled={pageIndex <= 1 || isDesignTime}
+                >
+                    <span className="glyphicon glyphicon-backward" />
+                </button>
+                <button className="btn btn-default" 
+                    onClick={onPrev} 
+                    disabled={pageIndex <= 1 || isDesignTime}
+                >
+                    <span className="glyphicon glyphicon-chevron-left" />
+                </button>
+                <span className="page-counter">{pageIndex}</span>
+                <button className="btn btn-default" 
+                    onClick={onNext} 
+                    disabled={!hasMoreResults || isDesignTime}
+                >
+                    <span className="glyphicon glyphicon-chevron-right" />
+                </button>
+            </div>
+        );
+    };
 
-    });
-
-    manywho.component.register('mw-pagination', pagination);
+    manywho.component.register('mw-pagination', Pagination);
 
 } (manywho));

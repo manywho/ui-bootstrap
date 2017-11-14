@@ -26,8 +26,20 @@ declare var manywho: any;
 
             if (this.props.onConfirm || this.props.onCancel)
                 footer = <div className="modal-footer">
-                    {this.props.onCancel ? <button className="btn btn-default" onClick={this.props.onCancel}>{this.props.cancelLabel || 'Cancel'}</button> : null}
-                    {this.props.onConfirm ? <button className="btn btn-primary" onClick={this.props.onConfirm}>{this.props.confirmLabel || 'OK'}</button> : null}                    
+                    {
+                        this.props.onCancel ? 
+                        <button className="btn btn-default" onClick={this.props.onCancel}>
+                            {this.props.cancelLabel || 'Cancel'}
+                        </button> : 
+                        null
+                    }
+                    {
+                        this.props.onConfirm ? 
+                        <button className="btn btn-primary" onClick={this.props.onConfirm}>
+                            {this.props.confirmLabel || 'OK'}
+                        </button> : 
+                        null
+                    }                    
                 </div>;
 
             return <div onKeyUp={this.onKeyUp}>

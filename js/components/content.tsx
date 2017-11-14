@@ -37,7 +37,6 @@ declare var tinymce: any;
         id: string;
 
         initializeEditor = () => {
-            const self = this;
             const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
             const customPlugins = 
@@ -45,7 +44,7 @@ declare var tinymce: any;
 
             if (customPlugins)
                 Object.keys(customPlugins).forEach(name => 
-                    tinymce.PluginManager.add(name, customPlugins[name])
+                    tinymce.PluginManager.add(name, customPlugins[name]),
                 );
 
             tinymce.init({
@@ -87,37 +86,37 @@ declare var tinymce: any;
                 file_picker_callback: null,
 
                 setup: (editor) => {
-                    self.editor = editor;
+                    this.editor = editor;
 
-                    if (!self.props.isDesignTime) {
+                    if (!this.props.isDesignTime) {
 
                         if (
                             manywho.settings.global(
-                                'richtext.imageUploadEnabled', self.props.flowKey, true,
+                                'richtext.imageUploadEnabled', this.props.flowKey, true,
                             )
                         ) {
                             editor.addButton('mwimage', {
                                 title: 'Images',
                                 icon: 'image',
                                 onclick: () => {
-                                    self.setState({isImageUploadOpen: true });
-                                    self.render();
-                                }
+                                    this.setState({ isImageUploadOpen: true });
+                                    this.render();
+                                },
                             });
                         }
 
-                        editor.on('change', self.onChange);
+                        editor.on('change', this.onChange);
 
                         if (model.hasEvents)
-                            editor.on('blur', self.onEvent);
+                            editor.on('blur', this.onEvent);
                     }
 
                     editor.on('init', function () {
                         this.getDoc().body.style.fontSize = manywho.settings.global(
-                            'richtext.fontsize', self.props.flowKey, '13px',
+                            'richtext.fontsize', this.props.flowKey, '13px',
                         );
                     });
-                }
+                },
             });
         }
 
@@ -208,7 +207,7 @@ declare var tinymce: any;
                                     {
                                         React.createElement(
                                             manywho.component.getByName('file-upload'), 
-                                            uploadProps
+                                            uploadProps,
                                         )
                                     }
                                 </div>
@@ -260,7 +259,7 @@ declare var tinymce: any;
                 tinymce.activeEditor.execCommand(
                     'mceInsertContent', 
                     false, 
-                    '<img src="' + imageUri + '" alt="' + imageName + '"/>'
+                    '<img src="' + imageUri + '" alt="' + imageName + '"/>',
                 );
 
                 this.setState({

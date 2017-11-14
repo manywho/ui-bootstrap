@@ -115,7 +115,7 @@ interface IGroupState {
                         manywho.component.getChildComponents(
                             children, 
                             this.props.id, 
-                            this.props.flowKey
+                            this.props.flowKey,
                         )
                     }
                 </div>;
@@ -128,7 +128,7 @@ interface IGroupState {
                         manywho.component.getChildComponents(
                             children, 
                             this.props.id, 
-                            this.props.flowKey
+                            this.props.flowKey,
                         )
                     }
                 </div>
