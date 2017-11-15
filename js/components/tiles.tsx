@@ -69,7 +69,7 @@ class Tiles extends React.Component<ITilesProps, any> {
             selectedProperty.contentValue,
             selectedProperty.contentFormat,
             selectedProperty.contentType,
-            this.props.flowKey
+            this.props.flowKey,
         );
 
         let deleteOutcomeElement = null;
@@ -80,8 +80,8 @@ class Tiles extends React.Component<ITilesProps, any> {
                     id: deleteOutcome.id,
                     flowKey: this.props.flowKey,
                     onClick: this.onOutcome,
-                    size: 'sm'
-                }
+                    size: 'sm',
+                },
             );
 
         let content: string = null;
@@ -93,7 +93,7 @@ class Tiles extends React.Component<ITilesProps, any> {
                 selectedProperty.contentValue,
                 selectedProperty.contentFormat,
                 selectedProperty.contentType,
-                this.props.flowKey
+                this.props.flowKey,
             );
         }
 
@@ -108,7 +108,7 @@ class Tiles extends React.Component<ITilesProps, any> {
                         selectedProperty.contentValue,
                         selectedProperty.contentFormat,
                         selectedProperty.contentType,
-                        this.props.flowKey
+                        this.props.flowKey,
                     );
                     return <li><strong>{selectedProperty.developerName}</strong>: {content}</li>;
                 }
@@ -143,7 +143,7 @@ class Tiles extends React.Component<ITilesProps, any> {
             this.props.parentId,
             this.props.id,
             'tiles',
-            this.props.flowKey
+            this.props.flowKey,
         ).join(' ');
 
         if (model.isVisible === false)
@@ -168,23 +168,23 @@ class Tiles extends React.Component<ITilesProps, any> {
 
         });
 
-        const footerOutcomes: (JSX.Element)[] = outcomes && outcomes
-            .filter(({ outcome }) => !manywho.utils.isEqual(
-                outcome.pageActionType,
-                'Delete',
-                true,
-            ) && !outcome.isBulkAction)
-            .map(({ outcome }) => React.createElement(
-                manywho.component.getByName('outcome'),
-                {
-                    id: outcome.id,
-                    flowKey: this.props.flowKey,
-                    onClick: this.onOutcome,
-                    size: 'default'
-                }));
+        const footerOutcomes: object[] = outcomes && outcomes
+        .filter(outcome => !manywho.utils.isEqual(
+            outcome.pageActionType,
+            'Delete', 
+            true) && !outcome.isBulkAction)
+        .map(outcome => React.createElement(
+            manywho.component.getByName('outcome'),
+            {
+                id: outcome.id,
+                flowKey: this.props.flowKey,
+                onClick: this.onOutcome,
+                size: 'default',
+            },
+        ));
 
         const deleteOutcome: any = outcomes && outcomes
-            .filter(({ outcome }) => manywho.utils.isEqual(
+            .filter(outcome => manywho.utils.isEqual(
                 outcome.pageActionType,
                 'Delete',
                 true,
@@ -194,7 +194,7 @@ class Tiles extends React.Component<ITilesProps, any> {
         let items = [];
 
         if (this.props.objectData && !manywho.utils.isPlaceholderObjectData(
-            this.props.objectData
+            this.props.objectData,
         )) {
             items = this.props.objectData.map(item => item);
 
@@ -216,7 +216,7 @@ class Tiles extends React.Component<ITilesProps, any> {
                         <ReactMotion.Motion defaultStyle={{ rotate: 0 }}
                             style={{ rotate: ReactMotion.spring(
                                 180,
-                                { stiffness: 65, damping: 9.5 }
+                                { stiffness: 65, damping: 9.5 },
                             ) }}>
 
                             {(interpolatingStyle) => {
@@ -234,7 +234,7 @@ class Tiles extends React.Component<ITilesProps, any> {
                                     <div className="back"
                                         style={{ transform: backTransform }}>
                                         {this.renderItem(
-                                            item, columns, footerOutcomes, deleteOutcome
+                                            item, columns, footerOutcomes, deleteOutcome,
                                         )}
                                     </div>
                                 </div>);
@@ -252,7 +252,7 @@ class Tiles extends React.Component<ITilesProps, any> {
             {React.createElement(
                 manywho.component.getByName('wait'),
                 { isVisible: state.loading, message: state.loading && state.loading.message },
-                null
+                null,
             )}
             </div>);
     }
