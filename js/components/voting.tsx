@@ -5,28 +5,30 @@ declare var manywho: any;
 (function (manywho) {
     
     /* tslint:disable-next-line:variable-name */
-    const Voting: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
+    class Voting extends React.Component<any, any> {
 
-        const isVisible = manywho.utils.isEqual(
-            manywho.model.getInvokeType(flowKey),
-            'waiting_on_votes',
-            true,
-        );
-        
-        if (isVisible) {
-            manywho.log.info('Rendering Voting');
-            return(
-                <div className="voting">
-                    <span className= "glyphicon glyphicon-refresh status-icon spin"
-                    aria-hidden= "true"></span>
-                    <p className="lead">Waiting on votes</p>
-                </div>
+        render() {
+
+            const isVisible = manywho.utils.isEqual(
+                manywho.model.getInvokeType(this.props.flowKey),
+                'waiting_on_votes',
+                true,
             );
+        
+            if (isVisible) {
+                manywho.log.info('Rendering Voting');
+                return(
+                    <div className="voting">
+                        <span className= "glyphicon glyphicon-refresh status-icon spin"
+                        aria-hidden= "true"></span>
+                        <p className="lead">Waiting on votes</p>
+                    </div>
+                );
 
-        } else {
-            return null;
+            } else {
+                return null;
+            }
         }
-
     };
 
     manywho.component.register('voting', Voting);

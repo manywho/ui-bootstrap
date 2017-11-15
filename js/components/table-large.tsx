@@ -2,38 +2,42 @@
 
 declare var manywho: any;
 
-(function (manywho) {
+(function (manywho, window) {
+        
+    class TableLarge extends React.Component<any, any> {
 
-    function setPropertyValue(objectData, id, propertyId, value) {
+        constructor(props) {
+            super(props);
 
-        return objectData.map(function (item) {
+            this.state = {};
+        }
 
-            item.properties = item.properties.map(function (prop) {
+        setPropertyValue(objectData, id, propertyId, value) {
 
-                if (manywho.utils.isEqual(prop.typeElementPropertyId, propertyId, true)
-                    && manywho.utils.isEqual(item.externalId, id, true)) {
+            return objectData.map((item) => {
 
-                    (Array.isArray(value)) ? prop.objectData = value : prop.contentValue = value;
+                item.properties = item.properties.map((prop) => {
 
-                }
+                    if (manywho.utils.isEqual(prop.typeElementPropertyId, propertyId, true)
+                        && manywho.utils.isEqual(item.externalId, id, true)) {
 
-                return prop;
+                        Array.isArray(value) ? 
+                        prop.objectData = value : 
+                        prop.contentValue = value;
+                    }
 
+                    return prop;
+                });
+
+                return item;
             });
+        }
 
-            return item;
+        isTableEditable(columns) {
+            return columns.filter(column => column.isEditable).length > 0;
+        }
 
-        });
-
-    }
-
-    function isTableEditable(columns) {
-        return columns.filter(column => column.isEditable).length > 0;
-    }
-
-    const tableLarge = React.createClass({
-
-        renderHeaderRow: function (displayColumns) {
+        renderHeaderRow(displayColumns) {
 
             let columns = [];
 
@@ -43,32 +47,40 @@ declare var manywho: any;
                     type: 'checkbox',
                     onChange: this.props.selectAll,
                     ref: 'selectAll',
-                    checked: this.props.selectedRows.length === this.props.totalObjectData
+                    checked: this.props.selectedRows.length === this.props.totalObjectData,
                 };
 
                 columns.push(<th className="checkbox-cell"><input {...checkboxProps} /></th>);
 
-            }
-            else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true))
+            } else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true))
                 columns.push(<th></th>);
 
-            columns = columns.concat(displayColumns.map(column => {
+            columns = columns.concat(displayColumns.map((column) => {
 
-                if (column === 'mw-outcomes')
+                if (column === 'mw-outcomes') {
                     return <th className="table-outcome-column" key="actions">Actions</th>;
-                else {
+
+                } else {
+
                     const headerProps = {
                         id: column.typeElementPropertyId,
                         key: 'header-' + column.typeElementPropertyId,
-                        onClick: (this.props.onHeaderClick) ? this.props.onHeaderClick : null
+                        onClick: (this.props.onHeaderClick) ? this.props.onHeaderClick : null,
                     };
 
                     const headerChildren = [column.label];
 
-                    if (manywho.utils.isEqual(this.props.sortedBy, column.typeElementPropertyId, true)) {
+                    if (
+                        manywho.utils.isEqual(
+                            this.props.sortedBy, column.typeElementPropertyId, true,
+                        )
+                    ) {
 
                         let iconClassName = 'table-header-icon glyphicon ';
-                        iconClassName += this.props.sortedIsAscending ? 'glyphicon-menu-down' : 'glyphicon-menu-up';
+                        iconClassName += 
+                            this.props.sortedIsAscending ? 
+                            'glyphicon-menu-down' : 
+                            'glyphicon-menu-up';
 
                         headerChildren.push(<span className={iconClassName}></span>);
                     }
@@ -78,145 +90,274 @@ declare var manywho: any;
             }));
 
             return <tr>{columns}</tr>;
-        },
+        }
 
-        onOutcomeClick: function (e, outcome) {
+        onOutcomeClick(e, outcome) {
             const objectDataId = e.currentTarget.parentElement.getAttribute('data-item');
             this.props.onOutcome(objectDataId, outcome.id);
-        },
+        }
 
-        onCellEditCommitted: function (id, propertyId, value) {
-            const objectData = setPropertyValue(this.props.objectData, id, propertyId, value);
-            manywho.state.setComponent(this.props.id, { objectData: objectData }, this.props.flowKey, false);
-        },
+        onCellEditCommitted(id, propertyId, value) {
+            const objectData = this.setPropertyValue(this.props.objectData, id, propertyId, value);
+            manywho.state.setComponent(
+                this.props.id, 
+                { objectData }, 
+                this.props.flowKey, 
+                false,
+            );
+        }
 
-        renderRows: function (flowKey, objectData, outcomes, displayColumns, selectedRows, onRowClicked, onSelect, outcomeDisplay) {
+        renderRows(
+            flowKey, objectData, outcomes, displayColumns, selectedRows, 
+            onRowClicked, onSelect, outcomeDisplay,
+        ) {            
             const outcomeComponent = manywho.component.getByName('outcome');
 
-            return objectData.map(item => {
-                const isSelected = selectedRows.filter(function (row) { return manywho.utils.isEqual(item.externalId, row.externalId, true); }).length > 0;
+            return objectData.map((item) => {
+                const isSelected = selectedRows.filter((row) => { 
+                    return manywho.utils.isEqual(item.externalId, row.externalId, true); 
+                }).length > 0;
 
                 const className = (isSelected) ? 'info' : null;
 
                 let columns = [];
 
-                if (this.props.model.isMultiSelect)
+                if (this.props.model.isMultiSelect) {
+
                     columns.push(<td className="checkbox-cell">
-                        <input id={item.externalId} type="checkbox" checked={isSelected} onClick={onSelect}></input>
+                        <input id={item.externalId} 
+                            type="checkbox" 
+                            checked={isSelected} 
+                            onClick={onSelect}>
+                        </input>
                     </td>);
-                else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true))
+
+                } else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true)) {
+
                     columns.push(<td className="checkbox-cell">
-                        <input id={item.externalId} type="radio" checked={isSelected} onClick={onSelect}></input>
+                        <input id={item.externalId} 
+                            type="radio" 
+                            checked={isSelected} 
+                            onClick={onSelect}>
+                        </input>
                     </td>);
+                }
 
-                columns = columns.concat(displayColumns.map(column => {
+                columns = columns.concat(displayColumns.map((column) => {
 
-                    if (column === 'mw-outcomes')
-                        return <td className="table-outcome-column" key={item.externalId + column} data-item={item.externalId}>
-                            {outcomes.map(outcome => React.createElement(outcomeComponent, { id: outcome.id, key: outcome.id, onClick: this.onOutcomeClick, flowKey: flowKey, display: outcomeDisplay.outcomes }, null))}
-                        </td>;
-                    else {
-                        let selectedProperty = item.properties.find(property => property.typeElementPropertyId === column.typeElementPropertyId);
+                    if (column === 'mw-outcomes') {
 
-                        if (!manywho.utils.isNullOrWhitespace(column.typeElementPropertyToDisplayId)) {
+                        return (
+                            <td className="table-outcome-column" 
+                                key={item.externalId + column} 
+                                data-item={item.externalId}>
+                                {
+                                    outcomes.map((outcome) => {
+                                        return React.createElement(
+                                            outcomeComponent, 
+                                            { 
+                                                flowKey, 
+                                                id: outcome.id, 
+                                                key: outcome.id, 
+                                                onClick: this.onOutcomeClick, 
+                                                display: outcomeDisplay.outcomes,
+                                            }, 
+                                            null,
+                                        );
+                                    })
+                                }
+                            </td>
+                        );
 
-                            if (selectedProperty != null && selectedProperty.objectData != null && selectedProperty.objectData.length)
-                                selectedProperty = selectedProperty.objectData[0].properties.find(childProperty => childProperty.typeElementPropertyId === column.typeElementPropertyToDisplayId);
+                    } else {
+                        
+                        let selectedProperty = item.properties.find((property) => {
+                            return property.typeElementPropertyId === column.typeElementPropertyId;
+                        });
+
+                        if (
+                            !manywho.utils.isNullOrWhitespace(column.typeElementPropertyToDisplayId)
+                        ) {
+
+                            if (
+                                selectedProperty !== null && 
+                                selectedProperty.objectData !== null && 
+                                selectedProperty.objectData.length
+                            ) {
+                                selectedProperty = 
+                                    selectedProperty.objectData[0].properties
+                                    .find((childProperty) => {
+                                        return childProperty.typeElementPropertyId === 
+                                            column.typeElementPropertyToDisplayId;
+                                    });
+                            }
                         }
 
                         if (selectedProperty) {
 
-                            if (this.props.isFiles &&
-                                (manywho.utils.isEqual(selectedProperty.typeElementPropertyId, manywho.settings.global('files.downloadUriPropertyId'), true)
-                                    || manywho.utils.isEqual(selectedProperty.developerName, manywho.settings.global('files.downloadUriPropertyName'), true))) {
+                            if (
+                                this.props.isFiles &&
+                                (manywho.utils.isEqual(
+                                    selectedProperty.typeElementPropertyId, 
+                                    manywho.settings.global('files.downloadUriPropertyId'), 
+                                    true,
+                                    ) || 
+                                    manywho.utils.isEqual(
+                                        selectedProperty.developerName, 
+                                        manywho.settings.global('files.downloadUriPropertyName'), 
+                                        true,
+                                    )
+                                )
+                            ) {
 
-                                const props: any = { href: selectedProperty.contentValue, target: '_blank' };
+                                const props: any = { 
+                                    href: selectedProperty.contentValue, 
+                                    target: '_blank',
+                                };
+
                                 const buttonClasses = ['btn', 'btn-sm'];
 
-                                if (manywho.utils.isNullOrWhitespace(selectedProperty.contentValue)) {
+                                if (
+                                    manywho.utils.isNullOrWhitespace(selectedProperty.contentValue)
+                                ) {
                                     buttonClasses.push('btn-default');
                                     props.disabled = 'disabled';
-                                }
-                                else
+                                } else {
                                     buttonClasses.push('btn-info');
+                                }
 
                                 props.className = buttonClasses.join(' ');
 
                                 return <td><a {...props}>Download</a></td>;
-                            }
-                            else if (!manywho.utils.isNullOrWhitespace(column.componentType))
-                                return <td id={column.typeElementPropertyId} key={column.typeElementPropertyId}>
-                                    {
-                                        React.createElement(manywho.component.getByName(column.componentType), {
-                                            id: item.externalId,
-                                            propertyId: column.typeElementPropertyId,
-                                            contentValue: selectedProperty.contentValue,
-                                            objectData: selectedProperty.objectData,
-                                            onCommitted: this.onCellEditCommitted,
-                                            flowKey: this.props.flowKey,
-                                            isEditable: column.isEditable,
-                                            contentType: column.contentType,
-                                            contentFormat: column.contentFormat
-                                        })
-                                    }
-                                </td>;
-                            else if (column.isEditable)
-                                return <td id={column.typeElementPropertyId} key={column.typeElementPropertyId} className="editable">
-                                    {
-                                        React.createElement(manywho.component.getByName('table-input'), {
-                                            id: item.externalId,
-                                            propertyId: column.typeElementPropertyId,
-                                            value: selectedProperty.contentValue,
-                                            contentType: column.contentType,
-                                            contentFormat: column.contentFormat,
-                                            onCommitted: this.onCellEditCommitted,
-                                            flowKey: this.props.flowKey
-                                        })
-                                    }
-                                </td>;
-                            else {
-                                let contentValue = manywho.formatting.format(selectedProperty.contentValue, selectedProperty.contentFormat, selectedProperty.contentType, flowKey);
 
-                                return <td id={column.typeElementPropertyId} key={column.typeElementPropertyId} onClick={column.isEditable && this.onCellClick}>
-                                    <span>{contentValue}</span>
-                                </td>;
+                            } else if (!manywho.utils.isNullOrWhitespace(column.componentType)) {
+
+                                return (
+                                    <td id={column.typeElementPropertyId} 
+                                        key={column.typeElementPropertyId}>
+                                        {
+                                            React.createElement(
+                                                manywho.component.getByName(column.componentType), 
+                                                {
+                                                    id: item.externalId,
+                                                    propertyId: column.typeElementPropertyId,
+                                                    contentValue: selectedProperty.contentValue,
+                                                    objectData: selectedProperty.objectData,
+                                                    onCommitted: this.onCellEditCommitted,
+                                                    flowKey: this.props.flowKey,
+                                                    isEditable: column.isEditable,
+                                                    contentType: column.contentType,
+                                                    contentFormat: column.contentFormat,
+                                                },
+                                            )
+                                        }
+                                    </td>
+                                );
+
+                            } else if (column.isEditable) {
+
+                                return (
+                                    <td id={column.typeElementPropertyId} 
+                                        key={column.typeElementPropertyId} 
+                                        className="editable">
+                                        {
+                                            React.createElement(
+                                                manywho.component.getByName('table-input'),
+                                                {
+                                                    id: item.externalId,
+                                                    propertyId: column.typeElementPropertyId,
+                                                    value: selectedProperty.contentValue,
+                                                    contentType: column.contentType,
+                                                    contentFormat: column.contentFormat,
+                                                    onCommitted: this.onCellEditCommitted,
+                                                    flowKey: this.props.flowKey,
+                                                },
+                                            )
+                                        }
+                                    </td>
+                                );
+
+                            } else {
+
+                                const contentValue = manywho.formatting.format(
+                                    selectedProperty.contentValue, 
+                                    selectedProperty.contentFormat, 
+                                    selectedProperty.contentType, 
+                                    flowKey,
+                                );
+
+                                return (
+                                    <td id={column.typeElementPropertyId} 
+                                        key={column.typeElementPropertyId}>
+                                        <span>{contentValue}</span>
+                                    </td>
+                                );
                             }
-                        }
-                        else
+                            
+                        } else {
+
                             return <td key={column.typeElementPropertyId}></td>;
+                        }
                     }
-
                 }));
 
-                return <tr className={className} id={item.externalId} key={item.externalId} onClick={onRowClicked}>{columns}</tr>;
+                return (
+                    <tr className={className} 
+                        id={item.externalId} 
+                        key={item.externalId} 
+                        onClick={onRowClicked}>
+                        {columns}
+                    </tr>
+                );
             });
-        },
+        }
 
-        getInitialState: function () {
-            return {};
-        },
+        componentDidUpdate() {
+            const selectAll: HTMLInputElement = 
+                ReactDOM.findDOMNode(this.refs.selectAll) as HTMLInputElement;
 
-        componentDidUpdate: function () {
-            const selectAll: HTMLInputElement = ReactDOM.findDOMNode(this.refs.selectAll) as HTMLInputElement;
-            if (selectAll)
-                selectAll.indeterminate = (this.props.selectedRows.length > 0 && this.props.selectedRows.length !== this.props.totalObjectData);
-        },
+            if (selectAll) {
+                selectAll.indeterminate = 
+                    (this.props.selectedRows.length > 0 && 
+                        this.props.selectedRows.length !== this.props.totalObjectData);
+            }
+        }
 
-        render: function () {
+        render() {
             manywho.log.info('Rendering Table-Large');
 
-            const isValid = (this.props.model.isValid !== undefined) ? this.props.model.isValid : this.props.isDesignTime && true;
+            const isValid = 
+                (this.props.model.isValid !== undefined) ? 
+                this.props.model.isValid : 
+                this.props.isDesignTime && true;
 
             const tableClassName = [
                 'table',
-                (this.props.model.attributes.borderless && manywho.utils.isEqual(this.props.model.attributes.borderless, 'true', true)) ? '' : 'table-bordered',
-                (this.props.model.attributes.striped && manywho.utils.isEqual(this.props.model.attributes.striped, 'true', true)) ? 'table-striped' : '',
+                (this.props.model.attributes.borderless && 
+                    manywho.utils.isEqual(this.props.model.attributes.borderless, 'true', true)) ? 
+                    '' : 
+                    'table-bordered',
+                (this.props.model.attributes.striped && 
+                    manywho.utils.isEqual(this.props.model.attributes.striped, 'true', true)) ? 
+                    'table-striped' : 
+                    '',
                 (this.props.isSelectionEnabled) ? 'table-hover' : '',
-                (isValid) ? '' : 'table-invalid'
+                (isValid) ? '' : 'table-invalid',
             ].join(' ');
 
             let rows = [this.renderHeaderRow(this.props.displayColumns)];
-            rows = rows.concat(this.renderRows(this.props.flowKey, this.props.objectData || [], this.props.outcomes, this.props.displayColumns, this.props.selectedRows, this.props.onRowClicked, this.props.onSelect, this.props.model.attributes));
+            rows = rows.concat(
+                this.renderRows(
+                    this.props.flowKey, 
+                    this.props.objectData || [], 
+                    this.props.outcomes, 
+                    this.props.displayColumns, 
+                    this.props.selectedRows, 
+                    this.props.onRowClicked, 
+                    this.props.onSelect, 
+                    this.props.model.attributes,
+                ),
+            );
 
             return <div className="table-responsive">
                 <table className={tableClassName}>
@@ -227,8 +368,8 @@ declare var manywho: any;
             </div>;
         }
 
-    });
+    }
 
-    manywho.component.register('mw-table-large', tableLarge);
+    manywho.component.register('mw-table-large', TableLarge);
 
 } (manywho));
