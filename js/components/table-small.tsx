@@ -2,11 +2,52 @@
 
 declare var manywho: any;
 
-(function(manywho){
+(function (manywho) {
 
-    class tableSmall extends React.Component<any, any> {
+    class TableSmall extends React.Component<any, any> {
         constructor(props) {
             super(props);
+        }
+
+        componentDidMount() {
+            this.centerChevrons();
+        }
+
+        componentDidUpdate() {
+            this.centerChevrons();
+        }
+        
+        centerChevrons() {
+            
+            const chevrons = document.querySelectorAll('.table-small-chevron');
+    
+            for (let i = 0; i < chevrons.length; i += 1) {
+    
+                const $chevron = $(chevrons[i]);
+                const parentHeight = $chevron.parent().height();
+    
+                $chevron.css('margin-top', ((parentHeight / 2) - ($chevron.height() / 2)) + 'px');
+    
+            }
+    
+        }
+
+        onOutcomeClick = (e, outcome) => {
+            const objectDataId = e.target.parentElement.getAttribute('data-item');
+            this.props.onOutcome(objectDataId, outcome.id);
+        }
+
+        onItemClick = (e) => {  
+            if (this.props.isDesignTime)
+                return;
+
+            e.preventDefault();
+
+            const objectDataId = e.currentTarget.getAttribute('data-item');
+            const outcomeId = e.currentTarget.getAttribute('data-outcome');
+
+            this.props.onOutcome(objectDataId, outcomeId);
+
         }
 
         renderOutcomeColumn = (item, model, outcomes) => {
@@ -28,7 +69,7 @@ declare var manywho: any;
                             );
                         })}
                 </td>
-            </tr>)
+            </tr>);
         }
 
         renderRows = (objectData, outcomes, displayColumns) => {
@@ -84,7 +125,7 @@ declare var manywho: any;
                                 {displayColumns.map((column) => {
                                     if (column === 'mw-outcomes') {
                                         if (outcomes.length > 1 || isOutcomeDestructive) {
-                                            this.renderOutcomeColumn(item, model, outcomes)
+                                            this.renderOutcomeColumn(item, model, outcomes);
                                         }
                                     } else {
                                         let selectedProperty = item.properties.filter(
@@ -100,27 +141,50 @@ declare var manywho: any;
                                                 selectedProperty.objectData != null) {
                                                 selectedProperty = selectedProperty.objectData[0].properties.filter(
                                                     (childProperty) => {
-                                                    return childProperty.typeElementPropertyId == column.typeElementPropertyToDisplayId;
-                                                })[0];
+                                                        return childProperty.typeElementPropertyId === column.typeElementPropertyToDisplayId;
+                                                    })[0];
                                             }
                                         }
 
                                         if (selectedProperty) {
                                             
-                                            var element = React.DOM.span(null, manywho.formatting.format(selectedProperty.contentValue, selectedProperty.contentFormat, selectedProperty.contentType, this.props.flowKey));
+                                            let element = <span>
+                                                {manywho.formatting.format(
+                                                    selectedProperty.contentValue,
+                                                    selectedProperty.contentFormat,
+                                                    selectedProperty.contentType,
+                                                    this.props.flowKey,
+                                                )}
+                                            </span>;
         
                                             if (this.props.isFiles &&
-                                                (manywho.utils.isEqual(selectedProperty.typeElementPropertyId, manywho.settings.global('files.downloadUriPropertyId'), true)
-                                                || manywho.utils.isEqual(selectedProperty.developerName, manywho.settings.global('files.downloadUriPropertyName'), true))) {
-        
-                                                element = React.DOM.a({ href: selectedProperty.contentValue, className: 'btn btn-info', target: '_blank' }, 'Download');
-        
+                                                (manywho.utils.isEqual(
+                                                    selectedProperty.typeElementPropertyId,
+                                                    manywho.settings.global(
+                                                        'files.downloadUriPropertyId',
+                                                    ),
+                                                    true,
+                                                )
+                                                || manywho.utils.isEqual(
+                                                    selectedProperty.developerName,
+                                                    manywho.settings.global(
+                                                        'files.downloadUriPropertyName',
+                                                    ),
+                                                    true,
+                                                ))
+                                            ) {
+                                                element = <a href={selectedProperty.contentValue}
+                                                    className="btn btn-info"
+                                                    target="_blank">Download</a>;        
                                             }
-        
-                                            return React.DOM.tr(null, [
-                                                React.DOM.th({ className: 'table-small-column table-small-label' }, column.label),
-                                                React.DOM.td({ className: 'table-small-column' }, element)
-                                            ]);
+
+                                            return(
+                                                <tr>
+                                                    <th 
+                                                    className="table-small-column table-small-label">{column.label}</th>
+                                                    <td className="table-small-column">{element}</td>
+                                                </tr>
+                                            );
         
                                         }
 
@@ -128,82 +192,11 @@ declare var manywho: any;
                                 })}
                             </tbody>
                         </table>
+                        {chevron}
                     </li>
-                )
+                );
 
-                return React.DOM.li(attributes, [
-                    React.DOM.table(
-                        { className: 'table table-small-item' },
-                        React.DOM.tbody(
-                            null,
-                            displayColumns.map(function (column) {
-
-                            if (column == 'mw-outcomes') {
-
-                                if (outcomes.length > 1 || isOutcomeDestructive) {
-
-                                    return React.DOM.tr(null, [
-                                        React.DOM.th({ className: 'table-small-column table-small-label' }, 'Actions'),
-                                        React.DOM.td({ className: 'table-small-column', 'data-item': item.externalId, 'data-model': model.id }, outcomes.map(function (outcome) {
-
-                                            return React.createElement(outcomeComponent, { id: outcome.id, onClick: this.onOutcomeClick, flowKey: this.props.flowKey }, null);
-
-                                        }, this))
-                                    ]);
-
-                                }
-
-                            }
-                            else {
-
-                                var selectedProperty = item.properties.filter(function (property) {
-
-                                    return property.typeElementPropertyId == column.typeElementPropertyId;
-
-                                })[0];
-
-                                if (!manywho.utils.isNullOrWhitespace(column.typeElementPropertyToDisplayId)) {
-
-                                    if (selectedProperty != null && selectedProperty.objectData != null) {
-
-                                        selectedProperty = selectedProperty.objectData[0].properties.filter(function (childProperty) {
-
-                                            return childProperty.typeElementPropertyId == column.typeElementPropertyToDisplayId;
-
-                                        })[0];
-
-                                    }
-
-                                }
-
-                                if (selectedProperty) {
-
-                                    var element = React.DOM.span(null, manywho.formatting.format(selectedProperty.contentValue, selectedProperty.contentFormat, selectedProperty.contentType, this.props.flowKey));
-
-                                    if (this.props.isFiles &&
-                                        (manywho.utils.isEqual(selectedProperty.typeElementPropertyId, manywho.settings.global('files.downloadUriPropertyId'), true)
-                                        || manywho.utils.isEqual(selectedProperty.developerName, manywho.settings.global('files.downloadUriPropertyName'), true))) {
-
-                                        element = React.DOM.a({ href: selectedProperty.contentValue, className: 'btn btn-info', target: '_blank' }, 'Download');
-
-                                    }
-
-                                    return React.DOM.tr(null, [
-                                        React.DOM.th({ className: 'table-small-column table-small-label' }, column.label),
-                                        React.DOM.td({ className: 'table-small-column' }, element)
-                                    ]);
-
-                                }
-
-                            }
-
-                        }, this)
-                        )
-                    ),
-                    chevron
-                ]);
-
-            }, this);
+            });
         }
 
         render() {
@@ -217,7 +210,7 @@ declare var manywho: any;
             const items = this.renderRows(
                 this.props.objectData || [],
                 this.props.outcomes,
-                this.props.displayColumns
+                this.props.displayColumns,
             );
 
             return <ul className={classNames}>
@@ -226,6 +219,6 @@ declare var manywho: any;
         }
     }
 
-    manywho.component.register('mw-table-small', tableSmall);
+    manywho.component.register('mw-table-small', TableSmall);
 
 }(manywho));
