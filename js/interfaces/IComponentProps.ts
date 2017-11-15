@@ -2,7 +2,7 @@ interface IComponentProps {
     id: string;
     parentId: string;
     flowKey: string;
-    items: Array<any>;
+    items: any[];
     isDesignTime: boolean;
     children: any;
 }
