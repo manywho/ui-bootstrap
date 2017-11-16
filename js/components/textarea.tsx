@@ -17,7 +17,7 @@ class Textarea extends React.Component<IComponentProps, any> {
         manywho.state.setComponent(
             this.props.id,
             { contentValue: e.target.value },
-            this.props.flowKey, true
+            this.props.flowKey, true,
         );
         this.forceUpdate();
     }
@@ -30,7 +30,7 @@ class Textarea extends React.Component<IComponentProps, any> {
     onBlur(e) {
         manywho.component.handleEvent(
             this, manywho.model.getComponent(this.props.id, this.props.flowKey),
-            this.props.flowKey
+            this.props.flowKey,
         );
     }
 
@@ -41,7 +41,7 @@ class Textarea extends React.Component<IComponentProps, any> {
 
         const state = this.props.isDesignTime ? { contentValue: '' } : manywho.state.getComponent(
             this.props.id,
-            this.props.flowKey
+            this.props.flowKey,
         ) || {};
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
@@ -55,7 +55,7 @@ class Textarea extends React.Component<IComponentProps, any> {
             className: 'form-control',
             disabled: !model.isEnabled,
             required: model.isRequired,
-            readOnly: !model.isEditable
+            readOnly: !model.isEditable,
         };
 
         if (!this.props.isDesignTime) {
@@ -71,7 +71,7 @@ class Textarea extends React.Component<IComponentProps, any> {
             this.props.parentId,
             this.props.id,
             'textarea',
-            this.props.flowKey
+            this.props.flowKey,
         ).join(' ');
 
         className += ' form-group';
@@ -84,7 +84,7 @@ class Textarea extends React.Component<IComponentProps, any> {
 
         const outcomeButtons = outcomes && outcomes.map(outcome => React.createElement(
             manywho.component.getByName('outcome'),
-            { id: outcome.id, flowKey: this.props.flowKey }
+            { id: outcome.id, flowKey: this.props.flowKey },
         ));
 
         return <div className={className}>

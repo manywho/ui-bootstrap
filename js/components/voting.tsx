@@ -25,11 +25,11 @@ declare var manywho: any;
                     </div>
                 );
 
-            } else {
-                return null;
             }
+            return null;
         }
-    };
+    }
+
 
     manywho.component.register('voting', Voting);
 

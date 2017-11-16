@@ -3,9 +3,23 @@ declare var manywho;
 manywho.theming = (function (manywho) {
 
     const themes = [
-        'cerulean', 'cosmo', 'cyborg', 'darkly', 'flatly', 'journal', 'lumen', 
-        'paper', 'readable', 'sandstone', 'simplex', 'slate', 'spacelab', 
-        'superhero', 'united', 'yeti', 'sf1',
+        'cerulean',
+        'cosmo',
+        'cyborg',
+        'darkly',
+        'flatly',
+        'journal',
+        'lumen',
+        'paper',
+        'readable',
+        'sandstone',
+        'simplex',
+        'slate',
+        'spacelab',
+        'superhero',
+        'united',
+        'yeti',
+        'sf1',
     ];
 
     function loadTheme(url) {

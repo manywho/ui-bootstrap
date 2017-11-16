@@ -42,14 +42,14 @@ class Toggle extends React.Component<IComponentProps, IToggleState> {
         const outcomeElements: (JSX.Element)[] = outcomes && outcomes
             .map(({ outcome }) => React.createElement(
                 manywho.component.getByName('outcome'),
-                { id: outcome.id, flowKey: this.props.flowKey }
+                { id: outcome.id, flowKey: this.props.flowKey },
             ));
 
         let className = (manywho.styling.getClasses(
             this.props.parentId,
             this.props.id,
             'toggle',
-            this.props.flowKey
+            this.props.flowKey,
         )).join(' ');
 
         if (model.isValid === false || state.isValid === false)
