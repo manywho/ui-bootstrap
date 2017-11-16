@@ -9,7 +9,8 @@
   },
   "scripts": {
     "docs": "typedoc --mode modules --module es2015 --excludeExternals --excludePrivate --excludeNotExported --ignoreCompilerErrors --out ./docs ./js",
-    "lint": "tslint -c tslint.json js/**/*.ts --fix"
+    "lint": "tslint -c tslint.json js/**/*.ts --fix",
+    "start": "webpack"
   },
   "devDependencies": {
     "css-loader": "^0.28.7",
