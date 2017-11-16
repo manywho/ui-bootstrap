@@ -1,19 +1,10 @@
 {
-    "files": [
-        "typings/index.d.ts"
-    ],
     "compilerOptions": {
         "pretty": true,
         "target": "es5",
         "allowJs": true,
         "jsx": "react",
-        "lib": ["dom", "es6"],
-        "outFile": "ui-bootstrap.js"        
-    },
-    "include": [
-        "js/**/*"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+        "lib": ["dom", "es6", "es2015"],
+        "moduleResolution": "node"       
+    }
 }
