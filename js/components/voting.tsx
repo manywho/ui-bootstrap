@@ -5,7 +5,7 @@ declare var manywho: any;
 (function (manywho) {
     
     /* tslint:disable-next-line:variable-name */
-    class Voting extends React.Component<any, any> {
+    class Voting extends React.Component<IComponentProps, null> {
 
         render() {
 

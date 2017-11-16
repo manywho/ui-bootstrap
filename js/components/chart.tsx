@@ -76,8 +76,11 @@ const ChartComponent: React.SFC<IChartComponentProps> = (
         columns = [{ typeElementPropertyId: 'id' }, { typeElementPropertyId: 'id1' }];
     }
 
-    if (!contentElement || isDesignTime)
-        contentElement = React.createElement(
+    let content = contentElement;
+
+    if (!content || isDesignTime) {
+
+        content = React.createElement(
             manywho.component.getByName('mw-chart-base'), 
             {
                 columns,
@@ -93,6 +96,7 @@ const ChartComponent: React.SFC<IChartComponentProps> = (
             }, 
             null,
         );
+    }
 
     let validationElement = null;
     if (typeof model.isValid !== 'undefined' && model.isValid === false)
@@ -103,7 +107,7 @@ const ChartComponent: React.SFC<IChartComponentProps> = (
     return <div className={className} id={id}>
         {labelElement}
         {headerElement}
-        {contentElement}
+        {content}
         {validationElement}
         <span className="help-block">{model.validationMessage}</span>
         <span className="help-block">{model.helpInfo}</span>

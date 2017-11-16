@@ -1,10 +1,11 @@
 /// <reference path="../../typings/index.d.ts" />
+/// <reference path="../interfaces/ITableSmallProps.ts" />
 
 declare var manywho: any;
 
 (function (manywho) {
 
-    class TableSmall extends React.Component<any, any> {
+    class TableSmall extends React.Component<ITableSmallProps, null> {
         constructor(props) {
             super(props);
         }

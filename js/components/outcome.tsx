@@ -1,4 +1,5 @@
 /// <reference path="../../typings/index.d.ts" />
+/// <reference path="../interfaces/IOutcomeProps.ts" />
 
 declare var manywho: any;
 
@@ -92,10 +93,10 @@ declare var manywho: any;
         return null;
     }
 
-    class Outcome extends React.Component<any, any> {
+    class Outcome extends React.Component<IOutcomeProps, null> {
 
         getContent(model, display: string) {
-            if (display)
+            if (display) {
                 switch (display.toUpperCase()) {
                 case 'ICON':
                 case 'ICONS':
@@ -107,8 +108,9 @@ declare var manywho: any;
                 default:
                     return model.label;
                 }
-            else
-                return model.label;
+            }
+            
+            return model.label;
         }
 
         getSize(model) {
@@ -194,19 +196,18 @@ declare var manywho: any;
                         {content}
                     </a>
                 );
-            } else {
-                return (
-                    <button id={this.props.id} 
-                        className={className} 
-                        onClick={this.onClick} 
-                        title={model.label} 
-                        disabled={this.props.disabled}>
-                        {content}
-                    </button>
-                );
             }
-        }
 
+            return (
+                <button id={this.props.id} 
+                    className={className} 
+                    onClick={this.onClick} 
+                    title={model.label} 
+                    disabled={this.props.disabled}>
+                    {content}
+                </button>
+            );
+        }
     }
 
     manywho.component.register('outcome', Outcome);

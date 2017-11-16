@@ -3,7 +3,7 @@
 
 declare var manywho: any;
 
-class Textarea extends React.Component<IComponentProps, any> {
+class Textarea extends React.Component<IComponentProps, null> {
 
     constructor(props) {
         super(props);

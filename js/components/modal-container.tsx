@@ -1,10 +1,11 @@
 /// <reference path="../../typings/index.d.ts" />
+/// <reference path="../interfaces/IModalContainerProps.ts" />
 
 declare var manywho: any;
 
 (function (manywho) {
 
-    class ModalContainer extends React.Component<any, any> {
+    class ModalContainer extends React.Component<IModalContainerProps, null> {
 
         onKeyUp = (e) => {
             if (e.keyCode === 27)

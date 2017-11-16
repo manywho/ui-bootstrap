@@ -3,9 +3,13 @@
 declare var manywho: any;
 declare var tinymce: any;
 
+interface IContentState {
+    isImageUploadOpen: boolean;
+}
+
 (function (manywho, window) {
 
-    class Content extends React.Component<any, any> {
+    class Content extends React.Component<IComponentProps, IContentState> {
 
         static isLoadingTinyMce: boolean = false;
         static loadTinyMce(callback) {

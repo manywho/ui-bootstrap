@@ -4,7 +4,7 @@ declare var manywho: any;
 
 (function (manywho) {
 
-    class Presentation extends React.Component<any, any> {
+    class Presentation extends React.Component<IComponentProps, null> {
 
         replaceContent() {
             const node = ReactDOM.findDOMNode(this.refs.content);

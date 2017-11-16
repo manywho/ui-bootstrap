@@ -1,10 +1,22 @@
 /// <reference path="../../typings/index.d.ts" />
+/// <reference path="../interfaces/ILoginProps.ts" />
 
 declare var manywho: any;
 
+interface ILoginState {
+    username?: string;
+    password?: string;
+    usernameError?: string;
+    passwordError?: string; 
+    loading?: {
+        message: string;
+    };
+    faults?: null;
+}
+
 (function (manywho) {
 
-    class Login extends React.Component<any, any> {
+    class Login extends React.Component<ILoginProps, ILoginState> {
 
         constructor(props) {
             super(props);

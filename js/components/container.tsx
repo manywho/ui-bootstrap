@@ -6,7 +6,7 @@ declare var ReactMotion: any;
 
 interface IContainerState {
     isCollapsed: boolean;
-};
+}
 
 (function (manywho) {
 

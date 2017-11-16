@@ -1,23 +1,25 @@
 /// <reference path="../../typings/index.d.ts" />
+/// <reference path="../interfaces/INavigationProps.ts" />
 
 declare var manywho: any;
 
 (function (manywho) {
 
-    class Navigation extends React.Component<any, any> {
+    class Navigation extends React.Component<INavigationProps, null> {
 
         getItem(items: any, id: string) {
             for (const itemId in items) {
                 if (itemId === id) {
                     return items[id];
-                } else {
-                    const item = items[itemId];
-                    if (item.items) {
-                        const foundItem = this.getItem(item.items, id);
-                        if (foundItem)
-                            return foundItem;
-                    }
+                } 
+
+                const item = items[itemId];
+                if (item.items) {
+                    const foundItem = this.getItem(item.items, id);
+                    if (foundItem)
+                        return foundItem;
                 }
+                
             }
         }
 
@@ -141,52 +143,52 @@ declare var manywho: any;
                             </div>
                         </div>
                     </nav>);
-                }  else {
-                    return <div className="navbar-wizard">
-                        {
-                            !manywho.utils.isNullOrWhitespace(navigation.label) ? 
-                            <span className="navbar-brand">{navigation.label}</span> : 
-                            null
-                        }
-                        <ul className="steps">
-                            {manywho.utils.convertToArray(navigation.items)
-                                .filter(item => item.isVisible)
-                                .map((item) => {
-                                    let className = null;
-
-                                    if (item.isCurrent)
-                                        className += ' active';
-
-                                    if (item.isEnabled === false)
-                                        className += ' disabled';
-
-                                    if (item.tags) {
-                                        const tag = item.tags.find((tag) => {
-                                            return manywho.utils.isEqual(
-                                                tag.developerName, 'isComplete', true,
-                                            );
-                                        });
-                                        if (tag && manywho.utils.isEqual(
-                                            tag.contentValue, 'false', true,
-                                        )) {
-                                            className += ' active';
-                                        }
-                                    }
-
-                                    return (
-                                        <li onClick={this.onClick.bind(null, item)} 
-                                            id={item.id} 
-                                            className={className}>
-                                            <span className="indicator" />
-                                            <span className="glyphicon glyphicon-ok" />
-                                            {item.label}
-                                        </li>
-                                    );
-                                })}
-                        </ul>
-                        {returnToParent}
-                    </div>;
                 }
+
+                return <div className="navbar-wizard">
+                    {
+                        !manywho.utils.isNullOrWhitespace(navigation.label) ? 
+                        <span className="navbar-brand">{navigation.label}</span> : 
+                        null
+                    }
+                    <ul className="steps">
+                        {manywho.utils.convertToArray(navigation.items)
+                            .filter(item => item.isVisible)
+                            .map((item) => {
+                                let className = null;
+
+                                if (item.isCurrent)
+                                    className += ' active';
+
+                                if (item.isEnabled === false)
+                                    className += ' disabled';
+
+                                if (item.tags) {
+                                    const tag = item.tags.find((tag) => {
+                                        return manywho.utils.isEqual(
+                                            tag.developerName, 'isComplete', true,
+                                        );
+                                    });
+                                    if (tag && manywho.utils.isEqual(
+                                        tag.contentValue, 'false', true,
+                                    )) {
+                                        className += ' active';
+                                    }
+                                }
+
+                                return (
+                                    <li onClick={this.onClick.bind(null, item)} 
+                                        id={item.id} 
+                                        className={className}>
+                                        <span className="indicator" />
+                                        <span className="glyphicon glyphicon-ok" />
+                                        {item.label}
+                                    </li>
+                                );
+                            })}
+                    </ul>
+                    {returnToParent}
+                </div>;
             }
 
             return null;

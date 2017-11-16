@@ -1,7 +1,9 @@
+/// <reference path="../interfaces/INotificationsProps.ts" />
+
 (function (manywho) {
 
     /* tslint:disable-next-line:variable-name */
-    const Notifications: React.SFC<any> = ({ flowKey, position }) => {
+    const Notifications: React.SFC<INotificationsProps> = ({ flowKey, position }) => {
 
         const models = manywho.model.getNotifications(flowKey, position);
         const notificationComponent = manywho.component.getByName('notification');

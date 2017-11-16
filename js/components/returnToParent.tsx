@@ -1,7 +1,9 @@
+/// <reference path="../interfaces/IReturnToParentProps.ts" />
+
 (function (manywho) {
     
     /* tslint:disable-next-line:variable-name */
-    const ReturnToParent: React.SFC<any> = ({ flowKey, parentStateId }) => {
+    const ReturnToParent: React.SFC<IReturnToParentProps> = ({ flowKey, parentStateId }) => {
 
         const onClick = () => {
 

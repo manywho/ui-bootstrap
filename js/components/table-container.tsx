@@ -1,8 +1,34 @@
 /// <reference path="../../typings/index.d.ts" />
 
+interface ITableContainerState {
+    isVisible?: boolean;
+    height?: number;
+    icon?: string;
+    windowWidth?: number;
+    sortByOrder?: string;
+    lastOrderBy?: string;
+    objectData?: any;
+    lastSortedBy?: string;
+}
+
+interface ITableContainerProps extends IPaginationProps, IComponentProps {
+    sort: (event: React.SyntheticEvent) => void;
+    select: (event: React.SyntheticEvent) => void;
+    objectData: any;
+    sortedBy: string;
+    sortedIsAscending: boolean;
+    onOutcome(): void;
+    selectAll(): void;
+    contentElement: any;
+    isLoading: boolean;
+    onSearch(): void;
+    refresh(): void;
+    page: number;
+}
+
 (function (manywho) {
 
-    class Table extends React.Component<any, any> {
+    class Table extends React.Component<ITableContainerProps, ITableContainerState> {
 
         handleResizeDebounced = null;
 

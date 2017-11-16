@@ -1,4 +1,6 @@
-﻿interface IFileUploadState {
+﻿/// <reference path="../interfaces/IFileUploadProps.ts" />
+
+interface IFileUploadState {
     isUploadDisabled?: boolean;
     isFileSelected?: boolean;
     isProgressVisible?: boolean;
@@ -7,11 +9,11 @@
     progress?: number;
     error?: any;
     files?: any;
-};
+}
 
 (function (manywho) {
 
-    class FileUpload extends React.Component<any, IFileUploadState> {
+    class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
 
         static defaultProps = {
             uploadCaption: 'Upload',

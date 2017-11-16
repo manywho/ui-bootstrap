@@ -4,7 +4,7 @@
 declare var manywho: any;
 declare var ReactMotion: any;
 
-class Tiles extends React.Component<ITilesProps, any> {
+class Tiles extends React.Component<ITilesProps, null> {
 
     constructor(props: ITilesProps) {
         super(props);
