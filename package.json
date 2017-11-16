@@ -30,16 +30,16 @@
     "gulp-replace": "^0.5.2",
     "gulp-rev": "^7.0.0",
     "gulp-sourcemaps": "^2.6.0",
-    "gulp-tslint": "^7.0.1",
+    "gulp-tslint": "^8.1.2",
     "gulp-typescript": "^2.13.4",
     "gulp-uglify": "^1.1.0",
     "gulp-util": "^3.0.4",
     "guppy-pre-commit": "^0.4.0",
-    "tslint": "^4.0.2",
+    "tslint": "^5.8.0",
     "typescript": "^2.0.2",
     "yargs": "^2.3.0"
   },
   "dependencies": {
-    "tslint-config-airbnb": "^5.3.1"
+    "tslint-config-airbnb": "^5.4.2"
   }
 }

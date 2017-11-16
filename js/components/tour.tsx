@@ -12,7 +12,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
 
         this.state = {
             foundTarget: false,
-            style: null
+            style: null,
         };
 
         this.onNext = this.onNext.bind(this);
@@ -133,7 +133,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
         const className = 'mw-tour-step popover ' + step.placement;
 
         let arrowStyle = null;
-        let offset = manywho.utils.isNullOrUndefined(step.offset) ? 16 : step.offset;
+        const offset = manywho.utils.isNullOrUndefined(step.offset) ? 16 : step.offset;
 
         switch (step.placement.toUpperCase()) {
         case 'LEFT':
@@ -204,6 +204,6 @@ manywho.tours.getTargetElement = function (step: ITourStep) {
 
     if (step.querySelector)
         return document.querySelector(step.target);
-    else
-        return document.getElementById(step.target);
+
+    return document.getElementById(step.target);
 };
