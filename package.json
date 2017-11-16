@@ -12,7 +12,10 @@
     "lint": "tslint -c tslint.json js/**/*.ts --fix"
   },
   "devDependencies": {
+    "css-loader": "^0.28.7",
     "del": "^2.2.2",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.5",
     "git-guppy": "^2.0.0",
     "glob": "^7.0.3",
     "gulp": "^3.8.11",
@@ -35,8 +38,15 @@
     "gulp-uglify": "^1.1.0",
     "gulp-util": "^3.0.4",
     "guppy-pre-commit": "^0.4.0",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "script-loader": "^0.7.2",
+    "style-loader": "^0.19.0",
+    "ts-loader": "^3.1.1",
     "tslint": "^5.8.0",
     "typescript": "^2.0.2",
+    "webpack": "^3.8.1",
+    "webpack-bundle-analyzer": "^2.9.1",
     "yargs": "^2.3.0"
   },
   "dependencies": {
