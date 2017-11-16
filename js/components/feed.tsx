@@ -196,7 +196,7 @@
         
             return null;
         }
-    };
+    }
 
     manywho.component.register('feed', Feed);
 

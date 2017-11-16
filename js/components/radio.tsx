@@ -1,7 +1,7 @@
 (function (manywho) {
 
     /* tslint:disable-next-line:variable-name */
-    const Radio: React.SFC<any> = ({ id, flowKey, isDesignTime, parentId }) => {
+    const Radio: React.SFC<IComponentProps> = ({ id, flowKey, isDesignTime, parentId }) => {
 
         manywho.log.info('Rendering Radio Buttons: ' + id);
 

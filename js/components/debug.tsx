@@ -7,7 +7,7 @@ interface IDebugViewerState {
 
 (function (manywho) {
 
-    class DebugViewer extends React.Component<any, IDebugViewerState> {
+    class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
 
         constructor(props) {
             super(props);
@@ -154,9 +154,9 @@ interface IDebugViewerState {
                                                 {part}
                                             </a>
                                         </li>;
-                                    } else {
-                                        return null;
                                     }
+
+                                    return null;
 
                                 }, 
                                 this,

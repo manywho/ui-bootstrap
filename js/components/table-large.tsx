@@ -1,16 +1,11 @@
 ﻿/// <reference path="../../typings/index.d.ts" />
+/// <reference path="../interfaces/ITableLargeProps.ts" />
 
 declare var manywho: any;
 
 (function (manywho, window) {
         
-    class TableLarge extends React.Component<any, any> {
-
-        constructor(props) {
-            super(props);
-
-            this.state = {};
-        }
+    class TableLarge extends React.Component<ITableLargeProps, null> {
 
         setPropertyValue(objectData, id, propertyId, value) {
 
@@ -60,33 +55,33 @@ declare var manywho: any;
                 if (column === 'mw-outcomes') {
                     return <th className="table-outcome-column" key="actions">Actions</th>;
 
-                } else {
-
-                    const headerProps = {
-                        id: column.typeElementPropertyId,
-                        key: 'header-' + column.typeElementPropertyId,
-                        onClick: (this.props.onHeaderClick) ? this.props.onHeaderClick : null,
-                    };
-
-                    const headerChildren = [column.label];
-
-                    if (
-                        manywho.utils.isEqual(
-                            this.props.sortedBy, column.typeElementPropertyId, true,
-                        )
-                    ) {
-
-                        let iconClassName = 'table-header-icon glyphicon ';
-                        iconClassName += 
-                            this.props.sortedIsAscending ? 
-                            'glyphicon-menu-down' : 
-                            'glyphicon-menu-up';
-
-                        headerChildren.push(<span className={iconClassName}></span>);
-                    }
-
-                    return <th {...headerProps}>{headerChildren}</th>;
                 }
+
+                const headerProps = {
+                    id: column.typeElementPropertyId,
+                    key: 'header-' + column.typeElementPropertyId,
+                    onClick: (this.props.onHeaderClick) ? this.props.onHeaderClick : null,
+                };
+
+                const headerChildren = [column.label];
+
+                if (
+                    manywho.utils.isEqual(
+                        this.props.sortedBy, column.typeElementPropertyId, true,
+                    )
+                ) {
+
+                    let iconClassName = 'table-header-icon glyphicon ';
+                    iconClassName += 
+                        this.props.sortedIsAscending ? 
+                        'glyphicon-menu-down' : 
+                        'glyphicon-menu-up';
+
+                    headerChildren.push(<span className={iconClassName}></span>);
+                }
+
+                return <th {...headerProps}>{headerChildren}</th>;
+                
             }));
 
             return <tr>{columns}</tr>;
@@ -169,136 +164,136 @@ declare var manywho: any;
                             </td>
                         );
 
-                    } else {
+                    }
                         
-                        let selectedProperty = item.properties.find((property) => {
-                            return property.typeElementPropertyId === column.typeElementPropertyId;
-                        });
+                    let selectedProperty = item.properties.find((property) => {
+                        return property.typeElementPropertyId === column.typeElementPropertyId;
+                    });
+
+                    if (
+                        !manywho.utils.isNullOrWhitespace(column.typeElementPropertyToDisplayId)
+                    ) {
 
                         if (
-                            !manywho.utils.isNullOrWhitespace(column.typeElementPropertyToDisplayId)
+                            selectedProperty !== null && 
+                            selectedProperty.objectData !== null && 
+                            selectedProperty.objectData.length
                         ) {
-
-                            if (
-                                selectedProperty !== null && 
-                                selectedProperty.objectData !== null && 
-                                selectedProperty.objectData.length
-                            ) {
-                                selectedProperty = 
-                                    selectedProperty.objectData[0].properties
-                                    .find((childProperty) => {
-                                        return childProperty.typeElementPropertyId === 
-                                            column.typeElementPropertyToDisplayId;
-                                    });
-                            }
-                        }
-
-                        if (selectedProperty) {
-
-                            if (
-                                this.props.isFiles &&
-                                (manywho.utils.isEqual(
-                                    selectedProperty.typeElementPropertyId, 
-                                    manywho.settings.global('files.downloadUriPropertyId'), 
-                                    true,
-                                    ) || 
-                                    manywho.utils.isEqual(
-                                        selectedProperty.developerName, 
-                                        manywho.settings.global('files.downloadUriPropertyName'), 
-                                        true,
-                                    )
-                                )
-                            ) {
-
-                                const props: any = { 
-                                    href: selectedProperty.contentValue, 
-                                    target: '_blank',
-                                };
-
-                                const buttonClasses = ['btn', 'btn-sm'];
-
-                                if (
-                                    manywho.utils.isNullOrWhitespace(selectedProperty.contentValue)
-                                ) {
-                                    buttonClasses.push('btn-default');
-                                    props.disabled = 'disabled';
-                                } else {
-                                    buttonClasses.push('btn-info');
-                                }
-
-                                props.className = buttonClasses.join(' ');
-
-                                return <td><a {...props}>Download</a></td>;
-
-                            } else if (!manywho.utils.isNullOrWhitespace(column.componentType)) {
-
-                                return (
-                                    <td id={column.typeElementPropertyId} 
-                                        key={column.typeElementPropertyId}>
-                                        {
-                                            React.createElement(
-                                                manywho.component.getByName(column.componentType), 
-                                                {
-                                                    id: item.externalId,
-                                                    propertyId: column.typeElementPropertyId,
-                                                    contentValue: selectedProperty.contentValue,
-                                                    objectData: selectedProperty.objectData,
-                                                    onCommitted: this.onCellEditCommitted,
-                                                    flowKey: this.props.flowKey,
-                                                    isEditable: column.isEditable,
-                                                    contentType: column.contentType,
-                                                    contentFormat: column.contentFormat,
-                                                },
-                                            )
-                                        }
-                                    </td>
-                                );
-
-                            } else if (column.isEditable) {
-
-                                return (
-                                    <td id={column.typeElementPropertyId} 
-                                        key={column.typeElementPropertyId} 
-                                        className="editable">
-                                        {
-                                            React.createElement(
-                                                manywho.component.getByName('table-input'),
-                                                {
-                                                    id: item.externalId,
-                                                    propertyId: column.typeElementPropertyId,
-                                                    value: selectedProperty.contentValue,
-                                                    contentType: column.contentType,
-                                                    contentFormat: column.contentFormat,
-                                                    onCommitted: this.onCellEditCommitted,
-                                                    flowKey: this.props.flowKey,
-                                                },
-                                            )
-                                        }
-                                    </td>
-                                );
-
-                            } else {
-
-                                const contentValue = manywho.formatting.format(
-                                    selectedProperty.contentValue, 
-                                    selectedProperty.contentFormat, 
-                                    selectedProperty.contentType, 
-                                    flowKey,
-                                );
-
-                                return (
-                                    <td id={column.typeElementPropertyId} 
-                                        key={column.typeElementPropertyId}>
-                                        <span>{contentValue}</span>
-                                    </td>
-                                );
-                            }
-                            
-                        } else {
-
-                            return <td key={column.typeElementPropertyId}></td>;
+                            selectedProperty = 
+                                selectedProperty.objectData[0].properties
+                                .find((childProperty) => {
+                                    return childProperty.typeElementPropertyId === 
+                                        column.typeElementPropertyToDisplayId;
+                                });
                         }
                     }
+
+                    if (selectedProperty) {
+
+                        if (
+                            this.props.isFiles &&
+                            (manywho.utils.isEqual(
+                                selectedProperty.typeElementPropertyId, 
+                                manywho.settings.global('files.downloadUriPropertyId'), 
+                                true,
+                                ) || 
+                                manywho.utils.isEqual(
+                                    selectedProperty.developerName, 
+                                    manywho.settings.global('files.downloadUriPropertyName'), 
+                                    true,
+                                )
+                            )
+                        ) {
+
+                            const props: any = { 
+                                href: selectedProperty.contentValue, 
+                                target: '_blank',
+                            };
+
+                            const buttonClasses = ['btn', 'btn-sm'];
+
+                            if (
+                                manywho.utils.isNullOrWhitespace(selectedProperty.contentValue)
+                            ) {
+                                buttonClasses.push('btn-default');
+                                props.disabled = 'disabled';
+                            } else {
+                                buttonClasses.push('btn-info');
+                            }
+
+                            props.className = buttonClasses.join(' ');
+
+                            return <td><a {...props}>Download</a></td>;
+
+                        } 
+                        
+                        if (!manywho.utils.isNullOrWhitespace(column.componentType)) {
+
+                            return (
+                                <td id={column.typeElementPropertyId} 
+                                    key={column.typeElementPropertyId}>
+                                    {
+                                        React.createElement(
+                                            manywho.component.getByName(column.componentType), 
+                                            {
+                                                id: item.externalId,
+                                                propertyId: column.typeElementPropertyId,
+                                                contentValue: selectedProperty.contentValue,
+                                                objectData: selectedProperty.objectData,
+                                                onCommitted: this.onCellEditCommitted,
+                                                flowKey: this.props.flowKey,
+                                                isEditable: column.isEditable,
+                                                contentType: column.contentType,
+                                                contentFormat: column.contentFormat,
+                                            },
+                                        )
+                                    }
+                                </td>
+                            );
+
+                        }
+                        
+                        if (column.isEditable) {
+
+                            return (
+                                <td id={column.typeElementPropertyId} 
+                                    key={column.typeElementPropertyId} 
+                                    className="editable">
+                                    {
+                                        React.createElement(
+                                            manywho.component.getByName('table-input'),
+                                            {
+                                                id: item.externalId,
+                                                propertyId: column.typeElementPropertyId,
+                                                value: selectedProperty.contentValue,
+                                                contentType: column.contentType,
+                                                contentFormat: column.contentFormat,
+                                                onCommitted: this.onCellEditCommitted,
+                                                flowKey: this.props.flowKey,
+                                            },
+                                        )
+                                    }
+                                </td>
+                            );
+
+                        }
+
+                        const contentValue = manywho.formatting.format(
+                            selectedProperty.contentValue, 
+                            selectedProperty.contentFormat, 
+                            selectedProperty.contentType, 
+                            flowKey,
+                        );
+
+                        return (
+                            <td id={column.typeElementPropertyId} 
+                                key={column.typeElementPropertyId}>
+                                <span>{contentValue}</span>
+                            </td>
+                        );                        
+                    }
+
+                    return <td key={column.typeElementPropertyId}></td>;                    
                 }));
 
                 return (

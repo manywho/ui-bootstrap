@@ -1,4 +1,6 @@
 /// <reference path="../../typings/index.d.ts" />
+/// <reference path="../interfaces/IWaitProps.ts" />
+
 
 declare var manywho: any;
 
@@ -11,7 +13,7 @@ declare var manywho: any;
         return Object.keys(props).length > 0;  
     }
 
-    class Wait extends React.Component<any, any> {
+    class Wait extends React.Component<IWaitProps, null> {
         
         constructor(props) {
             super(props);

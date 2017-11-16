@@ -1,10 +1,17 @@
 /// <reference path="../../typings/index.d.ts" />
+/// <reference path="../interfaces/ITableInputProps.ts" />
+
+interface ITableInputState {
+    value?: any;
+    currentValue?: any;
+    isFocused?: boolean;
+}
 
 declare var manywho: any;
 
 (function (manywho) {
 
-    class TableInput extends React.Component<any, any> {
+    class TableInput extends React.Component<ITableInputProps, ITableInputState> {
 
         getInputType(contentType) {
 
@@ -201,10 +208,10 @@ declare var manywho: any;
             ) {
                 props.rows = 1;
                 return React.DOM.textarea(props);
-            } else {
-                props.type = this.getInputType(this.props.contentType);
-                return React.DOM.input(props);
             }
+
+            props.type = this.getInputType(this.props.contentType);
+            return React.DOM.input(props);
         }
     }
 

@@ -12,7 +12,7 @@ interface IItemsComponentProps extends IComponentProps {
     objectData: any[];
     onSearch: Function;
     outcomes: any[];
-    refresh: (MouseEvent) => void;
+    refresh: (event: React.SyntheticEvent) => void;
     onNext: Function;
     onPrev: Function;
     onFirstPage: Function;

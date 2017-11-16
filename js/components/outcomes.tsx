@@ -3,17 +3,11 @@
 
 declare var manywho: any;
 
-interface IOutcomesProps extends IComponentProps {
-}
-
-interface IOutcomesState {
-}
-
-class Outcomes extends React.Component<IOutcomesProps, IOutcomesState> {
+class Outcomes extends React.Component<IComponentProps, null> {
 
     displayName: 'Outcomes';
 
-    constructor(props: IOutcomesProps) {
+    constructor(props: IComponentProps) {
         super(props);
 
         this.handleEvent = this.handleEvent.bind(this);
@@ -77,12 +71,16 @@ class Outcomes extends React.Component<IOutcomesProps, IOutcomesState> {
                     flowKey: this.props.flowKey,
                 });
 
-                if (model.attributes && !manywho.utils.isNullOrWhitespace(model.attributes.columns))
+                if (
+                    model.attributes && 
+                    !manywho.utils.isNullOrWhitespace(model.attributes.columns)
+                ) {
                     return <div className={'column col-' + model.attributes.columns}>
                         {element}
                     </div>;
-                else
-                    return element;
+                }
+
+                return element;
             });
 
         if (this.props.isDesignTime)

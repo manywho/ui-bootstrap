@@ -1,6 +1,8 @@
+/// <reference path="../interfaces/IModalProps.ts" />
+
 (function (manywho) {
 
-    class Modal extends React.Component<any, any> {
+    class Modal extends React.Component<IModalProps, null> {
         
         constructor(props) {
             super(props);

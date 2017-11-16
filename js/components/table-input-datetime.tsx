@@ -1,10 +1,11 @@
 /// <reference path="../../typings/index.d.ts" />
+/// <reference path="../interfaces/ITableInputDateTimeProps.ts" />
 
 declare var manywho: any;
 
 (function (manywho) {
 
-    class TableInputDateTime extends React.Component<any, any> {
+    class TableInputDateTime extends React.Component<ITableInputDateTimeProps, null> {
 
         onChange = (e) => {
             this.props.onChange(

@@ -3,7 +3,13 @@
 
 declare var manywho: any;
 
-class ItemsContainer extends React.Component<IComponentProps, any> {
+interface IItemsContainerState {
+    search?: null;
+    sortedBy?: string;
+    sortedIsAscending?: boolean;
+}
+
+class ItemsContainer extends React.Component<IComponentProps, IItemsContainerState> {
 
     constructor(props: IComponentProps) {
         super(props);

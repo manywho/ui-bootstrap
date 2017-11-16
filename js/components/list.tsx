@@ -3,7 +3,7 @@
 
 declare var manywho: any;
 
-class List extends React.Component<IComponentProps, any> {
+class List extends React.Component<IComponentProps, null> {
 
     displayName: 'List';
 

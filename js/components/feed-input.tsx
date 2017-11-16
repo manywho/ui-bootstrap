@@ -1,10 +1,12 @@
+/// <reference path="../interfaces/IFeedInputProps.ts" />
+
 interface IFeedInputState {
     mentionedUsers: any;
 }
 
 (function (manywho) {
     
-    class FeedInput extends React.Component<any, IFeedInputState> {
+    class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
 
         constructor(props) {
             super(props);

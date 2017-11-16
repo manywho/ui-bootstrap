@@ -11,12 +11,13 @@ interface IGroupState {
     function childContainsInvalidItems(child, flowKey) {
         if (!manywho.model.isContainer(child)) {
             return !manywho.state.isValid(child.id, flowKey).isValid;
-        } else {
-            const items = manywho.model.getChildren(child.id, flowKey);
-            for (let i = 0; i < items.length; i = i + 1) {
-                if (childContainsInvalidItems(items[i], flowKey))
-                    return true;
-            }
+        } 
+
+        const items = manywho.model.getChildren(child.id, flowKey);
+
+        for (let i = 0; i < items.length; i = i + 1) {
+            if (childContainsInvalidItems(items[i], flowKey))
+                return true;
         }
 
         return false;
@@ -32,7 +33,7 @@ interface IGroupState {
         }
     }
 
-    class Group extends React.Component<any, IGroupState> {
+    class Group extends React.Component<IComponentProps, IGroupState> {
 
         constructor(props) {
             super(props);

@@ -5,7 +5,7 @@ declare var manywho: any;
 
 (function (manywho) {
 
-    class Status extends React.Component<any, any> {
+    class Status extends React.Component<IComponentProps, null> {
 
         render () {
 
@@ -37,12 +37,11 @@ declare var manywho: any;
                     </div>
                 );
 
-            } else {
-                return null;
             }
+
+            return null;
         }
-            
-    };
+    }
 
     manywho.component.register('status', Status);
 

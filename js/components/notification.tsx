@@ -1,6 +1,8 @@
+/// <reference path="../interfaces/INotificationProps.ts" />
+
 (function (manywho) {
     
-    class Notification extends React.Component<any, any> {
+    class Notification extends React.Component<INotificationProps, null> {
 
         timeout = null;
 

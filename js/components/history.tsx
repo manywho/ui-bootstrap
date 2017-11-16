@@ -81,7 +81,7 @@
             return null;
         }
 
-    };
+    }
 
     manywho.component.register('history', History);
 

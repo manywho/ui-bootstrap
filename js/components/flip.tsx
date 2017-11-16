@@ -10,7 +10,7 @@ interface IFlipState {
 // Stolen From: http://davidwalsh.name/css-flip
 (function (manywho) {
 
-    class Flip extends React.Component<any, IFlipState> {
+    class Flip extends React.Component<IComponentProps, IFlipState> {
 
         constructor(props) {
             super(props);

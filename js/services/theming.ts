@@ -31,10 +31,11 @@ manywho.theming = (function (manywho) {
 
             img.onerror = () => { manywho.log.info('Finished loading theme: ' + url); };
             img.src = url;
-        } else
+        } else {
             manywho.log.error(
                 `Failed loading theme ${url}. A <link> element with id "theme" could not be found`,
             );
+        }
     }
 
     return {
@@ -42,8 +43,9 @@ manywho.theming = (function (manywho) {
             if (themes !== null && name && themes.indexOf(name) !== -1) {
                 manywho.log.info('Switching theme to: ' + name);
                 loadTheme(manywho.cdnUrl + manywho.settings.theme('url') + '/mw-' + name + '.css');
-            } else
+            } else {
                 manywho.log.error(name + ' theme cannot be found');
+            }
         },
 
         custom(url) {
