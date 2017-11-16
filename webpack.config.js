@@ -13,6 +13,15 @@ var config = {
     module: {
     rules: [
         {
+            test: /\.ts$/,
+            enforce: 'pre',
+            loader: 'tslint-loader',
+            options: {
+                emitErrors: true,
+                failOnHint: true
+            },
+        },
+        {
             test: /\.tsx?$/,
             use: 'ts-loader',
             exclude: /node_modules/
@@ -80,6 +89,10 @@ var config = {
     extensions: [ '.tsx', '.ts', '.js' ]
     },
     devtool: 'source-map',
+    watch: true,
+    watchOptions: {
+        poll: true
+    },
     externals: {
         'react': 'React',
         'react-dom' : 'ReactDOM',
