@@ -9,6 +9,7 @@
   },
   "scripts": {
     "docs": "typedoc --mode modules --module es2015 --excludeExternals --excludePrivate --excludeNotExported --ignoreCompilerErrors --out ./docs ./js",
+    "start": "webpack",
     "precommit": "lint-staged"
   },
   "lint-staged": {

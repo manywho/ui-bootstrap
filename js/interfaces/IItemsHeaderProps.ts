@@ -6,5 +6,5 @@ interface IItemsHeaderProps extends IComponentProps {
     onSearch: Function;
     outcomes: any[];
     isDisabled: boolean;
-    refresh: (MouseEvent) => void;
+    refresh: (event: React.SyntheticEvent) => void;
 }
