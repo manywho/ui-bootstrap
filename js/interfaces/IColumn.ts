@@ -6,3 +6,5 @@ interface IColumn {
     contentType: string;
     contentFormat: string;
 }
+
+export default IColumn;

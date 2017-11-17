@@ -1,27 +1,26 @@
-/// <reference path="../../typings/index.d.ts" />
+import IComponentProps from '../interfaces/IComponentProps';
+import '../../css/footer.less';
 
 declare var manywho: any;
 
-(function (manywho) {
+/* tslint:disable-next-line:variable-name */
+const Footer: React.SFC<IComponentProps> = ({ children, flowKey }) => {
 
-    /* tslint:disable-next-line:variable-name */
-    const Footer: React.SFC<IComponentProps> = ({ children, flowKey }) => {
+    if (children) {
+        manywho.log.info('Rendering Footer');
 
-        if (children) {
-            manywho.log.info('Rendering Footer');
-
-            let className = 'mw-footer';
-            className += 
-                manywho.settings.global('isFullWidth', flowKey, false) ? 
-                ' container-fluid' : 
+        let className = 'mw-footer';
+        className +=
+            manywho.settings.global('isFullWidth', flowKey, false) ?
+                ' container-fluid' :
                 ' container';
 
-            return <div className={className}>{children}</div>;
-        }
+        return <div className={className}>{children}</div>;
+    }
 
-        return null;
-    };
+    return null;
+};
 
-    manywho.component.register('footer', Footer);
+manywho.component.register('footer', Footer);
 
-} (manywho));
+export default Footer;

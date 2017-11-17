@@ -1,8 +1,7 @@
 /// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IInputProps.ts" />
+import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
-declare var moment: any;
 
 interface IInputBooleanProps extends IComponentProps {
     value: string;
@@ -13,38 +12,36 @@ interface IInputBooleanProps extends IComponentProps {
     autocomplete: any;
 }
 
-(function (manywho) {
-    
-    /* tslint:disable-next-line:variable-name */
-    const InputBoolean: React.SFC<IInputBooleanProps> = (
-        { id, parentId, flowKey, value, disabled, readOnly, isDesignTime, required, autocomplete },
-    ) => {
+/* tslint:disable-next-line:variable-name */
+const InputBoolean: React.SFC<IInputBooleanProps> = (
+    { id, parentId, flowKey, value, disabled, readOnly, isDesignTime, required, autocomplete },
+) => {
 
-        const model = manywho.model.getComponent(id, flowKey);
-        const checked = 
-            typeof value === 'string' ?
-                manywho.utils.isEqual(value, 'true', true) :
-                value === true;
+    const model = manywho.model.getComponent(id, flowKey);
+    const checked =
+        typeof value === 'string' ?
+            manywho.utils.isEqual(value, 'true', true) :
+            value === true;
 
-        const onChange = (e) => {
-            onChange(e.target.checked);
-        };
-
-        return <div className="checkbox">
-            <label>
-                <input id={id}
-                    checked={checked}
-                    type="checkbox"
-                    disabled={disabled || readOnly}
-                    required={required}
-                    onChange={!isDesignTime && onChange}
-                    autoComplete={autocomplete} />
-                {model.label}
-                {model.isRequired ? <span className="input-required"> *</span> : null}
-            </label>
-        </div>;
+    const onChange = (e) => {
+        onChange(e.target.checked);
     };
 
-    manywho.component.register('input-boolean', InputBoolean);
+    return <div className="checkbox">
+        <label>
+            <input id={id}
+                checked={checked}
+                type="checkbox"
+                disabled={disabled || readOnly}
+                required={required}
+                onChange={!isDesignTime && onChange}
+                autoComplete={autocomplete} />
+            {model.label}
+            {model.isRequired ? <span className="input-required"> *</span> : null}
+        </label>
+    </div>;
+};
 
-} (manywho));
+manywho.component.register('input-boolean', InputBoolean);
+
+export default InputBoolean;

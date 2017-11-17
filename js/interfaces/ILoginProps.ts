@@ -1,3 +1,5 @@
+import IComponentProps from './IComponentProps';
+
 interface ILoginProps extends IComponentProps {
     callback: {
         execute: Function;
@@ -9,3 +11,5 @@ interface ILoginProps extends IComponentProps {
     username: string;
     directoryName: string;
 }
+
+export default ILoginProps;

@@ -1,8 +1,9 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IChartBaseProps.ts" />
+import IChartBaseProps from '../interfaces/IChartBaseProps';
+
+import '../../css/chart.less';
+import { Chart } from 'chart.js';
 
 declare var manywho: any;
-declare var Chart: any;
 
 class ChartBase extends React.Component<IChartBaseProps, null> {
 
@@ -175,3 +176,5 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
 }
 
 manywho.component.register('mw-chart-base', ChartBase);
+
+export default ChartBase;

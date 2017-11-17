@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IItemsComponentProps.ts" />
+import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 
 declare var manywho: any;
 
@@ -26,3 +25,5 @@ const ChartBar: React.SFC<IItemsComponentProps> = (props) => {
 };
 
 manywho.component.registerItems('chart-bar', ChartBar);
+
+export default ChartBar;

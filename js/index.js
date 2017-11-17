@@ -1,6 +1,6 @@
 import 'script-loader!./lib/000-react-height.js';
 import 'script-loader!./lib/010-pollyfills.js';
-import 'script-loader!./lib/020-chart.js';
+// import 'script-loader!./lib/020-chart.js';
 import 'script-loader!./lib/040-react-dropzone.js';
 import 'script-loader!./lib/060-prelude-browser.js';
 import 'script-loader!./lib/070-prelude-extension.js';
@@ -36,19 +36,6 @@ import "../css/themes/mw-superhero.less";
 import "../css/themes/mw-tooling.less";
 import "../css/themes/mw-united.less";
 import "../css/themes/mw-yeti.less";
-
-// Interfaces
-/*
-import './interfaces/datetimepicker.ts';
-import './interfaces/IChartBaseProps.ts';
-import './interfaces/IChartComponentProps.ts';
-import './interfaces/IComponentProps.ts';
-import './interfaces/IInputProps.ts';
-import './interfaces/IItemsComponentProps.ts';
-import './interfaces/IItemsHeaderProps.ts';
-import './interfaces/ITilesProps.ts';
-import './interfaces/ITour.ts';
-*/
 
 // Services
 import './services/theming.ts';

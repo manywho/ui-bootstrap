@@ -1,3 +1,5 @@
+import IComponentProps from './IComponentProps';
+
 interface IFileUploadProps extends IComponentProps {
     upload: Function;
     multiple: boolean;
@@ -7,3 +9,5 @@ interface IFileUploadProps extends IComponentProps {
     smallInputs?: boolean;
     isUploadVisible?: boolean;
 }
+
+export default IFileUploadProps;

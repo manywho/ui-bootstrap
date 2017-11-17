@@ -17,6 +17,7 @@
     "*.tsx": "lint"
   },
   "devDependencies": {
+    "chart.js": "^2.2.2",
     "css-loader": "^0.28.7",
     "del": "^2.2.2",
     "extract-text-webpack-plugin": "^3.0.2",

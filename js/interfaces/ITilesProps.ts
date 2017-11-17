@@ -1,6 +1,6 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="IComponentProps.ts" />
-/// <reference path="IItemsComponentProps.ts" />
+import IItemsComponentProps from './IItemsComponentProps';
 
 interface ITilesProps extends IItemsComponentProps {
 }
+
+export default ITilesProps;

@@ -1,22 +1,20 @@
-/// <reference path="../../typings/index.d.ts" />
-
-interface ITourState {
+export interface ITourState {
     foundTarget: boolean;
     style: React.CSSProperties;
 }
 
-interface ITourProps {
+export interface ITourProps {
     tour: ITour;
     stepIndex: number;
 }
 
-interface ITour {
+export interface ITour {
     id: string;
     steps: ITourStep[];
     currentStep: number;
 }
 
-interface ITourStep {
+export interface ITourStep {
     target: string;
     title: string;
     content: string;

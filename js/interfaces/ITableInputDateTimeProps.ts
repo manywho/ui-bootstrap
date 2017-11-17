@@ -4,3 +4,5 @@ interface ITableInputDateTimeProps {
     value: string;
     contentFormat: string;
 }
+
+export default ITableInputDateTimeProps;

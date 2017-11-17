@@ -1,3 +1,5 @@
+import IComponentProps from './IComponentProps';
+
 interface IItemsHeaderProps extends IComponentProps {
     isSearchable: boolean;
     isRefreshable: boolean;
@@ -8,3 +10,5 @@ interface IItemsHeaderProps extends IComponentProps {
     isDisabled: boolean;
     refresh: (event: React.SyntheticEvent) => void;
 }
+
+export default IItemsHeaderProps;

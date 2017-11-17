@@ -1,3 +1,5 @@
+import IComponentProps from './IComponentProps';
+
 interface IModalContainerProps extends IComponentProps {
     title: string;
     content: any;
@@ -6,3 +8,5 @@ interface IModalContainerProps extends IComponentProps {
     cancelLabel?: string;
     confirmLabel?: string;
 }
+
+export default IModalContainerProps;

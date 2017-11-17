@@ -6,3 +6,5 @@ interface IPaginationProps {
     onNext(): void;
     hasMoreResults: boolean;
 }
+
+export default IPaginationProps;
