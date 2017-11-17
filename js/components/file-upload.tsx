@@ -1,4 +1,5 @@
-﻿/// <reference path="../interfaces/IFileUploadProps.ts" />
+﻿import IFileUploadProps from '../interfaces/IFileUploadProps';
+import '../../css/files.less';
 
 interface IFileUploadState {
     isUploadDisabled?: boolean;

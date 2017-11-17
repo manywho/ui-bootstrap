@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IItemsComponentProps.ts" />
+import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 
 declare var manywho: any;
 
@@ -25,3 +24,5 @@ const ChartLine: React.SFC<IItemsComponentProps> = (props) => {
 };
 
 manywho.component.registerItems('chart-line', ChartLine);
+
+export default ChartLine;

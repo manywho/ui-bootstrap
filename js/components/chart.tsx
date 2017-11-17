@@ -1,8 +1,6 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IChartComponentProps.ts" />
+import IChartComponentProps from '../interfaces/IChartComponentProps';
 
 declare var manywho: any;
-declare var Chart: any;
 
 /* tslint:disable-next-line:variable-name */
 const ChartComponent: React.SFC<IChartComponentProps> = (
@@ -126,3 +124,5 @@ const ChartComponent: React.SFC<IChartComponentProps> = (
 };
 
 manywho.component.register('mw-chart', ChartComponent);
+
+export default ChartComponent;

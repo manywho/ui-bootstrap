@@ -1,7 +1,7 @@
 
 import 'script-loader!./lib/000-react-height.js';
 import 'script-loader!./lib/010-pollyfills.js';
-import 'script-loader!./lib/020-chart.js';
+// import 'script-loader!./lib/020-chart.js';
 import 'script-loader!./lib/040-react-dropzone.js';
 import 'script-loader!./lib/060-prelude-browser.js';
 import 'script-loader!./lib/070-prelude-extension.js';
@@ -54,17 +54,17 @@ import "../css/lib/jquery.textcomplete.css";
 import "../css/lib/react-selectize.css";
 
 // Component less
-import "../css/chart.less";
-import "../css/containers.less";
-import "../css/content.less";
-import "../css/debug.less";
-import "../css/feed.less";
-import "../css/files.less";
-import "../css/flip.less";
-import "../css/footer.less";
-import "../css/group.less";
-import "../css/history.less";
-import "../css/iframe.less";
+// import "../css/chart.less";
+// import "../css/containers.less";
+// import "../css/content.less";
+// import "../css/debug.less";
+// import "../css/feed.less";
+// import "../css/files.less";
+// import "../css/flip.less";
+// import "../css/footer.less";
+// import "../css/group.less";
+// import "../css/history.less";
+// import "../css/iframe.less";
 import "../css/input.less";
 import "../css/items.less";
 import "../css/list.less";

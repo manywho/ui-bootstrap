@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IItemsComponentProps.ts" />
+import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 
 declare var manywho: any;
 
@@ -14,3 +13,5 @@ const ChartPie: React.SFC<IItemsComponentProps> = (props) => {
 };
 
 manywho.component.registerItems('chart-pie', ChartPie);
+
+export default ChartPie;

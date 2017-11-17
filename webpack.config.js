@@ -1,6 +1,5 @@
 var path = require('path');
 var fs = require('fs');
-var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 

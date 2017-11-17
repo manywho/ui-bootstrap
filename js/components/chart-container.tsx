@@ -1,4 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
+import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 
 declare var manywho: any;
 
@@ -146,3 +146,5 @@ const ChartContainer: React.SFC<IItemsComponentProps> = ({ id, flowKey, isDesign
 };
 
 manywho.component.registerContainer('charts', ChartContainer);
+
+export default ChartContainer;
