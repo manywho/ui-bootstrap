@@ -1,3 +1,5 @@
+import IComponentProps from './IComponentProps';
+
 interface ITableInputProps extends IComponentProps {
     contentType: string;
     contentFormat: string;
@@ -5,3 +7,5 @@ interface ITableInputProps extends IComponentProps {
     onCommitted: Function;
     value: any;
 }
+
+export default ITableInputProps;

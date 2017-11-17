@@ -1,3 +1,6 @@
+import IComponentProps from './IComponentProps';
+import IColumn from './IColumn';
+
 interface ITableSmallProps extends IComponentProps {
     onOutcome: Function;
     isValid: boolean;
@@ -5,3 +8,5 @@ interface ITableSmallProps extends IComponentProps {
     outcomes: { id: string; }[];
     displayColumns: IColumn[];
 }
+
+export default ITableSmallProps;

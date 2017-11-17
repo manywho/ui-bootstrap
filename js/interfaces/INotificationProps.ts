@@ -1,3 +1,5 @@
+import IComponentProps from './IComponentProps';
+
 interface INotificationProps extends IComponentProps {
     model: {
         type: string;
@@ -6,3 +8,5 @@ interface INotificationProps extends IComponentProps {
         dismissible: boolean;
     };
 }
+
+export default INotificationProps;

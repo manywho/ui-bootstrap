@@ -6,3 +6,5 @@ interface IComponentProps {
     isDesignTime: boolean;
     children: any;
 }
+
+export default IComponentProps;

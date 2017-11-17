@@ -3,3 +3,5 @@ interface ISelectable {
     onSelect: (event: React.SyntheticEvent) => void;
     selectAll: (event: React.SyntheticEvent) => void;
 }
+
+export default ISelectable;

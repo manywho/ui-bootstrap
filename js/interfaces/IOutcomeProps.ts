@@ -1,3 +1,5 @@
+import IComponentProps from './IComponentProps';
+
 interface IOutcomeProps extends IComponentProps {
     size: string;
     onClick(event: React.SyntheticEvent, model: any, flowKey: string): void;
@@ -5,3 +7,5 @@ interface IOutcomeProps extends IComponentProps {
     display: string;
     disabled: boolean;
 }
+
+export default IOutcomeProps;

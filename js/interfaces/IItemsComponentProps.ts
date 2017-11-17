@@ -1,3 +1,5 @@
+import IComponentProps from './IComponentProps';
+
 interface IItemsComponentProps extends IComponentProps {
     id: string;
     parentId: string;
@@ -23,3 +25,5 @@ interface IItemsComponentProps extends IComponentProps {
     sortedBy: boolean;
     sortedIsAscending: string;
 }
+
+export default IItemsComponentProps;

@@ -1,3 +1,5 @@
+import IComponentProps from './IComponentProps';
+
 interface IInputProps extends IComponentProps {
     value: string | boolean;
     placeholder: string;
@@ -11,3 +13,5 @@ interface IInputProps extends IComponentProps {
     isDesignTime: boolean;
     autocomplete: string;
 }
+
+export default IInputProps;

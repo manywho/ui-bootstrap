@@ -3,3 +3,5 @@ interface IWaitProps {
     isVisible: boolean;
     message: string;
 }
+
+export default IWaitProps;

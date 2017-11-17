@@ -1,6 +1,7 @@
-/// <reference path="./ISortable.ts" />
-/// <reference path="./ISelectable.ts" />
-/// <reference path="./IColumn.ts" />
+import IComponentProps from './IComponentProps';
+import IColumn from './IColumn';
+import ISelectable from './ISelectable';
+import ISortable from './ISortable';
 
 interface ITableLargeProps extends IComponentProps, ISortable, ISelectable {
     model: any;
@@ -14,3 +15,5 @@ interface ITableLargeProps extends IComponentProps, ISortable, ISelectable {
     isFiles: boolean;
     displayColumns: IColumn[]; 
 }
+
+export default ITableLargeProps;

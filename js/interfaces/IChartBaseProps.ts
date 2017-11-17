@@ -11,3 +11,5 @@ interface IChartBaseProps {
     height: number;
     isLoading: boolean;
 }
+
+export default IChartBaseProps;
