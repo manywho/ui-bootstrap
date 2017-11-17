@@ -1,6 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IComponentProps.ts" />
 
+import '../../css/items.less';
+
 declare var manywho: any;
 
 interface IItemsContainerState {
@@ -435,3 +437,5 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 }
 
 manywho.component.register('mw-items-container', ItemsContainer);
+
+export default ItemsContainer;

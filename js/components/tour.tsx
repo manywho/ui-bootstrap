@@ -1,6 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/ITour.ts" />
 
+import '../../css/tours.less';
+
 declare var manywho: any;
 
 class Tour extends React.Component<ITourProps, ITourState> {
@@ -207,3 +209,5 @@ manywho.tours.getTargetElement = function (step: ITourStep) {
 
     return document.getElementById(step.target);
 };
+
+export default Tour;

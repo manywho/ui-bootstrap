@@ -1,6 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/ITilesProps.ts" />
 
+import '../../css/tiles.less';
+
 declare var manywho: any;
 declare var ReactMotion: any;
 
@@ -260,3 +262,5 @@ class Tiles extends React.Component<ITilesProps, null> {
 }
 
 manywho.component.registerItems('tiles', Tiles);
+
+export default Tiles;

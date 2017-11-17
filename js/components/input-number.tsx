@@ -1,6 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IInputProps.ts" />
 
+import '../../css/input.less';
+
 declare var manywho: any;
 declare var moment: any;
 
@@ -110,3 +112,5 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
 }
 
 manywho.component.register('input-number', InputNumber);
+
+export default InputNumber;

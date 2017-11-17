@@ -1,6 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IComponentProps.ts" />
 
+import '../../css/outcomes.less';
+
 declare var manywho: any;
 
 class Outcomes extends React.Component<IComponentProps, null> {
@@ -105,3 +107,5 @@ class Outcomes extends React.Component<IComponentProps, null> {
 }
 
 manywho.component.register('outcomes', Outcomes);
+
+export default Outcomes;

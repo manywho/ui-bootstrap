@@ -1,6 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IComponentProps.ts" />
 
+import '../../css/toggle.less';
+
 declare var manywho: any;
 
 interface IToggleState {
@@ -112,3 +114,5 @@ class Toggle extends React.Component<IComponentProps, IToggleState> {
 }
 
 manywho.component.register('toggle', Toggle);
+
+export default Toggle;

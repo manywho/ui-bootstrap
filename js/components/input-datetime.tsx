@@ -1,6 +1,10 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IInputProps.ts" />
 
+import '../../css/input.less';
+import '../../css/lib/bootstrap-datetimepicker.css';
+import '../lib/100-datetimepicker.js';
+
 declare var manywho: any;
 declare var moment: any;
 
@@ -147,3 +151,5 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
 }
 
 manywho.component.register('input-datetime', InputDateTime);
+
+export default InputDateTime;

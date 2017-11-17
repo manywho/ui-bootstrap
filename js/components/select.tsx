@@ -1,6 +1,8 @@
 ﻿/// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IItemsComponentProps.ts" />
 
+import '../../css/select.less';
+
 declare var manywho: any;
 declare var reactSelectize: any;
 
@@ -357,3 +359,5 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
 }
 
 manywho.component.registerItems('select', DropDown);
+
+export default DropDown;

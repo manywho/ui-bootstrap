@@ -1,6 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IComponentProps.ts" />
 
+import '../../css/textarea.less';
+
 declare var manywho: any;
 
 class Textarea extends React.Component<IComponentProps, null> {
@@ -102,3 +104,6 @@ class Textarea extends React.Component<IComponentProps, null> {
 }
 
 manywho.component.register('textarea', Textarea);
+
+export default Textarea;
+

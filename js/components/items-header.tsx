@@ -1,6 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IItemsHeaderProps.ts" />
 
+import '../../css/items.less';
+
 declare var manywho: any;
 
 interface IItemsHeaderState {
@@ -87,3 +89,5 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
 }
 
 manywho.component.register('mw-items-header', ItemsHeader);
+
+export default ItemsHeader;

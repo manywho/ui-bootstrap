@@ -1,6 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IComponentProps.ts" />
 
+import '../../css/input.less';
+
 declare var manywho: any;
 declare var MaskedInput: any;
 
@@ -237,3 +239,5 @@ class Input extends React.Component<IComponentProps, IInputState> {
 }
 
 manywho.component.register('input', Input, ['checkbox']);
+
+export default Input;

@@ -1,6 +1,8 @@
 /// <reference path="../../typings/index.d.ts" />
 /// <reference path="../interfaces/IComponentProps.ts" />
 
+import '../../css/list.less';
+
 declare var manywho: any;
 
 class List extends React.Component<IComponentProps, null> {
@@ -107,3 +109,5 @@ class List extends React.Component<IComponentProps, null> {
 }
 
 manywho.component.register('list', List);
+
+export default List;

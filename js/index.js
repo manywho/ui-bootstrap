@@ -1,4 +1,3 @@
-
 import 'script-loader!./lib/000-react-height.js';
 import 'script-loader!./lib/010-pollyfills.js';
 import 'script-loader!./lib/020-chart.js';
@@ -7,83 +6,15 @@ import 'script-loader!./lib/060-prelude-browser.js';
 import 'script-loader!./lib/070-prelude-extension.js';
 import 'script-loader!./lib/080-tether.js';
 import 'script-loader!./lib/090-react-selectize.js';
-import 'script-loader!./lib/100-datetimepicker.js';
+//mport 'script-loader!./lib/100-datetimepicker.js';
 import 'script-loader!./lib/110-react-motion.js';
 import 'script-loader!./lib/120-react-collapse.js';
 import 'script-loader!./lib/130-jquery.textcomplete.js';
 import 'script-loader!./lib/140-react-maskedinput.js';
 
-// Icons
-//import * as Icons from '../css/icons';
-
-// Fonts
-/*
-import '../css/fonts/glyphicons-halflings-regular.eot';
-import '../css/fonts/glyphicons-halflings-regular.svg';
-import '../css/fonts/glyphicons-halflings-regular.ttf';
-import '../css/fonts/glyphicons-halflings-regular.woff';
-import '../css/fonts/glyphicons-halflings-regular.woff2';
-
-import '../css/fonts/icon-utility.dev.svg';
-import '../css/fonts/icon-utility.eot';
-import '../css/fonts/icon-utility.svg';
-import '../css/fonts/icon-utility.ttf';
-import '../css/fonts/icon-utility.woff';
-
-import '../css/fonts/ProximaNovaSoft-Bold.otf';
-import '../css/fonts/ProximaNovaSoft-Bold.ttf';
-
-import '../css/fonts/ProximaNovaSoft-Medium.eot';
-import '../css/fonts/ProximaNovaSoft-Medium.otf';
-import '../css/fonts/ProximaNovaSoft-Medium.svg';
-import '../css/fonts/ProximaNovaSoft-Medium.ttf';
-import '../css/fonts/ProximaNovaSoft-Medium.woff';
-
-import '../css/fonts/ProximaNovaSoft-Regular.eot';
-import '../css/fonts/ProximaNovaSoft-Regular.otf';
-import '../css/fonts/ProximaNovaSoft-Regular.svg';
-import '../css/fonts/ProximaNovaSoft-Regular.ttf';
-import '../css/fonts/ProximaNovaSoft-Regular.woff';
-
-import '../css/fonts/ProximaNovaSoft-Semibold.otf';
-import '../css/fonts/ProximaNovaSoft-Semibold.ttf';*/
-
 // Lib CSS
-import "../css/lib/bootstrap-datetimepicker.css";
 import "../css/lib/jquery.textcomplete.css";
 import "../css/lib/react-selectize.css";
-
-// Component less
-import "../css/chart.less";
-import "../css/containers.less";
-import "../css/content.less";
-import "../css/debug.less";
-import "../css/feed.less";
-import "../css/files.less";
-import "../css/flip.less";
-import "../css/footer.less";
-import "../css/group.less";
-import "../css/history.less";
-import "../css/iframe.less";
-import "../css/input.less";
-import "../css/items.less";
-import "../css/list.less";
-import "../css/loading.less";
-import "../css/modal.less";
-import "../css/navigation.less";
-import "../css/notifications.less";
-import "../css/outcome.less";
-import "../css/outcomes.less";
-import "../css/pagination.less";
-import "../css/radio.less";
-import "../css/returnToParent.less";
-import "../css/select.less";
-import "../css/status.less";
-import "../css/table.less";
-import "../css/textarea.less";
-import "../css/tiles.less";
-import "../css/toggle.less";
-import "../css/tours.less";
 
 // Themes
 import "../css/mw-bootstrap.less";
@@ -107,6 +38,7 @@ import "../css/themes/mw-united.less";
 import "../css/themes/mw-yeti.less";
 
 // Interfaces
+/*
 import './interfaces/datetimepicker.ts';
 import './interfaces/IChartBaseProps.ts';
 import './interfaces/IChartComponentProps.ts';
@@ -116,6 +48,7 @@ import './interfaces/IItemsComponentProps.ts';
 import './interfaces/IItemsHeaderProps.ts';
 import './interfaces/ITilesProps.ts';
 import './interfaces/ITour.ts';
+*/
 
 // Services
 import './services/theming.ts';
