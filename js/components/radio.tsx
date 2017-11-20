@@ -3,11 +3,13 @@ import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/radio.less';
 
 /* tslint:disable-next-line:variable-name */
-const Radio: React.SFC<IComponentProps> = ({ id, flowKey, isDesignTime, parentId }) => {
+class Radio extends React.Component<IComponentProps, any> {
+    constructor(props) {
+        super(props);
+        manywho.log.info('Rendering Radio Buttons: ' + this.props.id);
+    }
 
-    manywho.log.info('Rendering Radio Buttons: ' + id);
-
-    const renderOption = (item, attributes, column, developerName, selectedItems, flowKey) => {
+    renderOption = (item, attributes, column, developerName, selectedItems, flowKey) => {
 
         const optionAttributes : any = {};
 
@@ -64,9 +66,9 @@ const Radio: React.SFC<IComponentProps> = ({ id, flowKey, isDesignTime, parentId
         }
 
         return null;
-    };
+    }
 
-    const isEmptyObjectData = (model) => {
+    isEmptyObjectData = (model) => {
 
         if (model.objectDataRequest && model.objectData && model.objectData.length === 1) {
 
@@ -87,12 +89,12 @@ const Radio: React.SFC<IComponentProps> = ({ id, flowKey, isDesignTime, parentId
         }
 
         return true;
-    };
+    }
 
-    const handleChange = (e) => {
+    handleChange = (e) => {
 
-        const model = manywho.model.getComponent(id, flowKey);
-        const state = manywho.state.getComponent(id, flowKey);
+        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+        const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
         let selectedObjectData = null;
 
@@ -146,141 +148,143 @@ const Radio: React.SFC<IComponentProps> = ({ id, flowKey, isDesignTime, parentId
         });
 
         manywho.state.setComponent(
-            id, 
+            this.props.id, 
             { objectData: selectedObjectData }, 
-            flowKey, 
+            this.props.flowKey, 
             true,
         );
 
-        manywho.component.handleEvent(this, model, flowKey);
-    };
-
-    let options = [];
-
-    const model = manywho.model.getComponent(id, flowKey);
-    const state = 
-        isDesignTime ? 
-        { error: null, loading: false } : 
-        manywho.state.getComponent(id, flowKey) || {};
-
-    const outcomes = manywho.model.getOutcomes(id, flowKey);
-
-    const attributes : any = {
-        required: model.isRequired && 'required',
-        disabled: (!model.isEnabled || !model.isEditable) && 'disabled',
-        multiSelect: model.isMultiSelect,
-    };
-
-    if (!isDesignTime) {
-
-        const columnTypeElementPropertyId = 
-            manywho.component.getDisplayColumns(model.columns)[0].typeElementPropertyId;
-
-        manywho.utils.extend(attributes, { onClick: this.handleChange });
-
-        if (!isEmptyObjectData(model)) {
-
-            let selectedItems = null;
-
-            if (state && state.objectData) {
-
-                selectedItems = state.objectData.map(item => item.externalId);
-            } else {
-
-                selectedItems = 
-                    model.objectData
-                    .filter(item => item.isSelected)
-                    .map(item => item.externalId);
-            }
-
-            if (selectedItems && !model.isMultiSelect) {
-
-                attributes.value = selectedItems[0];
-            }
-
-            options = model.objectData.map((item) => {
-                return renderOption(
-                    item, 
-                    attributes, 
-                    columnTypeElementPropertyId, 
-                    model.developerName, 
-                    selectedItems, 
-                    flowKey,
-                );
-            });
-        }
-    } else {
-
-        const type = attributes.multiSelect ? 'checkbox' : 'radio';
-        options = [];
-
-        for (let i = 1; i < 4; i += 1) {
-            options.push((
-                <label className={type}>
-                    <input type={type} />
-                    { 'Radio ' + i }
-                </label>
-            ));
-        }
+        manywho.component.handleEvent(this, model, this.props.flowKey);
     }
 
-    let containerClassNames = ['form-group'];
-
-    if (model.isValid === false || state.isValid === false || state.error)
-        containerClassNames.push('has-error');
-
-    if (model.isVisible === false)
-        containerClassNames.push('hidden');
-
-    containerClassNames = containerClassNames.concat(
-        manywho.styling.getClasses(
-            parentId,
-            id, 
-            'radio', 
-            flowKey,
-        ),
-    );
-
-    const iconClassNames = ['select-loading-icon'];
-
-    if (!state.loading || state.error)
-        iconClassNames.push('hidden');
-
-    const outcomeButtons = outcomes && outcomes.map((outcome) => {
-        return React.createElement(
-            manywho.component.getByName('outcome'), 
-            { flowKey, id: outcome.id },
-        );
-    });
-
-    return (
-        <div className={containerClassNames.join(' ')} id={id}>
-            <label for={ id }>
-                {model.label}
-                { 
-                    model.isRequired ? 
-                    <span className={'input-required'}> *</span> : 
-                    null
+    render() {
+        let options = [];
+        
+        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+        const state = 
+        this.props.isDesignTime ? 
+            { error: null, loading: false } : 
+            manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
+    
+        const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
+    
+        const attributes : any = {
+            required: model.isRequired && 'required',
+            disabled: (!model.isEnabled || !model.isEditable) && 'disabled',
+            multiSelect: model.isMultiSelect,
+        };
+    
+        if (!this.props.isDesignTime) {
+    
+            const columnTypeElementPropertyId = 
+                manywho.component.getDisplayColumns(model.columns)[0].typeElementPropertyId;
+    
+            manywho.utils.extend(attributes, { onClick: this.handleChange });
+    
+            if (!this.isEmptyObjectData(model)) {
+    
+                let selectedItems = null;
+    
+                if (state && state.objectData) {
+    
+                    selectedItems = state.objectData.map(item => item.externalId);
+                } else {
+    
+                    selectedItems = 
+                        model.objectData
+                        .filter(item => item.isSelected)
+                        .map(item => item.externalId);
                 }
-            </label>
-            <div className={'radio-group'}>
-                options
-            </div>
-            <div className={iconClassNames.join(' ')}>
-                <span className={'glyphicon glyphicon-refresh spin'} />
-            </div>
-            <span className={'help-block'}>
-            {
-                (state.error && state.error.message) || 
-                model.validationMessage || 
-                state.validationMessage
+    
+                if (selectedItems && !model.isMultiSelect) {
+    
+                    attributes.value = selectedItems[0];
+                }
+    
+                options = model.objectData.map((item) => {
+                    return this.renderOption(
+                        item, 
+                        attributes, 
+                        columnTypeElementPropertyId, 
+                        model.developerName, 
+                        selectedItems, 
+                        this.props.flowKey,
+                    );
+                });
             }
-            </span>
-            <span className={'help-block'}>{model.helpInfo}</span>
-            {outcomeButtons}
-        </div>
-    );
-};
+        } else {
+    
+            const type = attributes.multiSelect ? 'checkbox' : 'radio';
+            options = [];
+    
+            for (let i = 1; i < 4; i += 1) {
+                options.push((
+                    <label className={type}>
+                        <input type={type} />
+                        { 'Radio ' + i }
+                    </label>
+                ));
+            }
+        }
+    
+        let containerClassNames = ['form-group'];
+    
+        if (model.isValid === false || state.isValid === false || state.error)
+            containerClassNames.push('has-error');
+    
+        if (model.isVisible === false)
+            containerClassNames.push('hidden');
+    
+        containerClassNames = containerClassNames.concat(
+            manywho.styling.getClasses(
+                this.props.parentId,
+                this.props.id, 
+                'radio', 
+                this.props.flowKey,
+            ),
+        );
+    
+        const iconClassNames = ['select-loading-icon'];
+    
+        if (!state.loading || state.error)
+            iconClassNames.push('hidden');
+    
+        const outcomeButtons = outcomes && outcomes.map((outcome) => {
+            return React.createElement(
+                manywho.component.getByName('outcome'), 
+                { flowKey: this.props.flowKey, id: outcome.id },
+            );
+        });
+    
+        return (
+            <div className={containerClassNames.join(' ')} id={this.props.id}>
+                <label for={ this.props.id }>
+                    {model.label}
+                    { 
+                        model.isRequired ? 
+                        <span className={'input-required'}> *</span> : 
+                        null
+                    }
+                </label>
+                <div className={'radio-group'}>
+                    {options}
+                </div>
+                <div className={iconClassNames.join(' ')}>
+                    <span className={'glyphicon glyphicon-refresh spin'} />
+                </div>
+                <span className={'help-block'}>
+                {
+                    (state.error && state.error.message) || 
+                    model.validationMessage || 
+                    state.validationMessage
+                }
+                </span>
+                <span className={'help-block'}>{model.helpInfo}</span>
+                {outcomeButtons}
+            </div>
+        );
+    }
+}
 
 manywho.component.register('radio', Radio);
 
