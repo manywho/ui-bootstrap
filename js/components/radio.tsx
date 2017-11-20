@@ -1,3 +1,5 @@
+import IComponentProps from '../interfaces/IComponentProps';
+
 import '../../css/radio.less';
 
 /* tslint:disable-next-line:variable-name */

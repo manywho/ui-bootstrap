@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/INavigationProps.ts" />
+import INavigationProps from '../interfaces/INavigationProps';
 
 import '../../css/navigation.less';
 

@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/ILoginProps.ts" />
+import ILoginProps from '../interfaces/ILoginProps';
 
 declare var manywho: any;
 

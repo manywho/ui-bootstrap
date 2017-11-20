@@ -1,4 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
+import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
     

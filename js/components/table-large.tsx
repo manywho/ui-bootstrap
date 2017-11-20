@@ -1,5 +1,4 @@
-﻿/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/ITableLargeProps.ts" />
+﻿import ITableLargeProps from '../interfaces/ITableLargeProps';
 
 import '../../css/table.less';
 

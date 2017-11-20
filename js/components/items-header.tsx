@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IItemsHeaderProps.ts" />
+import IItemsHeaderProps from '../interfaces/IItemsHeaderProps';
 
 import '../../css/items.less';
 

@@ -1,4 +1,4 @@
-/// <reference path="../interfaces/IReturnToParentProps.ts" />
+import IReturnToParentProps from '../interfaces/IReturnToParentProps';
 
 import '../../css/returnToParent.less';
     

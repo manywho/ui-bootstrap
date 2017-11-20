@@ -1,5 +1,6 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/ITableInputDateTimeProps.ts" />
+import ITableInputDateTimeProps from '../interfaces/ITableInputDateTimeProps';
+
+import * as moment from 'moment';
 
 import '../../css/input.less';
 import '../../css/table.less';
@@ -9,6 +10,10 @@ import '../lib/100-datetimepicker.js';
 declare var manywho: any;
 
 class TableInputDateTime extends React.Component<ITableInputDateTimeProps, null> {
+
+    constructor(props) {
+        super(props);
+    }
 
     onChange = (e) => {
         this.props.onChange(

@@ -1,4 +1,4 @@
-/// <reference path="../interfaces/INotificationsProps.ts" />
+import INotificationsProps from '../interfaces/INotificationsProps';
 
 import '../../css/notifications.less';
 

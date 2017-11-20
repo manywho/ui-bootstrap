@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IModalContainerProps.ts" />
+import IModalContainerProps from '../interfaces/IModalContainerProps';
 
 import '../../css/modal.less';
 
