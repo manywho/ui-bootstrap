@@ -143,7 +143,7 @@ class Container extends React.Component<IComponentProps, IContainerState> {
         const outcomeButtons = outcomes && outcomes.map((outcome) => {
             return React.createElement(
                 manywho.component.getByName('outcome'), 
-                { id: outcome.id, flowKey: this.props.flowKey },
+                { id: outcome.id, flowKey: this.props.flowKey, key: outcome.id },
             );
         });
         const isCollapsible = this.isCollapsible(model);

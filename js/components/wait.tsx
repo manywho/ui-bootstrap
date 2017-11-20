@@ -2,20 +2,31 @@ import IWaitProps from '../interfaces/IWaitProps';
 
 declare var manywho: any;
 
-function arePropsSpecified(props) { 
+function arePropsSpecified(props) {
     if (Object.keys(props).length === 1) {
         return !props.hasOwnProperty('children');
     }
-    return Object.keys(props).length > 0;  
+    return Object.keys(props).length > 0;
 }
 
 class Wait extends React.Component<IWaitProps, null> {
-    
+
     constructor(props) {
-        super(props);
+        super(
+            Object.assign(
+                {},
+                {
+                    // default props
+                    isVisible: false,
+                    isSmall: false,
+                    message: null,
+                },
+                props,
+            ),
+        );
     }
 
-    componentDidUpdate() {    
+    componentDidUpdate() {
         if (ReactDOM.findDOMNode(this.refs['wait'])) {
             const element = ReactDOM.findDOMNode(this.refs['wait']);
             if (element.clientHeight > window.innerHeight) {
@@ -25,17 +36,9 @@ class Wait extends React.Component<IWaitProps, null> {
         }
     }
 
-    getDefaultProps() {          
-        return {
-            isVisible: false,
-            isSmall: false,
-            message: null,
-        };
-    }
-
     render() {
         if (this.props.isVisible) {
-            
+
             manywho.log.info('Rendering Wait');
 
             const spinnerClassNames = ['wait-spinner'];
@@ -50,7 +53,7 @@ class Wait extends React.Component<IWaitProps, null> {
                     <span className="wait-message">{this.props.message}</span>
                 </div>
             );
-            
+
         }
 
         return null;

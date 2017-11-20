@@ -7,12 +7,12 @@ declare var ReactCollapse: any;
 
 
 /* tslint:disable-next-line:variable-name */
-const Horizontal: React.SFC<IComponentProps> = ({ id, flowKey }) => {
+const Horizontal: React.SFC<IComponentProps> = ({ id, flowKey, children }) => {
 
-    const children = manywho.model.getChildren(id, flowKey);
+    const childData = manywho.model.getChildren(id, flowKey);
 
     return <div className="row clearfix">
-        {children || manywho.component.getChildComponents(children, id, flowKey)}
+        {children || manywho.component.getChildComponents(childData, id, flowKey)}
     </div>;
 };
 
