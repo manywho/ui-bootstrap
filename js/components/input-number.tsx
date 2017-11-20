@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IInputProps.ts" />
+import IInputProps from '../interfaces/IInputProps';
 
 import '../../css/input.less';
 

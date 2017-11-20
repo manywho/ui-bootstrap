@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IComponentProps.ts" />
+import IComponentProps from '../interfaces/IComponentProps';
 
 import '../../css/textarea.less';
 

@@ -1,4 +1,4 @@
-/// <reference path="../interfaces/IModalProps.ts" />
+import IModalProps from '../interfaces/IModalProps';
 
 import '../../css/modal.less';
 

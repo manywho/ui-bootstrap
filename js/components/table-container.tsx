@@ -1,4 +1,5 @@
-/// <reference path="../../typings/index.d.ts" />
+import IPaginationProps from '../interfaces/IPaginationProps';
+import IComponentProps from '../interfaces/IComponentProps';
 
 import '../../css/table.less';
 

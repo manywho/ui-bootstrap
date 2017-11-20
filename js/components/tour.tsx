@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/ITour.ts" />
+import { ITourState, ITourProps, ITour, ITourStep } from '../interfaces/ITour';
 
 import '../../css/tours.less';
 

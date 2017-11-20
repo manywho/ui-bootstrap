@@ -1,5 +1,6 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/ITableInputProps.ts" />
+import ITableInputProps from '../interfaces/ITableInputProps';
+
+import * as moment from 'moment';
 
 import '../../css/input.less';
 

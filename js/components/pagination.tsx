@@ -1,6 +1,3 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IPaginationProps.ts" />
-
 import '../../css/pagination.less';
 
 declare var manywho: any;

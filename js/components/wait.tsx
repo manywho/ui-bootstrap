@@ -1,6 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IWaitProps.ts" />
-
+import IWaitProps from '../interfaces/IWaitProps';
 
 declare var manywho: any;
 

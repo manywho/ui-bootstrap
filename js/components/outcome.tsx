@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IOutcomeProps.ts" />
+import IOutcomeProps from '../interfaces/IOutcomeProps';
 
 import '../../css/outcome.less';
 

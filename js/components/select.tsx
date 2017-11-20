@@ -1,5 +1,4 @@
-﻿/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IItemsComponentProps.ts" />
+﻿import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 
 import '../../css/select.less';
 

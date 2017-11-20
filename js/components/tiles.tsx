@@ -1,5 +1,4 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/ITilesProps.ts" />
+import ITilesProps from '../interfaces/ITilesProps';
 
 import '../../css/tiles.less';
 
