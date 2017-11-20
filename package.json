@@ -8,8 +8,9 @@
     "url": "https://github.com/manywho/ui-bootstrap.git"
   },
   "scripts": {
-    "docs": "typedoc --mode modules --module es2015 --excludeExternals --excludePrivate --excludeNotExported --ignoreCompilerErrors --out ./docs ./js",
+    "docs": "typedoc --ignoreCompilerErrors --out ./docs ./js",
     "start": "webpack",
+    "dist": "webpack -p --config webpack.production.config.js",
     "precommit": "lint-staged"
   },
   "lint-staged": {
@@ -53,6 +54,7 @@
     "ts-loader": "^3.1.1",
     "tslint": "^5.8.0",
     "tslint-loader": "^3.5.3",
+    "typedoc": "^0.9.0",
     "typescript": "^2.0.2",
     "webpack": "^3.8.1",
     "webpack-bundle-analyzer": "^2.9.1",

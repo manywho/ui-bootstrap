@@ -72,7 +72,7 @@ import './components/items-header.tsx';
 import './components/list.tsx';
 import './components/login.tsx';
 import './components/main.tsx';
-import './components/mixins.js';
+import './components/mixins.ts';
 import './components/modal-container.tsx';
 import './components/modal.tsx';
 import './components/navigation.tsx';

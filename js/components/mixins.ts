@@ -2,20 +2,20 @@
 
     manywho.component.mixins.enterKeyHandler = {
 
-        onEnter: function (e) {
+        onEnter: (e) => {
 
-            if (e.keyCode == 13
+            if (e.keyCode === 13
                 && !e.shiftKey
-                && (e.target.className && e.target.className.indexOf('feed') == -1)
+                && (e.target.className && e.target.className.indexOf('feed') === -1)
                 && manywho.settings.global('shortcuts.progressOnEnter', this.props.flowKey, true)) {
 
-                var outcome = manywho.model.getOutcomes(null, this.props.flowKey)
-                    .sort(function (a, b) {
+                const outcome = manywho.model.getOutcomes(null, this.props.flowKey)
+                    .sort((a, b) => {
 
                         return a.order - b.order;
 
                     })
-                    .filter(function (outcome) {
+                    .filter((outcome) => {
 
                         return manywho.utils.isEqual(outcome.pageActionBindingType, 'save', true);
 
@@ -30,23 +30,23 @@
 
             }
 
-        }
+        },
 
     };
 
-    manywho.component.mixins.collapse =  {
+    manywho.component.mixins.collapse = {
 
-        getInitialState: function () {
+        getInitialState: () => {
 
             return {
                 isVisible: true,
                 height: null,
-                icon: 'toggle-icon glyphicon glyphicon-triangle-bottom'
+                icon: 'toggle-icon glyphicon glyphicon-triangle-bottom',
             };
 
         },
 
-        toggleVisibility: function (event) {
+        toggleVisibility: (event) => {
 
             event.preventDefault();
 
@@ -57,13 +57,11 @@
                     this.setState({
                         isVisible: false,
                         height: ReactDOM.findDOMNode(this).clientHeight,
-                        icon: 'toggle-icon glyphicon glyphicon-triangle-right'
+                        icon: 'toggle-icon glyphicon glyphicon-triangle-right',
                     });
 
-                    var self = this;
-
-                    requestAnimationFrame(function () {
-                        self.setState({ height: 0 });
+                    requestAnimationFrame(() => {
+                        this.setState({ height: 0 });
                     });
 
                 } else {
@@ -71,7 +69,7 @@
                     this.setState({
                         isVisible: true,
                         height: null,
-                        icon: 'toggle-icon glyphicon glyphicon-triangle-bottom'
+                        icon: 'toggle-icon glyphicon glyphicon-triangle-bottom',
                     });
 
                 }
@@ -81,12 +79,19 @@
 
         },
 
-        getLabel: function(label, required) {
+        getLabel: (label, required) => {
 
             if (!manywho.utils.isNullOrWhitespace(label)) {
 
-                var labelClasses = manywho.settings.global('collapsible', this.props.flowKey) ? 'container-label clickable-section' : 'container-label';
-                var labelContent = manywho.settings.global('collapsible', this.props.flowKey) && label ? [React.DOM.i({ className: this.state.icon }), label] : [label];
+                const labelClasses = 
+                    manywho.settings.global('collapsible', this.props.flowKey) ? 
+                    'container-label clickable-section' : 
+                    'container-label';
+
+                const labelContent = 
+                    manywho.settings.global('collapsible', this.props.flowKey) && label ? 
+                    [React.DOM.i({ className: this.state.icon }), label] : 
+                    [label];
 
                 if (required) {
 
@@ -100,8 +105,8 @@
 
             return null;
 
-        }
+        },
 
-    }
+    };
 
-}(manywho));
+} (manywho));
