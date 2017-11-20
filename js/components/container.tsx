@@ -143,7 +143,7 @@ class Container extends React.Component<IComponentProps, IContainerState> {
         const outcomeButtons = outcomes && outcomes.map((outcome) => {
             return React.createElement(
                 manywho.component.getByName('outcome'), 
-                { id: outcome.id, flowKey: this.props.flowKey },
+                { id: outcome.id, flowKey: this.props.flowKey, key: outcome.id },
             );
         });
         const isCollapsible = this.isCollapsible(model);
@@ -186,17 +186,21 @@ class Container extends React.Component<IComponentProps, IContainerState> {
                             this.props,
                         )
                     }
-                    {outcomeButtons}
+                    { outcomeButtons }
                 </ReactCollapse>
             );
         else
-            content = [
-                React.createElement(
-                    manywho.component.getByName('mw-' + model.containerType), 
-                    this.props,
-                ), 
-                outcomeButtons,
-            ];
+            content = (
+                <div>
+                    {
+                        React.createElement(
+                            manywho.component.getByName('mw-' + model.containerType), 
+                            this.props,
+                        )
+                    }
+                    { outcomeButtons }
+                </div>
+            );
 
         return <div className={className} id={this.props.id}>
             {label}

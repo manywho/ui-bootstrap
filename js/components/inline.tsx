@@ -3,14 +3,14 @@ import IComponentProps from '../interfaces/IComponentProps';
 declare var manywho: any;
 
 /* tslint:disable-next-line:variable-name */
-const Inline: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
+const Inline: React.SFC<IComponentProps> = ({ id, parentId, flowKey, children }) => {
 
-    const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
+    const childData = manywho.model.getChildren(id, flowKey);
 
     return <div className="clearfix">
         {
-            this.props.children ||
-            manywho.component.getChildComponents(children, this.props.id, this.props.flowKey)
+            children ||
+            manywho.component.getChildComponents(childData, id, flowKey)
         }
     </div>;
 };
