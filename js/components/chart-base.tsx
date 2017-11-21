@@ -1,4 +1,7 @@
 import IChartBaseProps from '../interfaces/IChartBaseProps';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as $ from 'jquery';
 
 import '../../css/chart.less';
 import { Chart } from 'chart.js';

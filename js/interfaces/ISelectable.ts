@@ -1,7 +1,7 @@
 interface ISelectable {
     isSelectionEnabled: boolean;
-    onSelect: (event: React.SyntheticEvent) => void;
-    selectAll: (event: React.SyntheticEvent) => void;
+    onSelect: (event: React.SyntheticEvent<HTMLElement>) => void;
+    selectAll: (event: React.SyntheticEvent<HTMLElement>) => void;
 }
 
 export default ISelectable;

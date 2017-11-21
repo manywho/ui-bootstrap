@@ -1,4 +1,7 @@
 import IComponentProps from '../interfaces/IComponentProps';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as $ from 'jquery';
 
 import '../../css/input.less';
 
@@ -20,7 +23,7 @@ class Input extends React.Component<IComponentProps, IInputState> {
         this.onBlur = this.onBlur.bind(this);
     }
 
-    onChange(e: React.FormEvent | string | boolean | number | null) {
+    onChange(e: React.FormEvent<any> | string | boolean | number | null) {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
         if (

@@ -1,5 +1,7 @@
 ﻿import IFileUploadProps from '../interfaces/IFileUploadProps';
 import '../../css/files.less';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 interface IFileUploadState {
     isUploadDisabled?: boolean;

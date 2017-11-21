@@ -1,4 +1,5 @@
 import IComponentProps from '../interfaces/IComponentProps';
+import * as React from 'react';
 
 import '../../css/outcomes.less';
 

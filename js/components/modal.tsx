@@ -1,4 +1,5 @@
 import IModalProps from '../interfaces/IModalProps';
+import * as React from 'react';
 
 import '../../css/modal.less';
 

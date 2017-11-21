@@ -1,4 +1,6 @@
 ﻿import ITableLargeProps from '../interfaces/ITableLargeProps';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 import '../../css/table.less';
 

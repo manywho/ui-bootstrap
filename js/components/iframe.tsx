@@ -1,5 +1,7 @@
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/iframe.less';
+import * as React from 'react';
+
 
 /* tslint:disable-next-line:variable-name */
 const IFrame: React.SFC<IComponentProps> = ({ id, flowKey, parentId }) => {

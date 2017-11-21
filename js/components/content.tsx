@@ -1,5 +1,6 @@
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/content.less';
+import * as React from 'react';
 
 declare var manywho: any;
 

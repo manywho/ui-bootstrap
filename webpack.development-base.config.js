@@ -7,7 +7,6 @@ var extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap.css');
 var baseConfig = common.config;
 var baseRules = common.rules;
 var run = common.run;
-var dir = 'build';
 
 var rules = baseRules.concat([
     {
@@ -41,11 +40,7 @@ var config = Object.assign({}, baseConfig, {
         rules,
     },
     plugins,
-    devtool: 'source-map',
-    watch: true,
-    watchOptions: {
-        poll: true
-    }
+    devtool: 'source-map'
 });
 
-module.exports = common.run(config, dir);
+module.exports = config;

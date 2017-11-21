@@ -1,5 +1,6 @@
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/history.less';
+import * as React from 'react';
 
 class History extends React.Component<IComponentProps, null> {
 
@@ -18,7 +19,7 @@ class History extends React.Component<IComponentProps, null> {
 
         return (
             <div className={classes} style={{ width: outcomeWidth }}>
-                <p align={'center'}>
+                <p style={{ textAlign: 'center' }}>
                     {outcome.label}
                 </p>
             </div>

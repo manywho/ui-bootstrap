@@ -1,5 +1,7 @@
 import ITableInputDateTimeProps from '../interfaces/ITableInputDateTimeProps';
-
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as $ from 'jquery';
 import * as moment from 'moment';
 
 import '../../css/input.less';

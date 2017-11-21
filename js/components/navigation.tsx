@@ -1,4 +1,6 @@
 import INavigationProps from '../interfaces/INavigationProps';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 import '../../css/navigation.less';
 

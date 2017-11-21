@@ -1,4 +1,6 @@
 import IItemsComponentProps from '../interfaces/IItemsComponentProps';
+import * as React from 'react';
+import * as $ from 'jquery';
 
 declare var manywho: any;
 

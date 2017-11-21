@@ -8,7 +8,7 @@ interface IItemsHeaderProps extends IComponentProps {
     onSearch: Function;
     outcomes: any[];
     isDisabled: boolean;
-    refresh: (event: React.SyntheticEvent) => void;
+    refresh: (event: React.SyntheticEvent<HTMLElement>) => void;
 }
 
 export default IItemsHeaderProps;

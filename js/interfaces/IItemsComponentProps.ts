@@ -14,7 +14,7 @@ interface IItemsComponentProps extends IComponentProps {
     objectData: any[];
     onSearch: Function;
     outcomes: any[];
-    refresh: (event: React.SyntheticEvent) => void;
+    refresh: (event: React.SyntheticEvent<HTMLElement>) => void;
     onNext: Function;
     onPrev: Function;
     onFirstPage: Function;

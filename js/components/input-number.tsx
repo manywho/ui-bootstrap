@@ -1,4 +1,5 @@
 import IInputProps from '../interfaces/IInputProps';
+import * as React from 'react';
 
 import '../../css/input.less';
 

@@ -1,4 +1,6 @@
 import ILoginProps from '../interfaces/ILoginProps';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 declare var manywho: any;
 

@@ -8,8 +8,8 @@ interface ITableLargeProps extends IComponentProps, ISortable, ISelectable {
     objectData: any;    
     selectedRows: { externalId: string }[];
     totalObjectData: any;
-    onHeaderClick: (event: React.SyntheticEvent) => void;
-    onRowClicked: (event: React.SyntheticEvent) => void;
+    onHeaderClick: (event: React.SyntheticEvent<HTMLElement>) => void;
+    onRowClicked: (event: React.SyntheticEvent<HTMLElement>) => void;
     outcomes: { id: string; }[];
     onOutcome: Function;
     isFiles: boolean;

@@ -1,3 +1,6 @@
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+
 (function (manywho) {
 
     manywho.component.mixins.enterKeyHandler = {
