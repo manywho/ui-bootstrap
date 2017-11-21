@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 declare var manywho: any;
 
 class Main extends React.Component<any, any> {

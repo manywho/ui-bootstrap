@@ -1,4 +1,5 @@
 import IReturnToParentProps from '../interfaces/IReturnToParentProps';
+import * as React from 'react';
 
 import '../../css/returnToParent.less';
     

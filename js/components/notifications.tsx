@@ -1,4 +1,5 @@
 import INotificationsProps from '../interfaces/INotificationsProps';
+import * as React from 'react';
 
 import '../../css/notifications.less';
 

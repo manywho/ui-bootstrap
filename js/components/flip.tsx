@@ -1,5 +1,7 @@
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/flip.less';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 declare var manywho: any;
 

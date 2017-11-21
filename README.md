@@ -6,29 +6,24 @@
 
 ### Building
 
-To build the ui bootstrap components you will need to have [nodejs](http://nodejs.org/), [gulp](http://gulpjs.com/) and [typings](https://github.com/typings/typings) installed.
+To build the ui bootstrap components you will need to have [nodejs](http://nodejs.org/) installed.
 
 Then install dependencies:
 
 ```
 npm install
-typings install
 ```
 
 Then run the dev build:
 
 ```
-gulp dev-less
-gulp dev-ts
-gulp dev-bootstrap
-gulp dev-bootstrap-themes
-gulp dev-fonts
+npm run dev
 ```
 
 Or dist build:
 
 ```
-gulp dist
+npm run dist
 ```
 
 ### Running
@@ -36,16 +31,16 @@ gulp dist
 You can run:
 
 ```
-gulp watch
+npm start
 ```
 
-Which will re-run the relevant dev tasks whenever a change to the script or less files is made.
+Which will rebuild the project whenever a change to the script or less files is made.
 
-By default the compiled assets will be output to the `build` folder, you can override this using the `--build` arg:
+By default the compiled assets will be output to the `build` folder, you can override this using the `--env.build` arg:
 
 ```
-gulp dev-* --build="custom-folder"
-gulp watch --build="custom-folder"
+npm run dev -- --env.build="custom-folder"
+npm start -- --env.build="custom-folder"
 ```
 
 ## Contributing

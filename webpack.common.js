@@ -16,12 +16,13 @@ module.exports.config = {
     externals: {
         'react': 'React',
         'react-dom': 'ReactDOM',
+        'react-transition-group/CSSTransitionGroup': 'React.addons.CSSTransitionGroup',
         'jquery': 'jQuery',
         'numbro': 'numbro',
         'moment': 'moment',
         'bootstrap': 'bootstrap',
         'socket.io-client': 'io',
-        'react-motion': 'react-motion'
+        'react-motion': 'react-motion',
     },
     output: {
         filename: 'js/ui-bootstrap.js',

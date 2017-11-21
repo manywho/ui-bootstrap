@@ -1,4 +1,5 @@
 import IOutcomeProps from '../interfaces/IOutcomeProps';
+import * as React from 'react';
 
 import '../../css/outcome.less';
 

@@ -1,5 +1,5 @@
 import ITableInputProps from '../interfaces/ITableInputProps';
-
+import * as React from 'react';
 import * as moment from 'moment';
 
 import '../../css/input.less';

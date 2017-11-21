@@ -1,4 +1,5 @@
 import ITilesProps from '../interfaces/ITilesProps';
+import * as React from 'react';
 
 import '../../css/tiles.less';
 

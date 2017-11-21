@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import '../../css/pagination.less';
 
 declare var manywho: any;

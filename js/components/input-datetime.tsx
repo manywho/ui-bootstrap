@@ -1,4 +1,7 @@
 import IInputProps from '../interfaces/IInputProps';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as $ from 'jquery';
 
 import '../../css/input.less';
 import '../../css/lib/bootstrap-datetimepicker.css';

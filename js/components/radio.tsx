@@ -1,4 +1,5 @@
 import IComponentProps from '../interfaces/IComponentProps';
+import * as React from 'react';
 
 import '../../css/radio.less';
 
@@ -258,7 +259,7 @@ class Radio extends React.Component<IComponentProps, any> {
     
         return (
             <div className={containerClassNames.join(' ')} id={this.props.id}>
-                <label for={ this.props.id }>
+                <label htmlFor={ this.props.id }>
                     {model.label}
                     { 
                         model.isRequired ? 

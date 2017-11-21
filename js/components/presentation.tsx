@@ -1,4 +1,6 @@
 import IComponentProps from '../interfaces/IComponentProps';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 declare var manywho: any;
 

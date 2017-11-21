@@ -1,4 +1,5 @@
 import IChartComponentProps from '../interfaces/IChartComponentProps';
+import * as React from 'react';
 
 declare var manywho: any;
 

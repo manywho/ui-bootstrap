@@ -1,4 +1,6 @@
 import IFeedInputProps from '../interfaces/IFeedInputProps';
+import * as React from 'react';
+import * as $ from 'jquery';
 
 interface IFeedInputState {
     mentionedUsers: any;
@@ -25,7 +27,7 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
 
         } else {
 
-            deferred = jQuery.Deferred();
+            deferred = $.Deferred();
             deferred.resolve();
         }
 

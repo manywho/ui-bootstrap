@@ -1,5 +1,7 @@
 import IPaginationProps from '../interfaces/IPaginationProps';
 import IComponentProps from '../interfaces/IComponentProps';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 import '../../css/table.less';
 
@@ -15,8 +17,8 @@ interface ITableContainerState {
 }
 
 interface ITableContainerProps extends IPaginationProps, IComponentProps {
-    sort: (event: React.SyntheticEvent) => void;
-    select: (event: React.SyntheticEvent) => void;
+    sort: (event: React.SyntheticEvent<HTMLElement>) => void;
+    select: (event: React.SyntheticEvent<HTMLElement>) => void;
     objectData: any;
     sortedBy: string;
     sortedIsAscending: boolean;

@@ -1,4 +1,6 @@
 import IWaitProps from '../interfaces/IWaitProps';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
 declare var manywho: any;
 

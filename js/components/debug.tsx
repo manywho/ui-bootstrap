@@ -1,5 +1,6 @@
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/debug.less';
+import * as React from 'react';
 
 interface IDebugViewerState {
     paths?: any;

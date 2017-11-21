@@ -1,4 +1,6 @@
 import ITableSmallProps from '../interfaces/ITableSmallProps';
+import * as React from 'react';
+import * as $ from 'jquery';
 
 import '../../css/table.less';
 

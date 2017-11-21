@@ -1,4 +1,6 @@
 import { ITourState, ITourProps, ITour, ITourStep } from '../interfaces/ITour';
+import * as React from 'react';
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 
 import '../../css/tours.less';
 
@@ -6,7 +8,7 @@ declare var manywho: any;
 
 class Tour extends React.Component<ITourProps, ITourState> {
 
-    domWatcher: number;
+    domWatcher: any;
 
     constructor(props) {
         super(props);
@@ -160,7 +162,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
             break;
         }
 
-        return <React.addons.CSSTransitionGroup transitionName="mw-tour-step"
+        return <CSSTransitionGroup transitionName="mw-tour-step"
             transitionAppear={true}
             transitionAppearTimeout={500}
             transitionEnter={false}
@@ -193,7 +195,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
                     </div>
                 </div>
             </div>
-        </React.addons.CSSTransitionGroup>;
+        </CSSTransitionGroup>;
     }
 }
 

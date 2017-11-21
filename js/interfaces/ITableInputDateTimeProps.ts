@@ -1,5 +1,5 @@
 interface ITableInputDateTimeProps {
-    onChange: (event: React.SyntheticEvent) => void;
+    onChange: (event: React.SyntheticEvent<HTMLElement>) => void;
     format: string;
     value: string;
     contentFormat: string;

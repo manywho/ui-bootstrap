@@ -1,4 +1,5 @@
 import IItemsHeaderProps from '../interfaces/IItemsHeaderProps';
+import * as React from 'react';
 
 import '../../css/items.less';
 

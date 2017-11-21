@@ -1,5 +1,8 @@
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/group.less';
+import * as React from 'react';
+import * as $ from 'jquery';
+
 
 declare var manywho: any;
 

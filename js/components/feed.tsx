@@ -1,5 +1,6 @@
 import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 import '../../css/feed.less';
+import * as React from 'react';
 
 class Feed extends React.Component<IItemsComponentProps, null> {
 
