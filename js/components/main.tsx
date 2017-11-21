@@ -1,4 +1,13 @@
 import * as React from 'react';
+import notifications from './notifications';
+import navigation from './navigation';
+import status from './status';
+import footer from './footer';
+import voting from './voting';
+import feed from './feed';
+import wait from './wait';
+import debug from './debug';
+import history from './history';
 
 declare var manywho: any;
 
@@ -24,6 +33,16 @@ class Main extends React.Component<any, any> {
     render() {
         manywho.log.info('Rendering Main');
 
+        const Navigation : typeof navigation = manywho.component.getByName('navigation');
+        const Notifications : typeof notifications = manywho.component.getByName('notifications');
+        const Status : typeof status = manywho.component.getByName('status');
+        const Footer : typeof footer = manywho.component.getByName('footer');
+        const Voting : typeof voting = manywho.component.getByName('voting');
+        const Feed : typeof feed = manywho.component.getByName('feed');
+        const Wait : typeof wait = manywho.component.getByName('wait');
+        const Debug : typeof debug = manywho.component.getByName('debug');
+        const History : typeof history = manywho.component.getByName('history');
+
         const children = manywho.model.getChildren('root', this.props.flowKey);
         const outcomes = manywho.model.getOutcomes('root', this.props.flowKey);
         const state = manywho.state.getComponent('main', this.props.flowKey) || {};
@@ -38,12 +57,12 @@ class Main extends React.Component<any, any> {
             'outcomes.isFixed', this.props.flowKey, false,
         );
 
-        const navElement = React.createElement(manywho.component.getByName('navigation'), {
-            id: manywho.model.getDefaultNavigationId(this.props.flowKey),
-            flowKey: this.props.flowKey,
-            isFixed: isFixedNav,
-            isFullWidth: manywho.settings.global('isFullWidth', this.props.flowKey, false),
-        });
+        const navElement = <Navigation
+            id={manywho.model.getDefaultNavigationId(this.props.flowKey)}
+            flowKey={this.props.flowKey}
+            isFixed={isFixedNav}
+            isFullWidth={manywho.settings.global('isFullWidth', this.props.flowKey, false)}
+        />;
 
         if (
             state && 
@@ -62,11 +81,9 @@ class Main extends React.Component<any, any> {
             isFixedFooter = manywho.utils.isEqual(attributes.outcomes, 'fixed', false);
 
         if (isFixedFooter) {
-            fixedFooter = React.createElement(
-                manywho.component.getByName('footer'), 
-                { flowKey: this.props.flowKey }, 
-                outcomeElements,
-            );
+            fixedFooter = <Footer flowKey={ this.props.flowKey }>
+                {outcomeElements}
+            </Footer>;
             outcomeElements = null;
         }
 
@@ -100,53 +117,28 @@ class Main extends React.Component<any, any> {
                         {componentElements}
                         {outcomeElements}
                         {
-                            React.createElement(
-                                manywho.component.getByName('status'), 
-                                { flowKey: this.props.flowKey },
-                            )
+                            <Status flowKey={ this.props.flowKey } />
                         }
                         {
-                            React.createElement(
-                                manywho.component.getByName('voting'), 
-                                { flowKey: this.props.flowKey },
-                            )
+                            <Voting flowKey={ this.props.flowKey } />
                         }
                         {
-                            React.createElement(
-                                manywho.component.getByName('feed'), 
-                                { flowKey: this.props.flowKey },
-                            )
+                            <Feed flowKey={ this.props.flowKey } />
                         }
                     </div>
                 </div>
                 {(isFixedFooter) ? fixedFooter : null}
                 {
-                    React.createElement(
-                        manywho.component.getByName('notifications'), 
-                        { flowKey: this.props.flowKey, position: 'center' },
-                    )
+                    <Notifications flowKey={this.props.flowKey} position={'center'} />
                 }
                 {
-                    React.createElement(
-                        manywho.component.getByName('notifications'), 
-                        { flowKey: this.props.flowKey, position: 'right' },
-                    )
+                    <Notifications flowKey={this.props.flowKey} position={'right'} />
                 }
                 {
-                    React.createElement(
-                        manywho.component.getByName('wait'), 
-                        { 
-                            isVisible: state.loading, 
-                            message: state.loading && state.loading.message, 
-                        }, 
-                        null,
-                    )
+                    <Wait isVisible={state.loading} message={state.loading && state.loading.message} />
                 }
                 {
-                    React.createElement(
-                        manywho.component.getByName('notifications'), 
-                        { flowKey: this.props.flowKey, position: 'left' },
-                    )
+                    <Notifications flowKey={this.props.flowKey} position={'left'} />
                 }
                 {
                     staticComponents.map(component => React.createElement(
@@ -158,16 +150,10 @@ class Main extends React.Component<any, any> {
                 }
             </div>
             {
-                React.createElement(
-                    manywho.component.getByName('debug'), 
-                    { flowKey: this.props.flowKey },
-                )
+                <Debug flowKey={ this.props.flowKey } />
             }
             {
-                React.createElement(
-                    manywho.component.getByName('history'), 
-                    { flowKey: this.props.flowKey },
-                )
+                <History flowKey={ this.props.flowKey } />
             }
         </div>);
     }

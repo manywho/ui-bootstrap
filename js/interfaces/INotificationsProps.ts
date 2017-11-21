@@ -1,7 +1,7 @@
 import IComponentProps from './IComponentProps';
 
 interface INotificationsProps extends IComponentProps {
-    position: number;
+    position?: string;
 }
 
 export default INotificationsProps;

@@ -1,8 +1,8 @@
-import IItemsComponentProps from '../interfaces/IItemsComponentProps';
+import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/feed.less';
 import * as React from 'react';
 
-class Feed extends React.Component<IItemsComponentProps, null> {
+class Feed extends React.Component<IComponentProps, null> {
 
     onToggleFollow(e) {
 

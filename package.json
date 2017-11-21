@@ -8,7 +8,7 @@
     "url": "https://github.com/manywho/ui-bootstrap.git"
   },
   "scripts": {
-    "docs": "typedoc js --out docs --ignoreCompilerErrors --mode modules --exclude \"**/lib/*.js\"",
+    "docs": "typedoc js --out docs --ignoreCompilerErrors --mode modules --exclude & start docs/index.html",
     "start": "webpack --config webpack.development-watch.config.js",
     "dev": "webpack --config webpack.development.config.js",
     "dist": "webpack -p --config webpack.production.config.js",

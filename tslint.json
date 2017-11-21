@@ -7,6 +7,7 @@
             4
         ],
         "max-line-length": [true, 150],
-        "ter-indent": [true, 4]
+        "ter-indent": [true, 4],
+        "variable-name": [true, "check-format", "allow-pascal-case"]
     }
 }
