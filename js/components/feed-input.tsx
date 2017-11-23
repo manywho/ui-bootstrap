@@ -1,6 +1,8 @@
-import IFeedInputProps from '../interfaces/IFeedInputProps';
 import * as React from 'react';
 import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import IFeedInputProps from '../interfaces/IFeedInputProps';
+import fileUpload from './file-upload';
 
 interface IFeedInputState {
     mentionedUsers: any;
@@ -91,24 +93,25 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
 
     render() {
 
+        const FileUpload : typeof fileUpload = manywho.component.getByName(registeredComponents.FILE_UPLOAD);
+
         let fileUpload = null;
 
         if (this.props.isAttachmentsEnabled) {
 
-            fileUpload = React.createElement(
-                manywho.component.getByName('file-upload'),
-                {
-                    flowKey: this.props.flowKey,
-                    multiple: true,
-                    upload: manywho.social.attachFiles,
-                    smallInputs: true,
-                    isChildComponent: true,
-                    isUploadVisible: false,
-                    id: this.props.id,
-                    browseCaption: 'Attach Files',
-                    ref: 'files',
-                },
-            );
+            const fileUploadProps = {
+                flowKey: this.props.flowKey,
+                multiple: true,
+                upload: manywho.social.attachFiles,
+                smallInputs: true,
+                isChildComponent: true,
+                isUploadVisible: false,
+                id: this.props.id,
+                browseCaption: 'Attach Files',
+                ref: 'files',
+            };
+
+            fileUpload = <FileUpload {...fileUploadProps} />;
         }
 
         return <div className={'feed-post clearfix'}>
@@ -130,6 +133,8 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
     }
 }
 
-manywho.component.register('feed-input', FeedInput);
+manywho.component.register(registeredComponents.FEED_INPUT, FeedInput);
+
+export const getFeedInput = () : typeof FeedInput => manywho.component.getByName(registeredComponents.FEED_INPUT);
 
 export default FeedInput;

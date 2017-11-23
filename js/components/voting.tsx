@@ -1,9 +1,9 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
-    
-/* tslint:disable-next-line:variable-name */
+
 class Voting extends React.Component<IComponentProps, null> {
 
     render() {
@@ -29,6 +29,8 @@ class Voting extends React.Component<IComponentProps, null> {
     }
 }
 
-manywho.component.register('voting', Voting);
+manywho.component.register(registeredComponents.VOTING, Voting);
+
+export const getVoting = () : typeof Voting => manywho.component.getByName(registeredComponents.VOTING);
 
 export default Voting;

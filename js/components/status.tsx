@@ -1,5 +1,6 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
 
 import '../../css/status.less';
 
@@ -43,6 +44,8 @@ class Status extends React.Component<IComponentProps, null> {
     }
 }
 
-manywho.component.register('status', Status);
+manywho.component.register(registeredComponents.STATUS, Status);
+
+export const getStatus = () : typeof Status => manywho.component.getByName(registeredComponents.STATUS);
 
 export default Status;

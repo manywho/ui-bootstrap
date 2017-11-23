@@ -1,9 +1,10 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
 
 import '../../css/radio.less';
+import { getOutcome } from './outcome';
 
-/* tslint:disable-next-line:variable-name */
 class Radio extends React.Component<IComponentProps, any> {
     constructor(props) {
         super(props);
@@ -160,6 +161,8 @@ class Radio extends React.Component<IComponentProps, any> {
 
     render() {
         let options = [];
+
+        const Outcome = getOutcome();
         
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const state = 
@@ -250,12 +253,7 @@ class Radio extends React.Component<IComponentProps, any> {
         if (!state.loading || state.error)
             iconClassNames.push('hidden');
     
-        const outcomeButtons = outcomes && outcomes.map((outcome) => {
-            return React.createElement(
-                manywho.component.getByName('outcome'), 
-                { flowKey: this.props.flowKey, id: outcome.id },
-            );
-        });
+        const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey}/>);
     
         return (
             <div className={containerClassNames.join(' ')} id={this.props.id}>
@@ -287,6 +285,8 @@ class Radio extends React.Component<IComponentProps, any> {
     }
 }
 
-manywho.component.register('radio', Radio);
+manywho.component.register(registeredComponents.RADIO, Radio);
+
+export const getRadio = () : typeof Radio => manywho.component.getByName(registeredComponents.RADIO);
 
 export default Radio;

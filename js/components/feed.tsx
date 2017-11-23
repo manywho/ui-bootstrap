@@ -1,6 +1,9 @@
-import IComponentProps from '../interfaces/IComponentProps';
-import '../../css/feed.less';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import feedInput from './feed-input';
+import wait from './wait';
+import '../../css/feed.less';
 
 class Feed extends React.Component<IComponentProps, null> {
 
@@ -27,6 +30,8 @@ class Feed extends React.Component<IComponentProps, null> {
     }
 
     renderThread(messages, isCommentingEnabled, isAttachmentsEnabled?) {
+
+        const FeedInput : typeof feedInput = manywho.component.getByName(registeredComponents.FEED_INPUT);
 
         if (messages) {
 
@@ -74,17 +79,12 @@ class Feed extends React.Component<IComponentProps, null> {
                                         {this.renderThread(message.comments, false, false)}
                                         {
                                             isCommentingEnabled &&
-                                            React.createElement(
-                                                manywho.component.getByName('feed-input'),
-                                                {
-                                                    isAttachmentsEnabled,
-                                                    flowKey: this.props.flowKey,
-                                                    caption: 'Reply',
-                                                    messageId: message.id,
-                                                    send: this.onSendMessage,
-                                                },
-                                                null,
-                                            )
+                                            <FeedInput
+                                                flowKey={this.props.flowKey}
+                                                caption={'Reply'}
+                                                messageId={message.id}
+                                                send={this.onSendMessage}
+                                                isAttachmentsEnabled={isAttachmentsEnabled} />
                                         }
                                     </div>
                                 </li>;
@@ -131,6 +131,9 @@ class Feed extends React.Component<IComponentProps, null> {
 
     render() {
 
+        const FeedInput : typeof feedInput = manywho.component.getByName(registeredComponents.FEED_INPUT);
+        const Wait : typeof wait = manywho.component.getByName(registeredComponents.WAIT);
+
         const stream = manywho.social.getStream(this.props.flowKey);
 
         if (stream && stream.me) {
@@ -161,18 +164,11 @@ class Feed extends React.Component<IComponentProps, null> {
                 </div>
                 <div className={'panel-body'}>
                     {this.renderFollowers(stream.followers)}
-                    {
-                        React.createElement(
-                            manywho.component.getByName('feed-input'),
-                            {
-                                flowKey: this.props.flowKey,
-                                caption: 'Post',
-                                send: this.onSendMessage,
-                                isAttachmentsEnabled: true,
-                            },
-                            null,
-                        )
-                    }
+                    <FeedInput
+                        flowKey={this.props.flowKey}
+                        caption={'Post'}
+                        send={this.onSendMessage}
+                        isAttachmentsEnabled={true} />
                     {this.renderThread(streamMessages.messages, true)}
                 </div>
                 <div className={'panel-heading clearfix ' + (!isFooterVisible) ? 'hidden' : ''}>
@@ -182,17 +178,9 @@ class Feed extends React.Component<IComponentProps, null> {
                         More
                         </button>
                 </div>
-                {
-                    React.createElement(
-                        manywho.component.getByName('wait'),
-                        {
-                            isVisible: state.loading != null,
-                            message: state.loading && state.loading.message,
-                            isSmall: true,
-                        },
-                        null,
-                    )
-                }
+                <Wait isVisible={state.loading != null}
+                    message={state.loading && state.loading.message}
+                    isSmall={true} />
             </div>;
         }
 
@@ -200,6 +188,8 @@ class Feed extends React.Component<IComponentProps, null> {
     }
 }
 
-manywho.component.register('feed', Feed);
+manywho.component.register(registeredComponents.FEED, Feed);
+
+export const getFeed = () : typeof Feed => manywho.component.getByName(registeredComponents.FEED);
 
 export default Feed;

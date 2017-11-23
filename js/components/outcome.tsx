@@ -1,5 +1,6 @@
-import IOutcomeProps from '../interfaces/IOutcomeProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IOutcomeProps from '../interfaces/IOutcomeProps';
 
 import '../../css/outcome.less';
 
@@ -210,6 +211,8 @@ class Outcome extends React.Component<IOutcomeProps, null> {
     }
 }
 
-manywho.component.register('outcome', Outcome);
+manywho.component.register(registeredComponents.OUTCOME, Outcome);
+
+export const getOutcome = () : typeof Outcome => manywho.component.getByName(registeredComponents.OUTCOME);
 
 export default Outcome;

@@ -1,10 +1,10 @@
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/pagination.less';
 
 declare var manywho: any;
 
-/* tslint:disable-next-line:variable-name */
 const Pagination: React.SFC<any> = (
     { onFirstPage, pageIndex, isDesignTime, onPrev, onNext, hasMoreResults },
 ) => {
@@ -36,4 +36,8 @@ const Pagination: React.SFC<any> = (
     );
 };
 
-manywho.component.register('mw-pagination', Pagination);
+manywho.component.register(registeredComponents.PAGINATION, Pagination);
+
+export const getPagination = () : typeof Pagination => manywho.component.getByName(registeredComponents.PAGINATION);
+
+export default Pagination;

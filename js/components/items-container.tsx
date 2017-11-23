@@ -1,5 +1,6 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
 
 import '../../css/items.less';
 
@@ -436,6 +437,8 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 
 }
 
-manywho.component.register('mw-items-container', ItemsContainer);
+manywho.component.register(registeredComponents.ITEMS_CONTAINER, ItemsContainer);
+
+export const getItemsContainer = () : typeof ItemsContainer => manywho.component.getByName(registeredComponents.ITEMS_CONTAINER);
 
 export default ItemsContainer;

@@ -1,9 +1,9 @@
-import IReturnToParentProps from '../interfaces/IReturnToParentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IReturnToParentProps from '../interfaces/IReturnToParentProps';
 
 import '../../css/returnToParent.less';
-    
-/* tslint:disable-next-line:variable-name */
+
 const ReturnToParent: React.SFC<IReturnToParentProps> = ({ flowKey, parentStateId }) => {
 
     const onClick = () => {
@@ -27,6 +27,8 @@ const ReturnToParent: React.SFC<IReturnToParentProps> = ({ flowKey, parentStateI
     return null;
 };
 
-manywho.component.register('returnToParent', ReturnToParent);
+manywho.component.register(registeredComponents.RETURN_TO_PARENT, ReturnToParent);
+
+export const getReturnToParent = () : typeof ReturnToParent => manywho.component.getByName(registeredComponents.RETURN_TO_PARENT);
 
 export default ReturnToParent;

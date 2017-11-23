@@ -1,5 +1,8 @@
-import IModalProps from '../interfaces/IModalProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IModalProps from '../interfaces/IModalProps';
+import { getNotifications } from './notifications';
+import { getWait } from './wait';
 
 import '../../css/modal.less';
 
@@ -21,6 +24,9 @@ class Modal extends React.Component<IModalProps, null> {
             manywho.utils.extractElement(this.props.flowKey), 
             this.props.flowKey,
         ) || {};
+
+        const Notifications = getNotifications();
+        const Wait = getWait();
 
         if (
             state && state.loading == null && 
@@ -58,34 +64,10 @@ class Modal extends React.Component<IModalProps, null> {
                                 manywho.component.getOutcomes(outcomes, this.props.flowKey)
                             }
                         </div>
-                        {
-                            React.createElement(
-                                manywho.component.getByName('notifications'), 
-                                { flowKey: this.props.flowKey, position: 'left' },
-                            )
-                        }
-                        {
-                            React.createElement(
-                                manywho.component.getByName('notifications'), 
-                                { flowKey: this.props.flowKey, position: 'center' },
-                            )
-                        }
-                        {
-                            React.createElement(
-                                manywho.component.getByName('notifications'), 
-                                { flowKey: this.props.flowKey, position: 'right' },
-                            )
-                        }
-                        {
-                            React.createElement(
-                                manywho.component.getByName('wait'), 
-                                { 
-                                    isVisible: state.loading, 
-                                    message: state.loading && state.loading.message,
-                                },
-                                null,
-                            )
-                        }
+                        <Notifications flowKey={this.props.flowKey} position={'left'} />
+                        <Notifications flowKey={this.props.flowKey} position={'center'} />
+                        <Notifications flowKey={this.props.flowKey} position={'right'} />
+                        <Wait isVisible={state.loading} message={state.loading && state.loading.message} />
                     </div>
                 </div>
             </div>
@@ -118,6 +100,8 @@ class Modal extends React.Component<IModalProps, null> {
 
 }
 
-manywho.component.register('modal', Modal, ['modal-standalone']);
+manywho.component.register(registeredComponents.MODAL, Modal, ['modal-standalone']);
+
+export const getModal = () : typeof Modal => manywho.component.getByName(registeredComponents.MODAL);
 
 export default Modal;

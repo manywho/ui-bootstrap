@@ -1,5 +1,7 @@
-import IItemsHeaderProps from '../interfaces/IItemsHeaderProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IItemsHeaderProps from '../interfaces/IItemsHeaderProps';
+import { getOutcome } from './outcome';
 
 import '../../css/items.less';
 
@@ -37,6 +39,8 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
     }
 
     render() {
+        const Outcome = getOutcome();
+
         let search = null;
         let outcomes = null;
         let refresh = null;
@@ -61,12 +65,7 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
                 {
                     this.props.outcomes
                     .filter(outcome => outcome.isBulkAction)
-                    .map((outcome) => {
-                        return React.createElement(
-                            manywho.component.getByName('outcome'), 
-                            { id: outcome.id, flowKey: this.props.flowKey },
-                        );
-                    })
+                    .map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey} />)
                 }
             </div>;
         }
@@ -85,9 +84,10 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
             {outcomes}
         </div>);
     }
-
 }
 
-manywho.component.register('mw-items-header', ItemsHeader);
+manywho.component.register(registeredComponents.ITEMS_HEADER, ItemsHeader);
+
+export const getItemsHeader = () : typeof ItemsHeader => manywho.component.getByName(registeredComponents.ITEMS_HEADER);
 
 export default ItemsHeader;

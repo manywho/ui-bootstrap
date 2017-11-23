@@ -1,6 +1,8 @@
-﻿import IItemsComponentProps from '../interfaces/IItemsComponentProps';
-import * as React from 'react';
+﻿import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import registeredComponents from '../constants/registeredComponents';
+import IItemsComponentProps from '../interfaces/IItemsComponentProps';
+import { getOutcome } from './outcome';
 
 import '../../css/select.less';
 
@@ -13,7 +15,7 @@ interface IDropDownState {
     isOpen?: boolean;
 }
 
-class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
+class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
     debouncedOnSearch = null;
 
@@ -219,6 +221,8 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
     render() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
+        const Outcome = getOutcome();
+
         manywho.log.info(`Rendering Select: ${this.props.id}, ${model.developerName}`);
 
         const state = 
@@ -306,12 +310,9 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
             );
         }
 
-        const outcomeButtons = this.props.outcomes && this.props.outcomes.map((outcome) => {
-            return React.createElement(
-                manywho.component.getByName('outcome'), 
-                { id: outcome.id, flowKey: this.props.flowKey },
-            );
-        });
+        const outcomeButtons = this.props.outcomes && this.props.outcomes.map(
+            outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey } />,
+        );
 
         let className = manywho.styling.getClasses(
             this.props.parentId, 
@@ -359,6 +360,8 @@ class DropDown extends React.Component<IItemsComponentProps, IDropDownState> {
     }
 }
 
-manywho.component.registerItems('select', DropDown);
+manywho.component.registerItems(registeredComponents.SELECT, Select);
 
-export default DropDown;
+export const getSelect = () : typeof Select => manywho.component.getByName(registeredComponents.SELECT);
+
+export default Select;

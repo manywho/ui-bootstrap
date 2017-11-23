@@ -1,6 +1,7 @@
 import IWaitProps from '../interfaces/IWaitProps';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import registeredComponents from '../constants/registeredComponents';
 
 declare var manywho: any;
 
@@ -62,6 +63,8 @@ class Wait extends React.Component<IWaitProps, null> {
     }
 }
 
-manywho.component.register('wait', Wait);
+manywho.component.register(registeredComponents.WAIT, Wait);
+
+export const getWait = () : typeof Wait => manywho.component.getByName(registeredComponents.WAIT);
 
 export default Wait;

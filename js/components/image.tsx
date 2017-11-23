@@ -1,9 +1,10 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getOutcome } from './outcome';
 
 declare var manywho: any;
 
-/* tslint:disable-next-line:variable-name */
 const Image: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
 
     const classes = manywho.styling.getClasses(parentId, id, 'image', flowKey);
@@ -11,17 +12,13 @@ const Image: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
     const outcomes = manywho.model.getOutcomes(id, flowKey);
     const label = model.label;
 
-    const outcomeButtons = outcomes && outcomes.map((outcome) => {
-        return React.createElement(
-            manywho.component.getByName('outcome'),
-            { flowKey, id: outcome.id },
-        );
-    });
+    const Outcome = getOutcome();
+
+    const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome flowKey={flowKey} id={outcome.id} />);
 
     if (model.isVisible !== true) {
 
         classes.push('hidden');
-
     }
 
     return (
@@ -38,6 +35,8 @@ const Image: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
     );
 };
 
-manywho.component.register('image', Image);
+manywho.component.register(registeredComponents.IMAGE, Image);
+
+export const getImage = () : typeof Image => manywho.component.getByName(registeredComponents.IMAGE);
 
 export default Image;

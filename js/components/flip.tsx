@@ -1,7 +1,8 @@
-import IComponentProps from '../interfaces/IComponentProps';
-import '../../css/flip.less';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import '../../css/flip.less';
 
 declare var manywho: any;
 
@@ -80,6 +81,8 @@ class Flip extends React.Component<IComponentProps, IFlipState> {
 
 }
 
-manywho.component.registerContainer('flip', Flip);
+manywho.component.registerContainer(registeredComponents.FLIP, Flip);
+
+export const getFlip = () : typeof Flip => manywho.component.getByName(registeredComponents.FLIP);
 
 export default Flip;

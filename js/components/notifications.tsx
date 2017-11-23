@@ -1,9 +1,9 @@
-import INotificationsProps from '../interfaces/INotificationsProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import INotificationsProps from '../interfaces/INotificationsProps';
 
 import '../../css/notifications.less';
 
-/* tslint:disable-next-line:variable-name */
 const Notifications: React.SFC<INotificationsProps> = ({ flowKey, position }) => {
 
     const models = manywho.model.getNotifications(flowKey, position);
@@ -30,6 +30,8 @@ const Notifications: React.SFC<INotificationsProps> = ({ flowKey, position }) =>
     );
 };
 
-manywho.component.register('notifications', Notifications);
+manywho.component.register(registeredComponents.NOTIFICATIONS, Notifications);
+
+export const getNotifications = () : typeof Notifications => manywho.component.getByName(registeredComponents.NOTIFICATIONS);
 
 export default Notifications;

@@ -1,5 +1,7 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getOutcome } from './outcome';
 
 import '../../css/outcomes.less';
 
@@ -29,6 +31,8 @@ class Outcomes extends React.Component<IComponentProps, null> {
         manywho.log.info(`Rendering Outcomes: ${this.props.id}, ${model.developerName}`);
 
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
+
+        const Outcome = getOutcome();
 
         let className = manywho.styling.getClasses(
             this.props.parentId, this.props.id, 'outcomes', this.props.flowKey,
@@ -65,13 +69,9 @@ class Outcomes extends React.Component<IComponentProps, null> {
 
         let outcomeElements: JSX.Element[] = outcomes && outcomes
             .map((outcome) => {
-                const element = React.createElement(manywho.component.getByName('outcome'), {
-                    size,
-                    id: outcome.id,
-                    className: model.attributes.outcomeClasses,
-                    disabled: !model.isEnabled,
-                    flowKey: this.props.flowKey,
-                });
+                const element = 
+                    <Outcome size={size} id={outcome.id} className={model.attributes.outcomeClasses} 
+                        disabled={!model.isEnabled} flowKey={this.props.flowKey} />;
 
                 if (
                     model.attributes && 
@@ -106,6 +106,8 @@ class Outcomes extends React.Component<IComponentProps, null> {
     }
 }
 
-manywho.component.register('outcomes', Outcomes);
+manywho.component.register(registeredComponents.OUTCOMES, Outcomes);
+
+export const getOutcomes = () : typeof Outcomes => manywho.component.getByName(registeredComponents.OUTCOMES);
 
 export default Outcomes;

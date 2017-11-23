@@ -1,5 +1,7 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getOutcome } from './outcome';
 
 import '../../css/textarea.less';
 
@@ -38,6 +40,8 @@ class Textarea extends React.Component<IComponentProps, null> {
 
     render() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+
+        const Outcome = getOutcome();
 
         manywho.log.info(`Rendering Textarea: ${model.developerName}, ${this.props.id}`);
 
@@ -84,10 +88,7 @@ class Textarea extends React.Component<IComponentProps, null> {
         if (model.isValid === false || state.isValid === false)
             className += ' has-error';
 
-        const outcomeButtons = outcomes && outcomes.map(outcome => React.createElement(
-            manywho.component.getByName('outcome'),
-            { id: outcome.id, flowKey: this.props.flowKey },
-        ));
+        const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey} />);
 
         return <div className={className}>
             <label>
@@ -103,7 +104,9 @@ class Textarea extends React.Component<IComponentProps, null> {
 
 }
 
-manywho.component.register('textarea', Textarea);
+manywho.component.register(registeredComponents.TEXTAREA, Textarea);
+
+export const getTextarea = () : typeof Textarea => manywho.component.getByName(registeredComponents.TEXTAREA);
 
 export default Textarea;
 

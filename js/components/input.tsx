@@ -1,9 +1,15 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getInputDateTime } from './input-datetime';
+import { getInputBoolean } from './input-boolean';
+import { getInputNumber } from './input-number';
+import { getOutcome } from './outcome';
 
 import '../../css/input.less';
+import { precompile } from 'handlebars';
 
 declare var manywho: any;
 declare var MaskedInput: any;
@@ -97,6 +103,11 @@ class Input extends React.Component<IComponentProps, IInputState> {
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
+        const InputDateTime = getInputDateTime();
+        const InputBoolean = getInputBoolean();
+        const InputNumber = getInputNumber();
+        const Outcome = getOutcome();
+
         const contentValue =
             state && state.contentValue !== undefined ? 
             state.contentValue : 
@@ -183,24 +194,16 @@ class Input extends React.Component<IComponentProps, IInputState> {
 
         switch (contentType.toUpperCase()) {
         case manywho.component.contentTypes.datetime:
-            inputElement = React.createElement(
-                manywho.component.getByName('input-datetime'), props,
-            );
+            inputElement = <InputDateTime {...props} />;
             break;
 
         case manywho.component.contentTypes.boolean:
             label = null;
-            inputElement = React.createElement(
-                manywho.component.getByName('input-boolean'), 
-                props,
-            );
+            inputElement = <InputBoolean {...props} />;
             break;
 
         case manywho.component.contentTypes.number:
-            inputElement = React.createElement(
-                manywho.component.getByName('input-number'), 
-                props,
-            );
+            inputElement = <InputNumber {...props} />;
             break;
 
         case manywho.component.contentTypes.password:
@@ -223,12 +226,7 @@ class Input extends React.Component<IComponentProps, IInputState> {
             break;
         }
 
-        const outcomeButtons = outcomes && outcomes.map((outcome) => {
-            return React.createElement(
-                manywho.component.getByName('outcome'), 
-                { id: outcome.id, flowKey: this.props.flowKey },
-            );
-        });
+        const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey} />);
 
         return <div className={className}>
             {label}
@@ -240,6 +238,8 @@ class Input extends React.Component<IComponentProps, IInputState> {
     }
 }
 
-manywho.component.register('input', Input, ['checkbox']);
+manywho.component.register(registeredComponents.INPUT, Input, ['checkbox']);
+
+export const getInput = () : typeof Input => manywho.component.getByName(registeredComponents.INPUT);
 
 export default Input;

@@ -1,7 +1,7 @@
 interface IWaitProps {
     isSmall?: boolean;
     isVisible: boolean;
-    message: string;
+    message?: string;
 }
 
 export default IWaitProps;

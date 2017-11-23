@@ -1,5 +1,9 @@
-import ITilesProps from '../interfaces/ITilesProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import ITilesProps from '../interfaces/ITilesProps';
+import { getOutcome } from './outcome';
+import { getItemsHeader } from './items-header';
+import { getWait } from './wait';
 
 import '../../css/tiles.less';
 
@@ -46,8 +50,10 @@ class Tiles extends React.Component<ITilesProps, null> {
         columns: (any)[],
         outcomes: (any)[],
         deleteOutcome: any,
-    ):
-    JSX.Element {
+    ): JSX.Element {
+
+        const Outcome = getOutcome();
+
         if (item.type === 'next')
             return <div className="mw-tiles-next"
                 onClick={this.onNext}>
@@ -76,15 +82,13 @@ class Tiles extends React.Component<ITilesProps, null> {
 
         let deleteOutcomeElement = null;
         if (deleteOutcome)
-            deleteOutcomeElement = React.createElement(
-                manywho.component.getByName('outcome'),
-                { 
-                    id: deleteOutcome.id,
-                    flowKey: this.props.flowKey,
-                    onClick: this.onOutcome,
-                    size: 'sm',
-                },
-            );
+            deleteOutcomeElement = 
+                <Outcome 
+                    id={deleteOutcome.id}
+                    flowKey={this.props.flowKey}
+                    onClick={this.onOutcome}
+                    size={'sm'}
+                />;
 
         let content: string = null;
         if (columns.length > 1) {
@@ -134,6 +138,10 @@ class Tiles extends React.Component<ITilesProps, null> {
         if (this.props.isDesignTime)
             return null;
 
+        const Outcome = getOutcome();
+        const ItemsHeader = getItemsHeader();
+        const Wait = getWait();
+
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const state = this.props.isDesignTime ? { error: null, loading: false } :
             manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
@@ -159,7 +167,7 @@ class Tiles extends React.Component<ITilesProps, null> {
         if (model.isEnabled === false || this.props.isLoading)
             isDisabled = true;
 
-        const headerElement = React.createElement(manywho.component.getByName('mw-items-header'), {
+        const headerProps = {
             isDisabled,
             flowKey: this.props.flowKey,
             isSearchable: model.isSearchable,
@@ -167,23 +175,23 @@ class Tiles extends React.Component<ITilesProps, null> {
             onSearch: this.onSearch,
             outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
             refresh: this.props.refresh,
+        };
 
-        });
+        const headerElement = <ItemsHeader {...headerProps} />;
 
         const footerOutcomes: object[] = outcomes && outcomes
         .filter(outcome => !manywho.utils.isEqual(
             outcome.pageActionType,
             'Delete', 
             true) && !outcome.isBulkAction)
-        .map(outcome => React.createElement(
-            manywho.component.getByName('outcome'),
-            {
-                id: outcome.id,
-                flowKey: this.props.flowKey,
-                onClick: this.onOutcome,
-                size: 'default',
-            },
-        ));
+        .map(
+            outcome => <Outcome
+                id={outcome.id}
+                flowKey={this.props.flowKey}
+                onClick={this.onOutcome}
+                size={'default'}
+            />,
+        );
 
         const deleteOutcome: any = outcomes && outcomes
             .filter(outcome => manywho.utils.isEqual(
@@ -247,20 +255,19 @@ class Tiles extends React.Component<ITilesProps, null> {
             </div>);
 
 
-        return (<div className={className} id={this.props.id} ref="container">
-            {labelElement}
-            {headerElement}
-            {contentElement}
-            {React.createElement(
-                manywho.component.getByName('wait'),
-                { isVisible: state.loading, message: state.loading && state.loading.message },
-                null,
-            )}
-            </div>);
+        return (
+            <div className={className} id={this.props.id} ref="container">
+                {labelElement}
+                {headerElement}
+                {contentElement}
+                <Wait isVisible={state.loading} message={state.loading && state.loading.message} />
+            </div>
+        );
     }
-
 }
 
-manywho.component.registerItems('tiles', Tiles);
+manywho.component.registerItems(registeredComponents.TILES, Tiles);
+
+export const getTiles = () : typeof Tiles => manywho.component.getByName(registeredComponents.TILES);
 
 export default Tiles;

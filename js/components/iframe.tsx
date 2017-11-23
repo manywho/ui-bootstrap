@@ -1,22 +1,21 @@
-import IComponentProps from '../interfaces/IComponentProps';
-import '../../css/iframe.less';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getOutcome } from './outcome';
+import '../../css/iframe.less';
 
-
-/* tslint:disable-next-line:variable-name */
 const IFrame: React.SFC<IComponentProps> = ({ id, flowKey, parentId }) => {
 
     manywho.log.info('Rendering iframe: ' + id);
+
+    const Outcome = getOutcome();
 
     const classes = manywho.styling.getClasses(parentId, id, 'iframe', flowKey);
     const model = manywho.model.getComponent(id, flowKey);
     const outcomes = manywho.model.getOutcomes(id, flowKey);
 
     const outcomeButtons = outcomes && outcomes.map((outcome) => {
-        return React.createElement(
-            manywho.component.getByName('outcome'),
-            { flowKey, id: outcome.id },
-        );
+        return <Outcome flowKey={flowKey} id={outcome.id} />;
     });
 
     return <div className={classes.join(' ')} id={id}>
@@ -26,6 +25,8 @@ const IFrame: React.SFC<IComponentProps> = ({ id, flowKey, parentId }) => {
     </div>;
 };
 
-manywho.component.register('iframe', IFrame);
+manywho.component.register(registeredComponents.IFRAME, IFrame);
+
+export const getIFrame = () : typeof IFrame => manywho.component.getByName(registeredComponents.IFRAME);
 
 export default IFrame;

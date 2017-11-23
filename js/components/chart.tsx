@@ -1,13 +1,20 @@
-import IChartComponentProps from '../interfaces/IChartComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IChartComponentProps from '../interfaces/IChartComponentProps';
+import { getItemsHeader } from './items-header';
+import { getChartBase } from './chart-base';
+import { getWait } from './wait';
 
 declare var manywho: any;
 
-/* tslint:disable-next-line:variable-name */
 const ChartComponent: React.SFC<IChartComponentProps> = (
     { id, flowKey, parentId, isDesignTime, contentElement, outcomes,
         objectData, options, isLoading, onOutcome, type, refresh },
 ) => {
+
+    const ItemsHeader = getItemsHeader();
+    const ChartBase = getChartBase();
+    const Wait = getWait();
 
     const onClick = (externalId) => {
         const outcome = outcomes.filter(item => !item.isBulkAction)[0];
@@ -42,15 +49,19 @@ const ChartComponent: React.SFC<IChartComponentProps> = (
         labelElement = <label>{model.label}</label>;
 
     let headerElement = null;
-    if (!isDesignTime)
-        headerElement = React.createElement(manywho.component.getByName('mw-items-header'), {
+
+    if (!isDesignTime) {
+        const headerProps = {
             flowKey,
             refresh,
             isSearchable: false,
             isRefreshable: (model.objectDataRequest || model.fileDataRequest),
             outcomes: manywho.model.getOutcomes(id, flowKey),
             isEnabled: model.isEnabled,
-        });
+        };
+
+        headerElement = <ItemsHeader {...headerProps} />;
+    }
 
     let objectDataList = [objectData];
 
@@ -79,22 +90,20 @@ const ChartComponent: React.SFC<IChartComponentProps> = (
 
     if (!content || isDesignTime) {
 
-        content = React.createElement(
-            manywho.component.getByName('mw-chart-base'), 
-            {
-                columns,
-                flowKey,
-                type,
-                options,
-                isLoading,
-                isVisible: model.isVisible,
-                objectData: objectDataList,
-                onClick: !isDesignTime ? this.onClick : null,
-                width: model.width > 0 ? model.width : undefined,
-                height: model.height > 0 ? model.height : undefined,
-            }, 
-            null,
-        );
+        const chartProps = {
+            columns,
+            flowKey,
+            type,
+            options,
+            isLoading,
+            isVisible: model.isVisible,
+            objectData: objectDataList,
+            onClick: !isDesignTime ? this.onClick : null,
+            width: model.width > 0 ? model.width : undefined,
+            height: model.height > 0 ? model.height : undefined,
+        };
+
+        content = <ChartBase {...chartProps} />;
     }
 
     let validationElement = null;
@@ -110,20 +119,12 @@ const ChartComponent: React.SFC<IChartComponentProps> = (
         {validationElement}
         <span className="help-block">{model.validationMessage}</span>
         <span className="help-block">{model.helpInfo}</span>
-        {
-            React.createElement(
-                manywho.component.getByName('wait'), 
-                { 
-                    isVisible: isLoading, 
-                    message: state.loading && state.loading.message, 
-                    isSmall: true,
-                }, 
-                null,
-            )
-        }
+        <Wait isVisible={isLoading} message={state.loading && state.loading.message} isSmall={true} />
     </div>;
 };
 
-manywho.component.register('mw-chart', ChartComponent);
+manywho.component.register(registeredComponents.CHART, ChartComponent);
+
+export const getChart = () : typeof ChartComponent => manywho.component.getByName(registeredComponents.CHART);
 
 export default ChartComponent;

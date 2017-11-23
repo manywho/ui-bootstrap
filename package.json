@@ -8,7 +8,7 @@
         "url": "https://github.com/manywho/ui-bootstrap.git"
     },
     "scripts": {
-        "docs": "typedoc js --out docs --ignoreCompilerErrors --mode modules --exclude & start docs/index.html",
+        "docs": "typedoc js --out docs --ignoreCompilerErrors --mode modules & start docs/index.html",
         "start": "webpack --config webpack.development-watch.config.js",
         "dev": "webpack --config webpack.development.config.js",
         "dist": "webpack -p --config webpack.production.config.js",
@@ -67,15 +67,15 @@
         "setupTestFrameworkScriptFile": "<rootDir>/setup-tests-globals.js",
         "transform": {
             "^.+\\.tsx?$": "ts-jest"
-          },
-          "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-          "moduleFileExtensions": [
+        },
+        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+        "moduleFileExtensions": [
             "ts",
             "tsx",
             "js",
             "jsx",
             "json"
-          ],
+        ],
         "moduleNameMapper": {
             "\\.(css|less)$": "identity-obj-proxy"
         }

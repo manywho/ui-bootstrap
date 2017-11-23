@@ -1,5 +1,7 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getOutcome } from './outcome';
 
 import '../../css/toggle.less';
 
@@ -37,15 +39,14 @@ class Toggle extends React.Component<IComponentProps, IToggleState> {
     render() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
+        const Outcome = getOutcome();
+
         manywho.log.info(`Rendering Toggle: ${this.props.id}, ${model.developerName}`);
 
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         const outcomes: any = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
         const outcomeElements: (JSX.Element)[] = outcomes && outcomes
-            .map(({ outcome }) => React.createElement(
-                manywho.component.getByName('outcome'),
-                { id: outcome.id, flowKey: this.props.flowKey },
-            ));
+            .map(({ outcome }) => <Outcome id={outcome.id} flowKey={this.props.flowKey} />);
 
         let className = (manywho.styling.getClasses(
             this.props.parentId,
@@ -113,6 +114,8 @@ class Toggle extends React.Component<IComponentProps, IToggleState> {
 
 }
 
-manywho.component.register('toggle', Toggle);
+manywho.component.register(registeredComponents.TOGGLE, Toggle);
+
+export const getToggle = () : typeof Toggle => manywho.component.getByName(registeredComponents.TOGGLE);
 
 export default Toggle;

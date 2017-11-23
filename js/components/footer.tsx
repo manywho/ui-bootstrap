@@ -1,10 +1,10 @@
+import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/footer.less';
-import * as React from 'react';
 
 declare var manywho: any;
 
-/* tslint:disable-next-line:variable-name */
 const Footer: React.SFC<IComponentProps> = ({ children, flowKey }) => {
 
     if (children) {
@@ -22,6 +22,8 @@ const Footer: React.SFC<IComponentProps> = ({ children, flowKey }) => {
     return null;
 };
 
-manywho.component.register('footer', Footer);
+manywho.component.register(registeredComponents.FOOTER, Footer);
+
+export const getFooter = () : typeof Footer => manywho.component.getByName(registeredComponents.FOOTER);
 
 export default Footer;

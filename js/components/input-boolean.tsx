@@ -1,5 +1,6 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
 
@@ -12,7 +13,6 @@ interface IInputBooleanProps extends IComponentProps {
     autocomplete: any;
 }
 
-/* tslint:disable-next-line:variable-name */
 const InputBoolean: React.SFC<IInputBooleanProps> = (
     { id, parentId, flowKey, value, disabled, readOnly, isDesignTime, required, autocomplete },
 ) => {
@@ -42,6 +42,8 @@ const InputBoolean: React.SFC<IInputBooleanProps> = (
     </div>;
 };
 
-manywho.component.register('input-boolean', InputBoolean);
+manywho.component.register(registeredComponents.INPUT_BOOLEAN, InputBoolean);
+
+export const getInputBoolean = () : typeof InputBoolean => manywho.component.getByName(registeredComponents.INPUT_BOOLEAN);
 
 export default InputBoolean;

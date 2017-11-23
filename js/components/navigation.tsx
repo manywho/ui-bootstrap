@@ -1,6 +1,7 @@
-import INavigationProps from '../interfaces/INavigationProps';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import INavigationProps from '../interfaces/INavigationProps';
+import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/navigation.less';
 
@@ -197,6 +198,8 @@ class Navigation extends React.Component<INavigationProps, null> {
 
 }
 
-manywho.component.register('navigation', Navigation);
+manywho.component.register(registeredComponents.NAVIGATION, Navigation);
+
+export const getNavigation = () : typeof Navigation => manywho.component.getByName(registeredComponents.NAVIGATION);
 
 export default Navigation;

@@ -1,6 +1,9 @@
-﻿import ITableLargeProps from '../interfaces/ITableLargeProps';
-import * as React from 'react';
+﻿import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import registeredComponents from '../constants/registeredComponents';
+import ITableLargeProps from '../interfaces/ITableLargeProps';
+import { getTableInput } from './table-input';
+import { getOutcome } from './outcome';
 
 import '../../css/table.less';
 
@@ -107,7 +110,8 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
         flowKey, objectData, outcomes, displayColumns, selectedRows, 
         onRowClicked, onSelect, outcomeDisplay,
     ) {            
-        const outcomeComponent = manywho.component.getByName('outcome');
+        const Outcome = getOutcome();
+        const TableInput = getTableInput();
 
         return objectData.map((item) => {
             const isSelected = selectedRows.filter((row) => { 
@@ -148,19 +152,10 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                             key={item.externalId + column} 
                             data-item={item.externalId}>
                             {
-                                outcomes.map((outcome) => {
-                                    return React.createElement(
-                                        outcomeComponent, 
-                                        { 
-                                            flowKey, 
-                                            id: outcome.id, 
-                                            key: outcome.id, 
-                                            onClick: this.onOutcomeClick, 
-                                            display: outcomeDisplay.outcomes,
-                                        }, 
-                                        null,
-                                    );
-                                })
+                                outcomes.map(
+                                    outcome => <Outcome flowKey={flowKey} id={outcome.id} key={outcome.id} 
+                                        onClick={this.onOutcomeClick} display={outcomeDisplay.outcomes} />,
+                                )
                             }
                         </td>
                     );
@@ -261,18 +256,15 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                                 key={column.typeElementPropertyId} 
                                 className="editable">
                                 {
-                                    React.createElement(
-                                        manywho.component.getByName('table-input'),
-                                        {
-                                            id: item.externalId,
-                                            propertyId: column.typeElementPropertyId,
-                                            value: selectedProperty.contentValue,
-                                            contentType: column.contentType,
-                                            contentFormat: column.contentFormat,
-                                            onCommitted: this.onCellEditCommitted,
-                                            flowKey: this.props.flowKey,
-                                        },
-                                    )
+                                    <TableInput
+                                        id={item.externalId}
+                                        propertyId={column.typeElementPropertyId}
+                                        value={selectedProperty.contentValue}
+                                        contentType={column.contentType}
+                                        contentFormat={column.contentFormat}
+                                        onCommitted={this.onCellEditCommitted}
+                                        flowKey={this.props.flowKey}
+                                    />
                                 }
                             </td>
                         );
@@ -366,6 +358,8 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
 }
 
-manywho.component.register('mw-table-large', TableLarge);
+manywho.component.register(registeredComponents.TABLE_LARGE, TableLarge);
+
+export const getTableLarge = () : typeof TableLarge => manywho.component.getByName(registeredComponents.TABLE_LARGE);
 
 export default TableLarge;
