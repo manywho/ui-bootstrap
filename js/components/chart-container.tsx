@@ -1,10 +1,11 @@
-import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 import * as React from 'react';
-
+import registeredComponents from '../constants/registeredComponents';
+import IItemsComponentProps from '../interfaces/IItemsComponentProps';
+import { getChartBase } from './chart-base';
+import { getWait } from './wait';
 
 declare var manywho: any;
 
-/* tslint:disable-next-line:variable-name */
 const ChartContainer: React.SFC<IItemsComponentProps> = ({ id, flowKey, isDesignTime }) => {
 
     const onClick = (externalId, index) => {
@@ -114,39 +115,35 @@ const ChartContainer: React.SFC<IItemsComponentProps> = ({ id, flowKey, isDesign
                     });
         });
 
+    const ChartBase = getChartBase();
+    const chartBaseProps = {
+        options,
+        objectData,
+        columns,
+        flowKey,
+        isVisible: model.isVisible,
+        labels: models.map(item => item.label),
+        type: types[models[0].componentType],
+        onClick: !isDesignTime ? onClick : null,
+        width: models[0].width > 0 ? models[0].width : undefined,
+        height: models[0].height > 0 ? models[0].height : undefined,
+    };
+
+    const Wait = getWait();
+
     return <div>
         {refreshButton}
         {
-            React.createElement(
-                manywho.component.getByName('mw-chart-base'), 
-                {
-                    options,
-                    objectData,
-                    columns,
-                    flowKey,
-                    isVisible: model.isVisible,
-                    labels: models.map(item => item.label),
-                    type: types[models[0].componentType],
-                    onClick: !isDesignTime ? onClick : null,
-                    width: models[0].width > 0 ? models[0].width : undefined,
-                    height: models[0].height > 0 ? models[0].height : undefined,
-                }, 
-                null,
-            )
+            <ChartBase {...chartBaseProps} />
         }
         {
-            React.createElement(
-                manywho.component.getByName('wait'), 
-                { 
-                    isVisible: isLoading, 
-                    isSmall: true,
-                }, 
-                null,
-            )
+            <Wait isVisible={isLoading} isSmall={true} />
         }
     </div>;
 };
 
-manywho.component.registerContainer('charts', ChartContainer);
+manywho.component.registerContainer(registeredComponents.CHART_CONTAINER, ChartContainer);
+
+export const getChartContainer = () : typeof ChartContainer => manywho.component.getByName(registeredComponents.CHART_CONTAINER);
 
 export default ChartContainer;

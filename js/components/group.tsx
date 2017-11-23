@@ -1,7 +1,8 @@
-import IComponentProps from '../interfaces/IComponentProps';
-import '../../css/group.less';
 import * as React from 'react';
 import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import '../../css/group.less';
 
 
 declare var manywho: any;
@@ -140,10 +141,12 @@ class Group extends React.Component<IComponentProps, IGroupState> {
 
 }
 
-manywho.component.registerContainer('group', Group);
+manywho.component.registerContainer(registeredComponents.GROUP, Group);
 
 manywho.styling.registerContainer('group', (item, container) => {
     return ['tab-pane', 'label-hidden'];
 });
+
+export const getGroup = () : typeof Group => manywho.component.getByName(registeredComponents.GROUP);
 
 export default Group;

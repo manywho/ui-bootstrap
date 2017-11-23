@@ -1,6 +1,10 @@
-import IComponentProps from '../interfaces/IComponentProps';
-import '../../css/content.less';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import outcome from './outcome';
+import tableContainer from './table-container';
+import fileUpload from './file-upload';
+import '../../css/content.less';
 
 declare var manywho: any;
 
@@ -171,6 +175,10 @@ class Content extends React.Component<IComponentProps, IContentState> {
     }
 
     renderFileDialog = () => {
+
+        const TableContainer : typeof tableContainer = manywho.component.getByName(registeredComponents.TABLE_CONTAINER); 
+        const FileUpload : typeof fileUpload = manywho.component.getByName(registeredComponents.FILE_UPLOAD); 
+
         const tableProps: any = {
             flowKey: this.props.flowKey,
             id: this.props.id,
@@ -202,20 +210,10 @@ class Content extends React.Component<IComponentProps, IContentState> {
                         </ul>
                         <div className="tab-content">
                             <div className="tab-pane active" id="files">
-                                {
-                                    React.createElement(
-                                        manywho.component.getByName('table'), 
-                                        tableProps,
-                                    )
-                                }
+                                <TableContainer {...tableProps} />
                             </div>
                             <div className="tab-pane" id="upload">
-                                {
-                                    React.createElement(
-                                        manywho.component.getByName('file-upload'), 
-                                        uploadProps,
-                                    )
-                                }
+                                <FileUpload {...uploadProps} />
                             </div>
                         </div>
                     </div>
@@ -282,6 +280,8 @@ class Content extends React.Component<IComponentProps, IContentState> {
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
+        const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME); 
+
         const contentValue = 
             state && state.contentValue !== undefined ? 
             state.contentValue : 
@@ -317,10 +317,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
         className += ' form-group';
 
         const outcomeButtons = outcomes && outcomes.map((outcome) => {
-            return React.createElement(
-                manywho.component.getByName('outcome'), 
-                { id: outcome.id, flowKey: this.props.flowKey },
-            );
+            return <Outcome id={outcome.id} flowKey={this.props.flowKey} />;
         });
 
         return <div className={className} id={this.props.id}>
@@ -345,6 +342,8 @@ class Content extends React.Component<IComponentProps, IContentState> {
     }
 }
 
-manywho.component.register('content', Content);
+manywho.component.register(registeredComponents.CONTENT, Content);
+
+export const getContent = () : typeof Content => manywho.component.getByName(registeredComponents.CONTENT);
 
 export default Content;

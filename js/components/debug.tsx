@@ -1,6 +1,7 @@
+import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/debug.less';
-import * as React from 'react';
 
 interface IDebugViewerState {
     paths?: any;
@@ -301,6 +302,8 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
 
 }
 
-manywho.component.register('debug', DebugViewer);
+manywho.component.register(registeredComponents.DEBUG, DebugViewer);
+
+export const getDebugViewer = () : typeof DebugViewer => manywho.component.getByName(registeredComponents.DEBUG);
 
 export default DebugViewer;

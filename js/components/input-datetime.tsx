@@ -1,7 +1,8 @@
-import IInputProps from '../interfaces/IInputProps';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as $ from 'jquery';
+import IInputProps from '../interfaces/IInputProps';
+import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/input.less';
 import '../../css/lib/bootstrap-datetimepicker.css';
@@ -152,6 +153,8 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
 
 }
 
-manywho.component.register('input-datetime', InputDateTime);
+manywho.component.register(registeredComponents.INPUT_DATETIME, InputDateTime);
+
+export const getInputDateTime = () : typeof InputDateTime => manywho.component.getByName(registeredComponents.INPUT_DATETIME);
 
 export default InputDateTime;

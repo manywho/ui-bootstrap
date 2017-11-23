@@ -1,6 +1,7 @@
+import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/history.less';
-import * as React from 'react';
 
 class History extends React.Component<IComponentProps, null> {
 
@@ -76,15 +77,14 @@ class History extends React.Component<IComponentProps, null> {
                     }
                 </div>
             </div>;
-
-
         }
 
         return null;
     }
-
 }
 
-manywho.component.register('history', History);
+manywho.component.register(registeredComponents.HISTORY, History);
+
+export const getHistory = () : typeof History => manywho.component.getByName(registeredComponents.HISTORY);
 
 export default History;

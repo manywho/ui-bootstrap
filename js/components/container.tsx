@@ -1,6 +1,8 @@
-import IComponentProps from '../interfaces/IComponentProps';
-import '../../css/containers.less';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import outcome from './outcome';
+import '../../css/containers.less';
 
 
 declare var manywho: any;
@@ -142,11 +144,11 @@ class Container extends React.Component<IComponentProps, IContainerState> {
 
         const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
+        
+        const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME); 
+        
         const outcomeButtons = outcomes && outcomes.map((outcome) => {
-            return React.createElement(
-                manywho.component.getByName('outcome'), 
-                { id: outcome.id, flowKey: this.props.flowKey, key: outcome.id },
-            );
+            return <Outcome id={outcome.id} flowKey={this.props.flowKey} key={outcome.id} />;
         });
         const isCollapsible = this.isCollapsible(model);
         let label = null;
@@ -212,6 +214,8 @@ class Container extends React.Component<IComponentProps, IContainerState> {
 
 }
 
-manywho.component.register('mw-container', Container);
+manywho.component.register(registeredComponents.CONTAINER, Container);
+
+export const getContainer = () : typeof Container => manywho.component.getByName(registeredComponents.CONTAINER);
 
 export default Container;

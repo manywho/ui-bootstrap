@@ -1,6 +1,7 @@
-import { ITourState, ITourProps, ITour, ITourStep } from '../interfaces/ITour';
 import * as React from 'react';
+import { ITourState, ITourProps, ITour, ITourStep } from '../interfaces/ITour';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/tours.less';
 
@@ -199,7 +200,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
     }
 }
 
-manywho.component.register('mw-tour', Tour);
+manywho.component.register(registeredComponents.TOUR, Tour);
 
 manywho.tours.getTargetElement = function (step: ITourStep) {
     if (!step)
@@ -210,5 +211,7 @@ manywho.tours.getTargetElement = function (step: ITourStep) {
 
     return document.getElementById(step.target);
 };
+
+export const getTour = () : typeof Tour => manywho.component.getByName(registeredComponents.TOUR);
 
 export default Tour;

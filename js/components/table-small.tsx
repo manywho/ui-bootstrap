@@ -1,6 +1,8 @@
-import ITableSmallProps from '../interfaces/ITableSmallProps';
 import * as React from 'react';
 import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import ITableSmallProps from '../interfaces/ITableSmallProps';
+import { getOutcome } from './outcome';
 
 import '../../css/table.less';
 
@@ -53,7 +55,8 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
     }
 
     renderOutcomeColumn = (item, model, outcomes) => {
-        const outcomeComponent = manywho.component.getByName('outcome');
+        const Outcome = getOutcome();
+
         return(<tr>
             <th className="table-small-column table-small-label">
                 Actions
@@ -61,15 +64,11 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
             <td className="table-small-column"
                 data-item={item.externalId}
                 data-model={model.id}>
-                    {outcomes.map(function (outcome) {
-                        return React.createElement(
-                            outcomeComponent,
-                            {id: outcome.id,
-                                onClick: this.onOutcomeClick,
-                                flowKey: this.props.flowKey},
-                            null,
-                        );
-                    })}
+                    {
+                        outcomes.map(
+                            outcome => <Outcome id={outcome.id} onClick={this.onOutcomeClick} flowKey={this.props.flowKey} />,
+                        )
+                    }
             </td>
         </tr>);
     }
@@ -221,6 +220,8 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
     }
 }
 
-manywho.component.register('mw-table-small', TableSmall);
+manywho.component.register(registeredComponents.TABLE_SMALL, TableSmall);
+
+export const getTableSmall = () : typeof TableSmall => manywho.component.getByName(registeredComponents.TABLE_SMALL);
 
 export default TableSmall;

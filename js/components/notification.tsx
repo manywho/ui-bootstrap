@@ -1,5 +1,6 @@
-import INotificationProps from '../interfaces/INotificationProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import INotificationProps from '../interfaces/INotificationProps';
 
 import '../../css/notifications.less';
     
@@ -52,6 +53,8 @@ class Notification extends React.Component<INotificationProps, null> {
     }
 }
 
-manywho.component.register('notification', Notification);
+manywho.component.register(registeredComponents.NOTIFICATION, Notification);
+
+export const getNotification = () : typeof Notification => manywho.component.getByName(registeredComponents.NOTIFICATION);
 
 export default Notification;

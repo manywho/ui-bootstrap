@@ -1,8 +1,9 @@
-import ITableInputDateTimeProps from '../interfaces/ITableInputDateTimeProps';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as $ from 'jquery';
 import * as moment from 'moment';
+import registeredComponents from '../constants/registeredComponents';
+import ITableInputDateTimeProps from '../interfaces/ITableInputDateTimeProps';
 
 import '../../css/input.less';
 import '../../css/table.less';
@@ -49,6 +50,8 @@ class TableInputDateTime extends React.Component<ITableInputDateTimeProps, null>
     }
 }
 
-manywho.component.register('table-input-datetime', TableInputDateTime);
+manywho.component.register(registeredComponents.TABLE_INPUT_DATETIME, TableInputDateTime);
+
+export const getTableInputDateTime = () : typeof TableInputDateTime => manywho.component.getByName(registeredComponents.TABLE_INPUT_DATETIME);
 
 export default TableInputDateTime;

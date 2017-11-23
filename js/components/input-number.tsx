@@ -1,5 +1,6 @@
-import IInputProps from '../interfaces/IInputProps';
 import * as React from 'react';
+import IInputProps from '../interfaces/IInputProps';
+import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/input.less';
 
@@ -111,6 +112,8 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
 
 }
 
-manywho.component.register('input-number', InputNumber);
+manywho.component.register(registeredComponents.INPUT_NUMBER, InputNumber);
+
+export const getInputNumber = () : typeof InputNumber => manywho.component.getByName(registeredComponents.INPUT_NUMBER);
 
 export default InputNumber;

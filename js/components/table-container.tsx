@@ -1,7 +1,8 @@
-import IPaginationProps from '../interfaces/IPaginationProps';
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import IPaginationProps from '../interfaces/IPaginationProps';
+import IComponentProps from '../interfaces/IComponentProps';
+import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/table.less';
 
@@ -359,7 +360,9 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
 
 }
 
-manywho.component.registerItems('table', Table);
-manywho.component.registerItems('files', Table);
+manywho.component.registerItems(registeredComponents.TABLE_CONTAINER, Table);
+manywho.component.registerItems(registeredComponents.FILES, Table);
+
+export const getTableContainer = () : typeof Table => manywho.component.getByName(registeredComponents.TABLE_CONTAINER);
 
 export default Table;

@@ -1,6 +1,8 @@
-import ITableInputProps from '../interfaces/ITableInputProps';
 import * as React from 'react';
 import * as moment from 'moment';
+import registeredComponents from '../constants/registeredComponents';
+import ITableInputProps from '../interfaces/ITableInputProps';
+import { getTableInputDateTime } from './table-input-datetime';
 
 import '../../css/input.less';
 
@@ -94,6 +96,8 @@ class TableInput extends React.Component<ITableInputProps, ITableInputState> {
     onClick = (e) => {
         e.stopPropagation();
 
+        const TableInputDateTime = getTableInputDateTime();
+
         if (
             manywho.utils.isEqual(
                 this.props.contentType, 
@@ -105,14 +109,11 @@ class TableInput extends React.Component<ITableInputProps, ITableInputState> {
             manywho.model.setModal(
                 this.props.flowKey, 
                 {
-                    content: React.createElement(
-                        manywho.component.getByName('table-input-datetime'), 
-                        {
-                            value: this.state.value,
-                            onChange: this.onChange,
-                            format: manywho.formatting.toMomentFormat(this.props.contentFormat),
-                        },
-                    ),
+                    content: <TableInputDateTime 
+                        value={this.state.value} 
+                        onChange={this.onChange} 
+                        format={manywho.formatting.toMomentFormat(this.props.contentFormat)} 
+                    />,
                     onConfirm: this.onCommit,
                     onCancel: this.onCloseDateTimePicker,
                     flowKey: this.props.flowKey,
@@ -216,7 +217,9 @@ class TableInput extends React.Component<ITableInputProps, ITableInputState> {
     }
 }
 
-manywho.component.register('table-input', TableInput);
+manywho.component.register(registeredComponents.TABLE_INPUT, TableInput);
+
+export const getTableInput = () : typeof TableInput => manywho.component.getByName(registeredComponents.TABLE_INPUT);
 
 export default TableInput;
 

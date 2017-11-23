@@ -1,10 +1,11 @@
-import IChartBaseProps from '../interfaces/IChartBaseProps';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import IChartBaseProps from '../interfaces/IChartBaseProps';
+import { Chart } from 'chart.js';
 
 import '../../css/chart.less';
-import { Chart } from 'chart.js';
 
 declare var manywho: any;
 
@@ -178,6 +179,8 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
 
 }
 
-manywho.component.register('mw-chart-base', ChartBase);
+manywho.component.register(registeredComponents.CHART_BASE, ChartBase);
+
+export const getChartBase = () : typeof ChartBase => manywho.component.getByName(registeredComponents.CHART_BASE);
 
 export default ChartBase;

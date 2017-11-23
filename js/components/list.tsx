@@ -1,5 +1,8 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getOutcome } from './outcome';
+import { getWait } from './wait';
 
 import '../../css/list.less';
 
@@ -20,6 +23,9 @@ class List extends React.Component<IComponentProps, null> {
 
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
+
+        const Outcome = getOutcome();
+        const Wait = getWait();
 
         let elements = null;
         let className = manywho.styling.getClasses(
@@ -92,22 +98,14 @@ class List extends React.Component<IComponentProps, null> {
             <label>{model.label}</label>
             {list}
             {outcomeButtons}
-            {
-                React.createElement(
-                    manywho.component.getByName('wait'),
-                    { 
-                        isVisible: state.loading, 
-                        message: state.loading && state.loading.message, 
-                        isSmall: true,
-                    }, 
-                    null,
-                )
-            }
+            <Wait isVisible={state.loading} message={state.loading && state.loading.message} isSmall={true} />
         </div>;
     }
 
 }
 
-manywho.component.register('list', List);
+manywho.component.register(registeredComponents.LIST, List);
+
+export const getList = () : typeof List => manywho.component.getByName(registeredComponents.LIST);
 
 export default List;

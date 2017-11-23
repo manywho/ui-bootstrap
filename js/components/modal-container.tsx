@@ -1,5 +1,5 @@
-import IModalContainerProps from '../interfaces/IModalContainerProps';
 import * as React from 'react';
+import IModalContainerProps from '../interfaces/IModalContainerProps';
 
 import '../../css/modal.less';
 

@@ -1,9 +1,9 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
 
-/* tslint:disable-next-line:variable-name */
 const Vertical: React.SFC<IComponentProps> = ({ id, children, flowKey }) => {
 
     const kids = manywho.model.getChildren(id, flowKey);
@@ -13,7 +13,7 @@ const Vertical: React.SFC<IComponentProps> = ({ id, children, flowKey }) => {
     </div>;
 };
 
-manywho.component.registerContainer('vertical_flow', Vertical);
+manywho.component.registerContainer(registeredComponents.VERTICAL, Vertical);
 manywho.styling.registerContainer('vertical_flow', (item, container) => {
     const classes = [];
 
@@ -37,5 +37,7 @@ manywho.styling.registerContainer('vertical_flow', (item, container) => {
 
     return classes;
 });
+
+export const getVertical = () : typeof Vertical => manywho.component.getByName(registeredComponents.VERTICAL);
 
 export default Vertical;

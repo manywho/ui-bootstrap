@@ -1,6 +1,8 @@
-import IComponentProps from '../interfaces/IComponentProps';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getOutcome } from './outcome';
 
 declare var manywho: any;
 
@@ -24,13 +26,12 @@ class Presentation extends React.Component<IComponentProps, null> {
 
         manywho.log.info(`Rendering Presentation: ${this.props.id}, ${model.developerName}`);
 
+        const Outcome = getOutcome();
+
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         const outcomes: any = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
         const outcomeElements: JSX.Element[] = outcomes && outcomes
-            .map(outcome => React.createElement(
-                manywho.component.getByName('outcome'), 
-                { id: outcome.id, flowKey: this.props.flowKey },
-            ));
+            .map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey}/>);
 
         let className = manywho.styling.getClasses(
             this.props.parentId, 
@@ -64,6 +65,8 @@ class Presentation extends React.Component<IComponentProps, null> {
 
 }
 
-manywho.component.register('presentation', Presentation);
+manywho.component.register(registeredComponents.PRESENTATION, Presentation);
+
+export const getPresentation = () : typeof Presentation => manywho.component.getByName(registeredComponents.PRESENTATION);
 
 export default Presentation;
