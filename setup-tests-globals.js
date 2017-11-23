@@ -13,5 +13,8 @@ window.manywho = {
         getByName: jest.fn(),
         register: jest.fn(),
     },
+    log: {
+        info: jest.fn(),
+    }
 };
 
