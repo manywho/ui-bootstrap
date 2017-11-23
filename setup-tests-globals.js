@@ -10,12 +10,8 @@ window.manywho = {
     adminTenantId: 'test',
     cdnUrl: '',
     component: {
-        getByName: ((component) => {
-            return component;
-        }),
-        register: ((name, component) => {
-            return component;
-        }),
+        getByName: jest.fn(),
+        register: jest.fn(),
     },
 };
 
