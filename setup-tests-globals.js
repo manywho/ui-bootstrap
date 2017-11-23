@@ -8,42 +8,14 @@
 // The global ManyWho object
 window.manywho = {
     adminTenantId: 'test',
-    cdnUrl: '.',
-    settings: {
-        isDebugEnabled: ((a) => {
-            return true;
-        })
-    },
-    log: {
-        info: ((a) => {
-            return a;
-        })
-    },
-    styling: {
-        getClasses: ((a,b,c,d) => {
-            return [];
-        })
-    },
-    model: {
-        getComponent: ((a,b) => {
-            return {};
-        }),
-        getOutcomes: ((a,b) => {
-            return [];
-        })
-    },
-    utils: {
-        isNullOrWhitespace: ((a) => {
-            return true;
-        })
-    },
+    cdnUrl: '',
     component: {
-        getByName: ((dummyComponent) => {
-            return dummyComponent;
+        getByName: ((component) => {
+            return component;
         }),
         register: ((name, component) => {
             return component;
-        })
-    }
+        }),
+    },
 };
 
