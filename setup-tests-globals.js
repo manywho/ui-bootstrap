@@ -15,6 +15,9 @@ window.manywho = {
     },
     log: {
         info: jest.fn(),
+    },
+    tours: {
+        getTargetElement: jest.fn(),
     }
 };
 
