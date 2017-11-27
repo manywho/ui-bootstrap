@@ -17,7 +17,11 @@ window.manywho = {
         info: jest.fn(),
     },
     tours: {
-        getTargetElement: jest.fn(),
+        getTargetElement: jest.fn(() => {
+            return {
+                getBoundingClientRect: jest.fn()
+            }
+        }),
     }
 };
 

@@ -8,8 +8,8 @@ import Tour from '../js/components/tour';
 
 jest.mock('react-transition-group/CSSTransitionGroup', () => {
     return {
-        'default': 'CSSTransitionGroup',
-    }
+        default: 'CSSTransitionGroup',
+    };
 });
 
 describe('Tour component behaviour', () => {
@@ -23,35 +23,65 @@ describe('Tour component behaviour', () => {
                 target: 'string',
                 title: 'string',
                 content: 'string',
-                placement: 'string',
+                placement: 'left',
                 showNext: true,
                 showBack: true,
-                offset: 1,
-                align: 'string',
+                offset: 20,
+                align: 'top',
                 order: 1,
                 querySelector: true,
-            }
+            },
         ],
         currentStep: 0,
-    }
+    };
 
-    let tourProps = {
+    const tourProps = {
         tour,
         stepIndex: 0,
-    }
+    };
 
     const globalAny:any = global;
 
-    function manyWhoMount(isDesignTime = false, isNullOrWhitespace = null) {
+    function manyWhoMount(placement = 'left', align = 'top', offset = 20, isDesignTime = false, isNullOrWhitespace = null) {
+
+        tour.steps[0].placement = placement;
+        tour.steps[0].align = align;
+        tour.steps[0].offset = offset;
 
         globalAny.window.manywho.tours['next'] = jest.fn();
         globalAny.window.manywho.tours['previous'] = jest.fn();
         globalAny.window.manywho.tours['done'] = jest.fn();
+        globalAny.window.manywho.tours['getTargetElement'] = jest.fn(() => {
+            return {
+                getBoundingClientRect: jest.fn(() => {
+                    return {
+                        top: 100,
+                        bottom: 100,
+                        left: 100,
+                        right: 100,
+                        width: 100,
+                        height: 100,
+                        x: 100,
+                        y: 100,
+                    }; 
+                }),
+            };
+        }),
 
         globalAny.window.manywho['utils'] = {
             isNullOrWhitespace: jest.fn(),
-            isEqual: jest.fn(),
-            isNullOrUndefined: jest.fn(),
+            isEqual: jest.fn((positionActual, position) => {
+                if (positionActual === position) {
+                    return true;
+                }           
+                return false;
+            }),
+            isNullOrUndefined: jest.fn((offset) => {
+                if (offset === null || offset === undefined) {
+                    return true; 
+                }
+                return false; 
+            }),
         };
 
         return mount(<Tour tour={tourProps.tour} stepIndex={tourProps.stepIndex} />);
@@ -104,4 +134,65 @@ describe('Tour component behaviour', () => {
         tourWrapper.find('.btn-primary').simulate('click');
         expect(myspy).toHaveBeenCalled();
     });
+
+    test('step positioning for top of element', () => {
+        tourWrapper = manyWhoMount('top', 'center');
+        tourWrapper.setState({ foundTarget: true });
+        expect(tourWrapper.state().style).toEqual({ top:84, left:150 });
+    });
+
+    test('step positioning for bottom of element', () => {
+        tourWrapper = manyWhoMount('bottom', 'center');
+        tourWrapper.setState({ foundTarget: true });
+        expect(tourWrapper.state().style).toEqual({ left: 150, top: 116 });        
+    });
+
+    test('step positioning for right of element', () => {
+        tourWrapper = manyWhoMount('left', 'center');
+        tourWrapper.setState({ foundTarget: true });
+        expect(tourWrapper.state().style).toEqual({ left:84, top:150 });        
+    });
+
+    test('step positioning for left of element', () => {
+        tourWrapper = manyWhoMount('right', 'center');
+        tourWrapper.setState({ foundTarget: true });
+        expect(tourWrapper.state().style).toEqual({ left:116, top:150 });        
+    });
+
+    test('arrow positioning for when offset is null/undefined', () => {
+        tourWrapper = manyWhoMount('right', 'top', null);
+        tourWrapper.setState({ foundTarget: true });
+        const arrowElement = tourWrapper.find('.arrow');
+
+        expect(arrowElement.html());
+        expect(arrowElement.html()).toEqual(expect.stringContaining('calc(0% + 16px)'));    
+    });
+
+    test('arrow positioning for right/left placement', () => {
+        tourWrapper = manyWhoMount('right', 'top');
+        tourWrapper.setState({ foundTarget: true });
+        const arrowElement = tourWrapper.find('.arrow');
+
+        expect(arrowElement.html());
+        expect(arrowElement.html()).toEqual(expect.stringContaining('calc(0% + 20px)'));    
+    });
+
+    test('arrow positioning for top/bottom placement and align left', () => {
+        tourWrapper = manyWhoMount('top', 'left');
+        tourWrapper.setState({ foundTarget: true });
+        const arrowElement = tourWrapper.find('.arrow');
+
+        expect(arrowElement.html());
+        expect(arrowElement.html()).toEqual(expect.stringContaining('calc(0% + 20px)'));       
+    });
+
+    test('arrow positioning for top/bottom placement and align right', () => {
+        tourWrapper = manyWhoMount('bottom', 'right');
+        tourWrapper.setState({ foundTarget: true });
+        const arrowElement = tourWrapper.find('.arrow');
+
+        expect(arrowElement.html());
+        expect(arrowElement.html()).toEqual(expect.stringContaining('calc(100% - 20px)'));       
+    });
+
 });
