@@ -27,7 +27,14 @@ window.manywho = {
         getComponent: jest.fn()
     },
     utils: {
-        isNullOrWhitespace: jest.fn()
+        isNullOrWhitespace: jest.fn(),
+    },
+    tours: {
+        getTargetElement: jest.fn(() => {
+            return {
+                getBoundingClientRect: jest.fn()
+            }
+        }),
     }
 };
 
