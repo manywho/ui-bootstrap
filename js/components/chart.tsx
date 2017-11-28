@@ -98,7 +98,7 @@ const ChartComponent: React.SFC<IChartComponentProps> = (
             isLoading,
             isVisible: model.isVisible,
             objectData: objectDataList,
-            onClick: !isDesignTime ? this.onClick : null,
+            onClick: !isDesignTime ? onClick : null,
             width: model.width > 0 ? model.width : undefined,
             height: model.height > 0 ? model.height : undefined,
         };
@@ -125,6 +125,6 @@ const ChartComponent: React.SFC<IChartComponentProps> = (
 
 manywho.component.register(registeredComponents.CHART, ChartComponent);
 
-export const getChart = () : typeof ChartComponent => manywho.component.getByName(registeredComponents.CHART);
+export const getChart = () : typeof ChartComponent => manywho.component.getByName(registeredComponents.CHART) || ChartComponent;
 
 export default ChartComponent;

@@ -8,7 +8,7 @@ const Vertical: React.SFC<IComponentProps> = ({ id, children, flowKey }) => {
 
     const kids = manywho.model.getChildren(id, flowKey);
 
-    return <div className="clearfix">
+    return <div className="clearfix" id="vertical">
         {children || manywho.component.getChildComponents(kids, id, flowKey)}
     </div>;
 };

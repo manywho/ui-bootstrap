@@ -1,14 +1,14 @@
 import * as React from 'react';
 import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
-import IItemsComponentProps from '../interfaces/IItemsComponentProps';
+import IComponentProps from '../interfaces/IComponentProps';
 import { getChart } from './chart';
 
 declare var manywho: any;
 
-const ChartBar: React.SFC<IItemsComponentProps> = (props) => {
+const ChartBar: React.SFC<IComponentProps> = (props) => {
 
-    const { id, parentId, flowKey } = props;
+    const { id, flowKey } = props;
     const model = manywho.model.getComponent(id, flowKey);
     const Chart = getChart();
 
@@ -30,5 +30,7 @@ const ChartBar: React.SFC<IItemsComponentProps> = (props) => {
 };
 
 manywho.component.registerItems(registeredComponents.CHART_BAR, ChartBar);
+
+export const getChartBar = () : typeof ChartBar => manywho.component.getByName(registeredComponents.CHART_BAR) || ChartBar;
 
 export default ChartBar;

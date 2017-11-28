@@ -19,7 +19,7 @@ const Footer: React.SFC<IComponentProps> = ({ children, flowKey }) => {
         return <div className={className}>{children}</div>;
     }
 
-    return null;
+    return <noscript/>;
 };
 
 manywho.component.register(registeredComponents.FOOTER, Footer);

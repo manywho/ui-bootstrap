@@ -11,7 +11,7 @@ const Horizontal: React.SFC<IComponentProps> = ({ id, flowKey, children }) => {
 
     const childData = manywho.model.getChildren(id, flowKey);
 
-    return <div className="row clearfix">
+    return <div className="row clearfix" id="horizontal">
         {children || manywho.component.getChildComponents(childData, id, flowKey)}
     </div>;
 };
