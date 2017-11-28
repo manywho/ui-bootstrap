@@ -12,6 +12,8 @@ jest.mock('react-transition-group/CSSTransitionGroup', () => {
     };
 });
 
+jest.useFakeTimers();
+
 describe('Tour component behaviour', () => {
 
     let tourWrapper;
@@ -42,11 +44,21 @@ describe('Tour component behaviour', () => {
 
     const globalAny:any = global;
 
-    function manyWhoMount(placement = 'left', align = 'top', offset = 20, isDesignTime = false, isNullOrWhitespace = null) {
+    function manyWhoMount(
+        placement = 'left',
+        align = 'top',
+        offset = 20,
+        title = 'title',
+        next = true,
+        back = true,
+    ) {
 
         tour.steps[0].placement = placement;
         tour.steps[0].align = align;
         tour.steps[0].offset = offset;
+        tour.steps[0].title = title;
+        tour.steps[0].showNext = next;
+        tour.steps[0].showBack = back;
 
         globalAny.window.manywho.tours['next'] = jest.fn();
         globalAny.window.manywho.tours['previous'] = jest.fn();
@@ -69,7 +81,12 @@ describe('Tour component behaviour', () => {
         }),
 
         globalAny.window.manywho['utils'] = {
-            isNullOrWhitespace: jest.fn(),
+            isNullOrWhitespace: jest.fn((string) => {
+                if (string === null || string === undefined) {
+                    return true; 
+                }
+                return false;                 
+            }),
             isEqual: jest.fn((positionActual, position) => {
                 if (positionActual === position) {
                     return true;
@@ -109,6 +126,20 @@ describe('Tour component behaviour', () => {
         tourWrapper = manyWhoMount();
         tourWrapper.setState({ foundTarget: true });
         expect(globalAny.window.manywho.component.register).toHaveBeenCalled();
+    });
+
+    test('wait half a second before onInterval is called', () => {
+        const setIntervalspy = jest.spyOn(Tour.prototype, 'onInterval');
+        tourWrapper = manyWhoMount();
+        jest.runTimersToTime(500);
+        expect(setIntervalspy).toHaveBeenCalledWith(tourProps.stepIndex);
+    });
+
+    test('unmounting component clears setInterval', () => {
+        tourWrapper = manyWhoMount();
+        jest.runTimersToTime(500);
+        Tour.prototype.componentWillUnMount();
+        expect(clearInterval.mock.calls.length).toBe(1);
     });
 
     test('simulating clicking close button', () => {
@@ -193,6 +224,27 @@ describe('Tour component behaviour', () => {
 
         expect(arrowElement.html());
         expect(arrowElement.html()).toEqual(expect.stringContaining('calc(100% - 20px)'));       
+    });
+
+    test('for no popover title if title is null', () => {
+        tourWrapper = manyWhoMount('right', 'top', null, null);
+        tourWrapper.setState({ foundTarget: true });
+
+        expect(tourWrapper.find('.popover-title').exists()).toEqual(false);     
+    });
+
+    test('for no next button if showNext is false', () => {
+        tourWrapper = manyWhoMount('right', 'top', null, null, false, true);
+        tourWrapper.setState({ foundTarget: true });
+
+        expect(tourWrapper.find('.btn-primary').exists()).toEqual(false);     
+    });
+
+    test('for no back button if showBack is false', () => {
+        tourWrapper = manyWhoMount('right', 'top', null, null, true, false);
+        tourWrapper.setState({ foundTarget: true });
+
+        expect(tourWrapper.find('.btn-default').exists()).toEqual(false);     
     });
 
 });
