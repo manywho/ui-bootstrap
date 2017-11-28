@@ -65,6 +65,6 @@ class Wait extends React.Component<IWaitProps, null> {
 
 manywho.component.register(registeredComponents.WAIT, Wait);
 
-export const getWait = () : typeof Wait => manywho.component.getByName(registeredComponents.WAIT);
+export const getWait = () : typeof Wait => manywho.component.getByName(registeredComponents.WAIT) || Wait;
 
 export default Wait;

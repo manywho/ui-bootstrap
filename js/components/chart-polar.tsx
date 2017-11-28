@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
-import IItemsComponentProps from '../interfaces/IItemsComponentProps';
+import IComponentProps from '../interfaces/IComponentProps';
 import { getChart } from './chart';
 
 
 declare var manywho: any;
 
-const ChartPolar: React.SFC<IItemsComponentProps> = (props) => {
+const ChartPolar: React.SFC<IComponentProps> = (props) => {
 
     const Chart = getChart();
     const chartProps: any = $.extend({}, props, {

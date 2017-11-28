@@ -4,9 +4,9 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import Chart from '../js/components/chart';
-import ChartBar from '../js/components/chart-bar';
+import ChartLine from '../js/components/chart-line';
 
-describe('Chart Bar component behaviour', () => {
+describe('Chart Line component behaviour', () => {
 
     let componentWrapper;
     let propId;
@@ -34,7 +34,7 @@ describe('Chart Bar component behaviour', () => {
             getChildren: jest.fn(() => []),
         };
 
-        return shallow(<ChartBar flowKey={propFlowKey} id={propId} />);
+        return shallow(<ChartLine flowKey={propFlowKey} id={propId} />);
     }
 
     afterEach(() => {
@@ -49,7 +49,7 @@ describe('Chart Bar component behaviour', () => {
     test('Component gets registered', () => {
         componentWrapper = manyWhoMount();
         expect(globalAny.window.manywho.component.registerItems)
-        .toHaveBeenCalledWith('chart-bar', ChartBar); 
+        .toHaveBeenCalledWith('chart-line', ChartLine); 
     });
 
     test('Chart gets called with correct props', () => {
@@ -58,7 +58,7 @@ describe('Chart Bar component behaviour', () => {
             componentWrapper.find(Chart).props(),
         ).toEqual(
             expect.objectContaining({ 
-                type: 'bar' ,
+                type: 'line' ,
                 options: {
                     legend: {
                         display: true,

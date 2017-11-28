@@ -14,16 +14,22 @@ window.manywho = {
         getByName: jest.fn(),
         register: jest.fn(),
         registerItems: jest.fn(),
-        registerContainer: jest.fn()
+        registerContainer: jest.fn(),
+        getDisplayColumns: jest.fn(() => []),
     },
     log: {
         info: jest.fn(),
     },
     styling: {
-        registerContainer: jest.fn()
+        registerContainer: jest.fn(),
+        getClasses: jest.fn(),
     },
     model: {
-        getChildren: jest.fn(),
+        getChildren: jest.fn(() => []),
+        getComponent: jest.fn(),
+        getOutcomes: jest.fn(),
+    },
+    state: {
         getComponent: jest.fn()
     },
     utils: {

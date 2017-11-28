@@ -88,6 +88,6 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
 
 manywho.component.register(registeredComponents.ITEMS_HEADER, ItemsHeader);
 
-export const getItemsHeader = () : typeof ItemsHeader => manywho.component.getByName(registeredComponents.ITEMS_HEADER);
+export const getItemsHeader = () : typeof ItemsHeader => manywho.component.getByName(registeredComponents.ITEMS_HEADER) || ItemsHeader;
 
 export default ItemsHeader;

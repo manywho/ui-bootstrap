@@ -1,12 +1,12 @@
 import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
-import IItemsComponentProps from '../interfaces/IItemsComponentProps';
+import IChartComponentProps from '../interfaces/IChartComponentProps';
 import { getChartBase } from './chart-base';
 import { getWait } from './wait';
 
 declare var manywho: any;
 
-const ChartContainer: React.SFC<IItemsComponentProps> = ({ id, flowKey, isDesignTime }) => {
+const ChartContainer: React.SFC<IChartComponentProps> = ({ id, flowKey, isDesignTime }) => {
 
     const onClick = (externalId, index) => {
         const children = manywho.model.getChildren(id, flowKey);
@@ -144,6 +144,6 @@ const ChartContainer: React.SFC<IItemsComponentProps> = ({ id, flowKey, isDesign
 
 manywho.component.registerContainer(registeredComponents.CHART_CONTAINER, ChartContainer);
 
-export const getChartContainer = () : typeof ChartContainer => manywho.component.getByName(registeredComponents.CHART_CONTAINER);
+export const getChartContainer = () : typeof ChartContainer => manywho.component.getByName(registeredComponents.CHART_CONTAINER) || ChartContainer;
 
 export default ChartContainer;
