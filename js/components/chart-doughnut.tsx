@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
-import IItemsComponentProps from '../interfaces/IItemsComponentProps';
+import IComponentProps from '../interfaces/IComponentProps';
 import { getChart } from './chart';
 
 
 declare var manywho: any;
 
-const ChartDoughnut: React.SFC<IItemsComponentProps> = (props) => {
+const ChartDoughnut: React.SFC<IComponentProps> = (props) => {
 
     const Chart = getChart();
 
@@ -20,6 +20,6 @@ const ChartDoughnut: React.SFC<IItemsComponentProps> = (props) => {
 
 manywho.component.registerItems(registeredComponents.CHART_DOUGHNUT, ChartDoughnut);
 
-export const getChartDoughnut = () : typeof ChartDoughnut => manywho.component.getByName(registeredComponents.CHART_DOUGHNUT);
+export const getChartDoughnut = () : typeof ChartDoughnut => manywho.component.getByName(registeredComponents.CHART_DOUGHNUT) || ChartDoughnut;
 
 export default ChartDoughnut;

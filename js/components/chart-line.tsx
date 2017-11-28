@@ -1,12 +1,12 @@
 import * as React from 'react';
 import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
-import IItemsComponentProps from '../interfaces/IItemsComponentProps';
+import IComponentProps from '../interfaces/IComponentProps';
 import { getChart } from './chart';
 
 declare var manywho: any;
 
-const ChartLine: React.SFC<IItemsComponentProps> = (props) => {
+const ChartLine: React.SFC<IComponentProps> = (props) => {
 
     const Chart = getChart();
     const model = manywho.model.getComponent(props.id, props.flowKey);

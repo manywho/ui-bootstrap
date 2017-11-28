@@ -181,6 +181,6 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
 
 manywho.component.register(registeredComponents.CHART_BASE, ChartBase);
 
-export const getChartBase = () : typeof ChartBase => manywho.component.getByName(registeredComponents.CHART_BASE);
+export const getChartBase = () : typeof ChartBase => manywho.component.getByName(registeredComponents.CHART_BASE) || ChartBase;
 
 export default ChartBase;

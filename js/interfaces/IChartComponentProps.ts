@@ -1,8 +1,14 @@
-import IItemsComponentProps from './IItemsComponentProps';
+import IComponentProps from './IComponentProps';
 
-interface IChartComponentProps extends IItemsComponentProps {
+interface IChartComponentProps extends IComponentProps {
     type: string;
     options: any;
+    outcomes: any[];
+    contentElement: JSX.Element;
+    objectData: any[];
+    isLoading: boolean;
+    onOutcome: Function;
+    refresh: (event: React.SyntheticEvent<HTMLElement>) => void;
 }
 
 export default IChartComponentProps;
