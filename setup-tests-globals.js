@@ -14,7 +14,7 @@ window.manywho = {
         getByName: jest.fn(),
         register: jest.fn(),
         registerItems: jest.fn(),
-        registerContainer: jest.fn(),
+        registerContainer: jest.fn()
     },
     log: {
         info: jest.fn(),

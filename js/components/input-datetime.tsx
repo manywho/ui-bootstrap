@@ -155,6 +155,6 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
 
 manywho.component.register(registeredComponents.INPUT_DATETIME, InputDateTime);
 
-export const getInputDateTime = () : typeof InputDateTime => manywho.component.getByName(registeredComponents.INPUT_DATETIME);
+export const getInputDateTime = () : typeof InputDateTime => manywho.component.getByName(registeredComponents.INPUT_DATETIME) || InputDateTime;
 
 export default InputDateTime;

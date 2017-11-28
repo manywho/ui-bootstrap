@@ -44,6 +44,6 @@ const InputBoolean: React.SFC<IInputBooleanProps> = (
 
 manywho.component.register(registeredComponents.INPUT_BOOLEAN, InputBoolean);
 
-export const getInputBoolean = () : typeof InputBoolean => manywho.component.getByName(registeredComponents.INPUT_BOOLEAN);
+export const getInputBoolean = () : typeof InputBoolean => manywho.component.getByName(registeredComponents.INPUT_BOOLEAN) || InputBoolean;
 
 export default InputBoolean;
