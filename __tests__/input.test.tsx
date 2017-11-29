@@ -76,6 +76,7 @@ describe('Input component behaviour', () => {
             number: jest.fn(),
         },
         globalAny.window.manywho.component['contentTypes'] = contentTypes,
+        globalAny.window.manywho.component['handleEvent'] = jest.fn(),
         globalAny.window.manywho['utils'] = {
             isNullOrWhitespace: jest.fn(() => isNullOrWhitespace),
             isNullOrUndefined: jest.fn(),
@@ -94,12 +95,12 @@ describe('Input component behaviour', () => {
         inputWrapper.unmount();
     });
 
-    test('Image component renders without crashing', () => {
+    test('Input component renders without crashing', () => {
         inputWrapper = manyWhoMount();
         expect(inputWrapper.length).toEqual(1);
     });
 
-    test('Image props are set', () => {
+    test('Input props are set', () => {
         inputWrapper = manyWhoMount();
         expect(inputWrapper.props().id).toEqual(propID);
         expect(inputWrapper.props().parentId).toEqual(propparentId);
@@ -145,8 +146,19 @@ describe('Input component behaviour', () => {
     test('on text input that onChange is triggered', () => {
         const onchangeSpy = jest.spyOn(Input.prototype, 'onChange');
         inputWrapper = manyWhoMount();
-        inputWrapper.find('input').simulate('change', { value: 'a' });
+        inputWrapper.find('input').simulate('change', { target: { value: 'text' } });
         expect(onchangeSpy).toHaveBeenCalled();
+        expect(globalAny.window.manywho.state.getComponent).toHaveBeenCalled();
+        expect(globalAny.window.manywho.validation.validate).toHaveBeenCalled();
+        expect(globalAny.window.manywho.state.setComponent).toHaveBeenCalledTimes(2);
+    });
+
+    test('on input blur that onBlur is triggered', () => {
+        const onblurSpy = jest.spyOn(Input.prototype, 'onBlur');
+        inputWrapper = manyWhoMount();
+        inputWrapper.find('input').simulate('blur');
+        expect(onblurSpy).toHaveBeenCalled();
+        expect(globalAny.window.manywho.component.handleEvent).toHaveBeenCalled();
     });
 
 });
