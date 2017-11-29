@@ -114,6 +114,6 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
 
 manywho.component.register(registeredComponents.INPUT_NUMBER, InputNumber);
 
-export const getInputNumber = () : typeof InputNumber => manywho.component.getByName(registeredComponents.INPUT_NUMBER);
+export const getInputNumber = () : typeof InputNumber => manywho.component.getByName(registeredComponents.INPUT_NUMBER) || InputNumber;
 
 export default InputNumber;

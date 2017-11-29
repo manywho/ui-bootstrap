@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as $ from 'jquery';
+import * as MaskedInput from '../lib/140-react-maskedinput';
+
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getInputDateTime } from './input-datetime';
@@ -12,7 +14,6 @@ import '../../css/input.less';
 import { precompile } from 'handlebars';
 
 declare var manywho: any;
-declare var MaskedInput: any;
 
 interface IInputState {
 
