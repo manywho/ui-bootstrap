@@ -49,6 +49,9 @@ window.manywho = {
     },
     settings: {
         global: jest.fn(),
-    }
+    },
+    social: {
+        getStream: jest.fn(),
+    },
 };
 
