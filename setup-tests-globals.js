@@ -31,9 +31,11 @@ window.manywho = {
         getOutcomes: jest.fn(),
     },
     state: {
-        getComponent: jest.fn()
+        getComponent: jest.fn(),
+        getComponents: jest.fn(() => ({})),
     },
     utils: {
+        convertToArray: jest.fn(() => []),
         isNullOrWhitespace: jest.fn(),
         isEqual: jest.fn(),
         guid: jest.fn(() => 'xxx'),
@@ -47,6 +49,9 @@ window.manywho = {
     },
     settings: {
         global: jest.fn(),
-    }
+    },
+    social: {
+        getStream: jest.fn(),
+    },
 };
 

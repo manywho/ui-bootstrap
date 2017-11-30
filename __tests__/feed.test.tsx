@@ -3,17 +3,23 @@ import testUtils from '../test-utils';
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import Content from '../js/components/content';
+import Feed from '../js/components/feed';
 
-describe('Content component behaviour', () => {
+jest.mock('jquery', () => {
+    return () => ({
+        textcomplete: () => {},
+    });
+});
+
+describe('Feed component behaviour', () => {
 
     let componentWrapper;
 
     const globalAny:any = global;
 
-    function manyWhoMount(label = null) {
+    function manyWhoMount() {
 
-        return shallow(<Content />);
+        return shallow(<Feed />);
     }
 
     afterEach(() => {
@@ -28,7 +34,7 @@ describe('Content component behaviour', () => {
     test('Component gets registered', () => {
         componentWrapper = manyWhoMount();
         expect(globalAny.window.manywho.component.register)
-        .toHaveBeenCalledWith('content', Content); 
+        .toHaveBeenCalledWith('feed', Feed); 
     });
 
 });
