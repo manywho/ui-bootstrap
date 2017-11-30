@@ -1,7 +1,7 @@
 import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
-import outcome from './outcome';
+import { getOutcome } from './outcome';
 import '../../css/containers.less';
 
 
@@ -145,7 +145,7 @@ class Container extends React.Component<IComponentProps, IContainerState> {
         const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
         
-        const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME); 
+        const Outcome = getOutcome(); 
         
         const outcomeButtons = outcomes && outcomes.map((outcome) => {
             return <Outcome id={outcome.id} flowKey={this.props.flowKey} key={outcome.id} />;
@@ -216,6 +216,6 @@ class Container extends React.Component<IComponentProps, IContainerState> {
 
 manywho.component.register(registeredComponents.CONTAINER, Container);
 
-export const getContainer = () : typeof Container => manywho.component.getByName(registeredComponents.CONTAINER);
+export const getContainer = () : typeof Container => manywho.component.getByName(registeredComponents.CONTAINER) || Container;
 
 export default Container;

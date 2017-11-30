@@ -213,6 +213,6 @@ class Outcome extends React.Component<IOutcomeProps, null> {
 
 manywho.component.register(registeredComponents.OUTCOME, Outcome);
 
-export const getOutcome = () : typeof Outcome => manywho.component.getByName(registeredComponents.OUTCOME);
+export const getOutcome = () : typeof Outcome => manywho.component.getByName(registeredComponents.OUTCOME) || Outcome;
 
 export default Outcome;

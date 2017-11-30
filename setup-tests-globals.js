@@ -22,11 +22,12 @@ window.manywho = {
     },
     styling: {
         registerContainer: jest.fn(),
-        getClasses: jest.fn(),
+        getClasses: jest.fn(() => []),
     },
     model: {
         getChildren: jest.fn(() => []),
         getComponent: jest.fn(),
+        getContainer: jest.fn(() => ({})),
         getOutcomes: jest.fn(),
     },
     state: {
@@ -34,6 +35,7 @@ window.manywho = {
     },
     utils: {
         isNullOrWhitespace: jest.fn(),
+        isEqual: jest.fn(),
     },
     tours: {
         getTargetElement: jest.fn(() => {
@@ -41,6 +43,9 @@ window.manywho = {
                 getBoundingClientRect: jest.fn()
             }
         }),
+    },
+    settings: {
+        global: jest.fn(),
     }
 };
 
