@@ -37,6 +37,7 @@ window.manywho = {
     utils: {
         convertToArray: jest.fn(() => []),
         isNullOrWhitespace: jest.fn(),
+        isNullOrUndefined: jest.fn(() => true),
         isEqual: jest.fn(),
         guid: jest.fn(() => 'xxx'),
     },
