@@ -3,9 +3,9 @@ import testUtils from '../test-utils';
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import Content from '../js/components/content';
+import Debug from '../js/components/debug';
 
-describe('Content component behaviour', () => {
+describe('Debug component behaviour', () => {
 
     let componentWrapper;
 
@@ -13,7 +13,13 @@ describe('Content component behaviour', () => {
 
     function manyWhoMount(label = null) {
 
-        return shallow(<Content />);
+        globalAny.window.manywho.settings.isDebugEnabled = () => true;
+        globalAny.window.manywho.model.getRootFaults = () => [];
+        globalAny.window.manywho.model.getPreCommitStateValues = () => [];
+        globalAny.window.manywho.model.getStateValues = () => [];
+        globalAny.window.manywho.model.getExecutionLog = () => ({});
+
+        return shallow(<Debug />);
     }
 
     afterEach(() => {
@@ -28,7 +34,7 @@ describe('Content component behaviour', () => {
     test('Component gets registered', () => {
         componentWrapper = manyWhoMount();
         expect(globalAny.window.manywho.component.register)
-        .toHaveBeenCalledWith('content', Content); 
+        .toHaveBeenCalledWith('debug', Debug); 
     });
 
 });
