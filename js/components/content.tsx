@@ -344,6 +344,6 @@ class Content extends React.Component<IComponentProps, IContentState> {
 
 manywho.component.register(registeredComponents.CONTENT, Content);
 
-export const getContent = () : typeof Content => manywho.component.getByName(registeredComponents.CONTENT);
+export const getContent = () : typeof Content => manywho.component.getByName(registeredComponents.CONTENT) || Content;
 
 export default Content;

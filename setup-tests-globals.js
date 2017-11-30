@@ -26,7 +26,7 @@ window.manywho = {
     },
     model: {
         getChildren: jest.fn(() => []),
-        getComponent: jest.fn(),
+        getComponent: jest.fn(() => ({})),
         getContainer: jest.fn(() => ({})),
         getOutcomes: jest.fn(),
     },
@@ -36,6 +36,7 @@ window.manywho = {
     utils: {
         isNullOrWhitespace: jest.fn(),
         isEqual: jest.fn(),
+        guid: jest.fn(() => 'xxx'),
     },
     tours: {
         getTargetElement: jest.fn(() => {
