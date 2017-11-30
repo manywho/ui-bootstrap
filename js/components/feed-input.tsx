@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
 import IFeedInputProps from '../interfaces/IFeedInputProps';
@@ -65,7 +66,7 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
 
         const textarea = (this.refs.textarea as any);
 
-        $(textarea.getDOMNode()).textcomplete(
+        $(ReactDOM.findDOMNode(textarea)).textcomplete(
             [{
                 match: /@([A-Za-z]{2,})$/,
                 index: 1,
@@ -135,6 +136,6 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
 
 manywho.component.register(registeredComponents.FEED_INPUT, FeedInput);
 
-export const getFeedInput = () : typeof FeedInput => manywho.component.getByName(registeredComponents.FEED_INPUT);
+export const getFeedInput = () : typeof FeedInput => manywho.component.getByName(registeredComponents.FEED_INPUT) || FeedInput;
 
 export default FeedInput;
