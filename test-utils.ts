@@ -8,6 +8,7 @@ export const f = () => false;
 export const obj = () => {};
 export const arr = () => [];
 export const noop = () => {};
+export const str = () => 'xxx';
 
 export default {
 

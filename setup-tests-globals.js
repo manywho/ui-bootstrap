@@ -25,6 +25,11 @@ window.manywho = {
         registerContainer: jest.fn(),
         getDisplayColumns: jest.fn(arr),
         focusInput: jest.fn(),
+        mixins: {
+            enterKeyHandler: {
+                onEnter: jest.fn(),
+            }
+        },
     },
     log: {
         info: jest.fn(),
@@ -45,6 +50,7 @@ window.manywho = {
         getOutcomes: jest.fn(),
         getModal: jest.fn(),
         getLabel: jest.fn(),
+        getNavigation: jest.fn(),
         getHistory: jest.fn(arr),
     },
     state: {
@@ -56,7 +62,9 @@ window.manywho = {
         convertToArray: jest.fn(arr),
         isNullOrWhitespace: jest.fn(),
         isNullOrUndefined: jest.fn(t),
+        isNullOrEmpty: jest.fn(t),
         isEqual: jest.fn(),
+        extractElement: jest.fn(),
         removeLoadingIndicator: jest.fn(),
         guid: jest.fn(str),
     },
