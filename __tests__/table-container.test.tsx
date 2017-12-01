@@ -24,7 +24,7 @@ describe('Table component behaviour', () => {
         sortedIsAscending: true,
         onOutcome: jest.fn(),
         selectAll: jest.fn(),
-        contentElement: 'string',
+        contentElement: null,
         isLoading: true,
         onSearch: jest.fn(),
         refresh: jest.fn(),
@@ -45,6 +45,9 @@ describe('Table component behaviour', () => {
         globalAny.window.manywho.model.getOutcomes = jest.fn(() => {
             return [];
         });
+        globalAny.window.manywho.component.getByName = jest.fn(() => {
+            return 'div';
+        });
         return mount(<Table {...props} />);
     }
 
@@ -59,6 +62,6 @@ describe('Table component behaviour', () => {
 
     test('Table component gets registered', () => {
         tableWrapper = manyWhoMount();
-        expect(globalAny.window.manywho.component.register).toHaveBeenCalled();
+        expect(globalAny.window.manywho.component.registerItems).toHaveBeenCalledTimes(2);
     });
 });

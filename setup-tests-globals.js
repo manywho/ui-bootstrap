@@ -12,7 +12,9 @@ window.manywho = {
     component: {
         getChildComponents: jest.fn(),
         getByName: jest.fn(),
-        register: jest.fn(),
+        register: jest.fn(() => {
+            return true;
+        }),
         registerItems: jest.fn(),
         registerContainer: jest.fn(),
         getDisplayColumns: jest.fn(() => []),
