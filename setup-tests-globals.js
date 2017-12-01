@@ -72,6 +72,7 @@ window.manywho = {
         extractElement: jest.fn(),
         removeLoadingIndicator: jest.fn(),
         guid: jest.fn(str),
+        extend: jest.fn(),
     },
     tours: {
         getTargetElement: jest.fn(() => {
