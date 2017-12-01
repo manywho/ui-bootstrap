@@ -190,6 +190,6 @@ class Feed extends React.Component<IComponentProps, null> {
 
 manywho.component.register(registeredComponents.FEED, Feed);
 
-export const getFeed = () : typeof Feed => manywho.component.getByName(registeredComponents.FEED);
+export const getFeed = () : typeof Feed => manywho.component.getByName(registeredComponents.FEED) || Feed;
 
 export default Feed;

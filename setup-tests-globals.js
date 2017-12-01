@@ -4,6 +4,13 @@
  * mock objects to the global namespace that
  * the Tooling expects to be there.
  */
+
+const t = () => true;
+const f = () => false;
+const obj = () => ({});
+const arr = () => [];
+const noop = () => {};
+const str = () => 'xxx';
  
 // The global ManyWho object
 window.manywho = {
@@ -12,37 +19,60 @@ window.manywho = {
     component: {
         getChildComponents: jest.fn(),
         getByName: jest.fn(),
-        register: jest.fn(() => {
-            return true;
-        }),
+        getOutcomes: jest.fn(),
+        register: jest.fn(),
         registerItems: jest.fn(),
         registerContainer: jest.fn(),
-        getDisplayColumns: jest.fn(() => []),
+        getDisplayColumns: jest.fn(arr),
+        focusInput: jest.fn(),
+        mixins: {
+            enterKeyHandler: {
+                onEnter: jest.fn(),
+            }
+        },
     },
     log: {
         info: jest.fn(),
     },
     styling: {
         registerContainer: jest.fn(),
-        getClasses: jest.fn(() => []),
+        getClasses: jest.fn(arr),
     },
     model: {
-        getChildren: jest.fn(() => []),
-        getComponent: jest.fn(() => ({})),
-        getContainer: jest.fn(() => ({})),
+        getChildren: jest.fn(arr),
+        getComponent: jest.fn(obj),
+        getContainer: jest.fn(() => ({
+            containerType: 'xxx',
+        })),
+        getAttributes: jest.fn(obj),
+        getDefaultNavigationId: jest.fn(str),
+        getInvokeType: jest.fn(str),
         getOutcomes: jest.fn(),
+        getModal: jest.fn(),
+        getLabel: jest.fn(),
+        getNavigation: jest.fn(),
+        getOutcome: jest.fn(() => ({
+            attributes: {},
+            pageActionType: 'xxx',
+        })),
+        getNotifications: jest.fn(arr),
+        getHistory: jest.fn(arr),
     },
     state: {
         getComponent: jest.fn(),
-        getComponents: jest.fn(() => ({})),
-        setComponent: jest.fn(() => ({})),
+        setComponent: jest.fn(obj),
+        getComponents: jest.fn(obj),
     },
     utils: {
-        convertToArray: jest.fn(() => []),
+        convertToArray: jest.fn(arr),
         isNullOrWhitespace: jest.fn(),
-        isNullOrUndefined: jest.fn(() => true),
+        isNullOrUndefined: jest.fn(t),
+        isNullOrEmpty: jest.fn(t),
         isEqual: jest.fn(),
-        guid: jest.fn(() => 'xxx'),
+        extractElement: jest.fn(),
+        removeLoadingIndicator: jest.fn(),
+        guid: jest.fn(str),
+        extend: jest.fn(),
     },
     tours: {
         getTargetElement: jest.fn(() => {
@@ -52,13 +82,14 @@ window.manywho = {
         }),
     },
     settings: {
-        global: jest.fn(),
+        global: jest.fn(arr),
+        isDebugEnabled: jest.fn(f),
     },
     social: {
         getStream: jest.fn(),
     },
     formatting: {
-        toMomentFormat: jest.fn(() => 'xxx'),
+        toMomentFormat: jest.fn(str),
     }
 };
 

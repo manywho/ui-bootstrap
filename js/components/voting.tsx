@@ -31,6 +31,6 @@ class Voting extends React.Component<IComponentProps, null> {
 
 manywho.component.register(registeredComponents.VOTING, Voting);
 
-export const getVoting = () : typeof Voting => manywho.component.getByName(registeredComponents.VOTING);
+export const getVoting = () : typeof Voting => manywho.component.getByName(registeredComponents.VOTING) || Voting;
 
 export default Voting;

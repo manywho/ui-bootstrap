@@ -200,6 +200,6 @@ class Navigation extends React.Component<INavigationProps, null> {
 
 manywho.component.register(registeredComponents.NAVIGATION, Navigation);
 
-export const getNavigation = () : typeof Navigation => manywho.component.getByName(registeredComponents.NAVIGATION);
+export const getNavigation = () : typeof Navigation => manywho.component.getByName(registeredComponents.NAVIGATION) || Navigation;
 
 export default Navigation;

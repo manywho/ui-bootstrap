@@ -46,6 +46,6 @@ class Status extends React.Component<IComponentProps, null> {
 
 manywho.component.register(registeredComponents.STATUS, Status);
 
-export const getStatus = () : typeof Status => manywho.component.getByName(registeredComponents.STATUS);
+export const getStatus = () : typeof Status => manywho.component.getByName(registeredComponents.STATUS) || Status;
 
 export default Status;

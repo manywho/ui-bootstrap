@@ -24,6 +24,6 @@ const Footer: React.SFC<IComponentProps> = ({ children, flowKey }) => {
 
 manywho.component.register(registeredComponents.FOOTER, Footer);
 
-export const getFooter = () : typeof Footer => manywho.component.getByName(registeredComponents.FOOTER);
+export const getFooter = () : typeof Footer => manywho.component.getByName(registeredComponents.FOOTER) || Footer;
 
 export default Footer;

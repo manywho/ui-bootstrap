@@ -32,6 +32,6 @@ const Notifications: React.SFC<INotificationsProps> = ({ flowKey, position }) =>
 
 manywho.component.register(registeredComponents.NOTIFICATIONS, Notifications);
 
-export const getNotifications = () : typeof Notifications => manywho.component.getByName(registeredComponents.NOTIFICATIONS);
+export const getNotifications = () : typeof Notifications => manywho.component.getByName(registeredComponents.NOTIFICATIONS) || Notifications;
 
 export default Notifications;
