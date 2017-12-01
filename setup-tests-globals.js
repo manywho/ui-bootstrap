@@ -33,6 +33,7 @@ window.manywho = {
     state: {
         getComponent: jest.fn(),
         getComponents: jest.fn(() => ({})),
+        setComponent: jest.fn(() => ({})),
     },
     utils: {
         convertToArray: jest.fn(() => []),
@@ -54,5 +55,8 @@ window.manywho = {
     social: {
         getStream: jest.fn(),
     },
+    formatting: {
+        toMomentFormat: jest.fn(() => 'xxx'),
+    }
 };
 
