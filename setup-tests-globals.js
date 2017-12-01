@@ -51,6 +51,11 @@ window.manywho = {
         getModal: jest.fn(),
         getLabel: jest.fn(),
         getNavigation: jest.fn(),
+        getOutcome: jest.fn(() => ({
+            attributes: {},
+            pageActionType: 'xxx',
+        })),
+        getNotifications: jest.fn(arr),
         getHistory: jest.fn(arr),
     },
     state: {
