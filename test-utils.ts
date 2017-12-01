@@ -3,6 +3,12 @@
  * used when writing Jest tests.
  */
 
+export const t = () => true;
+export const f = () => false;
+export const obj = () => {};
+export const arr = () => [];
+export const noop = () => {};
+
 export default {
 
     generateRandomString:(length) => {
@@ -16,6 +22,6 @@ export default {
 
     generateRandomInteger:(min, max) => {
         return Math.ceil(Math.random() * (max - min) + min);
-    }
+    },
     
-}
+};

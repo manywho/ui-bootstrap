@@ -304,6 +304,6 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
 
 manywho.component.register(registeredComponents.DEBUG, DebugViewer);
 
-export const getDebugViewer = () : typeof DebugViewer => manywho.component.getByName(registeredComponents.DEBUG);
+export const getDebugViewer = () : typeof DebugViewer => manywho.component.getByName(registeredComponents.DEBUG) || DebugViewer;
 
 export default DebugViewer;

@@ -85,6 +85,6 @@ class History extends React.Component<IComponentProps, null> {
 
 manywho.component.register(registeredComponents.HISTORY, History);
 
-export const getHistory = () : typeof History => manywho.component.getByName(registeredComponents.HISTORY);
+export const getHistory = () : typeof History => manywho.component.getByName(registeredComponents.HISTORY) || History;
 
 export default History;
