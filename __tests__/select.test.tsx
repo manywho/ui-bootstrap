@@ -2,7 +2,7 @@ import testUtils from '../test-utils';
 
 import * as React from 'react';
 
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 
 import Select from '../js/components/select';
 
@@ -13,7 +13,11 @@ const classTwo = testUtils.generateRandomString(5);
 globalAny.reactSelectize = {
     SimpleSelect: React.createClass({
         render: () => {
-            return <div></div>;
+            return (
+                <div>
+                    <div className="dropdown-menu"></div>
+                </div>
+            );
         },
     },
 });
@@ -35,7 +39,7 @@ describe('Select input component behaviour', () => {
     model = {};
     state = {};
 
-    function manyWhoMount(isDesignTime = false, objectData = [], isLoading = false) {
+    function manyWhoMount(isDesignTime = false, objectData = [], isLoading = false, isShallow = true) {
 
         props = {
             isDesignTime,
@@ -63,7 +67,9 @@ describe('Select input component behaviour', () => {
             sortedIsAscending: 'string',
         };
         globalAny.window.manywho['utils'] = {
-            debounce: jest.fn(),
+            debounce: jest.fn(() => {
+                return jest.fn();
+            }),
             isNullOrWhitespace: jest.fn(),
             isEqual: jest.fn((value1, value2, ignoreCase) => {
                 return true;
@@ -84,12 +90,16 @@ describe('Select input component behaviour', () => {
                 return value;
             }),
         };
-        return shallow(<Select {...props} />, { disableLifecycleMethods: true });
+        if (isShallow)
+            return shallow(<Select {...props} />, { disableLifecycleMethods: true });
+
+        return mount(<Select {...props} />);
     }
 
     afterEach(() => {
         model = {};
         state = {};
+        columns = [];
         selectWrapper.unmount();
     });
 
@@ -228,6 +238,81 @@ describe('Select input component behaviour', () => {
         const selectInstance = selectWrapper.instance();
         selectInstance.onValuesChange([]);
         expect(props.clearSelection).toHaveBeenCalled();
+    });
+
+    test('onValueChange method invokes select method and sets state', () => {
+        selectWrapper = manyWhoMount();
+        const selectInstance = selectWrapper.instance();
+        selectInstance.onValueChange({ label: testUtils.generateRandomString(10), value: { foo: 'bar' } });
+        expect(props.select).toHaveBeenCalled();
+    });
+
+    test('onValueChange method invokes select method when no option is passed and sets state', () => {
+        selectWrapper = manyWhoMount();
+        const selectInstance = selectWrapper.instance();
+        selectInstance.onValuesChange([]);
+        expect(props.clearSelection).toHaveBeenCalled();
+    });
+
+    test('search string updates component state', () => {
+        const searchString = testUtils.generateRandomString(10);
+        selectWrapper = manyWhoMount();
+        const selectInstance = selectWrapper.instance();
+        selectInstance.onSearchChange(searchString);
+        expect(selectWrapper.state().search).toEqual(searchString);
+    });
+
+    test('open state changes when component is loading', () => {
+        const isOpen = false;
+        selectWrapper = manyWhoMount();
+        const selectInstance = selectWrapper.instance();
+        selectInstance.onOpenChange(isOpen);
+        expect(selectWrapper.state().isOpen).toEqual(false);
+    });
+
+    test('open state changes when component is loading', () => {
+        const isOpen = false;
+        selectWrapper = manyWhoMount();
+        const selectInstance = selectWrapper.instance();
+        selectInstance.onOpenChange(isOpen);
+        expect(selectWrapper.state().isOpen).toEqual(false);
+    });
+
+    test('open state changes when component focus event is triggered', () => {
+        selectWrapper = manyWhoMount();
+        const selectInstance = selectWrapper.instance();
+
+        // We need to prototype this lifecycle method
+        // as Enzyme does not like ReactDOM.findDOMNode
+        selectInstance.componentDidUpdate = jest.fn();
+        selectInstance.onFocus();
+        expect(selectWrapper.state().isOpen).toEqual(true);
+    });
+
+    test('open state changes when component blur event is triggered', () => {
+        selectWrapper = manyWhoMount();
+        const selectInstance = selectWrapper.instance();
+        selectInstance.onBlur();
+        expect(selectWrapper.state().isOpen).toEqual(false);
+    });
+
+    test('is on page 1 select options get generated', () => {
+        columns = [
+            { typeElementPropertyId: 'test' },
+        ];
+        selectWrapper = manyWhoMount(false, [], true, false);
+        const objData = [
+            { properties: [
+                {
+                    contentValue:'test',
+                    typeElementPropertyId: 'test',
+                    contentFormat: null,
+                    contentType: 'ContentString',
+                },
+            ] },
+        ];
+        selectWrapper.setProps({ isLoading:false, objectData:objData });
+        expect(selectWrapper.state().options.length).toEqual(1);
     });
     
 });
