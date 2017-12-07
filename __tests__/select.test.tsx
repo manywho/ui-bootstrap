@@ -7,6 +7,9 @@ import { shallow, mount } from 'enzyme';
 import Select from '../js/components/select';
 
 const globalAny:any = global;
+
+jest.useFakeTimers();
+
 const classOne = testUtils.generateRandomString(5);
 const classTwo = testUtils.generateRandomString(5);
 
@@ -226,11 +229,15 @@ describe('Select input component behaviour', () => {
     test('onValuesChange method invokes select method', () => {
         selectWrapper = manyWhoMount();
         const selectInstance = selectWrapper.instance();
+
+        const key = testUtils.generateRandomString(10);
+        const value = testUtils.generateRandomString(10);
+
         const options = [
-            { label: testUtils.generateRandomString(10), value: { foo: 'bar' } },
+            { label: testUtils.generateRandomString(10), value: { key: value } },
         ];
         selectInstance.onValuesChange(options);
-        expect(props.select).toHaveBeenCalledWith({ foo: 'bar' });
+        expect(props.select).toHaveBeenCalledWith({ key: value });
     });
 
     test('onValuesChange method invokes clearSelection method when no options are passed', () => {
@@ -243,7 +250,11 @@ describe('Select input component behaviour', () => {
     test('onValueChange method invokes select method and sets state', () => {
         selectWrapper = manyWhoMount();
         const selectInstance = selectWrapper.instance();
-        selectInstance.onValueChange({ label: testUtils.generateRandomString(10), value: { foo: 'bar' } });
+
+        const key = testUtils.generateRandomString(10);
+        const value = testUtils.generateRandomString(10);
+
+        selectInstance.onValueChange({ label: testUtils.generateRandomString(10), value: { key: value } });
         expect(props.select).toHaveBeenCalled();
     });
 
@@ -297,15 +308,17 @@ describe('Select input component behaviour', () => {
     });
 
     test('is on page 1 select options get generated', () => {
+        const typeElementPropertyId = testUtils.generateRandomString(10);
+
         columns = [
-            { typeElementPropertyId: 'test' },
+            { typeElementPropertyId },
         ];
         selectWrapper = manyWhoMount(false, [], true, false);
         const objData = [
             { properties: [
                 {
-                    contentValue:'test',
-                    typeElementPropertyId: 'test',
+                    typeElementPropertyId,
+                    contentValue: testUtils.generateRandomString(10),
                     contentFormat: null,
                     contentType: 'ContentString',
                 },
@@ -313,6 +326,80 @@ describe('Select input component behaviour', () => {
         ];
         selectWrapper.setProps({ isLoading:false, objectData:objData });
         expect(selectWrapper.state().options.length).toEqual(1);
+    });
+
+    test('on next page that additional options are appended to option state', () => {
+        const typeElementPropertyId = testUtils.generateRandomString(10);
+        const pageOneObjData = [
+            { properties: [
+                {
+                    typeElementPropertyId,
+                    contentValue:testUtils.generateRandomString(10),
+                    contentFormat: null,
+                    contentType: 'ContentString',
+                },
+            ] },
+        ];
+
+        const pageTwoObjData = [
+            { properties: [
+                {
+                    typeElementPropertyId,
+                    contentValue:testUtils.generateRandomString(10),
+                    contentFormat: null,
+                    contentType: 'ContentString',
+                },
+            ] },
+        ];
+
+        columns = [
+            { typeElementPropertyId },
+        ];
+
+        selectWrapper = manyWhoMount(false, [], true, false);
+        selectWrapper.setState({ options:pageOneObjData });
+
+        selectWrapper.setProps({ isLoading:false, objectData:pageTwoObjData, page:2 });
+        expect(selectWrapper.state().options.length).toEqual(2);
+        expect(selectWrapper.state().isOpen).toBeTruthy();
+    });
+
+    test('filterOptions always return options passed as argument', () => {
+        const options = [
+            {
+                value: {},
+                label: testUtils.generateRandomString(10),
+            },
+        ];
+        selectWrapper = manyWhoMount();
+        const selectWrapperInstance = selectWrapper.instance();
+        expect(selectWrapperInstance.filterOptions(options)).toEqual(options);
+    });
+
+    test('getUid always returns an external ID', () => {
+        const option = {
+            value: {
+                externalId: testUtils.generateRandomString(10),
+            },
+            label: testUtils.generateRandomString(10),
+        };
+        selectWrapper = manyWhoMount();
+        const selectWrapperInstance = selectWrapper.instance();
+        expect(selectWrapperInstance.getUid(option)).toEqual(option.value.externalId);
+    });
+
+    test('when isScrollLimit is called that onNext is then invoked', () => {
+        const event = {
+            target: {
+                offsetHeight: testUtils.generateRandomInteger(1, 10),
+                scrollTop: testUtils.generateRandomInteger(1, 10),
+                scrollHeight: testUtils.generateRandomInteger(1, 10),
+            },
+        };
+        selectWrapper = manyWhoMount();
+        const selectWrapperInstance = selectWrapper.instance();
+        selectWrapperInstance.isScrollLimit(event);
+        expect(props.onNext).toHaveBeenCalled();
     });
     
 });
