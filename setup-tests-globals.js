@@ -17,9 +17,12 @@ window.manywho = {
     adminTenantId: 'test',
     cdnUrl: '',
     component: {
+        handleEvent: jest.fn(),
         getChildComponents: jest.fn(),
         getByName: jest.fn(),
         getOutcomes: jest.fn(),
+        getSelectedRows: jest.fn(),
+        onOutcome: jest.fn(),
         register: jest.fn(),
         registerItems: jest.fn(),
         registerContainer: jest.fn(),
@@ -33,6 +36,7 @@ window.manywho = {
     },
     log: {
         info: jest.fn(),
+        error: jest.fn(),
     },
     styling: {
         registerContainer: jest.fn(),
@@ -84,12 +88,17 @@ window.manywho = {
     settings: {
         global: jest.fn(arr),
         isDebugEnabled: jest.fn(f),
+        flow: jest.fn(),
     },
     social: {
         getStream: jest.fn(),
     },
     formatting: {
         toMomentFormat: jest.fn(str),
+    },
+    engine: {
+        objectDataRequest: jest.fn(),
+        fileDataRequest: jest.fn(),
     }
 };
 
