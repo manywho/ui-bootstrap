@@ -88,13 +88,14 @@ window.manywho = {
     settings: {
         global: jest.fn(arr),
         isDebugEnabled: jest.fn(f),
-        flow: jest.fn(),
+        flow: jest.fn()
     },
     social: {
         getStream: jest.fn(),
     },
     formatting: {
         toMomentFormat: jest.fn(str),
+        format: jest.fn(),
     },
     engine: {
         objectDataRequest: jest.fn(),

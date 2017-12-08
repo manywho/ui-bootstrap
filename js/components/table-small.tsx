@@ -76,7 +76,7 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
     renderRows = (objectData, outcomes, displayColumns) => {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
-        return objectData.map(function (item) {
+        return objectData.map((item) => {
 
             const classNames = ['list-group-item', 'clearfix'];
             const isSelected = this.props.selectedRows.filter((row) => {
