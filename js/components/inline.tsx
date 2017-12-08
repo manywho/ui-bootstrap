@@ -22,6 +22,6 @@ manywho.styling.registerContainer('inline_flow', (item, container) => {
     return ['pull-left'];
 });
 
-export const getInline = () : typeof Inline => manywho.component.getByName(registeredComponents.INLINE);
+export const getInline = () : typeof Inline => manywho.component.getByName(registeredComponents.INLINE) || Inline;
 
 export default Inline;
