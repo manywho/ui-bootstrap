@@ -68,6 +68,79 @@ describe('ItemsHeader component behaviour', () => {
         expect(onSearch).toBeCalled();
     });
 
+    test('Search is not rendered when props.onSearch is false', () => {
+
+        componentWrapper = manyWhoMount({
+            isSearchable: false,
+        });
+
+        expect(componentWrapper.find('.mw-items-header-search').length).toBe(0);
+    });
+
+    test('Outcome section is not rendered when props.outcomes is null', () => {
+
+        componentWrapper = manyWhoMount({
+            outcomes: null,
+        });
+
+        expect(componentWrapper.find('.mw-items-header-outcomes').length).toBe(0);
+    });
+
+    test('Pressing enter calls props.onSearch', () => {
+        const onSearch = jest.fn();
+        const event = {
+            keyCode: 13,
+            stopPropagation: noop,
+        };
+
+        componentWrapper = manyWhoMount({
+            onSearch,
+            isSearchable: true,
+        });
+
+        componentWrapper.find('.mw-items-header-search .form-control').first().simulate('keyup', event);
+
+        expect(onSearch).toBeCalled();
+    });
+
+    test('Pressing non-enter keys in search does not call props.onSearch', () => {
+        const onSearch = jest.fn();
+        const event = {
+            keyCode: 1,
+            stopPropagation: noop,
+        };
+
+        componentWrapper = manyWhoMount({
+            onSearch,
+            isSearchable: true,
+        });
+
+        componentWrapper.find('.mw-items-header-search .form-control').first().simulate('keyup', event);
+
+        expect(onSearch).not.toBeCalled();
+    });
+
+    test('Changing search input value calls setState with new value', () => {
+        const setStateSpy = jest.spyOn(ItemsHeader.prototype, 'setState');
+        const newSearchText = 'abc';
+
+        const event = {
+            currentTarget: {
+                value: newSearchText,
+            },
+        };
+
+        componentWrapper = manyWhoMount({
+            isSearchable: true,
+        });
+
+        componentWrapper.find('.mw-items-header-search .form-control').first().simulate('change', event);
+
+        expect(setStateSpy).toBeCalledWith(expect.objectContaining({
+            search: newSearchText,
+        }));
+    });
+
     test('Clicking refresh button calls props.refresh', () => {
         const refresh = jest.fn();
 
@@ -91,5 +164,6 @@ describe('ItemsHeader component behaviour', () => {
 
         expect(componentWrapper.find(Outcome).length).toEqual(2);
     });
+
 
 });
