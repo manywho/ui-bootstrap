@@ -16,6 +16,7 @@ describe('Outcome component behaviour', () => {
             type = '',
             size = '',
             pageActionType = 'xxx',
+            pageActionBindingType = null,
             classes = '',
             addNoBackgroundClass = false,
             uri = null,
@@ -31,6 +32,7 @@ describe('Outcome component behaviour', () => {
         globalAny.window.manywho.model.getOutcome = () => {
             return {
                 pageActionType,
+                pageActionBindingType,
                 attributes: {
                     type,
                     size,
@@ -174,6 +176,19 @@ describe('Outcome component behaviour', () => {
         });
 
         expect(componentWrapper.find('.glyphicon').hasClass('glyphicon-log-in')).toBe(true);
+    });
+
+    test('glyphicon type is not rendered when pageActionType and pageActionBindingType are null', () => {
+
+        globalAny.window.manywho.utils.isNullOrWhitespace = x => x === null;
+
+        componentWrapper = manyWhoMount({
+            display: 'ICON',
+            pageActionType: null,
+            pageActionBindingType: null,
+        });
+
+        expect(componentWrapper.find('.glyphicon').first().props().className).toBe('glyphicon ');
     });
 
 });
