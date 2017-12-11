@@ -212,7 +212,7 @@ class TableInput extends React.Component<ITableInputProps, ITableInputState> {
         }
 
         props.type = this.getInputType(this.props.contentType);
-        return <input {...props}/>;
+        return <input id="myId" {...props}/>;
     }
 }
 
