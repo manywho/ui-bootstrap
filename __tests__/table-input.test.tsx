@@ -51,4 +51,25 @@ describe('Table input component behaviour', () => {
         tableInputWrapper = manyWhoMount();
         expect(globalAny.window.manywho.component.register).toHaveBeenCalled();
     });
+
+    test('isEmptyDate identifies empty date strings', () => {
+        tableInputWrapper = manyWhoMount();
+        const date = '0001-01-01';
+
+        expect(TableInput.prototype.isEmptyDate(date)).toBe(true);
+    });
+
+    test('isEmptyDate identifies null date', () => {
+        tableInputWrapper = manyWhoMount();
+        const date = null;
+
+        expect(TableInput.prototype.isEmptyDate(date)).toBe(true);
+    });
+    
+    test('isEmptyDate identifies valid date', () => {
+        tableInputWrapper = manyWhoMount();
+        const date = Date();
+
+        expect(TableInput.prototype.isEmptyDate(date)).toBe(false);
+    });
 });

@@ -179,7 +179,6 @@ class TableInput extends React.Component<ITableInputProps, ITableInputState> {
             onKeyUp: this.onKeyUp,
             value: this.state.value,
             onFocus: this.onFocus,
-            ref: 'input',
         };
 
         if (
@@ -209,11 +208,11 @@ class TableInput extends React.Component<ITableInputProps, ITableInputState> {
             )
         ) {
             props.rows = 1;
-            return React.DOM.textarea(props);
+            return <textarea {...props} />;
         }
 
         props.type = this.getInputType(this.props.contentType);
-        return React.DOM.input(props);
+        return <input {...props}/>;
     }
 }
 
