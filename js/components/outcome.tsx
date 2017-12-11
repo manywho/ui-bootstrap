@@ -91,7 +91,7 @@ function getIcon(model) {
 
     }
 
-    return null;
+    return '';
 }
 
 class Outcome extends React.Component<IOutcomeProps, null> {

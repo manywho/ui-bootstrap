@@ -9,15 +9,23 @@ describe('Outcomes component behaviour', () => {
 
     const globalAny:any = global;
 
-    function manyWhoMount() {
+    function manyWhoMount(
+        {
+            isDesignTime = false,
+            group = 'xxx',
+        } = {},
+    ) {
+        const props = {
+            isDesignTime,
+        };
         
         globalAny.window.manywho.model.getComponent = () => ({
             attributes: {
-                group: 'xxx',
+                group,
             },
         });
 
-        return shallow(<Outcomes />);
+        return shallow(<Outcomes {...props} />);
     }
 
     afterEach(() => {
@@ -33,6 +41,28 @@ describe('Outcomes component behaviour', () => {
         componentWrapper = manyWhoMount();
         expect(globalAny.window.manywho.component.register)
         .toHaveBeenCalledWith('outcomes', Outcomes); 
+    });
+
+    test('Dummy outcome elements get rendered if in design time', () => {
+        componentWrapper = manyWhoMount({
+            isDesignTime: true,
+        });
+
+        expect(componentWrapper.find('.btn-primary').length).toBe(1);
+        expect(componentWrapper.find('.btn-success').length).toBe(1);
+        expect(componentWrapper.find('.btn-danger').length).toBe(1);
+        
+    });
+
+    test('Dummy outcome elements get rendered if in design time', () => {
+
+        globalAny.window.manywho.utils.isEqual = x => x === 'horizontal';
+
+        componentWrapper = manyWhoMount({
+            group: 'horizontal',
+        });
+
+        expect(componentWrapper.find('.btn-group').length).toBe(1);        
     });
 
 });

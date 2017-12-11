@@ -400,4 +400,40 @@ describe('ItemsContainer component behaviour', () => {
         expect(forceUpdateSpy).toBeCalled();
     });
 
+    test('onNext calls onPaginate with next page number', () => {
+        const onPaginateSpy = jest.spyOn(ItemsContainer.prototype, 'onPaginate');
+        
+        componentWrapper = manyWhoMount();
+
+        globalAny.window.manywho.state.getComponent = () => ({ page: 3 });
+        
+        componentWrapper.instance().onNext();
+
+        expect(onPaginateSpy).toBeCalledWith(4);
+    });
+
+    test('onPrev calls onPaginate with previous page number', () => {
+        const onPaginateSpy = jest.spyOn(ItemsContainer.prototype, 'onPaginate');
+        
+        componentWrapper = manyWhoMount();
+
+        globalAny.window.manywho.state.getComponent = () => ({ page: 3 });
+        
+        componentWrapper.instance().onPrev();
+
+        expect(onPaginateSpy).toBeCalledWith(2);
+    });
+
+    test('onFirstPage calls onPaginate with 1', () => {
+        const onPaginateSpy = jest.spyOn(ItemsContainer.prototype, 'onPaginate');
+        
+        componentWrapper = manyWhoMount();
+
+        globalAny.window.manywho.state.getComponent = () => ({ page: 3 });
+        
+        componentWrapper.instance().onFirstPage();
+
+        expect(onPaginateSpy).toBeCalledWith(1);
+    });
+
 });

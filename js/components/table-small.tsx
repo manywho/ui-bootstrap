@@ -126,7 +126,7 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
                             {displayColumns.map((column) => {
                                 if (column === 'mw-outcomes') {
                                     if (outcomes.length > 1 || isOutcomeDestructive) {
-                                        this.renderOutcomeColumn(item, model, outcomes);
+                                        return this.renderOutcomeColumn(item, model, outcomes);
                                     }
                                 } else {
                                     let selectedProperty = item.properties.filter(
