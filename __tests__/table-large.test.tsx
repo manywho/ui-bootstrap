@@ -24,6 +24,7 @@ describe('Table Large input component behaviour', () => {
                     striped: false,
                 },
                 isValid: true,
+                isMultiSelect: false,
             },
             objectData = [],   
             selectedRows = [{ 
@@ -278,6 +279,47 @@ describe('Table Large input component behaviour', () => {
             tableLargeWrapper.find('#abc a').first().props()['href'],
         ).toBe(
             'yyy',
+        );
+    });
+
+    test('Checkbox column is rendered when model.isMultiSelect is true', () => {
+        
+        const properties = {
+            find: () => ({
+                typeElementPropertyId: 'x',
+                contentValue: 'yyy',
+                objectData: [],
+            }),
+        };
+        
+        tableLargeWrapper = manyWhoMount({
+            model: {
+                attributes: {
+                    borderless: false,
+                    striped: false,
+                },
+                isValid: true,
+                isMultiSelect: true,
+            },
+            displayColumns: [
+                {},
+            ],
+            objectData: [
+                {
+                    properties,
+                    externalId: '0',
+                },
+                {
+                    properties,
+                    externalId: 'abc',
+                },
+            ],
+        });
+
+        expect(
+            tableLargeWrapper.find('.checkbox-cell').length,
+        ).toBe(
+            3,
         );
     });
 
