@@ -2,9 +2,10 @@ import { noop } from '../test-utils';
 
 import * as React from 'react';
 
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import TableSmall from '../js/components/table-small';
+import Outcome from '../js/components/outcome';
 
 describe('Table Small input component behaviour', () => {
 
@@ -32,7 +33,7 @@ describe('Table Small input component behaviour', () => {
             onRowClicked, isFiles,
         };
 
-        return mount(<TableSmall {...props} />);
+        return shallow(<TableSmall {...props} />);
     }
 
     afterEach(() => {
@@ -49,7 +50,28 @@ describe('Table Small input component behaviour', () => {
         expect(globalAny.window.manywho.component.register).toHaveBeenCalled();
     });
 
-    test('renedrRows gets called with objectData, outcomes and displayColumns', () => {        
+    test('Outcome column gets rendered when there are multiple outcomes', () => {
+        const outcomes = [
+            { id: 'string' },
+            { id: 'string' },
+        ];
+        const displayColumns = ['mw-outcomes'];
+        const objectData = [
+            {
+                externalId: '0',
+            },
+        ];
+        
+        tableSmallWrapper = manyWhoMount({
+            outcomes,
+            displayColumns,
+            objectData,
+        });
+
+        expect(tableSmallWrapper.find(Outcome).length).toBe(2);
+    });
+
+    test('renderRows gets called with objectData, outcomes and displayColumns', () => {        
         const objectData = [];
         const outcomes = [];
         const displayColumns = [];
