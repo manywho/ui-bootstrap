@@ -14,6 +14,8 @@ declare var manywho: any;
 
 class TableInputDateTime extends React.Component<ITableInputDateTimeProps, null> {
 
+    datetime = null;
+
     constructor(props) {
         super(props);
     }
@@ -27,7 +29,7 @@ class TableInputDateTime extends React.Component<ITableInputDateTimeProps, null>
     }
 
     componentDidMount() {
-        const target = ReactDOM.findDOMNode(this.refs['datetime']);
+        const target = ReactDOM.findDOMNode(this.datetime);
         const defaultDate = 
             this.props.value ? 
             moment(
@@ -46,7 +48,7 @@ class TableInputDateTime extends React.Component<ITableInputDateTimeProps, null>
     }
 
     render() {
-        return <div ref="datetime" />;
+        return <div ref={(datetime) => { this.datetime = datetime; }} />;
     }
 }
 

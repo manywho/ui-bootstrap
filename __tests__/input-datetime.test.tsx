@@ -122,15 +122,12 @@ describe('InputDateTime component behaviour', () => {
 
     test('datepicker plugin uses datetime format from model attributes', () => {
         const expectedArgs = {
-            useCurrent: false,
-            locale: 'en-us',
             format: 'YYYY-MM-DD',
-            timeZone: 'UTC',
         };
 
         componentWrapper = manyWhoMount(false, false, 'YYYY-MM-DD');
         expect(globalAny.datetimepickerMock).toHaveBeenCalledWith(
-            expect.objectContaining(expectedArgs)
+            expect.objectContaining(expectedArgs),
         );
     });
 
