@@ -391,9 +391,9 @@ describe('Select input component behaviour', () => {
     test('when isScrollLimit is called that onNext is then invoked', () => {
         const event = {
             target: {
-                offsetHeight: testUtils.generateRandomInteger(1, 10),
-                scrollTop: testUtils.generateRandomInteger(1, 10),
-                scrollHeight: testUtils.generateRandomInteger(1, 10),
+                offsetHeight: testUtils.generateRandomInteger(6, 10),
+                scrollTop: testUtils.generateRandomInteger(6, 10),
+                scrollHeight: testUtils.generateRandomInteger(1, 5),
             },
         };
         selectWrapper = manyWhoMount();
