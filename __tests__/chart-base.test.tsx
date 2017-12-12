@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 
 import * as React from 'react';
@@ -14,7 +14,6 @@ jest.mock('chart.js', () => {
     };
 });
 
-const str = testUtils.generateRandomString;
 
 describe('ChartBase component behaviour', () => {
 

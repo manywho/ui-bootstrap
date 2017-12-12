@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 import * as React from 'react';
 
@@ -145,51 +145,55 @@ describe('Table Large input component behaviour', () => {
     });
 
     test('setPropertyValue sets the correct property as the given value on each objectData', () => {
+        const a = str();
+        const b = str();
+        const c = str();
+        const d = str();
 
         globalAny.window.manywho.utils.isEqual = (a, b) => a === b;
         
         const objectData = [
             {
-                externalId: 'yyy',
+                externalId: a,
                 properties: [
                     {
-                        typeElementPropertyId: 'xxx', // only this one should match
+                        typeElementPropertyId: b, // only this one should match
                     },
                     {
-                        typeElementPropertyId: 'a',
+                        typeElementPropertyId: c,
                     },
                 ],
             },
             {
-                externalId: 'a',
+                externalId: c,
                 properties: [
                     {
-                        typeElementPropertyId: 'xxx',
+                        typeElementPropertyId: b,
                     },
                 ],
             },
         ];
 
-        const setObjectData = TableLarge.prototype.setPropertyValue(objectData, 'yyy', 'xxx', 'abc');
+        const setObjectData = TableLarge.prototype.setPropertyValue(objectData, a, b, d);
 
         expect(setObjectData).toEqual([
             {
-                externalId: 'yyy',
+                externalId: a,
                 properties: [
                     {
-                        typeElementPropertyId: 'xxx',
-                        contentValue: 'abc',
+                        typeElementPropertyId: b,
+                        contentValue: d,
                     },
                     {
-                        typeElementPropertyId: 'a',                        
+                        typeElementPropertyId: c,                        
                     },
                 ],
             },
             {
-                externalId: 'a',
+                externalId: c,
                 properties: [
                     {
-                        typeElementPropertyId: 'xxx',
+                        typeElementPropertyId: b,
                     },
                 ],
             },
@@ -218,10 +222,10 @@ describe('Table Large input component behaviour', () => {
 
         const objectData = [
             {
-                externalId: 'a',
+                externalId: str(),
             },
             {
-                externalId: 'b',
+                externalId: str(),
             },
         ];
 
@@ -243,17 +247,22 @@ describe('Table Large input component behaviour', () => {
     });
 
     test('Download anchor tags are rendered in rows when props.isFiles is true', () => {
+
+        const contentValue = str();
+        const typeElementPropertyId = str();
+        const externalId1 = str();
+        const externalId2 = str();
         
         const properties = {
             find: () => ({
-                typeElementPropertyId: 'x',
-                contentValue: 'yyy',
+                contentValue,
+                typeElementPropertyId,
                 objectData: [],
             }),
         };
 
         globalAny.window.manywho.utils.isEqual = (a) => {
-            if (a === 'x') {
+            if (a === typeElementPropertyId) {
                 return true;
             }
         };
@@ -266,55 +275,66 @@ describe('Table Large input component behaviour', () => {
             objectData: [
                 {
                     properties,
-                    externalId: '0',
+                    externalId: externalId1,
                 },
                 {
                     properties,
-                    externalId: 'abc',
+                    externalId: externalId2,
                 },
             ],
         });
 
         expect(
-            tableLargeWrapper.find('#abc a').first().props()['href'],
+            tableLargeWrapper.find(`#${externalId2} a`).first().props()['href'],
         ).toBe(
-            'yyy',
+            contentValue,
         );
     });
 
     test('Checkbox column is rendered when model.isMultiSelect is true', () => {
+
+        const contentValue = str();
+        const typeElementPropertyId = str();
+        const externalId1 = str();
+        const externalId2 = str();
         
         const properties = {
             find: () => ({
-                typeElementPropertyId: 'x',
-                contentValue: 'yyy',
+                typeElementPropertyId,
+                contentValue,
                 objectData: [],
             }),
         };
         
-        tableLargeWrapper = manyWhoMount({
-            model: {
-                attributes: {
-                    borderless: false,
-                    striped: false,
+        tableLargeWrapper = manyWhoMount(
+            {
+                model: {
+                    attributes: {
+                        borderless: false,
+                        striped: false,
+                    },
+                    isValid: true,
+                    isMultiSelect: true,
                 },
-                isValid: true,
-                isMultiSelect: true,
+                displayColumns: [
+                    { 
+                        typeElementPropertyId,
+                        label: str(),
+                    },
+                ],
+                objectData: [
+                    {
+                        properties,
+                        externalId: externalId1,
+                    },
+                    {
+                        properties,
+                        externalId: externalId2,
+                    },
+                ],
             },
-            displayColumns: [
-                {},
-            ],
-            objectData: [
-                {
-                    properties,
-                    externalId: '0',
-                },
-                {
-                    properties,
-                    externalId: 'abc',
-                },
-            ],
-        });
+            true,
+        );
 
         expect(
             tableLargeWrapper.find('.checkbox-cell').length,

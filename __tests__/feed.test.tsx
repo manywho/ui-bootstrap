@@ -1,5 +1,3 @@
-import testUtils from '../test-utils';
-
 import * as React from 'react';
 import { shallow } from 'enzyme';
 

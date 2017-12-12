@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import { str } from '../test-utils';
 
 import { default as Inline, getInline } from '../js/components/inline';
 
@@ -51,38 +52,43 @@ describe('Inline component behaviour', () => {
     });
 
     test('Children get rendered', () => {
+        const children = str();
+
         componentWrapper = manyWhoMount({
-            children: 'xxx',
+            children,
         });
         
         expect(componentWrapper.find('.clearfix').first().text())
-        .toBe('xxx'); 
+        .toBe(children); 
     });
 
     test('model.getChildren is called with correct id and flowKey', () => {
+        const id = str();
+        const flowKey = str();
 
         componentWrapper = manyWhoMount({
-            id: 'xxx',
-            flowKey: 'yyy',
+            id,
+            flowKey,
         });
         
         expect(globalAny.window.manywho.model.getChildren)
-        .toBeCalledWith('xxx', 'yyy'); 
+        .toBeCalledWith(id, flowKey); 
     });
 
     test('component.getChildComponents is called with correct childData, id and flowKey', () => {
-
-        const childData = 'child';
+        const id = str();
+        const flowKey = str();
+        const childData = str();
 
         globalAny.window.manywho.model.getChildren = () => childData;
 
         componentWrapper = manyWhoMount({
-            id: 'xxx',
-            flowKey: 'yyy',
+            id,
+            flowKey,
         });
         
         expect(globalAny.window.manywho.component.getChildComponents)
-        .toBeCalledWith('child', 'xxx', 'yyy'); 
+        .toBeCalledWith(childData, id, flowKey); 
     });
 
 });

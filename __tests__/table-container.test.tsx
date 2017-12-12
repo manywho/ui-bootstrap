@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str, int } from '../test-utils';
 
 import * as React from 'react';
 
@@ -46,9 +46,9 @@ describe('Table component behaviour', () => {
             isVisible,
             isValid,
             fileDataRequest: {},
-            label: testUtils.generateRandomString(10),
+            label: str(10),
             attributes: {
-                classes: testUtils.generateRandomString(10),
+                classes: str(10),
             },
         };
 
@@ -59,17 +59,17 @@ describe('Table component behaviour', () => {
             extend: jest.fn((props) => {
                 return props;
             }),
-            extractTenantId: jest.fn(() => testUtils.generateRandomString(10)),
+            extractTenantId: jest.fn(() => str(10)),
         };
         globalAny.window.manywho.model.getOutcomes = jest.fn(() => {
             return [];
         });
-        globalAny.window.manywho.state.getAuthenticationToken = jest.fn(() => testUtils.generateRandomString(10));
+        globalAny.window.manywho.state.getAuthenticationToken = jest.fn(() => str(10));
         globalAny.window.manywho['ajax'] = {
-            uploadFile: jest.fn(() => testUtils.generateRandomString(10))
+            uploadFile: jest.fn(() => str(10))
         };
         globalAny.window.manywho.state.getComponent = jest.fn(() => {
-            return { search: testUtils.generateRandomString(10) };
+            return { search: str(10) };
         });
         globalAny.window.manywho['engine'] = {
             fileDataRequest: jest.fn(),
@@ -125,13 +125,13 @@ describe('Table component behaviour', () => {
 
     test('Table Small gets rendered as a child component', () => {
         tableWrapper = manyWhoMount();
-        tableWrapper.setState({ windowWidth: testUtils.generateRandomInteger(100, 500) });
+        tableWrapper.setState({ windowWidth: int(100, 500) });
         expect(globalAny.window.manywho.component.getByName).toHaveBeenCalledWith('mw-table-small');
     });
 
     test('if window inner width is less than 768px then small tables class gets applied to rendered markup', () => {
         tableWrapper = manyWhoMount();
-        tableWrapper.setState({ windowWidth: testUtils.generateRandomInteger(100, 500) });
+        tableWrapper.setState({ windowWidth: int(100, 500) });
         expect(tableWrapper.find('.table-container-small').exists()).toEqual(true);
     });
 
@@ -183,11 +183,11 @@ describe('Table component behaviour', () => {
         const tableColumns = [
             {
                 contentType:'ContentString',
-                label: testUtils.generateRandomString(10),
+                label: str(10),
             },
             {
                 contentType:'ContentString',
-                label: testUtils.generateRandomString(10),
+                label: str(10),
             },
         ];
         expect(tableWrapperInstance.getDisplayColumns(tableColumns, [])).toEqual(tableColumns);
@@ -199,22 +199,22 @@ describe('Table component behaviour', () => {
         const tableColumns = [
             {
                 contentType:'ContentString',
-                label: testUtils.generateRandomString(10),
+                label: str(10),
             },
             {
                 contentType:'ContentString',
-                label: testUtils.generateRandomString(10),
+                label: str(10),
             },
         ];
 
         const outcomes = [
             {
                 contentType:'ContentString',
-                label: testUtils.generateRandomString(10),
+                label: str(10),
             },
             {
                 contentType:'ContentString',
-                label: testUtils.generateRandomString(10),
+                label: str(10),
                 isBulkAction: true,
             },
         ];
@@ -261,7 +261,7 @@ describe('Table component behaviour', () => {
 
         const mockEvent = {
             currentTarget: {
-                id: testUtils.generateRandomString(10),
+                id: str(10),
             },
         };
 
@@ -276,7 +276,7 @@ describe('Table component behaviour', () => {
         const mockEvent = {
             stopPropagation: jest.fn(),
             currentTarget: {
-                id: testUtils.generateRandomString(10),
+                id: str(10),
             },
         };
 
@@ -287,14 +287,14 @@ describe('Table component behaviour', () => {
 
     test('window resize updates component state to window inner width', () => {
         tableWrapper = manyWhoMount(true, true, true);
-        tableWrapper.setState({ windowWidth: testUtils.generateRandomInteger(100, 500) });
+        tableWrapper.setState({ windowWidth: int(100, 500) });
         const tableWrapperInstance = tableWrapper.instance();
         tableWrapperInstance.handleResize();
         expect(tableWrapper.state().windowWidth).toEqual(1024);
     });
 
     test('when uploading file data that ajax response from Manywho core is returned', () => {
-        const flowKey = testUtils.generateRandomString(10);
+        const flowKey = str(10);
         const mockFormData = new FormData();
 
         tableWrapper = manyWhoMount(true, true, true);

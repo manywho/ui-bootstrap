@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str, int } from '../test-utils';
 
 import * as React from 'react';
 import { shallow } from 'enzyme';
@@ -7,9 +7,6 @@ import Chart from '../js/components/chart';
 import ItemsHeader from '../js/components/items-header';
 import Wait from '../js/components/wait';
 import ChartBase from '../js/components/chart-base';
-
-const str = testUtils.generateRandomString;
-const int = testUtils.generateRandomInteger;
 
 describe('Chart component behaviour', () => {
 

@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 import * as React from 'react';
 
@@ -25,24 +25,24 @@ describe('Input component behaviour', () => {
 
     function manyWhoMount(modelcontentType = 'ContentString', mask = null, isVisible = false, isNullOrWhitespace = null) {
 
-        propID = testUtils.generateRandomString(5);
-        propparentId = testUtils.generateRandomString(5);
-        propflowKey = testUtils.generateRandomString(5);
+        propID = str(5);
+        propparentId = str(5);
+        propflowKey = str(5);
 
         classes = [
-            testUtils.generateRandomString(5),
-            testUtils.generateRandomString(5),
-            testUtils.generateRandomString(5),
+            str(5),
+            str(5),
+            str(5),
         ];
     
         model = {
             isVisible,
-            label: testUtils.generateRandomString(5),
+            label: str(5),
             contentType: modelcontentType,
-            developerName: testUtils.generateRandomString(5),
+            developerName: str(5),
             attributes: {
                 mask,
-                type: testUtils.generateRandomString(5),
+                type: str(5),
             },
         };
 

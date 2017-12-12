@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import { str } from '../test-utils';
 
 import Notification from '../js/components/notification';
 
@@ -13,8 +14,8 @@ describe('Notification component behaviour', () => {
 
         const props = {
             model: {
-                type: 'xxx',
-                message: 'xxx',
+                type: str(),
+                message: str(),
                 timeout: 1000,
                 dismissible: false,
             },

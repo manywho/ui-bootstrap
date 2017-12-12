@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import { str } from '../test-utils';
 
 import Radio from '../js/components/radio';
 
@@ -12,7 +13,7 @@ describe('Radio component behaviour', () => {
     function manyWhoMount() {
 
         globalAny.window.manywho.component.getDisplayColumns = () => [
-            { typeElementPropertyId: 'xxx' },
+            { typeElementPropertyId: str() },
         ];
 
         return shallow(<Radio />);

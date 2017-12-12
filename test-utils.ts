@@ -5,24 +5,21 @@
 
 export const t = () => true;
 export const f = () => false;
-export const obj = () => {};
+export const obj = () => ({});
 export const arr = () => [];
 export const noop = () => {};
-export const str = () => 'xxx';
 
-export default {
+export const bool = () => Math.round(Math.random()) > 0;
 
-    generateRandomString:(length) => {
-        let text = '';
-        const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        for (let i = 0; i < length; i++) {
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-        }
-        return text;
-    },
+export const str = (length = 5) => {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    for (let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+};
 
-    generateRandomInteger:(min, max) => {
-        return Math.ceil(Math.random() * (max - min) + min);
-    },
-    
+export const int = (min = 1, max = 1000) => {
+    return Math.ceil(Math.random() * (max - min) + min);
 };

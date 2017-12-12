@@ -1,4 +1,4 @@
-import { default as testUtils, noop, f } from '../test-utils';
+import { f, str } from '../test-utils';
 
 import * as React from 'react';
 
@@ -158,9 +158,12 @@ describe('Table input component behaviour', () => {
     
     test('change event on text input sets value on state', () => {
         const setStateSpy = jest.spyOn(TableInput.prototype, 'setState');
+        const value1 = str();
+        const value2 = str();
+
         const myEvent = {
             currentTarget: {
-                value: 'def',
+                value: value2,
             },
         };
 
@@ -168,21 +171,24 @@ describe('Table input component behaviour', () => {
 
         tableInputWrapper = manyWhoMount({
             contentType: 'CONTENTSTRING',
-            value: 'abc',
+            value: value1,
         });
 
         tableInputWrapper.simulate('change', myEvent);
         
         expect(setStateSpy).toHaveBeenLastCalledWith(expect.objectContaining({
-            value: 'def',
+            value: value2,
         }));
     });
     
     test('Pressing enter on input calls onCommit', () => {
         const setStateSpy = jest.spyOn(TableInput.prototype, 'setState');
+        const value1 = str();
+        const value2 = str();
+
         const myEvent = {
             currentTarget: {
-                value: 'def',
+                value: value2,
             },
         };
 
@@ -190,13 +196,13 @@ describe('Table input component behaviour', () => {
 
         tableInputWrapper = manyWhoMount({
             contentType: 'CONTENTSTRING',
-            value: 'abc',
+            value: value1,
         });
 
         tableInputWrapper.simulate('change', myEvent);
         
         expect(setStateSpy).toHaveBeenLastCalledWith(expect.objectContaining({
-            value: 'def',
+            value: value2,
         }));
     });
     
@@ -225,11 +231,13 @@ describe('Table input component behaviour', () => {
     });
 
     test('input value is set to props.value', () => {
+        const value1 = str();
+
         tableInputWrapper = manyWhoMount({
             contentType: 'CONTENTSTRING',
-            value: 'abc',
+            value: value1,
         });
 
-        expect(tableInputWrapper.find('input').first().props().value).toBe('abc');
+        expect(tableInputWrapper.find('input').first().props().value).toBe(value1);
     });
 });

@@ -1,4 +1,4 @@
-import { noop } from '../test-utils';
+import { noop, str } from '../test-utils';
 
 import * as React from 'react';
 
@@ -125,41 +125,48 @@ describe('Table Small input component behaviour', () => {
     });
 
     test('externalId gets added to node as id attribute', () => {
+        const externalId1 = str();
+        const externalId2 = str();
 
         tableSmallWrapper = manyWhoMount({
             objectData: [
                 {
-                    externalId: '0',
+                    externalId: externalId1,
                 },
                 {
-                    externalId: 'abc',
+                    externalId: externalId2,
                 },
             ],
         });
 
-        expect(tableSmallWrapper.find('li#abc').length).toBe(1);
+        expect(tableSmallWrapper.find(`li#${externalId2}`).length).toBe(1);
     });
 
     test('externalId gets added to node as data-item attribute', () => {
+        const externalId1 = str();
+        const externalId2 = str();
 
         tableSmallWrapper = manyWhoMount({
             objectData: [
                 {
-                    externalId: '0',
+                    externalId: externalId1,
                 },
                 {
-                    externalId: 'abc',
+                    externalId: externalId2,
                 },
             ],
         });
 
-        expect(tableSmallWrapper.find('li#abc').first().props()['data-item']).toBe('abc');
+        expect(tableSmallWrapper.find(`li#${externalId2}`).first().props()['data-item']).toBe(externalId2);
     });
 
     test('onClick gets added to rows when there is a single, non-destructive outcome', () => {
+        const externalId1 = str();
+        const externalId2 = str();
+        const pageActionBindingType = str();
 
         globalAny.window.manywho.utils.isEqual = (a) => {
-            if (a === 'x') {
+            if (a === pageActionBindingType) {
                 return false;
             }
         };
@@ -167,31 +174,34 @@ describe('Table Small input component behaviour', () => {
         tableSmallWrapper = manyWhoMount({
             outcomes: [
                 {
-                    id: 'abc',
-                    pageActionBindingType: 'x',
+                    pageActionBindingType,
+                    id: str(),
                 },
             ],
             objectData: [
                 {
-                    externalId: '0',
+                    externalId: externalId1,
                 },
                 {
-                    externalId: 'abc',
+                    externalId: externalId2,
                 },
             ],
         });
 
         expect(
-            tableSmallWrapper.find('li#abc').first().props()['onClick'],
+            tableSmallWrapper.find(`li#${externalId2}`).first().props()['onClick'],
         ).toBe(
             tableSmallWrapper.instance().onItemClick,
         );
     });
 
     test('glyphicon-chevron-right gets added to rows when there is a single, non-destructive outcome', () => {
+        const externalId1 = str();
+        const externalId2 = str();
+        const pageActionBindingType = str();
 
         globalAny.window.manywho.utils.isEqual = (a) => {
-            if (a === 'x') {
+            if (a === pageActionBindingType) {
                 return false;
             }
         };
@@ -199,16 +209,16 @@ describe('Table Small input component behaviour', () => {
         tableSmallWrapper = manyWhoMount({
             outcomes: [
                 {
-                    id: 'abc',
-                    pageActionBindingType: 'x',
+                    pageActionBindingType,
+                    id: str(),
                 },
             ],
             objectData: [
                 {
-                    externalId: '0',
+                    externalId: externalId1,
                 },
                 {
-                    externalId: 'abc',
+                    externalId: externalId2,
                 },
             ],
         });
@@ -221,6 +231,8 @@ describe('Table Small input component behaviour', () => {
     });
 
     test('props.onRowClicked gets added to rows when there isn\'t a single outcome', () => {
+        const externalId1 = str();
+        const externalId2 = str();
 
         const onRowClicked = jest.fn();
         
@@ -228,42 +240,46 @@ describe('Table Small input component behaviour', () => {
             onRowClicked,
             outcomes: [
                 {
-                    id: 'abc',
+                    id: str(),
                 },
                 {
-                    id: 'def',
+                    id: str(),
                 },
             ],
             objectData: [
                 {
-                    externalId: '0',
+                    externalId: externalId1,
                 },
                 {
-                    externalId: 'abc',
+                    externalId: externalId2,
                 },
             ],
         });
 
         expect(
-            tableSmallWrapper.find('li#abc').first().props()['onClick'],
+            tableSmallWrapper.find(`li#${externalId2}`).first().props()['onClick'],
         ).toBe(
             onRowClicked,
         );
     });
 
     test('Download anchor tags are rendered in rows when props.isFiles is true', () => {
+        const externalId1 = str();
+        const externalId2 = str();
+        const typeElementPropertyId = str();
+        const contentValue = str();
         
         const properties = {
             filter: () => {
                 return [{
-                    typeElementPropertyId: 'x',
-                    contentValue: 'yyy',
+                    typeElementPropertyId,
+                    contentValue,
                 }];
             },
         };
 
         globalAny.window.manywho.utils.isEqual = (a) => {
-            if (a === 'x') {
+            if (a === typeElementPropertyId) {
                 return true;
             }
         };
@@ -276,19 +292,19 @@ describe('Table Small input component behaviour', () => {
             objectData: [
                 {
                     properties,
-                    externalId: '0',
+                    externalId: externalId1,
                 },
                 {
                     properties,
-                    externalId: 'abc',
+                    externalId: externalId2,
                 },
             ],
         });
 
         expect(
-            tableSmallWrapper.find('li#abc a').first().props()['href'],
+            tableSmallWrapper.find(`li#${externalId2} a`).first().props()['href'],
         ).toBe(
-            'yyy',
+            contentValue,
         );
     });
 

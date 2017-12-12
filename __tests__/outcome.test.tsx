@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { default as utils, str, noop } from '../test-utils';
+import { str, noop } from '../test-utils';
 
 import Outcome from '../js/components/outcome';
 
@@ -15,7 +15,7 @@ describe('Outcome component behaviour', () => {
             className = null,
             type = '',
             size = '',
-            pageActionType = 'xxx',
+            pageActionType = str(),
             pageActionBindingType = null,
             classes = '',
             addNoBackgroundClass = false,
@@ -63,7 +63,7 @@ describe('Outcome component behaviour', () => {
     });
 
     test('Component receives correct type CSS classes', () => {
-        const type = utils.generateRandomString(5);
+        const type = str(5);
 
         componentWrapper = manyWhoMount({
             type,
@@ -74,7 +74,7 @@ describe('Outcome component behaviour', () => {
     });
 
     test('Component receives correct size CSS class', () => {
-        const size = utils.generateRandomString(5);
+        const size = str(5);
 
         componentWrapper = manyWhoMount({
             size,
@@ -92,7 +92,7 @@ describe('Outcome component behaviour', () => {
     });
 
     test('Component receives CSS classes from attributes', () => {
-        const classes = utils.generateRandomString(5);
+        const classes = str(5);
 
         componentWrapper = manyWhoMount({
             classes,
@@ -111,7 +111,7 @@ describe('Outcome component behaviour', () => {
 
     test('Use anchor element when uri supplied', () => {
         componentWrapper = manyWhoMount({
-            uri: utils.generateRandomString(24),
+            uri: str(24),
         });
 
         expect(componentWrapper.is('a')).toBe(true);
@@ -122,14 +122,14 @@ describe('Outcome component behaviour', () => {
 
         componentWrapper = manyWhoMount({
             target,
-            uri: utils.generateRandomString(24),
+            uri: str(24),
         });
 
         expect(componentWrapper.props().target).toBe(target);
     });
 
     test('Component receives CSS classes from props', () => {
-        const classes = utils.generateRandomString(5);
+        const classes = str(5);
 
         componentWrapper = manyWhoMount({
             className: classes,

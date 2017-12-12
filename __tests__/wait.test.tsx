@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 import * as React from 'react';
 import { mount } from 'enzyme';
@@ -17,7 +17,7 @@ describe('Wait component behaviour', () => {
     function manyWhoMount(
         isSmall = false,
         isVisible = false,
-        message = testUtils.generateRandomString(5),
+        message = str(5),
     ) {
 
         propIsSmall = isSmall;

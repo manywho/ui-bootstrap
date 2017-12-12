@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str, int } from '../test-utils';
 
 import * as React from 'react';
 
@@ -14,30 +14,30 @@ describe('Number input component behaviour', () => {
     let model;
 
     let props = {
-        id: testUtils.generateRandomString(10),
-        flowKey: testUtils.generateRandomString(10),
-        value: testUtils.generateRandomString(5),
-        placeholder: testUtils.generateRandomString(5),
+        id: str(10),
+        flowKey: str(10),
+        value: str(5),
+        placeholder: str(5),
         onChange: jest.fn(),
         onBlur: jest.fn(),
         required: true,
         disabled: true,
         readOnly: true,
-        size: testUtils.generateRandomInteger(1, 10),
-        format: testUtils.generateRandomString(5),
+        size: int(1, 10),
+        format: str(5),
         isDesignTime: false,
-        autocomplete: testUtils.generateRandomString(5),
+        autocomplete: str(5),
     };
 
     const modelAttrs = {
-        minimum: testUtils.generateRandomInteger(1, 10),
-        maximum: testUtils.generateRandomInteger(1, 10),
-        step: testUtils.generateRandomInteger(1, 10),  
+        minimum: int(1, 10),
+        maximum: int(1, 10),
+        step: int(1, 10),  
     };
 
     const globalAny:any = global;
 
-    function manyWhoMount(size = testUtils.generateRandomInteger(1, 10), attrs = modelAttrs) {
+    function manyWhoMount(size = int(1, 10), attrs = modelAttrs) {
 
         model = {
             size,
@@ -96,7 +96,7 @@ describe('Number input component behaviour', () => {
         };
 
         numberInputWrapper = manyWhoMount(
-            testUtils.generateRandomInteger(1, 10),
+            int(1, 10),
             custModelAttrs,
         );
 
@@ -119,7 +119,7 @@ describe('Number input component behaviour', () => {
     });
 
     test('Correct default min, max, step based on maxsize in input props', () => {
-        numberInputWrapper = manyWhoMount(testUtils.generateRandomInteger(1, 10), null);
+        numberInputWrapper = manyWhoMount(int(1, 10), null);
         const input = numberInputWrapper.find('input');
 
         expect(input.prop('min')).toEqual(-99999);
@@ -129,13 +129,13 @@ describe('Number input component behaviour', () => {
 
     test('on number field input that onChange is triggered', () => {
         const onchangeSpy = jest.spyOn(InputNumber.prototype, 'onChange');
-        numberInputWrapper = manyWhoMount(testUtils.generateRandomInteger(1, 10), null);
+        numberInputWrapper = manyWhoMount(int(1, 10), null);
         numberInputWrapper.find('input').simulate('change', { target: { value: '100' } });
         expect(onchangeSpy).toHaveBeenCalled();
     });
 
     test('that state is updated with input value', () => {
-        numberInputWrapper = manyWhoMount(testUtils.generateRandomInteger(1, 10), null);
+        numberInputWrapper = manyWhoMount(int(1, 10), null);
         numberInputWrapper.find('input').simulate('change', { target: { value: '100' } });
         expect(numberInputWrapper.state('value')).toEqual('100');
     });

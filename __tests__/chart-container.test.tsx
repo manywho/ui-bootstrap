@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 
 import * as React from 'react';
@@ -8,7 +8,6 @@ import { default as ChartContainer, onRefresh } from '../js/components/chart-con
 import Wait from '../js/components/wait';
 import ChartBase from '../js/components/chart-base';
 
-const str = testUtils.generateRandomString;
 
 describe('ChartContainer component behaviour', () => {
 

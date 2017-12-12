@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 import * as React from 'react';
 
@@ -12,15 +12,15 @@ describe('Boolean input component behaviour', () => {
     let model;
 
     let props = {
-        id: testUtils.generateRandomString(10),
-        flowKey: testUtils.generateRandomString(10),
-        parentId: testUtils.generateRandomString(5),
-        value: testUtils.generateRandomString(5),
+        id: str(10),
+        flowKey: str(10),
+        parentId: str(5),
+        value: str(5),
         disabled: false,
         readOnly: true,
         required: true,
         onChange: jest.fn(),
-        autocomplete: testUtils.generateRandomString(5),
+        autocomplete: str(5),
     };
 
     const globalAny:any = global;
@@ -28,7 +28,7 @@ describe('Boolean input component behaviour', () => {
     function manyWhoMount() {
 
         model = {
-            label: testUtils.generateRandomString(5),
+            label: str(5),
         };
 
         globalAny.window.manywho['utils'] = {

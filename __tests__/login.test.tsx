@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 import * as React from 'react';
 import { shallow } from 'enzyme';
@@ -19,10 +19,10 @@ describe('Login component behaviour', () => {
                 context: {},
                 args: {},
             },
-            loginUrl: testUtils.generateRandomString(5),
-            stateId: testUtils.generateRandomString(5),
-            username: testUtils.generateRandomString(5),
-            directoryName: testUtils.generateRandomString(5),
+            loginUrl: str(5),
+            stateId: str(5),
+            username: str(5),
+            directoryName: str(5),
         };
 
         globalAny.window.manywho.model.getComponent = () => ({

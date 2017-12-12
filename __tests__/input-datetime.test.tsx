@@ -1,5 +1,5 @@
-import testUtils from '../test-utils';
 import * as React from 'react';
+import { str, int } from '../test-utils';
 
 import { mount, shallow } from 'enzyme';
 
@@ -51,7 +51,7 @@ describe('InputDateTime component behaviour', () => {
             utc() {
                 return {
                     format() { 
-                        return testUtils.generateRandomString(5);
+                        return str();
                     },
                 };
             },
@@ -61,17 +61,17 @@ describe('InputDateTime component behaviour', () => {
         });
 
         const props = {
-            value: testUtils.generateRandomString(5),
-            placeholder: testUtils.generateRandomString(5),
+            value: str(),
+            placeholder: str(),
             onChange: () => {},
             onBlur: () => {},
             required: false,
             disabled: false,
             readOnly: false,
-            size: testUtils.generateRandomInteger(30, 200),
-            format: testUtils.generateRandomString(5),
+            size: int(30, 200),
+            format: str(),
             isDesignTime: false,
-            autocomplete: testUtils.generateRandomString(5),
+            autocomplete: str(),
         };
 
         if (isShallow === true)

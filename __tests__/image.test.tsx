@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 import * as React from 'react';
 import { mount } from 'enzyme';
@@ -18,21 +18,21 @@ describe('Image component behaviour', () => {
 
     function manyWhoMount(isVisible = false, isNullOrWhitespace = null) {
 
-        propID = testUtils.generateRandomString(5);
-        propparentId = testUtils.generateRandomString(5);
-        propflowKey = testUtils.generateRandomString(5);
+        propID = str(5);
+        propparentId = str(5);
+        propflowKey = str(5);
 
         classes = [
-            testUtils.generateRandomString(5),
-            testUtils.generateRandomString(5),
-            testUtils.generateRandomString(5),
+            str(5),
+            str(5),
+            str(5),
         ];
     
         model = {
             isVisible,
-            label: testUtils.generateRandomString(5),
-            imageUri: testUtils.generateRandomString(5),
-            developerName: testUtils.generateRandomString(5),
+            label: str(5),
+            imageUri: str(5),
+            developerName: str(5),
         };
 
         globalAny.window.manywho['styling'] = {

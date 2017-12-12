@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { noop } from '../test-utils';
+import { noop, str } from '../test-utils';
 
 import ItemsHeader from '../js/components/items-header';
 import Outcome from '../js/components/outcome';
@@ -122,7 +122,7 @@ describe('ItemsHeader component behaviour', () => {
 
     test('Changing search input value calls setState with new value', () => {
         const setStateSpy = jest.spyOn(ItemsHeader.prototype, 'setState');
-        const newSearchText = 'abc';
+        const newSearchText = str();
 
         const event = {
             currentTarget: {

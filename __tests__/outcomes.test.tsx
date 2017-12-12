@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import { str } from '../test-utils';
 
 import Outcomes from '../js/components/outcomes';
 
@@ -12,7 +13,7 @@ describe('Outcomes component behaviour', () => {
     function manyWhoMount(
         {
             isDesignTime = false,
-            group = 'xxx',
+            group = str(),
         } = {},
     ) {
         const props = {

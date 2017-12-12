@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str, int } from '../test-utils';
 
 import * as React from 'react';
 
@@ -10,8 +10,8 @@ const globalAny:any = global;
 
 jest.useFakeTimers();
 
-const classOne = testUtils.generateRandomString(5);
-const classTwo = testUtils.generateRandomString(5);
+const classOne = str(5);
+const classTwo = str(5);
 
 globalAny.reactSelectize = {
     SimpleSelect: React.createClass({
@@ -152,14 +152,14 @@ describe('Select input component behaviour', () => {
     });
 
     test('renders server state error response in mark-up', () => {
-        const errorMessage = testUtils.generateRandomString(10);
+        const errorMessage = str(10);
         state['error'] = { message: errorMessage };
         selectWrapper = manyWhoMount();
         expect(selectWrapper.contains(errorMessage)).toEqual(true);
     });
 
     test('renders server state validation error response in mark-up', () => {
-        const validationMessage = testUtils.generateRandomString(10);
+        const validationMessage = str(10);
         state['validationMessage'] = validationMessage;
         selectWrapper = manyWhoMount();
         expect(selectWrapper.contains(validationMessage)).toEqual(true);
@@ -173,14 +173,14 @@ describe('Select input component behaviour', () => {
     });
     
     test('component renders help info', () => {
-        const helpInfo = testUtils.generateRandomString(10);
+        const helpInfo = str(10);
         model['helpInfo'] = helpInfo;
         selectWrapper = manyWhoMount();
         expect(selectWrapper.contains(helpInfo)).toEqual(true);
     });
 
     test('label gets rendered', () => {
-        const label = testUtils.generateRandomString(10);
+        const label = str(10);
         model['label'] = label;
         selectWrapper = manyWhoMount();
         expect(selectWrapper.contains(label)).toEqual(true);
@@ -194,9 +194,9 @@ describe('Select input component behaviour', () => {
 
     test('options are set to component state', () => {
 
-        const dummyContentValue1 = testUtils.generateRandomString(10);
-        const dummyContentValue2 = testUtils.generateRandomString(10);
-        const dummyTypeElementPropertyId = testUtils.generateRandomString(10);
+        const dummyContentValue1 = str(10);
+        const dummyContentValue2 = str(10);
+        const dummyTypeElementPropertyId = str(10);
 
         const objData = [
             { properties: [
@@ -230,11 +230,11 @@ describe('Select input component behaviour', () => {
         selectWrapper = manyWhoMount();
         const selectInstance = selectWrapper.instance();
 
-        const key = testUtils.generateRandomString(10);
-        const value = testUtils.generateRandomString(10);
+        const key = str(10);
+        const value = str(10);
 
         const options = [
-            { label: testUtils.generateRandomString(10), value: { key: value } },
+            { label: str(10), value: { key: value } },
         ];
         selectInstance.onValuesChange(options);
         expect(props.select).toHaveBeenCalledWith({ key: value });
@@ -251,10 +251,10 @@ describe('Select input component behaviour', () => {
         selectWrapper = manyWhoMount();
         const selectInstance = selectWrapper.instance();
 
-        const key = testUtils.generateRandomString(10);
-        const value = testUtils.generateRandomString(10);
+        const key = str(10);
+        const value = str(10);
 
-        selectInstance.onValueChange({ label: testUtils.generateRandomString(10), value: { key: value } });
+        selectInstance.onValueChange({ label: str(10), value: { key: value } });
         expect(props.select).toHaveBeenCalled();
     });
 
@@ -266,7 +266,7 @@ describe('Select input component behaviour', () => {
     });
 
     test('search string updates component state', () => {
-        const searchString = testUtils.generateRandomString(10);
+        const searchString = str(10);
         selectWrapper = manyWhoMount();
         const selectInstance = selectWrapper.instance();
         selectInstance.onSearchChange(searchString);
@@ -308,7 +308,7 @@ describe('Select input component behaviour', () => {
     });
 
     test('is on page 1 select options get generated', () => {
-        const typeElementPropertyId = testUtils.generateRandomString(10);
+        const typeElementPropertyId = str(10);
 
         columns = [
             { typeElementPropertyId },
@@ -318,7 +318,7 @@ describe('Select input component behaviour', () => {
             { properties: [
                 {
                     typeElementPropertyId,
-                    contentValue: testUtils.generateRandomString(10),
+                    contentValue: str(10),
                     contentFormat: null,
                     contentType: 'ContentString',
                 },
@@ -329,12 +329,12 @@ describe('Select input component behaviour', () => {
     });
 
     test('on next page that additional options are appended to option state', () => {
-        const typeElementPropertyId = testUtils.generateRandomString(10);
+        const typeElementPropertyId = str(10);
         const pageOneObjData = [
             { properties: [
                 {
                     typeElementPropertyId,
-                    contentValue:testUtils.generateRandomString(10),
+                    contentValue:str(10),
                     contentFormat: null,
                     contentType: 'ContentString',
                 },
@@ -345,7 +345,7 @@ describe('Select input component behaviour', () => {
             { properties: [
                 {
                     typeElementPropertyId,
-                    contentValue:testUtils.generateRandomString(10),
+                    contentValue:str(10),
                     contentFormat: null,
                     contentType: 'ContentString',
                 },
@@ -368,7 +368,7 @@ describe('Select input component behaviour', () => {
         const options = [
             {
                 value: {},
-                label: testUtils.generateRandomString(10),
+                label: str(10),
             },
         ];
         selectWrapper = manyWhoMount();
@@ -379,9 +379,9 @@ describe('Select input component behaviour', () => {
     test('getUid always returns an external ID', () => {
         const option = {
             value: {
-                externalId: testUtils.generateRandomString(10),
+                externalId: str(10),
             },
-            label: testUtils.generateRandomString(10),
+            label: str(10),
         };
         selectWrapper = manyWhoMount();
         const selectWrapperInstance = selectWrapper.instance();
@@ -391,9 +391,9 @@ describe('Select input component behaviour', () => {
     test('when isScrollLimit is called that onNext is then invoked', () => {
         const event = {
             target: {
-                offsetHeight: testUtils.generateRandomInteger(1, 10),
-                scrollTop: testUtils.generateRandomInteger(1, 10),
-                scrollHeight: testUtils.generateRandomInteger(1, 10),
+                offsetHeight: int(1, 10),
+                scrollTop: int(1, 10),
+                scrollHeight: int(1, 10),
             },
         };
         selectWrapper = manyWhoMount();

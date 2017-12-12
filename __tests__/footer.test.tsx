@@ -1,5 +1,4 @@
-import testUtils from '../test-utils';
-
+import { str } from '../test-utils';
 import * as React from 'react';
 import { mount } from 'enzyme';
 
@@ -16,7 +15,7 @@ describe('Footer component behaviour', () => {
 
     function manyWhoMount(children = null, isFullWidth = false) {
 
-        propFlowKey = testUtils.generateRandomString(5);
+        propFlowKey = str(5);
         propChildren = children;
 
         globalAny.window.manywho.settings = {

@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 import * as React from 'react';
 import { shallow } from 'enzyme';
@@ -16,8 +16,8 @@ describe('Chart Polar component behaviour', () => {
 
     function manyWhoMount() {
 
-        propId = testUtils.generateRandomString(5);
-        propFlowKey = testUtils.generateRandomString(5);
+        propId = str(5);
+        propFlowKey = str(5);
 
         return shallow(<ChartPolar flowKey={propFlowKey} id={propId} />);
     }

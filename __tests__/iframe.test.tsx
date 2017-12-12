@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 import * as React from 'react';
 import { mount } from 'enzyme';
@@ -18,20 +18,20 @@ describe('Iframe component behaviour', () => {
 
     function manyWhoMount() {
 
-        propID = testUtils.generateRandomString(5);
-        propparentId = testUtils.generateRandomString(5);
-        propflowKey = testUtils.generateRandomString(5);
+        propID = str(5);
+        propparentId = str(5);
+        propflowKey = str(5);
 
         classes = [
-            testUtils.generateRandomString(5),
-            testUtils.generateRandomString(5),
-            testUtils.generateRandomString(5),
+            str(5),
+            str(5),
+            str(5),
         ];
     
         model = {
-            height: testUtils.generateRandomString(2),
-            width: testUtils.generateRandomString(2),
-            imageUri: testUtils.generateRandomString(20),
+            height: str(2),
+            width: str(2),
+            imageUri: str(20),
         };
 
         globalAny.window.manywho['styling'] = {

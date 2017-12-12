@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 import * as React from 'react';
 import * as moment from 'moment';
@@ -34,13 +34,13 @@ describe('Table Input Datetime component behaviour', () => {
     let tableInputDatetimeWrapper;
     let props;
 
-    function manyWhoMount(value = null, isShallow = false, format = testUtils.generateRandomString(10)) {
+    function manyWhoMount(value = null, isShallow = false, format = str(10)) {
         props = {
             value,
             format,
-            id: testUtils.generateRandomString(10),
-            parentId: testUtils.generateRandomString(10),
-            flowKey: testUtils.generateRandomString(10),
+            id: str(10),
+            parentId: str(10),
+            flowKey: str(10),
             onChange: jest.fn(() => {
                 return true;
             }),

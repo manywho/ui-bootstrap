@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
-import { default as utils } from '../test-utils';
+import { mount } from 'enzyme';
+import { str } from '../test-utils';
 
 import ItemsContainer from '../js/components/items-container';
 
@@ -11,9 +11,9 @@ describe('ItemsContainer component behaviour', () => {
     const globalAny:any = global;
 
     function manyWhoMount({
-        id = 'xxx', 
-        parentId = 'xxx', 
-        flowKey = 'xxx',
+        id = str(), 
+        parentId = str(), 
+        flowKey = str(),
         isDesignTime = false,
         objectData = [],
         paginationSize = null,
@@ -21,6 +21,7 @@ describe('ItemsContainer component behaviour', () => {
         page = null,
         objectDataRequest = null,
         fileDataRequest = null,
+        componentType = str(),
     } = {}) {
 
         const props = {
@@ -31,7 +32,7 @@ describe('ItemsContainer component behaviour', () => {
             objectData,
             objectDataRequest,
             fileDataRequest,
-            componentType: 'xxx',
+            componentType,
             attributes: {
                 paginationSize,
                 pagination: true,
@@ -83,12 +84,15 @@ describe('ItemsContainer component behaviour', () => {
     });
 
     test('Correct child component gets rendered', () => {
+        const componentType = str();
 
         globalAny.window.manywho.component.getByName = jest.fn();
 
-        componentWrapper = manyWhoMount();
+        componentWrapper = manyWhoMount({
+            componentType,
+        });
 
-        expect(globalAny.window.manywho.component.getByName).toHaveBeenCalledWith('mw-xxx'); 
+        expect(globalAny.window.manywho.component.getByName).toHaveBeenCalledWith(`mw-${componentType}`); 
     });
 
     test('Empty items element is rendered when required', () => {
@@ -215,9 +219,9 @@ describe('ItemsContainer component behaviour', () => {
     test('id, parentId, flowKey, isDesignTime are passed directly to child component', () => {
         const stubComponent = jest.fn(() => <div/>);
 
-        const id = utils.generateRandomString(4);
-        const parentId = utils.generateRandomString(4);
-        const flowKey = utils.generateRandomString(4);
+        const id = str(4);
+        const parentId = str(4);
+        const flowKey = str(4);
         const isDesignTime = true;
         
         globalAny.window.manywho.component.getByName = () => stubComponent;
@@ -276,11 +280,11 @@ describe('ItemsContainer component behaviour', () => {
             objectDataRequest: {},
         });
 
-        const str = utils.generateRandomString(5);
+        const testString = str(5);
 
-        componentWrapper.instance().sort(str);
+        componentWrapper.instance().sort(testString);
 
-        expect(componentWrapper.state().sortedBy).toBe(str);
+        expect(componentWrapper.state().sortedBy).toBe(testString);
     });
 
     test('sort method toggles state.sortedIsAscending property', () => {
@@ -288,15 +292,15 @@ describe('ItemsContainer component behaviour', () => {
             objectDataRequest: {},
         });
         
-        const str = utils.generateRandomString(5);
+        const testString = str(5);
 
         expect(componentWrapper.state().sortedIsAscending).toBe(null);
 
-        componentWrapper.instance().sort(str);
+        componentWrapper.instance().sort(testString);
 
         expect(componentWrapper.state().sortedIsAscending).toBe(true);
 
-        componentWrapper.instance().sort(str);
+        componentWrapper.instance().sort(testString);
 
         expect(componentWrapper.state().sortedIsAscending).toBe(false);
     });
@@ -306,9 +310,9 @@ describe('ItemsContainer component behaviour', () => {
             objectDataRequest: null,
         });
 
-        const str = utils.generateRandomString(5);
+        const testString = str(5);
 
-        componentWrapper.instance().sort(str);
+        componentWrapper.instance().sort(testString);
 
         expect(globalAny.window.manywho.log.error).toBeCalledWith(expect.any(String));
     });
@@ -318,10 +322,10 @@ describe('ItemsContainer component behaviour', () => {
             objectDataRequest: null,
         });
 
-        const str = utils.generateRandomString(5);
+        const testString = str(5);
 
         componentWrapper.instance().sort(str);
-        componentWrapper.instance().search(str, false);
+        componentWrapper.instance().search(testString, false);
 
         expect(componentWrapper.state().sortedIsAscending).toBe(null);
         expect(componentWrapper.state().sortedBy).toBe(null);
@@ -346,7 +350,7 @@ describe('ItemsContainer component behaviour', () => {
 
         const setComponentSpy = globalAny.window.manywho.state.setComponent = jest.fn();
 
-        componentWrapper.instance().search(utils.generateRandomString(5), true);
+        componentWrapper.instance().search(str(5), true);
         componentWrapper.instance().clearSelection(true);
 
         expect(setComponentSpy).toBeCalledWith(
@@ -363,8 +367,8 @@ describe('ItemsContainer component behaviour', () => {
         componentWrapper = manyWhoMount();
 
         componentWrapper.instance().onOutcome(
-            utils.generateRandomString(4),
-            utils.generateRandomString(4),
+            str(4),
+            str(4),
         );
 
         expect(globalAny.window.manywho.component.onOutcome).toBeCalled();

@@ -1,4 +1,4 @@
-import testUtils from '../test-utils';
+import { str } from '../test-utils';
 
 import * as React from 'react';
 import { mount } from 'enzyme';
@@ -13,7 +13,7 @@ describe('Hidden component behaviour', () => {
     const globalAny:any = global;
 
     beforeEach(() => {
-        propID = testUtils.generateRandomString(5);
+        propID = str(5);
         hiddenWrapper = mount(<Hidden id={propID} />);
     });
 
