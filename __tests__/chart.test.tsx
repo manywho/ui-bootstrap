@@ -80,7 +80,7 @@ describe('Chart component behaviour', () => {
             .toHaveBeenCalledWith('mw-chart', Chart);
     });
 
-    test('Component renders validation message when required', () => {
+    test('Component renders validation message when chart is invalid', () => {
         const validationMessage = str(5);
 
         componentWrapper = manyWhoMount(
@@ -94,7 +94,7 @@ describe('Chart component behaviour', () => {
         expect(componentWrapper.find('.has-error .help-block').text()).toEqual(validationMessage);
     });
 
-    test('Chart is hidden when required', () => {
+    test('Chart is hidden when isVisible is model.false', () => {
 
         componentWrapper = manyWhoMount(
             undefined,
@@ -163,7 +163,7 @@ describe('Chart component behaviour', () => {
         }));
     });
     
-    test('ChartBase receives correct props', () => {
+    test('ChartBase receives width, height and onClick props', () => {
         const width = int(1, 100);
         const height = int(1, 100);
 

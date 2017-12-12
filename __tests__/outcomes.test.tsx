@@ -55,7 +55,7 @@ describe('Outcomes component behaviour', () => {
         
     });
 
-    test('Dummy outcome elements get rendered if in design time', () => {
+    test('.btn-group element gets rendered if group is horizontal', () => {
 
         globalAny.window.manywho.utils.isEqual = x => x === 'horizontal';
 

@@ -45,14 +45,14 @@ describe('ItemsHeader component behaviour', () => {
         .toHaveBeenCalledWith('mw-items-header', ItemsHeader); 
     });
 
-    test('Component renders search when required', () => {
+    test('Component renders search when isSearchable is true', () => {
         componentWrapper = manyWhoMount({
             isSearchable: true,
         });
 
         expect(
-            componentWrapper.find('.mw-items-header-search').length,
-        ).toEqual(1);
+            componentWrapper.find('.mw-items-header-search').exists(),
+        ).toEqual(true);
     });
 
     test('Clicking search button calls props.onSearch', () => {

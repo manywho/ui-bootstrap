@@ -100,7 +100,7 @@ describe('ChartContainer component behaviour', () => {
         }));
     });
 
-    test('Refresh button renders when required', () => {
+    test('Refresh button renders when not in design time', () => {
 
         componentWrapper = manyWhoMount(
             {

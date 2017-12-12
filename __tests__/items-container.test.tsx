@@ -95,7 +95,7 @@ describe('ItemsContainer component behaviour', () => {
         expect(globalAny.window.manywho.component.getByName).toHaveBeenCalledWith(`mw-${componentType}`); 
     });
 
-    test('Empty items element is rendered when required', () => {
+    test('Empty items element is rendered when objectData is empty array', () => {
 
         const stubComponent = jest.fn(() => <div/>);
 
