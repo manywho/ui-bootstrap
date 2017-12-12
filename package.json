@@ -16,8 +16,12 @@
         "test": "jest"
     },
     "lint-staged": {
-        "*.ts": "lint",
-        "*.tsx": "lint"
+        "*.ts": "tslint",
+        "*.tsx": [
+            "tslint",
+            "git add",
+            "jest --bail --findRelatedTests"
+        ]
     },
     "devDependencies": {
         "@types/enzyme": "^3.1.5",
@@ -35,6 +39,7 @@
         "husky": "^0.14.3",
         "identity-obj-proxy": "^3.0.0",
         "jest": "^21.2.1",
+        "jest-junit-reporter": "^1.1.0",
         "jquery": "^2.1.4",
         "less": "^2.7.3",
         "less-loader": "^4.0.5",
@@ -46,14 +51,14 @@
         "react-transition-group": "^1.2.1",
         "script-loader": "^0.7.2",
         "style-loader": "^0.19.0",
-        "ts-jest": "^21.2.3",
+        "ts-jest": "^21.2.4",
         "ts-loader": "^3.1.1",
         "tslint": "^5.8.0",
         "tslint-config-airbnb": "^5.4.2",
         "tslint-loader": "^3.5.3",
         "typedoc": "^0.9.0",
-        "typescript": "^2.0.2",
-        "webpack": "^3.8.1",
+        "typescript": "^2.6.2",
+        "webpack": "^3.10.0",
         "webpack-bundle-analyzer": "^2.9.1"
     },
     "jest": {
@@ -78,6 +83,10 @@
         ],
         "moduleNameMapper": {
             "\\.(css|less)$": "identity-obj-proxy"
-        }
+        },
+        "testResultsProcessor": "./node_modules/jest-junit-reporter"
+    },
+    "dependencies": {
+        "lint": "^1.1.2"
     }
 }
