@@ -1,5 +1,7 @@
 
 
+import { int } from '../test-utils';
+
 import * as React from 'react';
 
 import { mount } from 'enzyme';
@@ -15,6 +17,14 @@ jest.mock('react-transition-group/CSSTransitionGroup', () => {
 jest.useFakeTimers();
 
 describe('Tour component behaviour', () => {
+    const top = int(1, 100);
+    const bottom = int(1, 100);
+    const left = int(1, 100);
+    const right = int(1, 100);
+    const width = int(1, 100);
+    const height = int(1, 100);
+    const x = int(1, 100);
+    const y = int(1, 100);
 
     let tourWrapper;
 
@@ -67,14 +77,14 @@ describe('Tour component behaviour', () => {
             return {
                 getBoundingClientRect: jest.fn(() => {
                     return {
-                        top: 100,
-                        bottom: 100,
-                        left: 100,
-                        right: 100,
-                        width: 100,
-                        height: 100,
-                        x: 100,
-                        y: 100,
+                        top,
+                        bottom,
+                        left,
+                        right,
+                        width,
+                        height,
+                        x,
+                        y,
                     }; 
                 }),
             };
@@ -167,27 +177,39 @@ describe('Tour component behaviour', () => {
     });
 
     test('step positioning for top of element', () => {
+        const expectedTopVal = top - 0 - 16;
+        const expectedCenterVal = left + (width / 2);
+
         tourWrapper = manyWhoMount('top', 'center');
         tourWrapper.setState({ foundTarget: true });
-        expect(tourWrapper.state().style).toEqual({ top:84, left:150 });
+        expect(tourWrapper.state().style).toEqual({ top:expectedTopVal, left:expectedCenterVal });
     });
 
     test('step positioning for bottom of element', () => {
+        const expectedTopVal = bottom + 16;
+        const expectedLeftVal = left + (width / 2);
+
         tourWrapper = manyWhoMount('bottom', 'center');
         tourWrapper.setState({ foundTarget: true });
-        expect(tourWrapper.state().style).toEqual({ left: 150, top: 116 });        
+        expect(tourWrapper.state().style).toEqual({ left: expectedLeftVal, top: expectedTopVal });        
     });
 
     test('step positioning for right of element', () => {
+        const expectedTopVal = (top + (height / 2)) - (0 / 2);
+        const expectedLeftVal = left - 0 - 16;
+
         tourWrapper = manyWhoMount('left', 'center');
         tourWrapper.setState({ foundTarget: true });
-        expect(tourWrapper.state().style).toEqual({ left:84, top:150 });        
+        expect(tourWrapper.state().style).toEqual({ left:expectedLeftVal, top:expectedTopVal });        
     });
 
     test('step positioning for left of element', () => {
+        const expectedTopVal = (top + (height / 2)) - (0 / 2);
+        const expectedLeftVal = right + 16;
+
         tourWrapper = manyWhoMount('right', 'center');
         tourWrapper.setState({ foundTarget: true });
-        expect(tourWrapper.state().style).toEqual({ left:116, top:150 });        
+        expect(tourWrapper.state().style).toEqual({ left:expectedLeftVal, top:expectedTopVal });        
     });
 
     test('arrow positioning for when offset is null/undefined', () => {
