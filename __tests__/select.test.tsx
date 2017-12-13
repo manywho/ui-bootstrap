@@ -281,14 +281,6 @@ describe('Select input component behaviour', () => {
         expect(selectWrapper.state().isOpen).toEqual(false);
     });
 
-    test('open state changes when component is loading', () => {
-        const isOpen = false;
-        selectWrapper = manyWhoMount();
-        const selectInstance = selectWrapper.instance();
-        selectInstance.onOpenChange(isOpen);
-        expect(selectWrapper.state().isOpen).toEqual(false);
-    });
-
     test('open state changes when component focus event is triggered', () => {
         selectWrapper = manyWhoMount();
         const selectInstance = selectWrapper.instance();
