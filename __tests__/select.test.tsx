@@ -229,8 +229,6 @@ describe('Select input component behaviour', () => {
     test('onValuesChange method invokes select method', () => {
         selectWrapper = manyWhoMount();
         const selectInstance = selectWrapper.instance();
-
-        const key = str(10);
         const value = str(10);
 
         const options = [
@@ -250,8 +248,6 @@ describe('Select input component behaviour', () => {
     test('onValueChange method invokes select method and sets state', () => {
         selectWrapper = manyWhoMount();
         const selectInstance = selectWrapper.instance();
-
-        const key = str(10);
         const value = str(10);
 
         selectInstance.onValueChange({ label: str(10), value: { key: value } });
