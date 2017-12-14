@@ -16,18 +16,18 @@ class Toggle extends React.Component<IComponentProps, IToggleState> {
         super(props);
     }
 
-    handleChange = (e) => {
+    handleChange: (e: { target: { checked: Boolean; } }) => void = (e) => {
         manywho.state.setComponent(
             this.props.id,
             { contentValue: e.target.checked },
             this.props.flowKey,
             true,
         );
-        this.handleEvent(null);
+        this.handleEvent();
         this.forceUpdate();
     }
 
-    handleEvent = (e) => {
+    handleEvent: () => void = () => {
         manywho.component.handleEvent(
             this,
             manywho.model.getComponent(this.props.id, this.props.flowKey), this.props.flowKey,

@@ -24,7 +24,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
         this.onDone = this.onDone.bind(this);
     }
 
-    onInterval(stepIndex) {
+    onInterval(stepIndex: number) {
         const targetElement = manywho.tours.getTargetElement(this.props.tour.steps[stepIndex]);
 
         if (targetElement && !this.state.foundTarget)
@@ -33,30 +33,30 @@ class Tour extends React.Component<ITourProps, ITourState> {
             this.setState({ foundTarget: false, style: this.state.style });
     }
 
-    onNext = () => {
+    onNext: () => void = () => {
         manywho.tours.next(this.props.tour);
     }
 
-    onBack = () => {
+    onBack: () => void = () => {
         manywho.tours.previous(this.props.tour);
     }
 
-    onDone = () => {
+    onDone: () => void = () => {
         manywho.tours.done(this.props.tour);
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps: ITourProps) {
         if (this.props.stepIndex !== nextProps.stepIndex) {
             this.setState({ foundTarget: false, style: this.state.style });
             this.domWatcher = setInterval(() => { this.onInterval(this.props.stepIndex); }, 500);
         }
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         this.domWatcher = setInterval(() => { this.onInterval(this.props.stepIndex); }, 500);
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps: ITourProps, prevState: ITourState) {
         if (prevState.foundTarget === false && this.state.foundTarget) {
             const step = this.props.tour.steps[this.props.tour.currentStep];
             const stepRect = (this.refs['step'] as HTMLElement).getBoundingClientRect();
@@ -123,7 +123,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
         }
     }
 
-    componentWillUnMount() {
+    componentWillUnMount(): void {
         clearInterval(this.domWatcher);
     }
 

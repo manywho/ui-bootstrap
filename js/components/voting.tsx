@@ -23,7 +23,7 @@ const Voting: React.SFC<IComponentProps> = ({ flowKey }) => {
         );
 
     }
-    return <div></div>;
+    return <noscript />;
 };
 
 manywho.component.register(registeredComponents.VOTING, Voting);
