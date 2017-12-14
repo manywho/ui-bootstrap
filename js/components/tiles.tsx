@@ -14,38 +14,32 @@ class Tiles extends React.Component<ITilesProps, null> {
 
     constructor(props: ITilesProps) {
         super(props);
-
-        this.onSelect = this.onSelect.bind(this);
-        this.onOutcome = this.onOutcome.bind(this);
-        this.onNext = this.onNext.bind(this);
-        this.onPrev = this.onPrev.bind(this);
         this.renderItem = this.renderItem.bind(this);
-        this.onSearch = this.onSearch.bind(this);
     }
 
-    onSelect(e) {
+    onSelect = (e) => {
         this.props.select(e.currentTarget.id);
     }
 
-    onOutcome(e) {
+    onOutcome = (e) => {
         this.props.onOutcome(e.currentTarget.parentElement.parentElement.id, e.currentTarget.id);
     }
 
-    onPrev() {
+    onPrev = () => {
         this.props.onPrev();
         setTimeout(() => (this.refs['container'] as HTMLElement).scrollIntoView(true));
     }
 
-    onNext() {
+    onNext = () => {
         this.props.onNext();
         setTimeout(() => (this.refs['container'] as HTMLElement).scrollIntoView(true));
     }
 
-    onSearch(search: string, clearSelection: boolean) {
+    onSearch = (search: string, clearSelection: boolean) => {
         this.props.onSearch(search, clearSelection);
     }
 
-    renderItem(
+    renderItem (
         item: any,
         columns: (any)[],
         outcomes: (any)[],

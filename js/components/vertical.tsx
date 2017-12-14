@@ -6,10 +6,10 @@ declare var manywho: any;
 
 const Vertical: React.SFC<IComponentProps> = ({ id, children, flowKey }) => {
 
-    const kids = manywho.model.getChildren(id, flowKey);
+    const modelChildren = manywho.model.getChildren(id, flowKey);
 
     return <div className="clearfix" id="vertical">
-        {children || manywho.component.getChildComponents(kids, id, flowKey)}
+        {children || manywho.component.getChildComponents(modelChildren, id, flowKey)}
     </div>;
 };
 

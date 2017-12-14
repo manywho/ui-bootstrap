@@ -33,15 +33,15 @@ class Tour extends React.Component<ITourProps, ITourState> {
             this.setState({ foundTarget: false, style: this.state.style });
     }
 
-    onNext() {
+    onNext = () => {
         manywho.tours.next(this.props.tour);
     }
 
-    onBack() {
+    onBack = () => {
         manywho.tours.previous(this.props.tour);
     }
 
-    onDone() {
+    onDone = () => {
         manywho.tours.done(this.props.tour);
     }
 

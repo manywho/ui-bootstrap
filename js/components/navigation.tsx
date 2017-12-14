@@ -25,7 +25,7 @@ class Navigation extends React.Component<INavigationProps, null> {
         }
     }
 
-    getHeaderElement(id, navigation) {
+    getHeaderElement(id: string, navigation: any) {
         const children = [
             <button className="navbar-toggle collapsed" 
                 data-toggle="collapse" 
@@ -44,7 +44,7 @@ class Navigation extends React.Component<INavigationProps, null> {
         return <div className="navbar-header">{children}</div>;
     }
 
-    getNavElements(items, isTopLevel) {
+    getNavElements(items: any, isTopLevel: boolean) {
         const elements = [];
 
         for (const itemId in items) {
@@ -87,7 +87,7 @@ class Navigation extends React.Component<INavigationProps, null> {
         return elements;
     }
 
-    onClick(item) {
+    onClick(item: any) {
 
         const toggleButton : HTMLButtonElement = 
             this.refs.toggle ?

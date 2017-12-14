@@ -4,30 +4,27 @@ import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
 
-class Voting extends React.Component<IComponentProps, null> {
+const Voting: React.SFC<IComponentProps> = ({ flowKey }) => {
 
-    render() {
+    const isVisible = manywho.utils.isEqual(
+        manywho.model.getInvokeType(flowKey),
+        'waiting_on_votes',
+        true,
+    );
 
-        const isVisible = manywho.utils.isEqual(
-            manywho.model.getInvokeType(this.props.flowKey),
-            'waiting_on_votes',
-            true,
+    if (isVisible) {
+        manywho.log.info('Rendering Voting');
+        return(
+            <div className="voting">
+                <span className= "glyphicon glyphicon-refresh status-icon spin"
+                aria-hidden= "true"></span>
+                <p className="lead">Waiting on votes</p>
+            </div>
         );
-    
-        if (isVisible) {
-            manywho.log.info('Rendering Voting');
-            return(
-                <div className="voting">
-                    <span className= "glyphicon glyphicon-refresh status-icon spin"
-                    aria-hidden= "true"></span>
-                    <p className="lead">Waiting on votes</p>
-                </div>
-            );
 
-        }
-        return null;
     }
-}
+    return <div></div>;
+};
 
 manywho.component.register(registeredComponents.VOTING, Voting);
 

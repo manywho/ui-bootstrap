@@ -44,10 +44,9 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
             );
 
         })
-            .then(() => {
-
-                fileUploadElement.getDOMNode().value = '';
-            });
+        .then(() => {
+            fileUploadElement.getDOMNode().value = '';
+        });
     }
 
 

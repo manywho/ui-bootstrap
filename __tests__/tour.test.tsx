@@ -153,24 +153,24 @@ describe('Tour component behaviour', () => {
     });
 
     test('simulating clicking close button', () => {
-        const myspy = jest.spyOn(Tour.prototype, 'onDone');
         tourWrapper = manyWhoMount();
+        const myspy = jest.spyOn(tourWrapper.instance(), 'onDone');
         tourWrapper.setState({ foundTarget: true });
         tourWrapper.find('.close').simulate('click');
         expect(myspy).toHaveBeenCalled();
     });
 
     test('simulating clicking back button', () => {
-        const myspy = jest.spyOn(Tour.prototype, 'onBack');
         tourWrapper = manyWhoMount();
+        const myspy = jest.spyOn(tourWrapper.instance(), 'onBack');
         tourWrapper.setState({ foundTarget: true });
         tourWrapper.find('.btn-default').simulate('click');
         expect(myspy).toHaveBeenCalled();
     });
 
     test('simulating clicking next button', () => {
-        const myspy = jest.spyOn(Tour.prototype, 'onNext');
         tourWrapper = manyWhoMount();
+        const myspy = jest.spyOn(tourWrapper.instance(), 'onNext');
         tourWrapper.setState({ foundTarget: true });
         tourWrapper.find('.btn-primary').simulate('click');
         expect(myspy).toHaveBeenCalled();

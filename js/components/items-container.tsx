@@ -126,7 +126,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         setTimeout(() => this.load());
     }
 
-    sort(by) {
+    sort(by: string) {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
         if (model.objectDataRequest) {
