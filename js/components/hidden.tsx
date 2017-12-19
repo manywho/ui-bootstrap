@@ -5,7 +5,7 @@ import IComponentProps from '../interfaces/IComponentProps';
 const Hidden: React.SFC<IComponentProps> = ({ id }) => {
 
     manywho.log.info('Rendering Hidden: ' + id);
-    return <div></div>;
+    return <noscript />;
 };
 
 manywho.component.register(registeredComponents.HIDDEN, Hidden);

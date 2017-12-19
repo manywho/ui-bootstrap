@@ -25,7 +25,7 @@ class Navigation extends React.Component<INavigationProps, null> {
         }
     }
 
-    getHeaderElement(id: string, navigation: any) {
+    getHeaderElement(id: string, navigation: { label: string; }) {
         const children = [
             <button className="navbar-toggle collapsed" 
                 data-toggle="collapse" 
@@ -87,7 +87,7 @@ class Navigation extends React.Component<INavigationProps, null> {
         return elements;
     }
 
-    onClick(item: any) {
+    onClick(item: { isEnabled: boolean; id: string; }) {
 
         const toggleButton : HTMLButtonElement = 
             this.refs.toggle ?
