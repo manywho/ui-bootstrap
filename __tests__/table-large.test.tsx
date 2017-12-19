@@ -95,6 +95,7 @@ describe('Table Large input component behaviour', () => {
                     striped: true,
                 },
                 isValid: false,
+                isMultiSelect: false,
             },
         });
         
@@ -112,6 +113,7 @@ describe('Table Large input component behaviour', () => {
                     striped: true,
                 },
                 isValid: true,
+                isMultiSelect: false,
             },
         });
 
@@ -129,6 +131,7 @@ describe('Table Large input component behaviour', () => {
                     striped: true,
                 },
                 isValid: false,
+                isMultiSelect: false,
             },
         });
 

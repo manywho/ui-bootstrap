@@ -5,13 +5,6 @@ import registeredComponents from '../constants/registeredComponents';
 
 declare var manywho: any;
 
-function arePropsSpecified(props) {
-    if (Object.keys(props).length === 1) {
-        return !props.hasOwnProperty('children');
-    }
-    return Object.keys(props).length > 0;
-}
-
 class Wait extends React.Component<IWaitProps, null> {
 
     constructor(props) {

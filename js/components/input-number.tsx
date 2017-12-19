@@ -5,7 +5,6 @@ import registeredComponents from '../constants/registeredComponents';
 import '../../css/input.less';
 
 declare var manywho: any;
-declare var moment: any;
 
 interface IInputNumberState {
     value: string;

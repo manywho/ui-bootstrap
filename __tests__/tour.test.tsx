@@ -16,6 +16,8 @@ jest.mock('react-transition-group/CSSTransitionGroup', () => {
 
 jest.useFakeTimers();
 
+declare var clearInterval: any;
+
 describe('Tour component behaviour', () => {
     const top = int(1, 100);
     const bottom = int(1, 100);

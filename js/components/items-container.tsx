@@ -130,8 +130,6 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
         if (model.objectDataRequest) {
-            const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
-
             let isAscending = true;
 
             if (manywho.utils.isEqual(this.state.sortedBy, by, true))
@@ -222,8 +220,6 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
     }
 
     clearSelection(clearSearch: boolean) {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-
         this.updateState([], clearSearch);
         manywho.component.handleEvent(
             this, 

@@ -6,15 +6,20 @@ import { shallow } from 'enzyme';
 
 import TableInput from '../js/components/table-input';
 
+
+
 describe('Table input component behaviour', () => {
 
     let tableInputWrapper;
+    let val:any;
+    val = str();
+
     const globalAny:any = global;
 
     function manyWhoMount(
         {
             contentType = 'string',
-            value = 'any',
+            value = val,
         } = {},
     ) {
 

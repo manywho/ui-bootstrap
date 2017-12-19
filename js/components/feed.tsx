@@ -153,7 +153,7 @@ class Feed extends React.Component<IComponentProps, null> {
                         <button className={'btn btn-default btn-sm'}
                             onClick={this.onToggleFollow}>
                             <span className={'glyphicon glyphicon-pushpin'} />
-                            followCaption
+                            {followCaption}
                             </button>
                         <button className={'btn btn-default btn-sm'}
                             onClick={this.onRefresh}>

@@ -1,6 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import * as $ from 'jquery';
 import * as MaskedInput from '../lib/140-react-maskedinput';
 
 import registeredComponents from '../constants/registeredComponents';
@@ -11,7 +9,6 @@ import { getInputNumber } from './input-number';
 import { getOutcome } from './outcome';
 
 import '../../css/input.less';
-import { precompile } from 'handlebars';
 
 declare var manywho: any;
 
@@ -30,7 +27,7 @@ class Input extends React.Component<IComponentProps, IInputState> {
         this.onBlur = this.onBlur.bind(this);
     }
 
-    onChange(e: React.FormEvent<any> | string | boolean | number | null) {
+    onChange(e: any | string | boolean | number | null) {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
         if (
@@ -185,11 +182,6 @@ class Input extends React.Component<IComponentProps, IInputState> {
                 {model.isRequired ? <span className="input-required"> *</span> : null}
             </label>
         );
-
-        const isRequired =
-            typeof model.isRequired === 'string' ?
-                manywho.utils.isEqual(model.isRequired, 'True', true) :
-                model.isRequired;
 
         let inputElement = null;
 

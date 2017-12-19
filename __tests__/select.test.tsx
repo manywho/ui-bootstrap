@@ -22,8 +22,9 @@ globalAny.reactSelectize = {
                 </div>
             );
         },
-    },
-});
+    }),
+};
+
 
 describe('Select input component behaviour', () => {
 

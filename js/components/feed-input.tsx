@@ -3,7 +3,6 @@ import * as ReactDOM from 'react-dom';
 import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
 import IFeedInputProps from '../interfaces/IFeedInputProps';
-import fileUpload from './file-upload';
 
 interface IFeedInputState {
     mentionedUsers: any;

@@ -3,8 +3,8 @@ import IComponentProps from './IComponentProps';
 interface IModalContainerProps extends IComponentProps {
     title: string;
     content: any;
-    onConfirm: (event: React.SyntheticEvent<HTMLElement>) => void;
-    onCancel: (event: React.SyntheticEvent<HTMLElement>) => void;
+    onConfirm: any;
+    onCancel: any;
     cancelLabel?: string;
     confirmLabel?: string;
 }

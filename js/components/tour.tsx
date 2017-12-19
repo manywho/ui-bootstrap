@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ITourState, ITourProps, ITour, ITourStep } from '../interfaces/ITour';
+import { ITourState, ITourProps, ITourStep } from '../interfaces/ITour';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import registeredComponents from '../constants/registeredComponents';
 

@@ -18,8 +18,8 @@ interface ITableContainerState {
 }
 
 interface ITableContainerProps extends IPaginationProps, IComponentProps {
-    sort: (event: React.SyntheticEvent<HTMLElement>) => void;
-    select: (event: React.SyntheticEvent<HTMLElement>) => void;
+    sort: any;
+    select: any;
     objectData: any;
     sortedBy: string;
     sortedIsAscending: boolean;

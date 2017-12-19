@@ -4,9 +4,6 @@ import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
 
-// Awaiting react update
-declare var ReactCollapse: any;
-
 const Horizontal: React.SFC<IComponentProps> = ({ id, flowKey, children }) => {
 
     const childData = manywho.model.getChildren(id, flowKey);

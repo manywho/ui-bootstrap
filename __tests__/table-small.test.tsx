@@ -20,7 +20,10 @@ describe('Table Small input component behaviour', () => {
         onOutcome = jest.fn(),
         isValid = true,
         objectData = [],
-        outcomes = [{ id: 'string' }],
+        outcomes = [{
+            id: 'string',
+            pageActionBindingType: '',
+        }],
         selectedRows = [],
         displayColumns = [],
         onRowClicked = noop,
@@ -52,8 +55,8 @@ describe('Table Small input component behaviour', () => {
 
     test('Outcome column gets rendered when there are multiple outcomes', () => {
         const outcomes = [
-            { id: 'string' },
-            { id: 'string' },
+            { id: 'string', pageActionBindingType: '' },
+            { id: 'string', pageActionBindingType: '' },
         ];
         const displayColumns = ['mw-outcomes'];
         const objectData = [
@@ -63,9 +66,9 @@ describe('Table Small input component behaviour', () => {
         ];
         
         tableSmallWrapper = manyWhoMount({
+            objectData,
             outcomes,
             displayColumns,
-            objectData,
         });
 
         expect(tableSmallWrapper.find(Outcome).length).toBe(2);
@@ -241,9 +244,11 @@ describe('Table Small input component behaviour', () => {
             outcomes: [
                 {
                     id: str(),
+                    pageActionBindingType: str(),
                 },
                 {
                     id: str(),
+                    pageActionBindingType: str(),
                 },
             ],
             objectData: [

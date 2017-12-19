@@ -4,7 +4,7 @@ import { str } from '../test-utils';
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import { default as ChartContainer, onRefresh } from '../js/components/chart-container';
+import { default as ChartContainer } from '../js/components/chart-container';
 import Wait from '../js/components/wait';
 import ChartBase from '../js/components/chart-base';
 

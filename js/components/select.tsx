@@ -79,7 +79,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
     onValuesChange(options) {
         if (!this.props.isLoading) {
             if (options.length > 0) {
-                const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+                manywho.model.getComponent(this.props.id, this.props.flowKey);
                 this.props.select(options[options.length - 1].value);
             } else {
                 this.props.clearSelection();

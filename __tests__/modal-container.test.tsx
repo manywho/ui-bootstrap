@@ -8,8 +8,6 @@ describe('ModalContainer component behaviour', () => {
 
     let componentWrapper;
 
-    const globalAny:any = global;
-
     function manyWhoMount() {
 
         const props = {

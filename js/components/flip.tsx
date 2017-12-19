@@ -57,7 +57,6 @@ class Flip extends React.Component<IComponentProps, IFlipState> {
         if (this.props.isDesignTime)
             return <div className="clearfix"></div>;
 
-        const model = manywho.model.getContainer(this.props.id, this.props.flowKey);
         const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
         const childComponents =
             manywho.component.getChildComponents(children, this.props.id, this.props.flowKey);

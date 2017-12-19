@@ -142,7 +142,6 @@ class Container extends React.Component<IComponentProps, IContainerState> {
             ${model.developerName}`,
         );
 
-        const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
         
         const Outcome = getOutcome(); 

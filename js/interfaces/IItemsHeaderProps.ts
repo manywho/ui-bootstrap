@@ -3,7 +3,7 @@ import IComponentProps from './IComponentProps';
 interface IItemsHeaderProps extends IComponentProps {
     isSearchable: boolean;
     outcomes: any[];
-    refresh: (event: React.SyntheticEvent<HTMLElement>) => void;
+    refresh: any;
     isDisabled?: boolean;
     onSearch?: Function;
     onSearchChanged?: Function;

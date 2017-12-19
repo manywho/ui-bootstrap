@@ -56,8 +56,6 @@ class Login extends React.Component<ILoginProps, ILoginState> {
     }
 
     onSubmit() {
-        const newState: any = {};
-
         if (
             !manywho.utils.isNullOrWhitespace(this.state.username) && 
             !manywho.utils.isNullOrWhitespace(this.state.password)

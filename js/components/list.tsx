@@ -17,7 +17,7 @@ const List: React.SFC<IComponentProps> = ({ id, parentId, flowKey, isDesignTime 
     const state = manywho.state.getComponent(id, flowKey) || {};
     const outcomes = manywho.model.getOutcomes(id, flowKey);
 
-    const Outcome = getOutcome();
+    getOutcome();
     const Wait = getWait();
 
     let elements = null;
