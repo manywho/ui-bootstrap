@@ -43,6 +43,14 @@ npm run dev -- --env.build="custom-folder"
 npm start -- --env.build="custom-folder"
 ```
 
+### Running tests
+
+To run Jest/Enzyme tests:
+
+```
+npm test
+```
+
 ## Contributing
 
 Contributions are welcome to the project - whether they are feature requests, improvements or bug fixes! Refer to 
