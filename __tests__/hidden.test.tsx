@@ -35,6 +35,6 @@ describe('Hidden component behaviour', () => {
 
     test('Component should render an empty div element', () => {
         const htmlOutput = hiddenWrapper.html();
-        expect(htmlOutput).toEqual('<div></div>');
+        expect(htmlOutput).toEqual('<noscript></noscript>');
     });
 });
