@@ -17,7 +17,7 @@ const List: React.SFC<IComponentProps> = ({ id, parentId, flowKey, isDesignTime 
     const state = manywho.state.getComponent(id, flowKey) || {};
     const outcomes = manywho.model.getOutcomes(id, flowKey);
 
-    getOutcome();
+    const Outcome = getOutcome();
     const Wait = getWait();
 
     let elements = null;
@@ -80,12 +80,7 @@ const List: React.SFC<IComponentProps> = ({ id, parentId, flowKey, isDesignTime 
     }
 
     const outcomeButtons = 
-        outcomes && outcomes.map((outcome) => {
-            return React.createElement(
-                manywho.component.getByName('outcome'), 
-                { flowKey, id: outcome.id },
-            );
-        });
+        outcomes && outcomes.map(outcome => <Outcome flowKey={flowKey} id={outcome.id} />);
 
     return <div className={className} id={id}>
         <label>{model.label}</label>

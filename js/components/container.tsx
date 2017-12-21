@@ -2,6 +2,8 @@ import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
+// tslint:disable-next-line
+import Dynamic from './dynamic';
 import '../../css/containers.less';
 
 
@@ -183,24 +185,14 @@ class Container extends React.Component<IComponentProps, IContainerState> {
                     isOpened={!this.state.isCollapsed} 
                     keepCollapsedContent={true} 
                     springConfig={ReactMotion.presets.gentle}>
-                    {
-                        React.createElement(
-                            manywho.component.getByName('mw-' + model.containerType), 
-                            this.props,
-                        )
-                    }
+                    <Dynamic name={`mw-${model.containerType}`} props={this.props} />
                     { outcomeButtons }
                 </ReactCollapse>
             );
         else
             content = (
                 <div>
-                    {
-                        React.createElement(
-                            manywho.component.getByName('mw-' + model.containerType), 
-                            this.props,
-                        )
-                    }
+                    <Dynamic name={`mw-${model.containerType}`} props={this.props} />
                     { outcomeButtons }
                 </div>
             );

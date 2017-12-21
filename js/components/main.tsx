@@ -9,6 +9,8 @@ import { getFeed } from './feed';
 import { getWait } from './wait';
 import { getDebugViewer } from './debug';
 import { getHistory } from './history';
+// tslint:disable-next-line
+import Dynamic from './dynamic';
 
 declare var manywho: any;
 
@@ -142,12 +144,10 @@ class Main extends React.Component<any, any> {
                     <Notifications flowKey={this.props.flowKey} position={'left'} />
                 }
                 {
-                    staticComponents.map(component => React.createElement(
-                        component, { flowKey: this.props.flowKey }))
+                    staticComponents.map(component => <Dynamic name={component} props={{ flowKey: this.props.flowKey }} />)
                 }
                 {
-                    modal ? React.createElement(
-                        manywho.component.modalContainer, modal) : null
+                    modal ? <Dynamic name={manywho.component.modalContainer} props={modal} /> : null
                 }
             </div>
             {

@@ -5,6 +5,12 @@ import IComponentProps from '../interfaces/IComponentProps';
 import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/table.less';
+import { getPagination } from './pagination';
+import { getTableLarge } from './table-large';
+import { getTableSmall } from './table-small';
+import { getFileUpload } from './file-upload';
+import { getItemsHeader } from './items-header';
+import { getWait } from './wait';
 
 interface ITableContainerState {
     isVisible?: boolean;
@@ -77,15 +83,21 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         onFirstPage: Function, 
         isDesignTime: boolean,
     ) {
-        if (pageIndex > 1 || hasMoreResults)
-            return React.createElement(manywho.component.getByName('mw-pagination'), {
+        const Pagination = getPagination();
+
+        if (pageIndex > 1 || hasMoreResults) {
+
+            const props = {
                 pageIndex,
                 hasMoreResults,
                 onNext,
                 onPrev,
                 onFirstPage,
                 isDesignTime,
-            });
+            };
+
+            return <Pagination {...props} />;
+        }
 
         return null;
     }
@@ -248,31 +260,31 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
                 props.onRowClicked = this.onSelect;
         }
 
+        const TableLarge = getTableLarge();
+        const TableSmall = getTableSmall();
+        
         let contentElement = this.props.contentElement;
         if (!contentElement) {
-            contentElement = React.createElement(
-                this.state.windowWidth <= 768 ? 
-                manywho.component.getByName('mw-table-small') :
-                manywho.component.getByName('mw-table-large'),
-                props,
-            );
+            contentElement = this.state.windowWidth <= 768 ? 
+                <TableSmall {...props} /> :
+                <TableLarge {...props} />;
         }
 
-        let fileUpload = null;
+        const FileUpload = getFileUpload();
+
+        let fileUploadElement = null;
         if (model.fileDataRequest) {
 
-            fileUpload = React.createElement(
-                manywho.component.getByName('file-upload'), 
-                {
-                    flowKey: this.props.flowKey,
-                    id: this.props.id,
-                    fileDataRequest: model.fileDataRequest,
-                    uploadComplete: this.uploadComplete,
-                    upload: this.uploadFile,
-                    isChildComponent: true,
-                }, 
-                null,
-            );
+            const props = {
+                flowKey: this.props.flowKey,
+                id: this.props.id,
+                fileDataRequest: model.fileDataRequest,
+                uploadComplete: this.uploadComplete,
+                upload: this.uploadFile,
+                isChildComponent: true,
+            };
+
+            fileUploadElement = <FileUpload {...props} />;
         }
 
         let classNames = 'table-container clear-fix';
@@ -313,24 +325,26 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         if (model.isEnabled === false || this.props.isLoading)
             isDisabled = true;
 
-        const headerElement = React.createElement(
-            manywho.component.getByName('mw-items-header'), 
-            {
-                isDisabled,
-                flowKey: this.props.flowKey,
-                isSearchable: model.isSearchable,
-                isRefreshable: (model.objectDataRequest || model.fileDataRequest),
-                onSearch: this.props.onSearch,
-                outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
-                refresh: this.props.refresh,
-            },
-        );
+        const ItemsHeader = getItemsHeader();
+        const itemsHeaderProps = {
+            isDisabled,
+            flowKey: this.props.flowKey,
+            isSearchable: model.isSearchable,
+            isRefreshable: (model.objectDataRequest || model.fileDataRequest),
+            onSearch: this.props.onSearch,
+            outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
+            refresh: this.props.refresh,
+        };
+
+        const headerElement = <ItemsHeader {...itemsHeaderProps} />;
+
+        const Wait = getWait();
 
         return <div className={classNames} id={this.props.id}>
             {labelElement}
             {validationElement}
             <div className={'clearfix' + (this.state.isVisible ? '' : ' hidden')}>
-                {fileUpload}
+                {fileUploadElement}
                 {headerElement}
                 {contentElement}
                 {
@@ -343,17 +357,7 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
                         this.props.isDesignTime,
                     )
                 }
-                {
-                    React.createElement(
-                        manywho.component.getByName('wait'), 
-                        { 
-                            isVisible: state.loading,
-                            message: state.loading && state.loading.message, 
-                            isSmall: true,
-                        },
-                        null,
-                    )
-                }
+                <Wait isVisible={state.loading} message={state.loading && state.loading.message} isSmall={true} />
             </div>
         </div>;
     }

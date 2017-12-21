@@ -4,6 +4,8 @@ import registeredComponents from '../constants/registeredComponents';
 import ITableLargeProps from '../interfaces/ITableLargeProps';
 import { getTableInput } from './table-input';
 import { getOutcome } from './outcome';
+// tslint:disable-next-line
+import Dynamic from './dynamic';
 
 import '../../css/table.less';
 
@@ -225,25 +227,22 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                     
                     if (!manywho.utils.isNullOrWhitespace(column.componentType)) {
 
+                        const columnProps = {
+                            id: item.externalId,
+                            propertyId: column.typeElementPropertyId,
+                            contentValue: selectedProperty.contentValue,
+                            objectData: selectedProperty.objectData,
+                            onCommitted: this.onCellEditCommitted,
+                            flowKey: this.props.flowKey,
+                            isEditable: column.isEditable,
+                            contentType: column.contentType,
+                            contentFormat: column.contentFormat,
+                        };
+
                         return (
                             <td id={column.typeElementPropertyId} 
                                 key={column.typeElementPropertyId}>
-                                {
-                                    React.createElement(
-                                        manywho.component.getByName(column.componentType), 
-                                        {
-                                            id: item.externalId,
-                                            propertyId: column.typeElementPropertyId,
-                                            contentValue: selectedProperty.contentValue,
-                                            objectData: selectedProperty.objectData,
-                                            onCommitted: this.onCellEditCommitted,
-                                            flowKey: this.props.flowKey,
-                                            isEditable: column.isEditable,
-                                            contentType: column.contentType,
-                                            contentFormat: column.contentFormat,
-                                        },
-                                    )
-                                }
+                                <Dynamic name={column.componentType} props={columnProps} />
                             </td>
                         );
 

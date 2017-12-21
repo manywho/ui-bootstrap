@@ -1,6 +1,8 @@
 import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
+// tslint:disable-next-line
+import Dynamic from './dynamic';
 
 import '../../css/items.less';
 
@@ -424,11 +426,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
             sortedIsAscending: this.state.sortedIsAscending,
         };
 
-        const component = manywho.component.getByName('mw-' + model.componentType);
-        if (component)
-            return React.createElement(component, props);
-
-        return null;
+        return <Dynamic name={`mw-${model.componentType}`} props={props} />;
     }
 
 }
