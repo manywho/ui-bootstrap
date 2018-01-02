@@ -1,5 +1,6 @@
 var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 var common = require('./webpack.common.js');
 
 var extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap.css');
@@ -42,5 +43,9 @@ var config = Object.assign({}, baseConfig, {
     plugins,
     devtool: 'source-map'
 });
+
+module.exports.plugins = [
+    new BundleAnalyzerPlugin(),
+];
 
 module.exports = config;

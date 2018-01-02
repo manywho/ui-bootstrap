@@ -1,7 +1,6 @@
 var path = require('path');
 var fs = require('fs');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 var LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
 
 var extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap.css');
@@ -55,7 +54,6 @@ module.exports.config = {
 };
 
 module.exports.plugins = [
-    new BundleAnalyzerPlugin(),
     new LicenseWebpackPlugin({
         pattern: /.*/,
         unacceptablePattern: /GPL|MPL|CC|EPL|CDDL|Artistic|OFL|Ms-RL|BSL|AFL|APSL|FDL|CPOL|AML|IPL|W3C|QPL/gi,
