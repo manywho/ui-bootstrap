@@ -118,6 +118,7 @@ module.exports.rules = [
 ];
 
 module.exports.run = (config, dir) => (env) => {
+
     var publicPath = "http://localhost:3000/build/"
 
     return new Promise((resolve, reject) => {
@@ -150,9 +151,10 @@ module.exports.run = (config, dir) => (env) => {
                 }
             });
 
-            if (env && env.build)
+            if (env && env.build) {
                 dir = env.build;
                 config.output.publicPath = publicPath;
+            }
 
             config.output.path = path.resolve(__dirname, dir);
             return resolve(config);
