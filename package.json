@@ -11,7 +11,7 @@
         "docs": "typedoc js --out docs --ignoreCompilerErrors --mode modules & start docs/index.html",
         "start": "webpack --config webpack.development-watch.config.js",
         "dev": "webpack --config webpack.development.config.js",
-        "dist": "webpack -p --config webpack.production.config.js",
+        "dist": "webpack -p --config webpack.production.config.js && node bundle",
         "precommit": "lint-staged",
         "test": "jest"
     },
