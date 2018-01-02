@@ -119,7 +119,7 @@ module.exports.rules = [
 
 module.exports.run = (config, dir) => (env) => {
 
-    var publicPath = "http://localhost:3000/build/"
+    var publicPath = "https://s3.amazonaws.com/manywho-cdn-react-staging/";
 
     return new Promise((resolve, reject) => {
 
@@ -153,8 +153,10 @@ module.exports.run = (config, dir) => (env) => {
 
             if (env && env.build) {
                 dir = env.build;
-                config.output.publicPath = publicPath;
+                publicPath = "http://localhost:3000/build/"
             }
+
+            config.output.publicPath = publicPath;
 
             config.output.path = path.resolve(__dirname, dir);
             return resolve(config);
