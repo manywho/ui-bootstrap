@@ -152,7 +152,7 @@ module.exports.run = (config, dir) => (env) => {
 
             if (env && env.build)
                 dir = env.build;
-            config.output.publicPath = publicPath;
+                config.output.publicPath = publicPath;
 
             config.output.path = path.resolve(__dirname, dir);
             return resolve(config);
