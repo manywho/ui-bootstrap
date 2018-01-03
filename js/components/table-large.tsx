@@ -13,6 +13,10 @@ declare var manywho: any;
         
 class TableLarge extends React.Component<ITableLargeProps, null> {
 
+    constructor(props) {
+        super(props);
+    }
+
     setPropertyValue(objectData, id, propertyId, value) {
 
         return objectData.map((item) => {
@@ -93,7 +97,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
         return <tr>{columns}</tr>;
     }
 
-    onOutcomeClick(e, outcome) {
+    onOutcomeClick = (e, outcome) => {
         const objectDataId = e.currentTarget.parentElement.getAttribute('data-item');
         this.props.onOutcome(objectDataId, outcome.id);
     }

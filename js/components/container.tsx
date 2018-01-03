@@ -190,12 +190,10 @@ class Container extends React.Component<IComponentProps, IContainerState> {
                 </ReactCollapse>
             );
         else
-            content = (
-                <div>
-                    <Dynamic name={`mw-${model.containerType}`} props={this.props} />
-                    { outcomeButtons }
-                </div>
-            );
+            content = [
+                <Dynamic name={`mw-${model.containerType}`} props={this.props} />,
+                outcomeButtons,         
+            ];
 
         return <div className={className} id={this.props.id}>
             {label}
