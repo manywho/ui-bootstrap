@@ -244,7 +244,7 @@ describe('Table Large input component behaviour', () => {
             tableLargeWrapper.find('td.table-outcome-column').first().find(Outcome).first().props(),
         ).toEqual(
             expect.objectContaining({
-                onClick: TableLarge.prototype.onOutcomeClick,
+                onClick: tableLargeWrapper.instance().onOutcomeClick,
             }),
         );
     });
