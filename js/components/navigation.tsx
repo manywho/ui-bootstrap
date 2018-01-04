@@ -75,7 +75,7 @@ class Navigation extends React.Component<INavigationProps, null> {
                 </li>;
             } else {
                 element = <li className={classNames.join(' ')}>
-                    <a href="#" onClick={this.onClick.bind(null, item)} id={item.id}>
+                    <a href="#" onClick={this.onClick.bind(this, item)} id={item.id}>
                         {item.label}
                     </a>
                 </li>;
@@ -100,7 +100,7 @@ class Navigation extends React.Component<INavigationProps, null> {
 
         if (
             this.refs.toggle && 
-            manywho.utils.isEqual(
+            !manywho.utils.isEqual(
                 window.getComputedStyle(toggleButton).display, 'none', true)
         ) {
             toggleButton.click();
@@ -179,7 +179,7 @@ class Navigation extends React.Component<INavigationProps, null> {
                             }
 
                             return (
-                                <li onClick={this.onClick.bind(null, item)} 
+                                <li onClick={this.onClick.bind(this, item)} 
                                     id={item.id} 
                                     className={className}>
                                     <span className="indicator" />
