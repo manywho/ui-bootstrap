@@ -97,6 +97,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
 
             setup: (editor) => {
                 this.editor = editor;
+                const props = this.props;
 
                 if (!this.props.isDesignTime) {
 
@@ -123,7 +124,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
 
                 editor.on('init', function () {
                     this.getDoc().body.style.fontSize = manywho.settings.global(
-                        'richtext.fontsize', this.props.flowKey, '13px',
+                        'richtext.fontsize', props.flowKey, '13px',
                     );
                 });
             },
