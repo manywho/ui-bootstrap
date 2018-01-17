@@ -32,7 +32,7 @@ declare var manywho: any;
         mixins: [manywho.component.mixins.collapse],
 
         onHeaderClick: function (e) {
-            this.props.sort(e.currentTarget.dataset['data-sort-property']);
+            this.props.sort(e.currentTarget.dataset.sortProperty);
         },
 
         onSelect: function (e) {
