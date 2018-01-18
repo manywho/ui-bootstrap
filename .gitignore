@@ -4,6 +4,7 @@
 /dist
 /build
 /typings
+/docs
 bundles.json
 
 ### VisualStudioCode ###

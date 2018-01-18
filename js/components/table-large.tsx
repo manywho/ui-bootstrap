@@ -59,6 +59,7 @@ declare var manywho: any;
                 else {
                     const headerProps = {
                         id: column.typeElementPropertyId,
+                        'data-sort-property': column.developerName,
                         key: 'header-' + column.typeElementPropertyId,
                         onClick: (this.props.onHeaderClick) ? this.props.onHeaderClick : null
                     };
