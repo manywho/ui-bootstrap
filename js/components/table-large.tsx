@@ -69,6 +69,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
             const headerProps = {
                 id: column.typeElementPropertyId,
+                'data-sort-property': column.developerName,
                 key: 'header-' + column.typeElementPropertyId,
                 onClick: (this.props.onHeaderClick) ? this.props.onHeaderClick : null,
             };
