@@ -94,6 +94,9 @@ class Content extends React.Component<IComponentProps, IContentState> {
                 null,
             ),
             file_picker_callback: null,
+            convert_urls: false,
+            relative_urls: false,
+            remove_script_host : false,
 
             setup: (editor) => {
                 this.editor = editor;
