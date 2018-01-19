@@ -161,7 +161,7 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
     }
 
     onHeaderClick(e) {
-        this.props.sort(e.currentTarget.dataset['data-sort-property']);
+        this.props.sort(e.currentTarget.dataset.sortProperty);
     }
 
     onSelect(e) {
