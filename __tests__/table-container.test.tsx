@@ -262,12 +262,15 @@ describe('Table component behaviour', () => {
         const mockEvent = {
             currentTarget: {
                 id: str(10),
+                dataset: {
+                    sortProperty: str(10),
+                },
             },
         };
 
         const tableWrapperInstance = tableWrapper.instance();
         tableWrapperInstance.onHeaderClick(mockEvent);
-        expect(props.sort).toBeCalledWith(mockEvent.currentTarget.id);
+        expect(props.sort).toBeCalledWith(mockEvent.currentTarget.dataset.sortProperty);
     });
 
     test('onSelect calls select function from component props', () => {
