@@ -176,12 +176,12 @@ class Input extends React.Component<IComponentProps, IInputState> {
             }
         }
 
-        let label = (
-            <label>
-                {model.label}
-                {model.isRequired ? <span className="input-required"> *</span> : null}
-            </label>
-        );
+        const isRequired =
+        typeof model.isRequired === 'string' ?
+            manywho.utils.isEqual(model.isRequired, 'True', true) :
+            model.isRequired;
+
+        let label = <label>{model.label}{isRequired ? <span className="input-required"> *</span> : null}</label>;
 
         let inputElement = null;
 
