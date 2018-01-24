@@ -14,7 +14,7 @@ interface IInputBooleanProps extends IComponentProps {
 }
 
 const InputBoolean: React.SFC<IInputBooleanProps> = (
-    { id, parentId, flowKey, value, disabled, readOnly, isDesignTime, required, autocomplete },
+    { id, parentId, flowKey, value, disabled, readOnly, isDesignTime, required, autocomplete, onChange },
 ) => {
 
     const model = manywho.model.getComponent(id, flowKey);
@@ -23,7 +23,7 @@ const InputBoolean: React.SFC<IInputBooleanProps> = (
             manywho.utils.isEqual(value, 'true', true) :
             value === true;
 
-    const onChange = (e) => {
+    const onInputChange = (e) => {
         onChange(e.target.checked);
     };
 
@@ -34,7 +34,7 @@ const InputBoolean: React.SFC<IInputBooleanProps> = (
                 type="checkbox"
                 disabled={disabled || readOnly}
                 required={required}
-                onChange={!isDesignTime && onChange}
+                onChange={!isDesignTime && onInputChange}
                 autoComplete={autocomplete} />
             {model.label}
             {model.isRequired ? <span className="input-required"> *</span> : null}
