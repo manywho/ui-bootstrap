@@ -53,6 +53,7 @@ import './components/chart.tsx';
 import './components/container.tsx';
 import './components/content.tsx';
 import './components/debug.tsx';
+import './components/feed-input.tsx';
 import './components/feed.tsx';
 import './components/file-upload.tsx';
 import './components/flip.tsx';
