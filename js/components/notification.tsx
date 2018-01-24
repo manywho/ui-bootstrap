@@ -41,7 +41,7 @@ class Notification extends React.Component<INotificationProps, null> {
             <div className={classNames}>
                 {
                     this.props.model.dismissible ? 
-                    <button className={'close'} onClick={this.dismiss}>
+                    <button className={'close'} onClick={this.dismiss.bind(this)}>
                         <span>{'\u00D7'}</span>
                     </button> : 
                     null
