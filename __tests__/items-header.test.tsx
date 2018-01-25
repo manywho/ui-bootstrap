@@ -14,6 +14,7 @@ describe('ItemsHeader component behaviour', () => {
     function manyWhoMount(
         {
             isSearchable = false,
+            isRefreshable = true,
             outcomes = [],
             onSearch = noop,
             refresh = noop,
@@ -25,6 +26,7 @@ describe('ItemsHeader component behaviour', () => {
             onSearch,
             outcomes,
             refresh,
+            isRefreshable,
         };
 
         return shallow(<ItemsHeader {...props} />);
@@ -151,6 +153,26 @@ describe('ItemsHeader component behaviour', () => {
         componentWrapper.find('.btn-sm.btn-default').simulate('click');
 
         expect(refresh).toBeCalled();
+    });
+
+    test('If isRefreshable is falsey then no refresh button is displayed', () => {
+        let isRefreshable = null;
+
+        componentWrapper = manyWhoMount({
+            isRefreshable,
+        });
+
+        expect(componentWrapper.find('.btn-sm.btn-default').exists()).toBeFalsy();
+
+        componentWrapper.unmount();
+
+        isRefreshable = false;
+    
+        componentWrapper = manyWhoMount({
+            isRefreshable,
+        });
+
+        expect(componentWrapper.find('.btn-sm.btn-default').exists()).toBeFalsy();
     });
 
     test('Component renders bulk outcomes only', () => {
