@@ -70,13 +70,13 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
             </div>;
         }
 
-        refresh = (
+        this.props.isRefreshable ? refresh = (
             <button className="btn btn-sm btn-default" 
                 onClick={this.props.refresh} 
                 disabled={this.props.isDisabled}>
                 <span className="glyphicon glyphicon-refresh" />
             </button>
-        );
+        ) : <noscript />;
 
         return (<div className="mw-items-header">
             {search}
