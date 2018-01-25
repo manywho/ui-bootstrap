@@ -76,7 +76,7 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
                 disabled={this.props.isDisabled}>
                 <span className="glyphicon glyphicon-refresh" />
             </button>
-        ) : <noscript />;
+        ) : null;
 
         return (<div className="mw-items-header">
             {search}
