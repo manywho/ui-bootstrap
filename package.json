@@ -9,7 +9,7 @@
     },
     "scripts": {
         "docs": "typedoc js --out docs --ignoreCompilerErrors --mode modules & start docs/index.html",
-        "start": "webpack --config webpack.development-watch.config.js",
+        "start": "webpack --config webpack.development.config.js --env.build=../ui-html5/build --env.assets=development --env.watch",
         "dev": "webpack --config webpack.development.config.js",
         "dist": "(if exist dist rmdir /s /q dist) & webpack -p --config webpack.production.config.js && node bundle",
         "precommit": "lint-staged",
