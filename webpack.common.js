@@ -1,9 +1,39 @@
-var path = require('path');
-var fs = require('fs');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
+const path = require('path');
+const fs = require('fs');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-var themeDir = path.resolve(__dirname, 'css/themes/');
+const themeDir = path.resolve(__dirname, 'css/themes/');
+const publicPaths = {
+    DEVELOPMENT: 'http://localhost:3000/build/',
+    QA: 'https://s3.amazonaws.com/manywho-cdn-react-qa/',
+    STAGING: 'https://s3.amazonaws.com/manywho-cdn-react-staging/',
+    PRODUCTION: 'https://assets.manywho.com/'
+}
+
+const mapPublicPath = (assets, publicPaths) => {
+
+    const assetsKey = typeof assets === 'string' ? assets.toLocaleLowerCase() : null;
+
+    switch (assets) {
+        
+        case 'development':
+            return publicPaths.DEVELOPMENT;
+
+        case 'qa':
+            return publicPaths.QA;
+
+        case 'staging':
+            return publicPaths.STAGING;
+
+        case 'production':
+            return publicPaths.PRODUCTION;
+
+        default:
+            return publicPaths.PRODUCTION;
+    }
+}
 
 module.exports.config = {
     entry: './js/index.js',
@@ -22,7 +52,7 @@ module.exports.config = {
         'react-motion': 'react-motion',
     },
     output: {
-        filename: 'js/ui-bootstrap.js',
+        // Properties added for different environments
     },
     performance: {
         hints: "warning",
@@ -110,9 +140,15 @@ module.exports.cssPaths = [
     'css/tours.less',
 ];
 
-module.exports.run = (config, dir) => (env) => {
+module.exports.run = (config, defaultDirectory) => (env = {}) => {
 
-    var publicPath = "https://s3.amazonaws.com/manywho-cdn-react-staging/";
+    const publicPath = mapPublicPath(env.assets, publicPaths);
+    const outputPath = env && env.build ? env.build : defaultDirectory;
+    const watch = env && env.watch;
+    const analyze = env && env.analyze;
+
+    console.log('Build directory: ', outputPath)
+    console.log('Assets url: ', publicPath);
 
     return new Promise((resolve, reject) => {
 
@@ -144,16 +180,24 @@ module.exports.run = (config, dir) => (env) => {
                 }
             });
 
-            if (env && env.build) {
-                dir = env.build;
-                publicPath = "http://localhost:3000/build/"
+            if (watch) {
+                config.watch = true
+                config.watchOptions = {
+                    poll: true
+                };
+            }
+
+            if (analyze) {
+                config.plugins = config.plugins.concat([
+                    new BundleAnalyzerPlugin()
+                ]);
             }
 
             config.output.publicPath = publicPath;
 
-            config.output.path = path.resolve(__dirname, dir);
+            config.output.path = path.resolve(__dirname, outputPath);
             return resolve(config);
-        })
+        });
 
-    })
+    });
 };

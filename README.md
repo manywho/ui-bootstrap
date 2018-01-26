@@ -17,7 +17,15 @@ npm install
 Then run the dev build:
 
 ```
-npm run dev
+npm run dev [env.build=<custom folder>] [env.assets=development|qa|staging|production] [env.watch] [env.analyze]
+```
+
+By default the compiled assets will be output to the 'build' folder, the assets will be set to `production`, 
+files will not be monitored for changes and the bundle will not get analyzed, you can override this using 
+the `env.build` , `env.assets`,  `env.watch` and `env.analyze` args:
+
+```
+npm run dev -- --env.build="custom-folder" --env.assets=development --env.watch --env.analyze
 ```
 
 Or dist build:
@@ -26,7 +34,10 @@ Or dist build:
 npm run dist
 ```
 
-### Running
+The compiled assets will be output to the 'dist' folder and the assets will be set to `production`.
+
+
+### Running locally and watching files
 
 You can run:
 
@@ -36,12 +47,8 @@ npm start
 
 Which will rebuild the project whenever a change to the script or less files is made.
 
-By default the compiled assets will be output to the `build` folder, you can override this using the `--env.build` arg:
+The compiled assets will be output to the ../ui-html5/build folder and the assets will be set to `development`.
 
-```
-npm run dev -- --env.build="custom-folder"
-npm start -- --env.build="custom-folder"
-```
 
 ### Running tests
 
