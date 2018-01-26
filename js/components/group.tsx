@@ -86,7 +86,7 @@ class Group extends React.Component<IComponentProps, IGroupState> {
         const tabElement = this.refs.group as HTMLElement;
 
         this.setState({ activeTabIndex: index });
-        $(tabElement.children[index].querySelector('a')).tab('show');
+        $(tabElement.children[0].children[index].querySelector('a')).tab('show');
     }
 
     render() {
