@@ -82,11 +82,11 @@ class Group extends React.Component<IComponentProps, IGroupState> {
         }
     }
 
-    onTabSelected(index) {
+    onTabSelected(index, tabId) {
         const tabElement = this.refs.group as HTMLElement;
 
         this.setState({ activeTabIndex: index });
-        $(tabElement.children[0].children[index].querySelector('a')).tab('show');
+        $(tabElement).find(tabId).tab('show');
     }
 
     render() {
@@ -103,9 +103,9 @@ class Group extends React.Component<IComponentProps, IGroupState> {
             }
 
             return <li className={className}>
-                <a href={'#' + child.id}
+                <a id={'tab-' + child.id} href={'#' + child.id}
                     className="control-label"
-                    onClick={this.onTabSelected.bind(null, index)}
+                    onClick={this.onTabSelected.bind(null, index, 'tab-' + child.id)}
                     data-toggle="tab">
                     {child.label}
                 </a>
