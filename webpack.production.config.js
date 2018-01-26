@@ -3,7 +3,8 @@ var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var common = require('./webpack.common.js');
 
-var extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap.css');
+var extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap-[contenthash].css');
+var extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap-[contenthash].css');
 
 var baseConfig = common.config;
 var baseRules = common.rules;
@@ -26,6 +27,11 @@ var rules = [
                 { loader: "less-loader" }
             ],
         })
+    },
+    {
+        test: /\.(less|css)$/,
+        include: common.cssPaths.map(cssPath => path.resolve(__dirname, cssPath)),
+        use: extractComponentsLess.extract(['css-loader', 'less-loader'])
     }
 ];
 
@@ -46,6 +52,7 @@ var plugins = common.plugins.concat([
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     extractBootstrap,
+    extractComponentsLess
 ]);
 
 var config = Object.assign({}, baseConfig, {
@@ -56,4 +63,6 @@ var config = Object.assign({}, baseConfig, {
     devtool: 'none'
 });
 
-module.exports = common.run(config, dir);
+config.output.filename = 'js/ui-bootstrap-[chunkhash].js';
+
+module.exports = common.run(config, dir, true);

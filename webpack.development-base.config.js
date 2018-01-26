@@ -4,6 +4,7 @@ var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlug
 var common = require('./webpack.common.js');
 
 var extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap.css');
+var extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap.css');
 
 var baseConfig = common.config;
 var baseRules = common.rules;
@@ -29,11 +30,17 @@ var rules = baseRules.concat([
                 { loader: "less-loader" }
             ],
         })
+    },
+    {
+        test: /\.(less|css)$/,
+        include: common.cssPaths.map(cssPath => path.resolve(__dirname, cssPath)),
+        use: extractComponentsLess.extract(['css-loader', 'less-loader'])
     }
 ]);
 
 var plugins = common.plugins.concat([    
     extractBootstrap,
+    extractComponentsLess
 ]);
 
 var config = Object.assign({}, baseConfig, {
