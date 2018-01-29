@@ -3,6 +3,12 @@ const fs = require('fs');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+const pathsToClean = [
+    'dist',
+    'build'
+];
 
 const themeDir = path.resolve(__dirname, 'css/themes/');
 const publicPaths = {
@@ -17,7 +23,7 @@ const mapPublicPath = (assets, publicPaths) => {
     const assetsKey = typeof assets === 'string' ? assets.toLocaleLowerCase() : null;
 
     switch (assets) {
-        
+
         case 'development':
             return publicPaths.DEVELOPMENT;
 
@@ -85,7 +91,8 @@ module.exports.plugins = [
         pattern: /.*/,
         unacceptablePattern: /GPL|MPL|CC|EPL|CDDL|Artistic|OFL|Ms-RL|BSL|AFL|APSL|FDL|CPOL|AML|IPL|W3C|QPL/gi,
         abortOnUnacceptableLicense: true
-    })
+    }),
+    new CleanWebpackPlugin(pathsToClean),
 ];
 
 module.exports.rules = [
