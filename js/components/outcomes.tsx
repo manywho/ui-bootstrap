@@ -1,26 +1,28 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IComponentProps.ts" />
+import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getOutcome } from './outcome';
+
+import '../../css/outcomes.less';
 
 declare var manywho: any;
 
-interface IOutcomesProps extends IComponentProps {
-}
-
-interface IOutcomesState {
-}
-
-class Outcomes extends React.Component<IOutcomesProps, IOutcomesState> {
+class Outcomes extends React.Component<IComponentProps, null> {
 
     displayName: 'Outcomes';
 
-    constructor(props: IOutcomesProps) {
+    constructor(props: IComponentProps) {
         super(props);
 
         this.handleEvent = this.handleEvent.bind(this);
     }
 
     handleEvent(e) {
-        manywho.component.handleEvent(this, manywho.model.getComponent(this.props.id, this.props.flowKey), this.props.flowKey);
+        manywho.component.handleEvent(
+            this, 
+            manywho.model.getComponent(this.props.id, this.props.flowKey), 
+            this.props.flowKey,
+        );
     }
 
     render() {
@@ -30,7 +32,11 @@ class Outcomes extends React.Component<IOutcomesProps, IOutcomesState> {
 
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
 
-        let className = (manywho.styling.getClasses(this.props.parentId, this.props.id, 'outcomes', this.props.flowKey)).join(' ');
+        const Outcome = getOutcome();
+
+        let className = manywho.styling.getClasses(
+            this.props.parentId, this.props.id, 'outcomes', this.props.flowKey,
+        ).join(' ');
 
         if (model.isValid === false || state.isValid === false)
             className += ' has-error';
@@ -55,33 +61,35 @@ class Outcomes extends React.Component<IOutcomesProps, IOutcomesState> {
                 rowClassName += ' block';
         }
 
-        const outcomes: Array<any> = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
+        const outcomes: any[] = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
         let size = 'default';
         if (model.attributes && !manywho.utils.isNullOrWhitespace(model.attributes.size))
             size = model.attributes.size;
 
-        let outcomeElements: Array<JSX.Element> = outcomes && outcomes
+        let outcomeElements: JSX.Element[] = outcomes && outcomes
             .map((outcome) => {
-                const element = React.createElement(manywho.component.getByName('outcome'), {
-                    id: outcome.id,
-                    size: size,
-                    className: model.attributes.outcomeClasses,
-                    disabled: !model.isEnabled,
-                    flowKey: this.props.flowKey
-                });
+                const element = 
+                    <Outcome size={size} id={outcome.id} className={model.attributes.outcomeClasses} 
+                        disabled={!model.isEnabled} flowKey={this.props.flowKey} />;
 
-                if (model.attributes && !manywho.utils.isNullOrWhitespace(model.attributes.columns))
-                    return <div className={'column col-' + model.attributes.columns}>{element}</div>;
-                else
-                    return element;
+                if (
+                    model.attributes && 
+                    !manywho.utils.isNullOrWhitespace(model.attributes.columns)
+                ) {
+                    return <div className={'column col-' + model.attributes.columns}>
+                        {element}
+                    </div>;
+                }
+
+                return element;
             });
 
         if (this.props.isDesignTime)
             outcomeElements = [
                 <button className="btn btn-primary outcome" key="outcome1">Outcome 1</button>,
                 <button className="btn btn-success outcome" key="outcome2">Outcome 2</button>,
-                <button className="btn btn-danger outcome" key="outcome3">Outcome 3</button>
+                <button className="btn btn-danger outcome" key="outcome3">Outcome 3</button>,
             ];
 
         if (!manywho.utils.isNullOrWhitespace(model.attributes.group))
@@ -98,4 +106,8 @@ class Outcomes extends React.Component<IOutcomesProps, IOutcomesState> {
     }
 }
 
-manywho.component.register('outcomes', Outcomes);
+manywho.component.register(registeredComponents.OUTCOMES, Outcomes);
+
+export const getOutcomes = () : typeof Outcomes => manywho.component.getByName(registeredComponents.OUTCOMES);
+
+export default Outcomes;

@@ -1,24 +1,23 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IItemsComponentProps.ts" />
+import * as React from 'react';
+import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getChart } from './chart';
 
 declare var manywho: any;
 
-class ChartPie extends React.Component<IItemsComponentProps, any> {
+const ChartPie: React.SFC<IComponentProps> = (props) => {
 
-    displayName = 'ChartPie';
+    const Chart = getChart();
+    const chartProps: any = $.extend({}, props, {
+        type: 'pie',
+    });
 
-    constructor(props: any) {
-        super(props);
-    }
+    return <Chart {...chartProps} />;
+};
 
-    render() {
-        const props: any = $.extend({}, this.props, {
-            type: 'pie'
-        });
+manywho.component.registerItems(registeredComponents.CHART_PIE, ChartPie);
 
-        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-    }
+export const getChartPie = () : typeof ChartPie => manywho.component.getByName(registeredComponents.CHART_PIE);
 
-}
-
-manywho.component.registerItems('chart-pie', ChartPie);
+export default ChartPie;

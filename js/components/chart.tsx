@@ -1,102 +1,130 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IChartComponentProps.ts" />
+import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IChartComponentProps from '../interfaces/IChartComponentProps';
+import { getItemsHeader } from './items-header';
+import { getChartBase } from './chart-base';
+import { getWait } from './wait';
 
 declare var manywho: any;
-declare var Chart: any;
 
-class ChartComponent extends React.Component<IChartComponentProps, any> {
+const ChartComponent: React.SFC<IChartComponentProps> = (
+    { id, flowKey, parentId, isDesignTime, contentElement, outcomes,
+        objectData, options, isLoading, onOutcome, type, refresh },
+) => {
 
-    chart = null;
-    displayName = 'Chart';
+    const ItemsHeader = getItemsHeader();
+    const ChartBase = getChartBase();
+    const Wait = getWait();
 
-    constructor(props: any) {
-        super(props);
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick(externalId) {
-        const outcome = this.props.outcomes.filter(item => !item.isBulkAction)[0];
+    const onClick = (externalId) => {
+        const outcome = outcomes.filter(item => !item.isBulkAction)[0];
 
         if (outcome)
-            this.props.onOutcome(externalId, outcome.id);
+            onOutcome(externalId, outcome.id);
+    };
+
+    const model = manywho.model.getComponent(id, flowKey);
+
+    manywho.log.info(`Rendering Chart: ${model.developerName}, ${id}`);
+
+    const state = 
+        isDesignTime ? 
+            { error: null, loading: false } : 
+            manywho.state.getComponent(id, flowKey) || {};
+
+    let columns = manywho.component.getDisplayColumns(model.columns) || [];
+
+    let className = manywho.styling.getClasses(
+        parentId, id, 'chart', flowKey,
+    ).join(' ');
+
+    if (model.isVisible === false)
+        className += ' hidden';
+
+    if (model.attributes && model.attributes.classes)
+        className += ' ' + model.attributes.classes;
+
+    let labelElement = null;
+    if (!manywho.utils.isNullOrWhitespace(model.label))
+        labelElement = <label>{model.label}</label>;
+
+    let headerElement = null;
+
+    if (!isDesignTime) {
+        const headerProps = {
+            flowKey,
+            refresh,
+            isSearchable: false,
+            isRefreshable: (model.objectDataRequest || model.fileDataRequest),
+            outcomes: manywho.model.getOutcomes(id, flowKey),
+            isEnabled: model.isEnabled,
+        };
+
+        headerElement = <ItemsHeader {...headerProps} />;
     }
 
-    render() {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+    let objectDataList = [objectData];
 
-        manywho.log.info(`Rendering Chart: ${model.developerName}, ${this.props.id}`);
-
-        const state = this.props.isDesignTime ? { error: null, loading: false } : manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
-        let columns = manywho.component.getDisplayColumns(model.columns) || [];
-
-        let className = manywho.styling.getClasses(this.props.parentId, this.props.id, 'chart', this.props.flowKey).join(' ');
-
-        if (model.isVisible === false)
-            className += ' hidden';
-
-        if (model.attributes && model.attributes.classes)
-            className += ' ' + model.attributes.classes;
-
-        let labelElement = null;
-        if (!manywho.utils.isNullOrWhitespace(model.label))
-            labelElement = <label>{model.label}</label>;
-
-        let headerElement = null;
-        if (!this.props.isDesignTime)
-            headerElement = React.createElement(manywho.component.getByName('mw-items-header'), {
-                flowKey: this.props.flowKey,
-                isSearchable: false,
-                isRefreshable: (model.objectDataRequest || model.fileDataRequest),
-                outcomes: manywho.model.getOutcomes(this.props.id, this.props.flowKey),
-                refresh: this.props.refresh,
-                isEnabled: model.isEnabled,
-            });
-
-        let contentElement = this.props.contentElement;
-        let objectData = [this.props.objectData];
-
-        if (this.props.isDesignTime) {
-            objectData = [[Math.random() * 10, Math.random() * 15, Math.random() * 50, Math.random() * 25].map((item, index) => {
+    if (isDesignTime) {
+        objectDataList = [
+            [
+                Math.random() * 10, 
+                Math.random() * 15, 
+                Math.random() * 50, 
+                Math.random() * 25,
+            ]
+            .map((item, index) => {
                 return {
                     properties: [
                         { contentValue: 'Label ' + index, typeElementPropertyId: 'id' },
-                        { contentValue: item, typeElementPropertyId: 'id1' }
-                    ]
+                        { contentValue: item, typeElementPropertyId: 'id1' },
+                    ],
                 };
-            })];
+            }),
+        ];
 
-            columns = [{ typeElementPropertyId: 'id' }, { typeElementPropertyId: 'id1' }];
-        }
-
-        if (!contentElement || this.props.isDesignTime)
-            contentElement = React.createElement(manywho.component.getByName('mw-chart-base'), {
-                isVisible: model.isVisible,
-                objectData: objectData,
-                columns: columns,
-                flowKey: this.props.flowKey,
-                type: this.props.type,
-                options: this.props.options,
-                onClick: !this.props.isDesignTime ? this.onClick : null,
-                width: model.width > 0 ? model.width : undefined,
-                height: model.height > 0 ? model.height : undefined,
-                isLoading: this.props.isLoading
-            }, null);
-
-        let validationElement = null;
-        if (typeof model.isValid !== 'undefined' && model.isValid === false)
-            validationElement = <div className="has-error"><span className="help-block">{model.validationMessage}</span></div>;
-
-        return <div className={className} id={this.props.id}>
-            {labelElement}
-            {headerElement}
-            {contentElement}
-            {validationElement}
-            <span className="help-block">{model.validationMessage}</span>
-            <span className="help-block">{model.helpInfo}</span>
-            {React.createElement(manywho.component.getByName('wait'), { isVisible: this.props.isLoading, message: state.loading && state.loading.message, isSmall: true }, null)}
-        </div>;
+        columns = [{ typeElementPropertyId: 'id' }, { typeElementPropertyId: 'id1' }];
     }
 
-}
+    let content = contentElement;
 
-manywho.component.register('mw-chart', ChartComponent);
+    if (!content || isDesignTime) {
+
+        const chartProps = {
+            columns,
+            flowKey,
+            type,
+            options,
+            isLoading,
+            isVisible: model.isVisible,
+            objectData: objectDataList,
+            onClick: !isDesignTime ? onClick : null,
+            width: model.width > 0 ? model.width : undefined,
+            height: model.height > 0 ? model.height : undefined,
+        };
+
+        content = <ChartBase {...chartProps} />;
+    }
+
+    let validationElement = null;
+    if (typeof model.isValid !== 'undefined' && model.isValid === false)
+        validationElement = <div className="has-error">
+            <span className="help-block">{model.validationMessage}</span>
+        </div>;
+
+    return <div className={className} id={id}>
+        {labelElement}
+        {headerElement}
+        {content}
+        {validationElement}
+        <span className="help-block">{model.validationMessage}</span>
+        <span className="help-block">{model.helpInfo}</span>
+        <Wait isVisible={isLoading} message={state.loading && state.loading.message} isSmall={true} />
+    </div>;
+};
+
+manywho.component.register(registeredComponents.CHART, ChartComponent);
+
+export const getChart = () : typeof ChartComponent => manywho.component.getByName(registeredComponents.CHART) || ChartComponent;
+
+export default ChartComponent;

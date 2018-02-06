@@ -6,46 +6,56 @@
 
 ### Building
 
-To build the ui bootstrap components you will need to have [nodejs](http://nodejs.org/), [gulp](http://gulpjs.com/) and [typings](https://github.com/typings/typings) installed.
+To build the ui bootstrap components you will need to have [nodejs](http://nodejs.org/) installed.
 
 Then install dependencies:
 
 ```
 npm install
-typings install
 ```
 
 Then run the dev build:
 
 ```
-gulp dev-less
-gulp dev-ts
-gulp dev-bootstrap
-gulp dev-bootstrap-themes
-gulp dev-fonts
+npm run dev [env.build=<custom folder>] [env.assets=development|qa|staging|production] [env.watch] [env.analyze]
+```
+
+By default the compiled assets will be output to the 'build' folder, the assets will be set to `production`, 
+files will not be monitored for changes and the bundle will not get analyzed, you can override this using 
+the `env.build` , `env.assets`,  `env.watch` and `env.analyze` args:
+
+```
+npm run dev -- --env.build="custom-folder" --env.assets=development --env.watch --env.analyze
 ```
 
 Or dist build:
 
 ```
-gulp dist
+npm run dist
 ```
 
-### Running
+The compiled assets will be output to the 'dist' folder and the assets will be set to `production`.
+
+
+### Running locally and watching files
 
 You can run:
 
 ```
-gulp watch
+npm start
 ```
 
-Which will re-run the relevant dev tasks whenever a change to the script or less files is made.
+Which will rebuild the project whenever a change to the script or less files is made.
 
-By default the compiled assets will be output to the `build` folder, you can override this using the `--build` arg:
+The compiled assets will be output to the ../ui-html5/build folder and the assets will be set to `development`.
+
+
+### Running tests
+
+To run Jest/Enzyme tests:
 
 ```
-gulp dev-* --build="custom-folder"
-gulp watch --build="custom-folder"
+npm test
 ```
 
 ## Contributing

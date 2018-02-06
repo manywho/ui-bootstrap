@@ -1,7 +1,14 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="IItemsComponentProps.ts" />
+import IComponentProps from './IComponentProps';
 
-interface IChartComponentProps extends IItemsComponentProps {
-    type: string,
-    options: any
+interface IChartComponentProps extends IComponentProps {
+    type: string;
+    options: any;
+    outcomes: any[];
+    contentElement: JSX.Element;
+    objectData: any[];
+    isLoading: boolean;
+    onOutcome: Function;
+    refresh: (event: React.SyntheticEvent<HTMLElement>) => void;
 }
+
+export default IChartComponentProps;

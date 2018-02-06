@@ -1,34 +1,42 @@
-/// <reference path="../../typings/index.d.ts" />
+import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getOutcome } from './outcome';
 
 declare var manywho: any;
 
-// Cannot use 'Image' for component name as it clashes with the browser native window.Image class
-const MWImage: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
+const Image: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
 
     const classes = manywho.styling.getClasses(parentId, id, 'image', flowKey);
     const model = manywho.model.getComponent(id, flowKey);
     const outcomes = manywho.model.getOutcomes(id, flowKey);
     const label = model.label;
 
-    const outcomeButtons = outcomes && outcomes.map(function (outcome) {
-        return React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: flowKey });
-    }, this);
+    const Outcome = getOutcome();
+
+    const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome flowKey={flowKey} id={outcome.id} />);
 
     if (model.isVisible !== true) {
 
         classes.push('hidden');
-
     }
 
     return (
         <div className={classes.join(' ')} id={id}>
             {
-                !manywho.utils.isNullOrWhitespace(label) ? <label className={'img-label'}>{label}</label> : null
+                !manywho.utils.isNullOrWhitespace(label) ?
+                    <label className={'img-label'}>{label}</label> :
+                    null
             }
-            <img className="img-responsive" src={model.imageUri} alt={model.developerName} id={id} />
+            <img className="img-responsive" src={model.imageUri}
+                alt={model.developerName} id={id} />
             {outcomeButtons}
         </div>
     );
 };
 
-manywho.component.register('image', MWImage);
+manywho.component.register(registeredComponents.IMAGE, Image);
+
+export const getImage = () : typeof Image => manywho.component.getByName(registeredComponents.IMAGE);
+
+export default Image;

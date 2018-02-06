@@ -1,24 +1,25 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IItemsComponentProps.ts" />
+import * as React from 'react';
+import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getChart } from './chart';
+
 
 declare var manywho: any;
 
-class ChartDoughnut extends React.Component<IItemsComponentProps, any> {
+const ChartDoughnut: React.SFC<IComponentProps> = (props) => {
 
-    displayName = 'ChartDoughnut';
+    const Chart = getChart();
 
-    constructor(props: any) {
-        super(props);
-    }
+    const chartProps: any = $.extend({}, props, {
+        type: 'doughnut',
+    });
 
-    render() {
-        const props: any = $.extend({}, this.props, {
-            type: 'doughnut'
-        });
+    return <Chart {...chartProps} />;
+};
 
-        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-    }
+manywho.component.registerItems(registeredComponents.CHART_DOUGHNUT, ChartDoughnut);
 
-}
+export const getChartDoughnut = () : typeof ChartDoughnut => manywho.component.getByName(registeredComponents.CHART_DOUGHNUT) || ChartDoughnut;
 
-manywho.component.registerItems('chart-doughnut', ChartDoughnut);
+export default ChartDoughnut;

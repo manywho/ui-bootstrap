@@ -1,74 +1,87 @@
-/// <reference path="../../typings/index.d.ts" />
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import '../../css/flip.less';
 
 declare var manywho: any;
 
+interface IFlipState {
+    isFlipped: boolean;
+    animationStyle?: string;
+}
+
 // Stolen From: http://davidwalsh.name/css-flip
-(function (manywho) {
+class Flip extends React.Component<IComponentProps, IFlipState> {
 
-    const flip = React.createClass({
+    constructor(props) {
+        super(props);
 
-        toggleFlip: function () {
-            this.setState({ isFlipped: !this.state.isFlipped });
-        },
+        this.state = {
+            isFlipped: false,
+            animationStyle: 'rotateY',
+        };
 
-        setHeight() {
-            if (this.props.isDesignTime)
-                return;
+        this.toggleFlip = this.toggleFlip.bind(this);
+        this.setHeight = this.setHeight.bind(this);
+    }
 
-            const element = ReactDOM.findDOMNode(this) as HTMLElement;
+    toggleFlip() {
+        this.setState({ isFlipped: !this.state.isFlipped });
+    }
 
-            if (this.state.isFlipped) {
-                const back = ReactDOM.findDOMNode(this.refs['back']).firstChild as HTMLElement;
-                element.style.setProperty('height', back.offsetHeight + 'px');
-            }
-            else {
-                const front = ReactDOM.findDOMNode(this.refs['front']).firstChild as HTMLElement;
-                element.style.setProperty('height', front.offsetHeight + 'px');
-            }
-        },
+    setHeight() {
+        if (this.props.isDesignTime)
+            return;
 
-        getInitialState: function () {
-            return {
-                isFlipped: false,
-                animationStyle: 'rotateY'
-            };
-        },
+        const element = ReactDOM.findDOMNode(this) as HTMLElement;
 
-        componentDidUpdate: function () {
-            this.setHeight();
-        },
-
-        componentDidMount: function () {
-            this.setHeight();
-        },
-
-        render: function () {
-            if (this.props.isDesignTime)
-                return <div className="clearfix"></div>;
-
-            const model = manywho.model.getContainer(this.props.id, this.props.flowKey);
-            const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
-            const childComponents = manywho.component.getChildComponents(children, this.props.id, this.props.flowKey);
-
-            let className = 'flip-container clearfix';
-
-            if (this.state.isFlipped)
-                className += ' ' + this.state.animationStyle;
-
-            return <div className={className}>
-                <div className="flipper" onTouchEnd={this.toggleFlip} onClick={this.toggleFlip}>
-                    <div className="front" ref="front">
-                        {childComponents[0]}
-                    </div>
-                    <div className="back" ref="back">
-                        {childComponents[1]}
-                    </div>
-                </div>
-            </div>;
+        if (this.state.isFlipped) {
+            const back = ReactDOM.findDOMNode(this.refs['back']).firstChild as HTMLElement;
+            element.style.setProperty('height', back.offsetHeight + 'px');
+        } else {
+            const front = ReactDOM.findDOMNode(this.refs['front']).firstChild as HTMLElement;
+            element.style.setProperty('height', front.offsetHeight + 'px');
         }
+    }
 
-    });
+    componentDidUpdate() {
+        this.setHeight();
+    }
 
-    manywho.component.registerContainer('flip', flip);
+    componentDidMount() {
+        this.setHeight();
+    }
 
-} (manywho));
+    render() {
+        if (this.props.isDesignTime)
+            return <div className="clearfix"></div>;
+
+        const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
+        const childComponents =
+            manywho.component.getChildComponents(children, this.props.id, this.props.flowKey);
+
+        let className = 'flip-container clearfix';
+
+        if (this.state.isFlipped)
+            className += ' ' + this.state.animationStyle;
+
+        return <div className={className}>
+            <div className="flipper" onTouchEnd={this.toggleFlip} onClick={this.toggleFlip}>
+                <div className="front" ref="front">
+                    {childComponents[0]}
+                </div>
+                <div className="back" ref="back">
+                    {childComponents[1]}
+                </div>
+            </div>
+        </div>;
+    }
+
+}
+
+manywho.component.registerContainer(registeredComponents.FLIP, Flip);
+
+export const getFlip = () : typeof Flip => manywho.component.getByName(registeredComponents.FLIP);
+
+export default Flip;
