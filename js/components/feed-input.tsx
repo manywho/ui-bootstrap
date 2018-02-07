@@ -121,7 +121,7 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
                     onKeyPress={this.onKeyPress}
                     defaultValue={''}
                     ref={'textarea'} />
-                fileUpload
+                    {fileUpload}
                 </div>
             <button
                 className={'btn btn-sm btn-primary feed-post-send'}
