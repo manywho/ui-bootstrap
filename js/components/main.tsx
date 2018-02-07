@@ -144,7 +144,7 @@ class Main extends React.Component<any, any> {
                     <Notifications flowKey={this.props.flowKey} position={'left'} />
                 }
                 {
-                    staticComponents.map(component => <Dynamic name={component} props={{ flowKey: this.props.flowKey }} />)
+                    staticComponents.map(component => React.createElement(component, { flowKey: this.props.flowKey }))
                 }
                 {
                     modal ? <Dynamic name={manywho.component.modalContainer} props={modal} /> : null
