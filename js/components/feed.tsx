@@ -143,7 +143,7 @@ class Feed extends React.Component<IComponentProps, null> {
             const streamMessages = stream.messages || {};
             const state = manywho.state.getComponent('feed', this.props.flowKey) || {};
 
-            const followCaption = (stream.me.isFollower) ? 'Un-Follow' : 'Follow';
+            const followCaption = (stream.me.isFollower) ? 'Un-Follow' : ' Follow';
             const isFooterVisible = streamMessages.nextPage && streamMessages.nextPage > 1;
 
             return <div className={'panel panel-default feed'}>
@@ -153,12 +153,12 @@ class Feed extends React.Component<IComponentProps, null> {
                         <button className={'btn btn-default btn-sm'}
                             onClick={this.onToggleFollow}>
                             <span className={'glyphicon glyphicon-pushpin'} />
-                            {followCaption}
+                            {' ' + followCaption}
                             </button>
                         <button className={'btn btn-default btn-sm'}
                             onClick={this.onRefresh}>
                             <span className={'glyphicon glyphicon-refresh'} />
-                            Refresh
+                            {' Refresh'}
                             </button>
                     </div>
                 </div>
