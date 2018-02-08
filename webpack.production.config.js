@@ -42,8 +42,10 @@ const plugins = commonPlugins.concat([
     new webpack.optimize.UglifyJsPlugin({
         compress: {
             screw_ie8: true,
-            warnings: false
-        }
+            warnings: false            
+        },
+        sourceMap: true,
+        minimize: true
     }),
     new webpack.LoaderOptionsPlugin({
         minimize: true,
@@ -62,8 +64,7 @@ const config = Object.assign({}, commonConfig, {
     module: {
         rules,
     },
-    plugins,
-    devtool: 'none'
+    plugins
 });
 
 config.output.filename = filename;

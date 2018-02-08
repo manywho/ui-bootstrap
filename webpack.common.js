@@ -153,6 +153,7 @@ module.exports.run = (config, defaultDirectory) => (env = {}) => {
     const outputPath = env && env.build ? env.build : defaultDirectory;
     const watch = env && env.watch;
     const analyze = env && env.analyze;
+    const sourcemaps = env && env.sourcemaps;
 
     console.log('Build directory: ', outputPath)
     console.log('Assets url: ', publicPath);
@@ -200,6 +201,8 @@ module.exports.run = (config, defaultDirectory) => (env = {}) => {
                 ]);
             }
 
+            config.devtool = sourcemaps ? 'source-map' : 'none';
+            
             config.output.publicPath = publicPath;
 
             config.output.path = path.resolve(__dirname, outputPath);

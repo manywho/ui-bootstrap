@@ -49,8 +49,7 @@ const config = Object.assign({}, commonConfig, {
     module: {
         rules,
     },
-    plugins,
-    devtool: 'source-map'
+    plugins
 });
 
 config.output.filename = filename;
