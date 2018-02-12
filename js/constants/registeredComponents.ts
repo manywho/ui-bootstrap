@@ -34,6 +34,7 @@ export default {
     MAIN: 'main',
     MODAL: 'modal',
     NAVIGATION: 'navigation',
+    NOT_FOUND: 'not-found-placeholder',
     NOTIFICATIONS: 'notifications',
     NOTIFICATION: 'notification',
     OUTCOME: 'outcome',

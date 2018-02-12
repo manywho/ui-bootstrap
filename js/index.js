@@ -78,6 +78,7 @@ import './components/modal-container.tsx';
 import './components/modal.tsx';
 import './components/navigation.tsx';
 import './components/notifications.tsx';
+import './components/not-found.tsx';
 import './components/outcome.tsx';
 import './components/outcomes.tsx';
 import './components/pagination.tsx';
