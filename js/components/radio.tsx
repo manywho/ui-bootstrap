@@ -179,9 +179,13 @@ class Radio extends React.Component<IComponentProps, any> {
         };
     
         if (!this.props.isDesignTime) {
+
+            const displayColumns = manywho.component.getDisplayColumns(model.columns);
     
             const columnTypeElementPropertyId = 
-                manywho.component.getDisplayColumns(model.columns)[0].typeElementPropertyId;
+                displayColumns 
+                ? displayColumns[0].typeElementPropertyId
+                : null;
     
             manywho.utils.extend(attributes, { onClick: this.handleChange });
     
@@ -205,16 +209,19 @@ class Radio extends React.Component<IComponentProps, any> {
                     attributes.value = selectedItems[0];
                 }
     
-                options = model.objectData.map((item) => {
-                    return this.renderOption(
-                        item, 
-                        attributes, 
-                        columnTypeElementPropertyId, 
-                        model.developerName, 
-                        selectedItems, 
-                        this.props.flowKey,
-                    );
-                });
+                options = 
+                    columnTypeElementPropertyId 
+                    ? model.objectData.map((item) => {
+                        return this.renderOption(
+                            item, 
+                            attributes, 
+                            columnTypeElementPropertyId, 
+                            model.developerName, 
+                            selectedItems, 
+                            this.props.flowKey,
+                        );
+                    })
+                    : <div style={{ color: 'red' }}>No display columns could be found</div>;
             }
         } else {
     
