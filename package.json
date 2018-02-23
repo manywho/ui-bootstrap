@@ -9,7 +9,7 @@
     },
     "scripts": {
         "docs": "typedoc js --out docs --ignoreCompilerErrors --mode modules & start docs/index.html",
-        "start": "webpack --config webpack.development.config.js --env.build=../ui-html5/build --env.assets=development --env.watch --env.sourcemaps",
+        "start": "webpack --config webpack.development.config.js --env.build=../ui-html5/build --env.assets=local --env.watch --env.sourcemaps",
         "dev": "webpack --config webpack.development.config.js",
         "dist": "webpack -p --config webpack.production.config.js",
         "postdist": "node bundle",
