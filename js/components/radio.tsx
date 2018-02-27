@@ -221,7 +221,7 @@ class Radio extends React.Component<IComponentProps, any> {
                             this.props.flowKey,
                         );
                     })
-                    : <div style={{ color: 'red' }}>No display columns could be found</div>;
+                    : null;
             }
         } else {
     
@@ -272,9 +272,17 @@ class Radio extends React.Component<IComponentProps, any> {
                         null
                     }
                 </label>
-                <div className={'radio-group'}>
-                    {options}
-                </div>
+                { 
+                    options ? (
+                        <div className={'radio-group'}>
+                            {options}
+                        </div>
+                    ) : (
+                        <div className="mw-items-error">
+                            <p className="lead">No display columns have been defined</p>
+                        </div>
+                    )
+                }
                 <div className={iconClassNames.join(' ')}>
                     <span className={'glyphicon glyphicon-refresh spin'} />
                 </div>
