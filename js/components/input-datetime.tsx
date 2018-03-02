@@ -63,7 +63,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     componentDidMount() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
-        let useCurrent = true;
+        let useCurrent = false;
         let customFormat = null;
 
         if (model.attributes) {
@@ -87,6 +87,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         $(datepickerElement).datetimepicker({
             useCurrent,
             locale: model.attributes.dateTimeLocale || 'en-us',
+            focusOnShow: false,
             format: customFormat || 
                 manywho.formatting.toMomentFormat(model.contentFormat) || 
                 'MM/DD/YYYY',
