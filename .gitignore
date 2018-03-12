@@ -4,7 +4,6 @@
 /dist
 /build
 /typings
-/docs
 bundles.json
 coverage
 test-report.xml

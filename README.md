@@ -17,15 +17,15 @@ npm install
 Then run the dev build:
 
 ```
-npm run dev [env.build=<custom folder>] [env.assets=local|development|qa|staging|production] [env.watch] [env.analyze]
+npm run dev [env.build=<custom folder>] [env.assets=local|development|qa|staging|production] [env.watch] [env.analyze] [env.sourcemaps]
 ```
 
 By default the compiled assets will be output to the 'build' folder, the assets will be set to `production`, 
-files will not be monitored for changes and the bundle will not get analyzed, you can override this using 
-the `env.build` , `env.assets`,  `env.watch` and `env.analyze` args:
+files will not be monitored for changes, sourcemaps will be built and the bundle will not get analyzed, you can override this using 
+the `env.build` , `env.assets`,  `env.watch`, `env.sourcemaps` and `env.analyze` args:
 
 ```
-npm run dev -- --env.build="custom-folder" --env.assets=local --env.watch --env.analyze
+npm run dev -- --env.build="custom-folder" --env.assets=local --env.watch --env.analyze --env.sourcemaps=false
 ```
 
 Or dist build:
