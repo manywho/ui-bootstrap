@@ -1,33 +1,59 @@
-/// <reference path="../../typings/index.d.ts" />
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as $ from 'jquery';
+import * as moment from 'moment';
+import registeredComponents from '../constants/registeredComponents';
+import ITableInputDateTimeProps from '../interfaces/ITableInputDateTimeProps';
+
+import '../../css/input.less';
+import '../../css/table.less';
+import '../../css/lib/bootstrap-datetimepicker.css';
+import '../lib/100-datetimepicker.js';
 
 declare var manywho: any;
 
-(function (manywho) {
+class TableInputDateTime extends React.Component<ITableInputDateTimeProps, null> {
 
-    class TableInputDateTime extends React.Component<any, any> {
+    datetime = null;
 
-        onChange = (e) => {
-            this.props.onChange(this.props.format ? e.date.format(this.props.format) : e.date.format());
-        }
-
-        componentDidMount() {
-            const target = ReactDOM.findDOMNode(this.refs['datetime']);
-            const defaultDate = this.props.value ? moment(this.props.value, ['MM/DD/YYYY hh:mm:ss A ZZ', moment.ISO_8601, this.props.contentFormat || '']) : null;
-
-            $(target).datetimepicker({
-                inline: true,
-                sideBySide: true,
-                useCurrent: false,
-                defaultDate: defaultDate
-            })
-            .on('dp.change', this.onChange);
-        }
-
-        render() {
-            return <div ref="datetime" />;
-        }
+    constructor(props) {
+        super(props);
     }
 
-    manywho.component.register('table-input-datetime', TableInputDateTime);
+    onChange = (e) => {
+        this.props.onChange(
+            this.props.format ? 
+            e.date.format(this.props.format) : 
+            e.date.format(),
+        );
+    }
 
-}(manywho));
+    componentDidMount() {
+        const target = ReactDOM.findDOMNode(this.datetime);
+        const defaultDate = 
+            this.props.value ? 
+            moment(
+                this.props.value, 
+                ['MM/DD/YYYY hh:mm:ss A ZZ', moment.ISO_8601, this.props.contentFormat || ''],
+            ) : 
+            null;
+
+        $(target).datetimepicker({
+            defaultDate,
+            inline: true,
+            sideBySide: true,
+            useCurrent: false,
+        })
+        .on('dp.change', this.onChange);
+    }
+
+    render() {
+        return <div ref={(datetime) => { this.datetime = datetime; }} />;
+    }
+}
+
+manywho.component.register(registeredComponents.TABLE_INPUT_DATETIME, TableInputDateTime);
+
+export const getTableInputDateTime = () : typeof TableInputDateTime => manywho.component.getByName(registeredComponents.TABLE_INPUT_DATETIME);
+
+export default TableInputDateTime;

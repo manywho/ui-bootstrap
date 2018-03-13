@@ -1,27 +1,25 @@
-/// <reference path="../../typings/index.d.ts" />
+import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
-declare var ReactCollapse: any;
 
-(function (manywho) {
+const Horizontal: React.SFC<IComponentProps> = ({ id, flowKey, children }) => {
 
-    const horizontal = React.createClass({
+    const childData = manywho.model.getChildren(id, flowKey);
 
-        render: function () {
-            const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
+    return <div className="row clearfix" id="horizontal">
+        {children || manywho.component.getChildComponents(childData, id, flowKey)}
+    </div>;
+};
 
-            return <div className="row clearfix">
-                {this.props.children || manywho.component.getChildComponents(children, this.props.id, this.props.flowKey)}
-            </div>;
-        }
+manywho.component.registerContainer(registeredComponents.HORIZONTAL, Horizontal);
 
-    });
+manywho.styling.registerContainer('horizontal_flow', (item, container) => {
+    const columnSpan = Math.floor(12 / Math.max(1, container.childCount));
+    return ['col-sm-' + columnSpan];
+});
 
-    manywho.component.registerContainer('horizontal_flow', horizontal);
+export const getHorizontal = () : typeof Horizontal => manywho.component.getByName(registeredComponents.HORIZONTAL);
 
-    manywho.styling.registerContainer('horizontal_flow', (item, container) => {
-        const columnSpan = Math.floor(12 / Math.max(1, container.childCount));
-        return ['col-sm-' + columnSpan];
-    });
-
-} (manywho));
+export default Horizontal;

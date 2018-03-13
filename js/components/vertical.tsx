@@ -1,37 +1,43 @@
-/// <reference path="../../typings/index.d.ts" />
+import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
 
-(function (manywho) {
+const Vertical: React.SFC<IComponentProps> = ({ id, children, flowKey }) => {
 
-    const vertical = React.createClass({
+    const modelChildren = manywho.model.getChildren(id, flowKey);
 
-        render: function () {
-            const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
+    return <div className="clearfix" id="vertical">
+        {children || manywho.component.getChildComponents(modelChildren, id, flowKey)}
+    </div>;
+};
 
-            return <div className="clearfix">
-                {this.props.children || manywho.component.getChildComponents(children, this.props.id, this.props.flowKey)}
-            </div>;
-        }
+manywho.component.registerContainer(registeredComponents.VERTICAL, Vertical);
+manywho.styling.registerContainer('vertical_flow', (item, container) => {
+    const classes = [];
 
-    });
+    if (manywho.utils.isEqual(item.componentType, 'input', true)
+            && item.size === 0 &&
+            (
+                manywho.utils.isEqual(
+                    item.contentType, manywho.component.contentTypes.string, true,
+                ) ||
+                manywho.utils.isEqual(
+                    item.contentType, manywho.component.contentTypes.password, true,
+                ) ||
+                manywho.utils.isEqual(
+                    item.contentType, manywho.component.contentTypes.number, true,
+                )
+            )
+        ) {
+        classes.push('auto-width');
 
-    manywho.component.registerContainer('vertical_flow', vertical);
+    }
 
-    manywho.styling.registerContainer('vertical_flow', (item, container) => {
-        const classes = [];
+    return classes;
+});
 
-        if (manywho.utils.isEqual(item.componentType, 'input', true)
-            && item.size === 0
-            && (manywho.utils.isEqual(item.contentType, manywho.component.contentTypes.string, true)
-                || manywho.utils.isEqual(item.contentType, manywho.component.contentTypes.password, true)
-                || manywho.utils.isEqual(item.contentType, manywho.component.contentTypes.number, true))) {
+export const getVertical = () : typeof Vertical => manywho.component.getByName(registeredComponents.VERTICAL);
 
-            classes.push('auto-width');
-
-        }
-
-        return classes;
-    });
-
-} (manywho));
+export default Vertical;

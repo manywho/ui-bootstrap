@@ -1,25 +1,27 @@
-/// <reference path="../../typings/index.d.ts" />
+import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
 
-(function (manywho) {
+const Inline: React.SFC<IComponentProps> = ({ id, parentId, flowKey, children }) => {
 
-    const inline = React.createClass({
+    const childData = manywho.model.getChildren(id, flowKey);
 
-        render: function () {
-            const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
-
-            return <div className="clearfix">
-                {this.props.children || manywho.component.getChildComponents(children, this.props.id, this.props.flowKey)}
-            </div>;
+    return <div className="clearfix">
+        {
+            children ||
+            manywho.component.getChildComponents(childData, id, flowKey)
         }
+    </div>;
+};
 
-    });
+manywho.component.registerContainer(registeredComponents.INLINE, Inline);
 
-    manywho.component.registerContainer('inline_flow', inline);
+manywho.styling.registerContainer('inline_flow', (item, container) => {
+    return ['pull-left'];
+});
 
-    manywho.styling.registerContainer('inline_flow', (item, container) => {
-        return ['pull-left'];
-    });
+export const getInline = () : typeof Inline => manywho.component.getByName(registeredComponents.INLINE) || Inline;
 
-} (manywho));
+export default Inline;

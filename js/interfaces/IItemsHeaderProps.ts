@@ -1,12 +1,14 @@
-/// <reference path="IComponentProps.ts" />
+import IComponentProps from './IComponentProps';
 
 interface IItemsHeaderProps extends IComponentProps {
-    isSearchable: boolean,
-    isRefreshable: boolean,
-    search: any,
-    onSearchChanged: Function,
-    onSearch: Function,
-    outcomes: Array<any>,
-    isDisabled: boolean,
-    refresh: (MouseEvent) => void
+    isSearchable: boolean;
+    isRefreshable: any;
+    outcomes: any[];
+    refresh: any;
+    isDisabled?: boolean;
+    onSearch?: Function;
+    onSearchChanged?: Function;
+    search?: any;
 }
+
+export default IItemsHeaderProps;

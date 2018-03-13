@@ -1,24 +1,24 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IItemsComponentProps.ts" />
+import * as React from 'react';
+import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getChart } from './chart';
+
 
 declare var manywho: any;
 
-class ChartPolar extends React.Component<IItemsComponentProps, any> {
+const ChartPolar: React.SFC<IComponentProps> = (props) => {
 
-    displayName = 'ChartPolar';
+    const Chart = getChart();
+    const chartProps: any = $.extend({}, props, {
+        type: 'polarArea',
+    });
 
-    constructor(props: any) {
-        super(props);
-    }
+    return <Chart {...chartProps} />;
+};
 
-    render() {
-        const props: any = $.extend({}, this.props, {
-            type: 'polarArea'
-        });
+manywho.component.registerItems(registeredComponents.CHART_POLAR, ChartPolar);
 
-        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-    }
+export const getChartPolar = () : typeof ChartPolar => manywho.component.getByName(registeredComponents.CHART_POLAR);
 
-}
-
-manywho.component.registerItems('chart-polar', ChartPolar);
+export default ChartPolar;

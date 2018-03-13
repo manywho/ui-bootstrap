@@ -1,11 +1,18 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IInputProps.ts" />
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as $ from 'jquery';
+import IInputProps from '../interfaces/IInputProps';
+import registeredComponents from '../constants/registeredComponents';
+
+import '../../css/input.less';
+import '../../css/lib/bootstrap-datetimepicker.css';
+import '../lib/100-datetimepicker.js';
 
 declare var manywho: any;
 declare var moment: any;
 
 interface IInputDateTimeState {
-    value: string
+    value: string;
 }
 
 class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
@@ -56,46 +63,71 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     componentDidMount() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
-        let useCurrent = true;
+        let useCurrent = false;
         let customFormat = null;
 
         if (model.attributes) {
             if (model.attributes.useCurrent !== undefined)
-                useCurrent = manywho.utils.isEqual(model.attributes.useCurrent, 'true', true) ? true : false;
+                useCurrent = manywho.utils.isEqual(model.attributes.useCurrent, 'true', true) ? 
+                    true : 
+                    false;
 
             if (model.attributes.dateTimeFormat)
                 customFormat = model.attributes.dateTimeFormat;
         }
 
         if (customFormat)
-            this.isDateOnly = customFormat.toLowerCase().indexOf('h') === -1 && customFormat.toLowerCase().indexOf('m') === -1 && customFormat.toLowerCase().indexOf('s') === -1;
+            this.isDateOnly = 
+                customFormat.toLowerCase().indexOf('h') === -1 && 
+                customFormat.toLowerCase().indexOf('m') === -1 && 
+                customFormat.toLowerCase().indexOf('s') === -1;
 
         const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
 
         $(datepickerElement).datetimepicker({
+            useCurrent,
             locale: model.attributes.dateTimeLocale || 'en-us',
-            format: customFormat || manywho.formatting.toMomentFormat(model.contentFormat) || 'MM/DD/YYYY',
+            focusOnShow: false,
+            format: customFormat || 
+                manywho.formatting.toMomentFormat(model.contentFormat) || 
+                'MM/DD/YYYY',
             keyBinds: {
-                'delete': function () {
-                    this.clear();
-                }
+                delete() { this.clear(); },
             },
-            useCurrent: useCurrent,
-            timeZone: 'UTC'
+            timeZone: 'UTC',
         })
         .on('dp.change', !this.props.isDesignTime && this.onChange);
 
         if (!this.props.isDesignTime) {
-            if (this.isEmptyDate(this.props.value))
-                manywho.state.setComponent(this.props.id, { contentValue: null }, this.props.flowKey, true);
-            else {
-                let date = moment(this.props.value, ['MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', moment.ISO_8601]);
-                manywho.state.setComponent(this.props.id, { contentValue: this.format(date) }, this.props.flowKey, true);
+            if (this.isEmptyDate(this.props.value)) {
+                
+                manywho.state.setComponent(
+                    this.props.id, { contentValue: null }, this.props.flowKey, true,
+                );
+            } else {
+                const date = moment(
+                    this.props.value, 
+                    [
+                        'MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', 
+                        moment.ISO_8601,
+                    ],
+                );
 
-                if (manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey) && !this.isDateOnly)
+                manywho.state.setComponent(
+                    this.props.id, 
+                    { contentValue: this.format(date) }, 
+                    this.props.flowKey, 
+                    true,
+                );
+
+                if (
+                    manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey) && 
+                    !this.isDateOnly
+                ) {
                     $(datepickerElement).data('DateTimePicker').date(date.local());
-                else
+                } else {
                     $(datepickerElement).data('DateTimePicker').date(date.utc());
+                }
             }
         }
     }
@@ -122,4 +154,8 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
 
 }
 
-manywho.component.register('input-datetime', InputDateTime);
+manywho.component.register(registeredComponents.INPUT_DATETIME, InputDateTime);
+
+export const getInputDateTime = () : typeof InputDateTime => manywho.component.getByName(registeredComponents.INPUT_DATETIME) || InputDateTime;
+
+export default InputDateTime;

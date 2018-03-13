@@ -1,10 +1,15 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IChartBaseProps.ts" />
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import IChartBaseProps from '../interfaces/IChartBaseProps';
+import { Chart } from 'chart.js';
+
+import '../../css/chart.less';
 
 declare var manywho: any;
-declare var Chart: any;
 
-class ChartBase extends React.Component<IChartBaseProps, any> {
+class ChartBase extends React.Component<IChartBaseProps, null> {
 
     chart = null;
     displayName = 'ChartBase';
@@ -16,27 +21,31 @@ class ChartBase extends React.Component<IChartBaseProps, any> {
 
     onClick(e) {
         const element = this.chart.getElementAtEvent(e);
+        const objectData = this.props.objectData;
+        const externalId = objectData[element[0]._datasetIndex][element[0]._index].externalId;
+
         if (element && element.length > 0 && this.props.onClick)
-            this.props.onClick(this.props.objectData[element[0]._datasetIndex][element[0]._index].externalId, element[0]._datasetIndex);
+            this.props.onClick(externalId, element[0]._datasetIndex);
     }
 
     updateChart() {
         if (this.props.isVisible === false)
             return;
 
-        const chartSettings = manywho.settings.global('charts.' + this.props.type, this.props.flowKey, null);
+        const chartSettings = 
+            manywho.settings.global('charts.' + this.props.type, this.props.flowKey, null);
 
-        let backgroundColors = chartSettings && chartSettings.backgroundColors ?
+        const backgroundColors = chartSettings && chartSettings.backgroundColors ?
             chartSettings.backgroundColors
             : manywho.settings.global('charts.backgroundColors', this.props.flowKey);
 
-        let borderColors = chartSettings && chartSettings.borderColors ?
+        const borderColors = chartSettings && chartSettings.borderColors ?
             chartSettings.borderColors
             : manywho.settings.global('charts.borderColors', this.props.flowKey);
 
         const data: any = {
             labels: [],
-            datasets: []
+            datasets: [],
         };
 
         this.props.objectData.forEach((objectData, index) => {
@@ -44,7 +53,7 @@ class ChartBase extends React.Component<IChartBaseProps, any> {
                 data: [],
                 fill: false,
                 backgroundColor: [],
-                borderColor: []
+                borderColor: [],
             };
 
             if (this.props.labels)
@@ -54,51 +63,62 @@ class ChartBase extends React.Component<IChartBaseProps, any> {
                 objectData.forEach((objectDatum, rowIndex) => {
 
                     this.props.columns.forEach((column, columnIndex) => {
-                        let property = objectDatum.properties.find(prop => manywho.utils.isEqual(prop.typeElementPropertyId, column.typeElementPropertyId));
+
+                        const property = objectDatum.properties.find(prop => 
+                                manywho.utils.isEqual(
+                                    prop.typeElementPropertyId, column.typeElementPropertyId,
+                                ),
+                            );
 
                         if (property)
                             switch (columnIndex) {
-                                case 0:
-                                    if (index === 0)
-                                        data.labels.push(property.contentValue);
-                                    break;
 
-                                case 1:
-                                    dataset.data.push(property.contentValue);
-                                    break;
+                            case 0:
+                                if (index === 0)
+                                    data.labels.push(property.contentValue);
+                                break;
 
-                                case 2:
-                                    let backgroundColor = property.contentValue;
-                                    if (manywho.utils.isNullOrWhitespace(property.contentValue))
-                                        backgroundColor = backgroundColors[rowIndex % backgroundColors.length];
+                            case 1:
+                                dataset.data.push(property.contentValue);
+                                break;
 
-                                    dataset.backgroundColor.push(backgroundColor);
-                                    break;
+                            case 2:
+                                let backgroundColor = property.contentValue;
+                                if (manywho.utils.isNullOrWhitespace(property.contentValue))
+                                    backgroundColor = 
+                                        backgroundColors[rowIndex % backgroundColors.length];
 
-                                case 3:
-                                    let borderColor = property.contentValue;
-                                    if (manywho.utils.isNullOrWhitespace(property.contentValue))
-                                        borderColor = borderColors[rowIndex % borderColors.length];
+                                dataset.backgroundColor.push(backgroundColor);
+                                break;
 
-                                    dataset.borderColor.push(borderColor);
-                                    break;
+                            case 3:
+                                let borderColor = property.contentValue;
+                                if (manywho.utils.isNullOrWhitespace(property.contentValue))
+                                    borderColor = borderColors[rowIndex % borderColors.length];
+
+                                dataset.borderColor.push(borderColor);
+                                break;
                             }
                     });
 
                     if (this.props.objectData.length > 1
                         && (this.props.type === 'bar' || this.props.type === 'line')) {
+
                         if (dataset.backgroundColor.length - 1 < rowIndex)
-                            dataset.backgroundColor.push(backgroundColors[index % backgroundColors.length]);
+                            dataset.backgroundColor
+                                .push(backgroundColors[index % backgroundColors.length]);
 
                         if (dataset.borderColor.length - 1 < rowIndex)
-                            dataset.borderColor.push(borderColors[index % borderColors.length]);
-                    }
-                    else {
+                            dataset.borderColor
+                                .push(borderColors[index % borderColors.length]);
+                    } else {
                         if (dataset.backgroundColor.length - 1 < rowIndex)
-                            dataset.backgroundColor.push(backgroundColors[rowIndex % backgroundColors.length]);
+                            dataset.backgroundColor
+                                .push(backgroundColors[rowIndex % backgroundColors.length]);
 
                         if (dataset.borderColor.length - 1 < rowIndex)
-                            dataset.borderColor.push(borderColors[rowIndex % borderColors.length]);
+                            dataset.borderColor
+                                .push(borderColors[rowIndex % borderColors.length]);
                     }
                 });
 
@@ -114,23 +134,24 @@ class ChartBase extends React.Component<IChartBaseProps, any> {
             });
         }
 
-        const options = $.extend({},
+        const options = $.extend(
+            {},
             manywho.settings.global('charts.options', this.props.flowKey, {}),
             (chartSettings && chartSettings.options) ? chartSettings.options : {},
-            this.props.options);
+            this.props.options,
+        );
 
         if (this.chart) {
             this.chart.data.datasets = data.datasets;
             this.chart.data.labels = data.labels;
             this.chart.update();
-        }
-        else {
+        } else {
             const canvas = ReactDOM.findDOMNode(this.refs['canvas']);
 
             this.chart = new Chart(canvas, {
+                data,
+                options,
                 type: this.props.type,
-                data: data,
-                options: options
             });
         }
     }
@@ -149,9 +170,17 @@ class ChartBase extends React.Component<IChartBaseProps, any> {
     }
 
     render() {
-        return <canvas onClick={this.onClick} ref="canvas" width={this.props.width} height={this.props.height} />;
+        return <canvas 
+            onClick={this.onClick} 
+            ref="canvas" 
+            width={this.props.width} 
+            height={this.props.height} />;
     }
 
 }
 
-manywho.component.register('mw-chart-base', ChartBase);
+manywho.component.register(registeredComponents.CHART_BASE, ChartBase);
+
+export const getChartBase = () : typeof ChartBase => manywho.component.getByName(registeredComponents.CHART_BASE) || ChartBase;
+
+export default ChartBase;

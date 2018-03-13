@@ -1,35 +1,36 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IItemsComponentProps.ts" />
+import * as React from 'react';
+import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getChart } from './chart';
 
 declare var manywho: any;
 
-class ChartBar extends React.Component<IItemsComponentProps, any> {
+const ChartBar: React.SFC<IComponentProps> = (props) => {
 
-    displayName = 'ChartBar';
+    const { id, flowKey } = props;
+    const model = manywho.model.getComponent(id, flowKey);
+    const Chart = getChart();
 
-    constructor(props: any) {
-        super(props);
-    }
+    let label = null;
 
-    render() {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        let label = null;
+    if (model.attributes)
+        label = model.attributes.label;
 
-        if (model.attributes)
-            label = model.attributes.label;
+    const chartProps: any = $.extend({}, props, {
+        type: 'bar',
+        options: {
+            legend: {
+                display: !manywho.utils.isNullOrWhitespace(label),
+            },
+        },
+    });
 
-        const props: any = $.extend({}, this.props, {
-            type: 'bar',
-            options: {
-                legend: {
-                    display: !manywho.utils.isNullOrWhitespace(label)
-                }
-            }
-        });
+    return <Chart {...chartProps} />;
+};
 
-        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-    }
+manywho.component.registerItems(registeredComponents.CHART_BAR, ChartBar);
 
-}
+export const getChartBar = () : typeof ChartBar => manywho.component.getByName(registeredComponents.CHART_BAR) || ChartBar;
 
-manywho.component.registerItems('chart-bar', ChartBar);
+export default ChartBar;

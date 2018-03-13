@@ -1,9 +1,13 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IComponentProps.ts" />
+import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getOutcome } from './outcome';
+
+import '../../css/textarea.less';
 
 declare var manywho: any;
 
-class Textarea extends React.Component<IComponentProps, any> {
+class Textarea extends React.Component<IComponentProps, null> {
 
     constructor(props) {
         super(props);
@@ -14,7 +18,11 @@ class Textarea extends React.Component<IComponentProps, any> {
     }
 
     onChange(e) {
-        manywho.state.setComponent(this.props.id, { contentValue: e.target.value }, this.props.flowKey, true);
+        manywho.state.setComponent(
+            this.props.id,
+            { contentValue: e.target.value },
+            this.props.flowKey, true,
+        );
         this.forceUpdate();
     }
 
@@ -24,15 +32,23 @@ class Textarea extends React.Component<IComponentProps, any> {
     }
 
     onBlur(e) {
-        manywho.component.handleEvent(this, manywho.model.getComponent(this.props.id, this.props.flowKey), this.props.flowKey);
+        manywho.component.handleEvent(
+            this, manywho.model.getComponent(this.props.id, this.props.flowKey),
+            this.props.flowKey,
+        );
     }
 
     render() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
+        const Outcome = getOutcome();
+
         manywho.log.info(`Rendering Textarea: ${model.developerName}, ${this.props.id}`);
 
-        const state = this.props.isDesignTime ? { contentValue: '' } : manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
+        const state = this.props.isDesignTime ? { contentValue: '' } : manywho.state.getComponent(
+            this.props.id,
+            this.props.flowKey,
+        ) || {};
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
         const props: any = {
@@ -45,7 +61,7 @@ class Textarea extends React.Component<IComponentProps, any> {
             className: 'form-control',
             disabled: !model.isEnabled,
             required: model.isRequired,
-            readOnly: !model.isEditable
+            readOnly: !model.isEditable,
         };
 
         if (!this.props.isDesignTime) {
@@ -57,7 +73,13 @@ class Textarea extends React.Component<IComponentProps, any> {
                 props.onBlur = this.onBlur;
         }
 
-        let className = manywho.styling.getClasses(this.props.parentId, this.props.id, 'textarea', this.props.flowKey).join(' ');
+        let className = manywho.styling.getClasses(
+            this.props.parentId,
+            this.props.id,
+            'textarea',
+            this.props.flowKey,
+        ).join(' ');
+
         className += ' form-group';
 
         if (model.isVisible === false)
@@ -66,7 +88,7 @@ class Textarea extends React.Component<IComponentProps, any> {
         if (model.isValid === false || state.isValid === false)
             className += ' has-error';
 
-        const outcomeButtons = outcomes && outcomes.map(outcome => React.createElement(manywho.component.getByName('outcome'), { id: outcome.id, flowKey: this.props.flowKey }));
+        const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey} />);
 
         return <div className={className}>
             <label>
@@ -82,4 +104,9 @@ class Textarea extends React.Component<IComponentProps, any> {
 
 }
 
-manywho.component.register('textarea', Textarea);
+manywho.component.register(registeredComponents.TEXTAREA, Textarea);
+
+export const getTextarea = () : typeof Textarea => manywho.component.getByName(registeredComponents.TEXTAREA);
+
+export default Textarea;
+

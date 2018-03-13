@@ -1,35 +1,34 @@
-/// <reference path="../../typings/index.d.ts" />
-/// <reference path="../interfaces/IItemsComponentProps.ts" />
+import * as React from 'react';
+import * as $ from 'jquery';
+import registeredComponents from '../constants/registeredComponents';
+import IComponentProps from '../interfaces/IComponentProps';
+import { getChart } from './chart';
 
 declare var manywho: any;
 
-class ChartLine extends React.Component<IItemsComponentProps, any> {
+const ChartLine: React.SFC<IComponentProps> = (props) => {
 
-    displayName = 'ChartLine';
+    const Chart = getChart();
+    const model = manywho.model.getComponent(props.id, props.flowKey);
+    let label = null;
 
-    constructor(props: any) {
-        super(props);
-    }
+    if (model.attributes)
+        label = model.attributes.label;
 
-    render() {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        let label = null;
+    const chartProps: any = $.extend({}, props, {
+        type: 'line',
+        options: {
+            legend: {
+                display: !manywho.utils.isNullOrWhitespace(label),
+            },
+        },
+    });
 
-        if (model.attributes)
-            label = model.attributes.label;
+    return <Chart {...chartProps} />;
+};
 
-        const props: any = $.extend({}, this.props, {
-            type: 'line',
-            options: {
-                legend: {
-                    display: !manywho.utils.isNullOrWhitespace(label)
-                }
-            }
-        });
+manywho.component.registerItems(registeredComponents.CHART_LINE, ChartLine);
 
-        return React.createElement(manywho.component.getByName('mw-chart'), props, null);
-    }
+export const getChartLine = () : typeof ChartLine => manywho.component.getByName(registeredComponents.CHART_LINE);
 
-}
-
-manywho.component.registerItems('chart-line', ChartLine);
+export default ChartLine;
