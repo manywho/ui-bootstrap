@@ -1,6 +1,7 @@
 import IWaitProps from '../interfaces/IWaitProps';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
 
 declare var manywho: any;
@@ -9,7 +10,7 @@ class Wait extends React.Component<IWaitProps, null> {
 
     constructor(props) {
         super(
-            Object.assign(
+            $.extend(
                 {},
                 {
                     // default props
