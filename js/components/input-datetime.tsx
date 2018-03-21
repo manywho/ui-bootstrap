@@ -12,7 +12,7 @@ declare var manywho: any;
 declare var moment: any;
 
 interface IInputDateTimeState {
-    value: string;
+    picker: any;
 }
 
 class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
@@ -22,7 +22,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     constructor(props: IInputProps) {
         super(props);
 
-        this.state = { value: null };
+        this.state = { picker: null };
         this.isDateOnly = true;
     }
 
@@ -60,18 +60,50 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         }
     }
 
-    /*componentWillReceiveProps(nextProps) {
-        if (
-            !manywho.utils.isNullOrUndefined(nextProps.value) && 
-            parseFloat(this.state.value) !== nextProps.value
-        ) {
-            this.setState({ value: nextProps.value.toString() });
-        } else if (manywho.utils.isNullOrUndefined(nextProps.value)) {
-            this.setState({ value: null });
-        }
-    }*/
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.props.value === null && nextProps.value === null) {
+            return true;
+        } 
 
-    test = () => {
+        return false;
+    }
+
+    componentDidUpdate() {
+        if (!this.props.isDesignTime) {
+            if (this.isEmptyDate(this.props.value)) {
+                manywho.state.setComponent(
+                    this.props.id, { contentValue: null }, this.props.flowKey, true,
+                );
+                $(this.state.picker).data('DateTimePicker').date(null);
+            } else {
+                const date = moment(
+                    this.props.value, 
+                    [
+                        'MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', 
+                        moment.ISO_8601,
+                    ],
+                );
+
+                manywho.state.setComponent(
+                    this.props.id, 
+                    { contentValue: this.format(date) }, 
+                    this.props.flowKey, 
+                    true,
+                );
+                if (
+                    manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey) && 
+                    !this.isDateOnly
+                ) {
+                    $(this.state.picker).data('DateTimePicker').date(date.local());
+                } else {
+                    $(this.state.picker).data('DateTimePicker').date(date.utc());
+                }
+
+            }
+        }
+    }
+
+    componentDidMount() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         
         let useCurrent = false;
@@ -109,54 +141,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         })
         .on('dp.change', !this.props.isDesignTime && this.onChange);
 
-        if (!this.props.isDesignTime) {
-            if (this.isEmptyDate(this.props.value)) {
-                
-                manywho.state.setComponent(
-                    this.props.id, { contentValue: null }, this.props.flowKey, true,
-                );
-            } else {
-                const date = moment(
-                    this.props.value, 
-                    [
-                        'MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', 
-                        moment.ISO_8601,
-                    ],
-                );
-
-                manywho.state.setComponent(
-                    this.props.id, 
-                    { contentValue: this.format(date) }, 
-                    this.props.flowKey, 
-                    true,
-                );
-
-                if (
-                    manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey) && 
-                    !this.isDateOnly
-                ) {
-                    $(datepickerElement).data('DateTimePicker').date(date.local());
-                } else {
-                    $(datepickerElement).data('DateTimePicker').date(date.utc());
-                }
-            }
-        }
-    }
-
-    componentWillReceiveProps(nextProps) {
-
-    }
-
-    componentDidMount() {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        if (model.attributes) {
-            if (model.attributes.useCurrent !== undefined)
-                this.setState({ 
-                    value: !manywho.utils.isNullOrUndefined(this.props.value) ? 
-                        manywho.formatting.number(this.props.value, this.props.format) : 
-                        null,
-                });
-        }     
+        this.setState({ picker: datepickerElement });
     }
 
     componentWillUnmount() {
@@ -165,7 +150,6 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     }
 
     render() {
-        this.test();
         return <input id={this.props.id}
             placeholder={this.props.placeholder}
             className="form-control datepicker"
