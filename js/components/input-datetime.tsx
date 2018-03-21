@@ -60,9 +60,20 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         }
     }
 
-    componentDidMount() {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+    /*componentWillReceiveProps(nextProps) {
+        if (
+            !manywho.utils.isNullOrUndefined(nextProps.value) && 
+            parseFloat(this.state.value) !== nextProps.value
+        ) {
+            this.setState({ value: nextProps.value.toString() });
+        } else if (manywho.utils.isNullOrUndefined(nextProps.value)) {
+            this.setState({ value: null });
+        }
+    }*/
 
+    test = () => {
+        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+        
         let useCurrent = false;
         let customFormat = null;
 
@@ -132,12 +143,29 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+
+    }
+
+    componentDidMount() {
+        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+        if (model.attributes) {
+            if (model.attributes.useCurrent !== undefined)
+                this.setState({ 
+                    value: !manywho.utils.isNullOrUndefined(this.props.value) ? 
+                        manywho.formatting.number(this.props.value, this.props.format) : 
+                        null,
+                });
+        }     
+    }
+
     componentWillUnmount() {
         if (this.refs['datepicker'])
             $(ReactDOM.findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
     }
 
     render() {
+        this.test();
         return <input id={this.props.id}
             placeholder={this.props.placeholder}
             className="form-control datepicker"
