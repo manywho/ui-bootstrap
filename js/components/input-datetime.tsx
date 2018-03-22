@@ -12,7 +12,8 @@ declare var manywho: any;
 declare var moment: any;
 
 interface IInputDateTimeState {
-    picker: any;
+    value: string; // TODO - check if this is needed (doesn't look like it)
+    picker: any; // The datepicker DOM node
 }
 
 class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
@@ -22,7 +23,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     constructor(props: IInputProps) {
         super(props);
 
-        this.state = { picker: null };
+        this.state = { picker: null, value: null };
         this.isDateOnly = true;
     }
 
@@ -61,11 +62,16 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
+
+        // A force update inside the parent component causes the component
+        // to update everytime a change event is fired. We do not necessarily
+        // want to re-render the component each time this happens, only when
+        // current and previous value prop is set to a date.
         if (this.props.value === null && nextProps.value === null) {
-            return true;
+            return false;
         } 
 
-        return false;
+        return true;
     }
 
     componentDidUpdate() {
@@ -74,6 +80,9 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
                 manywho.state.setComponent(
                     this.props.id, { contentValue: null }, this.props.flowKey, true,
                 );
+
+                // When the component is updated and no date is defined
+                // the datepicker value should be set to null
                 $(this.state.picker).data('DateTimePicker').date(null);
             } else {
                 const date = moment(
@@ -141,7 +150,8 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         })
         .on('dp.change', !this.props.isDesignTime && this.onChange);
 
-        this.setState({ picker: datepickerElement });
+        // 
+        this.setState({ picker: datepickerElement, value: null });
     }
 
     componentWillUnmount() {

@@ -32,7 +32,7 @@ describe('InputDateTime component behaviour', () => {
     let componentWrapper;
     let model;
 
-    function manyWhoMount(isShallow = false, useCurrent = false, dateTimeFormat = null) {
+    function manyWhoMount(isShallow = false, useCurrent = false, dateTimeFormat = null, value = str()) {
 
         model = {
             attributes: {
@@ -61,7 +61,7 @@ describe('InputDateTime component behaviour', () => {
         });
 
         const props = {
-            value: str(),
+            value,
             placeholder: str(),
             onChange: () => {},
             onBlur: () => {},
@@ -98,6 +98,16 @@ describe('InputDateTime component behaviour', () => {
     test('The datepicker plugin gets instantiated', () => {
         componentWrapper = manyWhoMount(false, true);
         expect(globalAny.datetimepickerMock).toHaveBeenCalled(); 
+    });
+
+    test('Datepicker DOM node gets added to component state', () => {
+        componentWrapper = manyWhoMount(false, true);
+        expect(componentWrapper.state().picker.className).toEqual('form-control datepicker');
+    });
+
+    test('If value prop is a date that datepicker plugin gets called', () => {
+        componentWrapper = manyWhoMount(false, true, null, '2018-02-16T00:00:00.0000000+00:00');
+        expect(globalAny.datetimepickerMock).toHaveBeenCalled();
     });
 
     test('An empty date will return true', () => {
