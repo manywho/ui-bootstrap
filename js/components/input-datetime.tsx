@@ -12,7 +12,7 @@ declare var manywho: any;
 declare var moment: any;
 
 interface IInputDateTimeState {
-    value: string;
+    picker: any; // The datepicker DOM node
 }
 
 class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
@@ -22,7 +22,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     constructor(props: IInputProps) {
         super(props);
 
-        this.state = { value: null };
+        this.state = { picker: null };
         this.isDateOnly = true;
     }
 
@@ -60,9 +60,60 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+
+        // A force update inside the parent component causes the component
+        // to update everytime a change event is fired. We do not necessarily
+        // want to re-render the component each time this happens, only when
+        // current and previous value prop is set to a date.
+        if (this.props.value === null && nextProps.value === null) {
+            return false;
+        } 
+
+        return true;
+    }
+
+    componentDidUpdate() {
+        if (!this.props.isDesignTime) {
+            if (this.isEmptyDate(this.props.value)) {
+                manywho.state.setComponent(
+                    this.props.id, { contentValue: null }, this.props.flowKey, true,
+                );
+
+                // When the component is updated and no date is defined
+                // the datepicker value should be set to null
+                $(this.state.picker).data('DateTimePicker').date(null);
+            } else {
+                const date = moment(
+                    this.props.value, 
+                    [
+                        'MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', 
+                        moment.ISO_8601,
+                    ],
+                );
+
+                manywho.state.setComponent(
+                    this.props.id, 
+                    { contentValue: this.format(date) }, 
+                    this.props.flowKey, 
+                    true,
+                );
+                if (
+                    manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey) && 
+                    !this.isDateOnly
+                ) {
+                    $(this.state.picker).data('DateTimePicker').date(date.local());
+                } else {
+                    $(this.state.picker).data('DateTimePicker').date(date.utc());
+                }
+
+            }
+        }
+    }
+
     componentDidMount() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-
+        
         let useCurrent = false;
         let customFormat = null;
 
@@ -98,38 +149,8 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         })
         .on('dp.change', !this.props.isDesignTime && this.onChange);
 
-        if (!this.props.isDesignTime) {
-            if (this.isEmptyDate(this.props.value)) {
-                
-                manywho.state.setComponent(
-                    this.props.id, { contentValue: null }, this.props.flowKey, true,
-                );
-            } else {
-                const date = moment(
-                    this.props.value, 
-                    [
-                        'MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', 
-                        moment.ISO_8601,
-                    ],
-                );
-
-                manywho.state.setComponent(
-                    this.props.id, 
-                    { contentValue: this.format(date) }, 
-                    this.props.flowKey, 
-                    true,
-                );
-
-                if (
-                    manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey) && 
-                    !this.isDateOnly
-                ) {
-                    $(datepickerElement).data('DateTimePicker').date(date.local());
-                } else {
-                    $(datepickerElement).data('DateTimePicker').date(date.utc());
-                }
-            }
-        }
+        // 
+        this.setState({ picker: datepickerElement });
     }
 
     componentWillUnmount() {
