@@ -1,3 +1,5 @@
+/* tslint:disable:object-literal-shorthand ter-prefer-arrow-callback */
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
@@ -5,7 +7,7 @@ import * as ReactDOM from 'react-dom';
 
     manywho.component.mixins.enterKeyHandler = {
 
-        onEnter: (e) => {
+        onEnter: function (e) {
 
             if (e.keyCode === 13
                 && !e.shiftKey
@@ -13,12 +15,12 @@ import * as ReactDOM from 'react-dom';
                 && manywho.settings.global('shortcuts.progressOnEnter', this.props.flowKey, true)) {
 
                 const outcome = manywho.model.getOutcomes(null, this.props.flowKey)
-                    .sort((a, b) => {
+                    .sort(function (a, b) {
 
                         return a.order - b.order;
 
                     })
-                    .filter((outcome) => {
+                    .filter(function (outcome) {
 
                         return manywho.utils.isEqual(outcome.pageActionBindingType, 'save', true);
 
@@ -39,7 +41,7 @@ import * as ReactDOM from 'react-dom';
 
     manywho.component.mixins.collapse = {
 
-        getInitialState: () => {
+        getInitialState: function () {
 
             return {
                 isVisible: true,
@@ -49,7 +51,7 @@ import * as ReactDOM from 'react-dom';
 
         },
 
-        toggleVisibility: (event) => {
+        toggleVisibility: function (event) {
 
             event.preventDefault();
 
@@ -63,7 +65,7 @@ import * as ReactDOM from 'react-dom';
                         icon: 'toggle-icon glyphicon glyphicon-triangle-right',
                     });
 
-                    requestAnimationFrame(() => {
+                    requestAnimationFrame(function () {
                         this.setState({ height: 0 });
                     });
 
@@ -82,7 +84,7 @@ import * as ReactDOM from 'react-dom';
 
         },
 
-        getLabel: (label, required) => {
+        getLabel: function (label, required) {
 
             if (!manywho.utils.isNullOrWhitespace(label)) {
 
