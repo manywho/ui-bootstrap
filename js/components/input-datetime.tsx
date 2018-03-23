@@ -12,7 +12,6 @@ declare var manywho: any;
 declare var moment: any;
 
 interface IInputDateTimeState {
-    value: string; // TODO - check if this is needed (doesn't look like it)
     picker: any; // The datepicker DOM node
 }
 
@@ -23,7 +22,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     constructor(props: IInputProps) {
         super(props);
 
-        this.state = { picker: null, value: null };
+        this.state = { picker: null };
         this.isDateOnly = true;
     }
 
@@ -151,7 +150,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         .on('dp.change', !this.props.isDesignTime && this.onChange);
 
         // 
-        this.setState({ picker: datepickerElement, value: null });
+        this.setState({ picker: datepickerElement });
     }
 
     componentWillUnmount() {
