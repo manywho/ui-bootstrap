@@ -13,6 +13,16 @@ const mockDatetimepicker = jest.fn((options) => {
 
 globalAny['datetimepickerMock'] = mockDatetimepicker;
 
+jest.mock('moment', () => {
+    return jest.fn(() => {
+        return {
+            year: () => 'xxx',
+            month: () => 'xxx',
+            date: () => 'xxx',
+        };
+    });
+});
+
 jest.mock('jquery', () => {
     return jest.fn(() => {
         return {
@@ -100,11 +110,6 @@ describe('InputDateTime component behaviour', () => {
         expect(globalAny.datetimepickerMock).toHaveBeenCalled(); 
     });
 
-    test('Datepicker DOM node gets added to component state', () => {
-        componentWrapper = manyWhoMount(false, true);
-        expect(componentWrapper.state().picker.className).toEqual('form-control datepicker');
-    });
-
     test('If value prop is a date that datepicker plugin gets called', () => {
         componentWrapper = manyWhoMount(false, true, null, '2018-02-16T00:00:00.0000000+00:00');
         expect(globalAny.datetimepickerMock).toHaveBeenCalled();
@@ -139,6 +144,16 @@ describe('InputDateTime component behaviour', () => {
         expect(globalAny.datetimepickerMock).toHaveBeenCalledWith(
             expect.objectContaining(expectedArgs),
         );
+    });
+
+    test('setPickerDate is called with correct value', () => {
+        const mockSetPickerDate = jest.spyOn(InputDateTime.prototype, 'setPickerDate');
+
+        componentWrapper = manyWhoMount(false, false, 'YYYY/MM/DD', '2018/12/25'); 
+        expect(mockSetPickerDate).toHaveBeenCalledWith('2018/12/25');
+
+        componentWrapper.setProps({ value: null });
+        expect(mockSetPickerDate).toHaveBeenCalledWith(null);
     });
 
 });

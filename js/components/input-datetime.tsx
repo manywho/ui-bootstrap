@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as $ from 'jquery';
+import * as moment from 'moment';
 import IInputProps from '../interfaces/IInputProps';
 import registeredComponents from '../constants/registeredComponents';
 
@@ -9,7 +10,6 @@ import '../../css/lib/bootstrap-datetimepicker.css';
 import '../lib/100-datetimepicker.js';
 
 declare var manywho: any;
-declare var moment: any;
 
 class InputDateTime extends React.Component<IInputProps, null> {
 
