@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as $ from 'jquery';
+import * as moment from 'moment';
 import IInputProps from '../interfaces/IInputProps';
 import registeredComponents from '../constants/registeredComponents';
 
@@ -9,21 +10,17 @@ import '../../css/lib/bootstrap-datetimepicker.css';
 import '../lib/100-datetimepicker.js';
 
 declare var manywho: any;
-declare var moment: any;
 
-interface IInputDateTimeState {
-    value: string;
-}
-
-class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
+class InputDateTime extends React.Component<IInputProps, null> {
 
     isDateOnly: boolean;
 
     constructor(props: IInputProps) {
         super(props);
 
-        this.state = { value: null };
         this.isDateOnly = true;
+
+        this.setPickerDate = this.setPickerDate.bind(this);
     }
 
     isEmptyDate(date) {
@@ -37,7 +34,15 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     }
 
     format(date) {
-        return date.utc().format(this.isDateOnly ? 'YYYY-MM-DD' : undefined);
+        if (this.isDateOnly) {
+            return moment({
+                year: date.year(),
+                month: date.month(),
+                day: date.date(),
+            }).format('YYYY-MM-DD');
+        }
+
+        return date.utc().format();
     }
 
     onChange = (e) => {
@@ -60,6 +65,43 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         }
     }
 
+    setPickerDate(newDate) {
+        const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
+        const datepickerInstance = $(datepickerElement).data('DateTimePicker');
+
+        let date = moment(
+            newDate, 
+            [
+                'MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', 
+                moment.ISO_8601,
+            ],
+        );
+
+        if (newDate === null) {
+            datepickerInstance.date(null);
+        } else if (this.isDateOnly) {
+            // Create a new date with no time information
+
+            date = moment({
+                year: date.year(),
+                month: date.month(),
+                day: date.date(),
+            });
+            
+            datepickerInstance.date(date);
+
+        } else {
+
+            if (
+                manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey)
+            ) {
+                datepickerInstance.date(date.local());
+            } else {
+                datepickerInstance.date(date.utc());
+            }
+        }
+    }
+
     componentDidMount() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
@@ -79,7 +121,7 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
         if (customFormat)
             this.isDateOnly = 
                 customFormat.toLowerCase().indexOf('h') === -1 && 
-                customFormat.toLowerCase().indexOf('m') === -1 && 
+                customFormat.indexOf('m') === -1 && // minute is always lower case, M is always month
                 customFormat.toLowerCase().indexOf('s') === -1;
 
         const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
@@ -104,30 +146,9 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
                 manywho.state.setComponent(
                     this.props.id, { contentValue: null }, this.props.flowKey, true,
                 );
+
             } else {
-                const date = moment(
-                    this.props.value, 
-                    [
-                        'MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', 
-                        moment.ISO_8601,
-                    ],
-                );
-
-                manywho.state.setComponent(
-                    this.props.id, 
-                    { contentValue: this.format(date) }, 
-                    this.props.flowKey, 
-                    true,
-                );
-
-                if (
-                    manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey) && 
-                    !this.isDateOnly
-                ) {
-                    $(datepickerElement).data('DateTimePicker').date(date.local());
-                } else {
-                    $(datepickerElement).data('DateTimePicker').date(date.utc());
-                }
+                this.setPickerDate(this.props.value);
             }
         }
     }
@@ -135,6 +156,12 @@ class InputDateTime extends React.Component<IInputProps, IInputDateTimeState> {
     componentWillUnmount() {
         if (this.refs['datepicker'])
             $(ReactDOM.findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
+    }
+
+    componentDidUpdate(nextProps) {
+        if (this.props.value === null) {
+            this.setPickerDate(null);
+        }
     }
 
     render() {

@@ -103,7 +103,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
         this.props.onOutcome(objectDataId, outcome.id);
     }
 
-    onCellEditCommitted(id, propertyId, value) {
+    onCellEditCommitted = (id, propertyId, value) => {
         const objectData = this.setPropertyValue(this.props.objectData, id, propertyId, value);
         manywho.state.setComponent(
             this.props.id, 
