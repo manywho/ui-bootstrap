@@ -41,6 +41,8 @@ class InputDateTime extends React.Component<IInputProps, null> {
                 day: date.date(),
             }).format('YYYY-MM-DD');
         }
+
+        return date.utc().format();
     }
 
     onChange = (e) => {
@@ -156,8 +158,10 @@ class InputDateTime extends React.Component<IInputProps, null> {
             $(ReactDOM.findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
     }
 
-    componentDidUpdate() {
-        this.setPickerDate(this.props.value);
+    componentDidUpdate(nextProps) {
+        if (this.props.value === null) {
+            this.setPickerDate(null);
+        }
     }
 
     render() {
