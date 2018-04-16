@@ -9,9 +9,7 @@ import { mount } from 'enzyme';
 import Tour from '../js/components/tour';
 
 jest.mock('react-transition-group/CSSTransitionGroup', () => {
-    return {
-        default: 'CSSTransitionGroup',
-    };
+    return 'CSSTransitionGroup';
 });
 
 jest.useFakeTimers();
