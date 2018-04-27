@@ -22,12 +22,22 @@ const rules = commonRules.concat([
             failOnHint: true
         },
     },
-    { 
+    {
         exclude: /node_modules/,
         test: /\.(less)$/,
         include: path.resolve(__dirname, 'css/mw-bootstrap.less'),
         use: extractBootstrap.extract({
             use: [
+                {
+                    // After less has run, change instances of .mw-bs html and .mw-bs body to .mw-bs
+                    // This is caused by nesting the entire bootstrap.css file within mw-bootstrap.less
+                    loader: 'string-replace-loader',
+                    options: {
+                        search: '\.mw-bs html|\.mw-bs body', 
+                        replace: '.mw-bs', 
+                        flags: 'g' ,
+                    }
+                },
                 { loader: "css-loader" },
                 { loader: "less-loader" }
             ],
@@ -40,7 +50,7 @@ const rules = commonRules.concat([
     }
 ]);
 
-const plugins = commonPlugins.concat([    
+const plugins = commonPlugins.concat([
     extractBootstrap,
     extractComponentsLess
 ]);
