@@ -53,7 +53,7 @@ module.exports.config = {
     externals: {
         'react': 'React',
         'react-dom': 'ReactDOM',
-        'react-transition-group/CSSTransitionGroup': 'React.addons.CSSTransitionGroup',
+        'react-transition-group': 'ReactTransitionGroup',
         'jquery': 'jQuery',
         'numbro': 'numbro',
         'moment': 'moment',

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ITourState, ITourProps, ITourStep } from '../interfaces/ITour';
-import * as CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import * as CSSTransitionGroup from 'react-transition-group';
 import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/tours.less';
