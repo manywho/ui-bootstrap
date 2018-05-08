@@ -1,27 +1,11 @@
 import IWaitProps from '../interfaces/IWaitProps';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
 
 declare var manywho: any;
 
 class Wait extends React.Component<IWaitProps, null> {
-
-    constructor(props) {
-        super(
-            $.extend(
-                {},
-                {
-                    // default props
-                    isVisible: false,
-                    isSmall: false,
-                    message: null,
-                },
-                props,
-            ),
-        );
-    }
 
     componentDidUpdate() {
         if (ReactDOM.findDOMNode(this.refs['wait'])) {

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { presets } from 'react-motion';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
@@ -11,7 +12,6 @@ declare var manywho: any;
 
 // Awaiting react update
 declare var ReactCollapse: any;
-declare var ReactMotion: any;
 
 interface IContainerState {
     isCollapsed: boolean;
@@ -184,7 +184,7 @@ class Container extends React.Component<IComponentProps, IContainerState> {
                 <ReactCollapse 
                     isOpened={!this.state.isCollapsed} 
                     keepCollapsedContent={true} 
-                    springConfig={ReactMotion.presets.gentle}>
+                    springConfig={presets.gentle}>
                     <Dynamic name={`mw-${model.containerType}`} props={this.props} />
                     { outcomeButtons }
                 </ReactCollapse>

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import * as MaskedInput from '../lib/140-react-maskedinput';
-
+import { default as MaskedInput } from 'react-maskedinput';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getInputDateTime } from './input-datetime';

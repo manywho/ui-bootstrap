@@ -13,7 +13,6 @@
         "dev": "webpack --config webpack.development.config.js",
         "dist": "webpack -p --config webpack.production.config.js",
         "postdist": "node bundle",
-        "precommit": "lint-staged",
         "test": "jest"
     },
     "lint-staged": {
@@ -91,6 +90,8 @@
         "testResultsProcessor": "./node_modules/jest-junit-reporter"
     },
     "dependencies": {
-        "lint": "^1.1.2"
+        "lint": "^1.1.2",
+        "react-maskedinput": "^4.0.1",
+        "react-motion": "^0.5.2"
     }
 }

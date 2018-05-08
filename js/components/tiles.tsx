@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Motion, spring } from 'react-motion';
 import registeredComponents from '../constants/registeredComponents';
 import ITilesProps from '../interfaces/ITilesProps';
 import { getOutcome } from './outcome';
@@ -8,7 +9,6 @@ import { getWait } from './wait';
 import '../../css/tiles.less';
 
 declare var manywho: any;
-declare var ReactMotion: any;
 
 class Tiles extends React.Component<ITilesProps, null> {
 
@@ -217,8 +217,8 @@ class Tiles extends React.Component<ITilesProps, null> {
                     const key: string = `${this.props.page.toString()}-${index}`;
 
                     return (<div className="mw-tiles-item-container" key={key} ref="items">
-                        <ReactMotion.Motion defaultStyle={{ rotate: 0 }}
-                            style={{ rotate: ReactMotion.spring(
+                        <Motion defaultStyle={{ rotate: 0 }}
+                            style={{ rotate: spring(
                                 180,
                                 { stiffness: 65, damping: 9.5 },
                             ) }}>
@@ -243,7 +243,7 @@ class Tiles extends React.Component<ITilesProps, null> {
                                     </div>
                                 </div>);
                             } }
-                        </ReactMotion.Motion>
+                        </Motion>
                     </div>);
                 })}
             </div>);
