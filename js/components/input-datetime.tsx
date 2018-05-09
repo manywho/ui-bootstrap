@@ -44,6 +44,12 @@ class InputDateTime extends React.Component<IInputProps, null> {
             }).format('YYYY-MM-DD');
         }
 
+        if (
+            manywho.settings.global('i18n.overrideTimezoneOffset', this.props.flowKey)
+        ) {
+            return date.local().format();
+        }
+            
         return date.utc().format();
     }
 
@@ -151,7 +157,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
             if (!this.isDateOnly)
                 this.isTimeOnly = 
                     customFormat.toLowerCase().indexOf('h') !== -1 && 
-                    customFormat.indexOf('m') !== -1 || // minute is always lower case, M is always month
+                    customFormat.indexOf('m') !== -1 ||
                     customFormat.toLowerCase().indexOf('s') !== -1;
         }
 
