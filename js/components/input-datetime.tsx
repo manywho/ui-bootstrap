@@ -14,11 +14,13 @@ declare var manywho: any;
 class InputDateTime extends React.Component<IInputProps, null> {
 
     isDateOnly: boolean;
+    isTimeOnly: boolean;
 
     constructor(props: IInputProps) {
         super(props);
 
         this.isDateOnly = true;
+        this.isTimeOnly = false;
 
         this.setPickerDate = this.setPickerDate.bind(this);
     }
@@ -50,7 +52,29 @@ class InputDateTime extends React.Component<IInputProps, null> {
             if (!e.date)
                 this.props.onChange(null);
             else if (e.date.isValid())
-                this.props.onChange(this.format(e.date));
+
+                // This check is happening as, if just the timepicker is being used
+                // the expected behaviour is that the page components default value
+                // e.g YYYY-MM-DD should persist and not default back to the current date
+                if (this.isTimeOnly &&
+                    this.props.value !== null &&
+                    !(e.date.isSame(this.props.value))) {
+    
+                    const defaultDate: any = this.props.value;
+                    const defaultMomentDate = moment(
+                        defaultDate,
+                    );
+                    const timeGetters = {
+                        hour: e.date.get('hour'),
+                        minute: e.date.get('minute'),
+                        second: e.date.get('second'),
+                    };
+
+                    const defaultDateSet = defaultMomentDate.set(timeGetters);
+                    this.props.onChange(this.format(defaultDateSet));
+                } else {
+                    this.props.onChange(this.format(e.date));
+                }
             else
                 this.props.onChange(e.target.value);
         }
@@ -118,11 +142,18 @@ class InputDateTime extends React.Component<IInputProps, null> {
                 customFormat = model.attributes.dateTimeFormat;
         }
 
-        if (customFormat)
+        if (customFormat) {
             this.isDateOnly = 
                 customFormat.toLowerCase().indexOf('h') === -1 && 
                 customFormat.indexOf('m') === -1 && // minute is always lower case, M is always month
                 customFormat.toLowerCase().indexOf('s') === -1;
+
+            if (!this.isDateOnly)
+                this.isTimeOnly = 
+                    customFormat.toLowerCase().indexOf('h') !== -1 && 
+                    customFormat.indexOf('m') !== -1 || // minute is always lower case, M is always month
+                    customFormat.toLowerCase().indexOf('s') !== -1;
+        }
 
         const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
 
