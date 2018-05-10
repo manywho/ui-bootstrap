@@ -150,15 +150,19 @@ class InputDateTime extends React.Component<IInputProps, null> {
 
         if (customFormat) {
             this.isDateOnly = 
-                customFormat.toLowerCase().indexOf('h') === -1 && 
-                customFormat.indexOf('m') === -1 && // minute is always lower case, M is always month
-                customFormat.toLowerCase().indexOf('s') === -1;
+                !customFormat.toLowerCase().includes('h') && 
+                !customFormat.includes('m') && // minute is always lower case, M is always month
+                !customFormat.toLowerCase().includes('s');
 
-            if (!this.isDateOnly)
+            if (!this.isDateOnly) { 
                 this.isTimeOnly = 
-                    customFormat.toLowerCase().indexOf('h') !== -1 && 
-                    customFormat.indexOf('m') !== -1 ||
-                    customFormat.toLowerCase().indexOf('s') !== -1;
+                    customFormat.toLowerCase().includes('h') &&
+                    customFormat.includes('m') ||
+                    customFormat.toLowerCase().includes('s') &&
+                    !customFormat.toLowerCase().includes('y') &&
+                    !customFormat.toLowerCase().includes('d') &&
+                    !customFormat.includes('M');
+            }
         }
 
         const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
