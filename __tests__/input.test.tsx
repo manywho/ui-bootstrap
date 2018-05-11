@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { mount } from 'enzyme';
 
-import * as MaskedInput from '../js/lib/140-react-maskedinput';
+import * as MaskedInput from 'react-maskedinput';
 
 import getInputBoolean from '../js/components/input-boolean';
 import getInputDateTime from '../js/components/input-datetime';

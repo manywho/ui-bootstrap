@@ -110,7 +110,7 @@ class Tiles extends React.Component<ITilesProps, null> {
                         selectedProperty.contentType,
                         this.props.flowKey,
                     );
-                    return <li><strong>{selectedProperty.developerName}</strong>: {content}</li>;
+                    return <li key={selectedProperty.developerName}><strong>{selectedProperty.developerName}</strong>: {content}</li>;
                 }
             })
             .filter(column => !!column);
@@ -180,6 +180,7 @@ class Tiles extends React.Component<ITilesProps, null> {
             true) && !outcome.isBulkAction)
         .map(
             outcome => <Outcome
+                key={outcome.id}
                 id={outcome.id}
                 flowKey={this.props.flowKey}
                 onClick={this.onOutcome}

@@ -55,10 +55,10 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                 checked: this.props.selectedRows.length === this.props.totalObjectData,
             };
 
-            columns.push(<th className="checkbox-cell"><input {...checkboxProps} /></th>);
+            columns.push(<th className="checkbox-cell" key="checkbox"><input {...checkboxProps} /></th>);
 
         } else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true))
-            columns.push(<th></th>);
+            columns.push(<th key="radio"></th>);
 
         columns = columns.concat(displayColumns.map((column) => {
 
@@ -95,7 +95,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
             
         }));
 
-        return <tr>{columns}</tr>;
+        return <tr key="header-row">{columns}</tr>;
     }
 
     onOutcomeClick = (e, outcome) => {

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { default as MaskedInput } from 'react-maskedinput';
+// tslint:disable-next-line
+import MaskedInput from 'react-maskedinput';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getInputDateTime } from './input-datetime';
@@ -11,11 +12,7 @@ import '../../css/input.less';
 
 declare var manywho: any;
 
-interface IInputState {
-
-}
-
-class Input extends React.Component<IComponentProps, IInputState> {
+class Input extends React.Component<IComponentProps, null> {
 
     validationRegex: RegExp;
 
@@ -199,22 +196,27 @@ class Input extends React.Component<IComponentProps, IInputState> {
             break;
 
         case manywho.component.contentTypes.password:
+            delete props.flowKey;
+            delete props.format;
             inputElement = <input {...props} className="form-control" type="password" />;
             break;
 
         default:
-            if (manywho.utils.isNullOrEmpty(mask))
+            if (manywho.utils.isNullOrEmpty(mask)) {
+                delete props.flowKey;
+                delete props.format;
                 inputElement = (
                     <input {...props} 
                         className="form-control" 
                         type={model.attributes.type ? model.attributes.type : 'text'} />
                 );
-            else
+            } else {
                 inputElement = (
                     <MaskedInput {...props} 
                         className="form-control" 
                         type={model.attributes.type ? model.attributes.type : 'text'} />
                 );
+            }
             break;
         }
 

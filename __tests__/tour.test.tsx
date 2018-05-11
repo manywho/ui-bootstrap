@@ -8,7 +8,7 @@ import { mount } from 'enzyme';
 
 import Tour from '../js/components/tour';
 
-jest.mock('react-transition-group/CSSTransitionGroup', () => {
+jest.mock('react-transition-group', () => {
     return 'CSSTransitionGroup';
 });
 

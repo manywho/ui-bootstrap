@@ -35,11 +35,12 @@
         "css-loader": "^0.28.11",
         "enzyme": "^3.3.0",
         "enzyme-adapter-react-14": "^1.0.5",
+        "enzyme-adapter-react-16": "^1.1.1",
         "extract-text-webpack-plugin": "^3.0.2",
         "file-loader": "^1.1.11",
         "husky": "^0.14.3",
         "identity-obj-proxy": "^3.0.0",
-        "jest": "^21.2.1",
+        "jest": "^22.4.3",
         "jest-junit-reporter": "^1.1.0",
         "jquery": "^2.1.4",
         "less": "^2.7.3",
@@ -48,15 +49,20 @@
         "lint-staged": "^5.0.0",
         "react": "^16.3.2",
         "react-addons-test-utils": "^0.14.8",
+        "react-collapse": "^4.0.3",
         "react-dom": "^16.3.2",
+        "react-dom-factories": "^1.0.0",
+        "react-maskedinput": "^4.0.1",
+        "react-motion": "^0.5.2",
+        "react-selectize": "^3.0.1",
         "react-test-renderer": "^16.3.2",
-        "react-transition-group": "^2.3.1",
+        "react-transition-group": "^1.0.0",
         "script-loader": "^0.7.2",
         "string-replace-loader": "^2.1.1",
         "style-loader": "^0.19.1",
         "ts-jest": "^21.2.4",
         "ts-loader": "^3.5.0",
-        "tslint": "^5.9.1",
+        "tslint": "^5.10.0",
         "tslint-config-airbnb": "^5.8.0",
         "tslint-loader": "^3.6.0",
         "typedoc": "^0.9.0",
@@ -90,8 +96,6 @@
         "testResultsProcessor": "./node_modules/jest-junit-reporter"
     },
     "dependencies": {
-        "lint": "^1.1.2",
-        "react-maskedinput": "^4.0.1",
-        "react-motion": "^0.5.2"
+        "lint": "^1.1.2"
     }
 }
