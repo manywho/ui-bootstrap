@@ -20,16 +20,12 @@ describe('ChartContainer component behaviour', () => {
         {
             id = str(5),
             flowKey = str(5),
-            parentId = str(5),
-            isDesignTime = false, 
-            contentElement = null, 
-            outcomes = [],
-            objectData = null, 
-            options = {}, 
-            isLoading = false, 
-            onOutcome = jest.fn(),
-            type = str(5), 
-            refresh = jest.fn(),
+            children = [
+                {
+                    columns: {},
+                },
+            ],
+            isDesignTime = false,
         } = {},
         // model
         {
@@ -48,8 +44,7 @@ describe('ChartContainer component behaviour', () => {
         globalAny.window.manywho.styling.getClasses = () => [str(5)];
 
         const props = {
-            id, flowKey, parentId, isDesignTime, contentElement, outcomes,
-            objectData, options, isLoading, onOutcome, type, refresh,
+            id, flowKey, children, isDesignTime,
         };
         
         globalAny.window.manywho.model.getContainer = () => ({
@@ -88,16 +83,14 @@ describe('ChartContainer component behaviour', () => {
             .toHaveBeenCalledWith('charts', ChartContainer);
     });
 
-    test('ChartBase component doesn\'t have click prop when design time', () => {
+    test('Container renders an empty div when in design time', () => {
         componentWrapper = manyWhoMount(
             {
                 isDesignTime: true,
             },
         );
 
-        expect(componentWrapper.find(ChartBase).props()).toEqual(expect.objectContaining({
-            onClick: null,
-        }));
+        expect(componentWrapper.find('.clearfix').length).toBe(1);
     });
 
     test('Refresh button renders when not in design time', () => {
@@ -129,7 +122,7 @@ describe('ChartContainer component behaviour', () => {
 
         componentWrapper.find('.glyphicon-refresh').parent().simulate('click');
 
-        expect(manywho.model.getChildren).toHaveBeenCalledTimes(2);
+        expect(manywho.model.getChildren).toHaveBeenCalled();
     });
 
     test('Wait renders when any children are loading', () => {

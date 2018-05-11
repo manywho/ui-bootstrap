@@ -1,12 +1,12 @@
 import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
-import IChartComponentProps from '../interfaces/IChartComponentProps';
+import IChartContainerProps from '../interfaces/IChartContainerProps';
 import { getChartBase } from './chart-base';
 import { getWait } from './wait';
 
 declare var manywho: any;
 
-const ChartContainer: React.SFC<IChartComponentProps> = ({ id, flowKey, children, isDesignTime }) => {
+const ChartContainer: React.SFC<IChartContainerProps> = ({ id, flowKey, children, isDesignTime }) => {
 
     const onClick = (externalId, index) => {
         const children = manywho.model.getChildren(id, flowKey);
