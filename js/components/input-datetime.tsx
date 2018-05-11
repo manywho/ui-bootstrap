@@ -156,12 +156,13 @@ class InputDateTime extends React.Component<IInputProps, null> {
 
             if (!this.isDateOnly) { 
                 this.isTimeOnly = 
-                    customFormat.toLowerCase().includes('h') &&
+                    (customFormat.toLowerCase().includes('h') &&
                     customFormat.includes('m') ||
-                    customFormat.toLowerCase().includes('s') &&
-                    !customFormat.toLowerCase().includes('y') &&
+                    customFormat.toLowerCase().includes('s'))
+                    &&
+                    (!customFormat.toLowerCase().includes('y') &&
                     !customFormat.toLowerCase().includes('d') &&
-                    !customFormat.includes('M');
+                    !customFormat.includes('M'));
             }
         }
 
