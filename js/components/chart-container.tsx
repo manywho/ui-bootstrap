@@ -6,7 +6,7 @@ import { getWait } from './wait';
 
 declare var manywho: any;
 
-const ChartContainer: React.SFC<IChartComponentProps> = ({ id, flowKey, isDesignTime }) => {
+const ChartContainer: React.SFC<IChartComponentProps> = ({ id, flowKey, children, isDesignTime }) => {
 
     const onClick = (externalId, index) => {
         const children = manywho.model.getChildren(id, flowKey);
@@ -54,14 +54,12 @@ const ChartContainer: React.SFC<IChartComponentProps> = ({ id, flowKey, isDesign
     };
 
     const model = manywho.model.getContainer(id, flowKey);
-    const children = manywho.model.getChildren(id, flowKey);
+    // const children = manywho.model.getChildren(id, flowKey);
 
     if (isDesignTime)
         return <div className="clearfix">
             {
-                manywho.component.getChildComponents(
-                    children, id, flowKey,
-                )
+                children
             }
         </div>;
 
