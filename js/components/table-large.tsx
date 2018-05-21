@@ -131,7 +131,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
             if (this.props.model.isMultiSelect) {
 
-                columns.push(<td className="checkbox-cell">
+                columns.push(<td className="checkbox-cell" key={'checkbox-cell'}>
                     <input id={item.externalId} 
                         type="checkbox" 
                         checked={isSelected} 
@@ -141,7 +141,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
             } else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true)) {
 
-                columns.push(<td className="checkbox-cell">
+                columns.push(<td className="checkbox-cell" key={'checkbox-cell'}>
                     <input id={item.externalId} 
                         type="radio" 
                         checked={isSelected} 
@@ -226,7 +226,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
                         props.className = buttonClasses.join(' ');
 
-                        return <td><a {...props}>Download</a></td>;
+                        return <td key="download"><a {...props}>Download</a></td>;
 
                     } 
                     

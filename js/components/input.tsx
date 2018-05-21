@@ -103,9 +103,9 @@ class Input extends React.Component<IComponentProps, null> {
         const Outcome = getOutcome();
 
         const contentValue =
-            state && state.contentValue !== undefined ? 
-            state.contentValue : 
-            model.contentValue;
+            state.contentValue
+            ? state.contentValue
+            : model.contentValue || '';
 
         let mask = null;
         if (model.attributes && model.attributes.mask)
@@ -202,9 +202,10 @@ class Input extends React.Component<IComponentProps, null> {
             break;
 
         default:
+            delete props.flowKey;
+            delete props.format;
+            
             if (manywho.utils.isNullOrEmpty(mask)) {
-                delete props.flowKey;
-                delete props.format;
                 inputElement = (
                     <input {...props} 
                         className="form-control" 
@@ -212,9 +213,9 @@ class Input extends React.Component<IComponentProps, null> {
                 );
             } else {
                 inputElement = (
-                    <MaskedInput {...props} 
-                        className="form-control" 
-                        type={model.attributes.type ? model.attributes.type : 'text'} />
+                    <MaskedInput mask={'HH:mm'} /> 
+                        // className="form-control" 
+                        // type={model.attributes.type ? model.attributes.type : 'text'} />
                 );
             }
             break;

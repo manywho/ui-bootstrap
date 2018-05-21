@@ -1,5 +1,3 @@
-
-
 import { int } from '../test-utils';
 
 import * as React from 'react';
@@ -9,7 +7,10 @@ import { mount } from 'enzyme';
 import Tour from '../js/components/tour';
 
 jest.mock('react-transition-group', () => {
-    return 'CSSTransitionGroup';
+    const React = require('react');
+    return ({
+        CSSTransitionGroup: ({ children }) => <div>{children}</div>,
+    });
 });
 
 jest.useFakeTimers();
@@ -215,37 +216,33 @@ describe('Tour component behaviour', () => {
     test('arrow positioning for when offset is null/undefined', () => {
         tourWrapper = manyWhoMount('right', 'top', null);
         tourWrapper.setState({ foundTarget: true });
-        const arrowElement = tourWrapper.find('.arrow');
+        const arrowElement = tourWrapper.find('.arrow').first();
 
-        expect(arrowElement.html());
-        expect(arrowElement.html()).toEqual(expect.stringContaining('calc(0% + 16px)'));    
+        expect(arrowElement.prop('style')).toHaveProperty('top', 'calc(0% + 16px)');    
     });
 
     test('arrow positioning for right/left placement', () => {
         tourWrapper = manyWhoMount('right', 'top');
         tourWrapper.setState({ foundTarget: true });
-        const arrowElement = tourWrapper.find('.arrow');
+        const arrowElement = tourWrapper.find('.arrow').first();
 
-        expect(arrowElement.html());
-        expect(arrowElement.html()).toEqual(expect.stringContaining('calc(0% + 20px)'));    
+        expect(arrowElement.prop('style')).toHaveProperty('top', 'calc(0% + 20px)');      
     });
 
     test('arrow positioning for top/bottom placement and align left', () => {
         tourWrapper = manyWhoMount('top', 'left');
         tourWrapper.setState({ foundTarget: true });
-        const arrowElement = tourWrapper.find('.arrow');
+        const arrowElement = tourWrapper.find('.arrow').first();
 
-        expect(arrowElement.html());
-        expect(arrowElement.html()).toEqual(expect.stringContaining('calc(0% + 20px)'));       
+        expect(arrowElement.prop('style')).toHaveProperty('left', 'calc(0% + 20px)');     
     });
 
     test('arrow positioning for top/bottom placement and align right', () => {
         tourWrapper = manyWhoMount('bottom', 'right');
         tourWrapper.setState({ foundTarget: true });
-        const arrowElement = tourWrapper.find('.arrow');
+        const arrowElement = tourWrapper.find('.arrow').first();
 
-        expect(arrowElement.html());
-        expect(arrowElement.html()).toEqual(expect.stringContaining('calc(100% - 20px)'));       
+        expect(arrowElement.prop('style')).toHaveProperty('left', 'calc(100% - 20px)');    
     });
 
     test('for no popover title if title is null', () => {

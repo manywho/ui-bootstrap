@@ -2,13 +2,13 @@ import { str } from '../test-utils';
 
 import * as React from 'react';
 
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 
-import * as MaskedInput from 'react-maskedinput';
+import MaskedInput from 'react-maskedinput';
 
-import getInputBoolean from '../js/components/input-boolean';
-import getInputDateTime from '../js/components/input-datetime';
-import getInputNumber from '../js/components/input-number';
+import InputBoolean from '../js/components/input-boolean';
+import InputDateTime from '../js/components/input-datetime';
+import InputNumber from '../js/components/input-number';
 import Input from '../js/components/input';
 
 describe('Input component behaviour', () => {
@@ -23,7 +23,7 @@ describe('Input component behaviour', () => {
 
     const globalAny:any = global;
 
-    function manyWhoMount(modelcontentType = 'ContentString', mask = null, isVisible = false, isNullOrWhitespace = null) {
+    function manyWhoMount(modelcontentType = 'ContentString', mask = null, isVisible = false, isNullOrWhitespace = null, shallowRender = false) {
 
         propID = str(5);
         propparentId = str(5);
@@ -42,7 +42,7 @@ describe('Input component behaviour', () => {
             developerName: str(5),
             attributes: {
                 mask,
-                type: str(5),
+                type: 'text',
             },
         };
 
@@ -88,7 +88,9 @@ describe('Input component behaviour', () => {
             }),
         };
 
-        return mount(<Input id={propID} parentId={propparentId} flowKey={propflowKey} />);
+        return shallowRender 
+            ? shallow(<Input id={propID} parentId={propparentId} flowKey={propflowKey} />)
+            : mount(<Input id={propID} parentId={propparentId} flowKey={propflowKey} />);
     }
 
     afterEach(() => {
@@ -120,17 +122,17 @@ describe('Input component behaviour', () => {
 
     test('Datetime input gets rendered', () => {
         inputWrapper = manyWhoMount('ContentDateTime');
-        expect(inputWrapper.find(getInputDateTime).exists()).toEqual(true);
+        expect(inputWrapper.find(InputDateTime).exists()).toEqual(true);
     });
 
     test('Boolean input gets rendered', () => {
         inputWrapper = manyWhoMount('ContentBoolean');
-        expect(inputWrapper.find(getInputBoolean).exists()).toEqual(true);
+        expect(inputWrapper.find(InputBoolean).exists()).toEqual(true);
     });
 
     test('Number input gets rendered', () => {
         inputWrapper = manyWhoMount('ContentNumber');
-        expect(inputWrapper.find(getInputNumber).exists()).toEqual(true);
+        expect(inputWrapper.find(InputNumber).exists()).toEqual(true);
     });
 
     test('Password input gets rendered', () => {
@@ -139,7 +141,7 @@ describe('Input component behaviour', () => {
     });
 
     test('MaskedInput input gets rendered', () => {
-        inputWrapper = manyWhoMount('ContentString', '11:11');
+        inputWrapper = manyWhoMount('ContentString', '11:11', true, undefined, true);
         expect(inputWrapper.find(MaskedInput).exists()).toEqual(true);
     });
 

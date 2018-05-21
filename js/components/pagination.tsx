@@ -38,6 +38,8 @@ const Pagination: React.SFC<any> = (
 
 manywho.component.register(registeredComponents.PAGINATION, Pagination);
 
-export const getPagination = () : typeof Pagination => manywho.component.getByName(registeredComponents.PAGINATION);
+export const getPagination = () : typeof Pagination => {
+    return manywho.component.getByName(registeredComponents.PAGINATION);
+};
 
 export default Pagination;

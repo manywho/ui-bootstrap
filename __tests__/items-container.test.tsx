@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import { str } from '../test-utils';
 
 import ItemsContainer from '../js/components/items-container';
+import Dynamic from '../js/components/dynamic';
 
 describe('ItemsContainer component behaviour', () => {
 
@@ -96,17 +97,14 @@ describe('ItemsContainer component behaviour', () => {
     });
 
     test('Empty items element is rendered when objectData is empty array', () => {
-
-        const stubComponent = jest.fn(() => <div/>);
-
-        globalAny.window.manywho.component.getByName = () => stubComponent;
+        
         globalAny.window.manywho.component.getDisplayColumns = () => [{}];
 
         componentWrapper = manyWhoMount({
             objectData: [],
         });
         
-        expect(stubComponent).toHaveBeenCalledWith(
+        expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 contentElement: expect.objectContaining({
                     props: expect.objectContaining({
@@ -114,24 +112,19 @@ describe('ItemsContainer component behaviour', () => {
                     }),
                 }),
             }),
-            expect.any(Object),
-            expect.any(Object),
         ); 
 
     });
 
     test('Error element is rendered when no display columns have been defined', () => {
         
-        const stubComponent = jest.fn(() => <div/>);
-
-        globalAny.window.manywho.component.getByName = () => stubComponent;
         globalAny.window.manywho.component.getDisplayColumns = () => [];
 
         componentWrapper = manyWhoMount({
             objectData: [],
         });
         
-        expect(stubComponent).toHaveBeenCalledWith(
+        expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 contentElement: expect.objectContaining({
                     props: expect.objectContaining({
@@ -139,17 +132,12 @@ describe('ItemsContainer component behaviour', () => {
                     }),
                 }),
             }),
-            expect.any(Object),
-            expect.any(Object),
         ); 
 
     });
 
     test('Error element is rendered when state has error', () => {
-        
-        const stubComponent = jest.fn(() => <div/>);
 
-        globalAny.window.manywho.component.getByName = () => stubComponent;
         globalAny.window.manywho.state.getComponent = () => ({
             error: true,
         });
@@ -158,7 +146,7 @@ describe('ItemsContainer component behaviour', () => {
             objectData: [],
         });
         
-        expect(stubComponent).toHaveBeenCalledWith(
+        expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 contentElement: expect.objectContaining({
                     props: expect.objectContaining({
@@ -166,17 +154,12 @@ describe('ItemsContainer component behaviour', () => {
                     }),
                 }),
             }),
-            expect.any(Object),
-            expect.any(Object),
         ); 
 
     });
 
     test('Pagination size is passed to child component', () => {
-        
-        const stubComponent = jest.fn(() => <div/>);
 
-        globalAny.window.manywho.component.getByName = () => stubComponent;
         globalAny.window.manywho.utils.isEqual = () => true;
 
         componentWrapper = manyWhoMount({
@@ -184,21 +167,16 @@ describe('ItemsContainer component behaviour', () => {
             paginationSize: 23,
         });
         
-        expect(stubComponent).toHaveBeenCalledWith(
+        expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 limit: 23,
             }),
-            expect.any(Object),
-            expect.any(Object),
         ); 
 
     });
 
     test('Pagination size is retreived from settings', () => {
-        
-        const stubComponent = jest.fn(() => <div/>);
 
-        globalAny.window.manywho.component.getByName = () => stubComponent;
         globalAny.window.manywho.utils.isEqual = () => true;
         globalAny.window.manywho.settings.flow = () => 16;
 
@@ -206,72 +184,55 @@ describe('ItemsContainer component behaviour', () => {
             objectData: [],
         });
         
-        expect(stubComponent).toHaveBeenCalledWith(
+        expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 limit: 16,
             }),
-            expect.any(Object),
-            expect.any(Object),
         ); 
 
     });
 
     test('id, parentId, flowKey, isDesignTime are passed directly to child component', () => {
-        const stubComponent = jest.fn(() => <div/>);
 
         const id = str(4);
         const parentId = str(4);
         const flowKey = str(4);
         const isDesignTime = true;
-        
-        globalAny.window.manywho.component.getByName = () => stubComponent;
 
         componentWrapper = manyWhoMount({
             id, parentId, flowKey, isDesignTime,
         });
         
-        expect(stubComponent).toHaveBeenCalledWith(
+        expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 id, parentId, flowKey, isDesignTime,
             }),
-            expect.any(Object),
-            expect.any(Object),
         ); 
     });
 
     test('isLoading is correctly passed to child component', () => {
-        const stubComponent = jest.fn(() => <div/>);
-        
-        globalAny.window.manywho.component.getByName = () => stubComponent;
 
         componentWrapper = manyWhoMount({
             loading: true,
         });
         
-        expect(stubComponent).toHaveBeenCalledWith(
+        expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 isLoading: true,
             }),
-            expect.any(Object),
-            expect.any(Object),
         ); 
     });
 
     test('Page number is correctly passed to child component', () => {
-        const stubComponent = jest.fn(() => <div/>);
-        
-        globalAny.window.manywho.component.getByName = () => stubComponent;
 
         componentWrapper = manyWhoMount({
             page: 42,
         });
         
-        expect(stubComponent).toHaveBeenCalledWith(
+        expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 page: 42,
             }),
-            expect.any(Object),
-            expect.any(Object),
         ); 
     });
 

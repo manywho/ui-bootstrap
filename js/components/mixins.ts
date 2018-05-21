@@ -95,16 +95,16 @@ import * as ReactDOM from 'react-dom';
 
                 const labelContent = 
                     manywho.settings.global('collapsible', this.props.flowKey) && label ? 
-                    [React.DOM.i({ className: this.state.icon }), label] : 
+                    [React.createElement('i', { className: this.state.icon }, label)] : 
                     [label];
 
                 if (required) {
 
-                    labelContent.push(React.DOM.span({ className: 'input-required' }, ' *'));
+                    labelContent.push(React.createElement('span', { className: 'input-required' }, ' *'));
 
                 }
 
-                return React.DOM.h3({ className: labelClasses, onClick: this.toggleVisibility }, labelContent);
+                return React.createElement('h3', { className: labelClasses, onClick: this.toggleVisibility }, labelContent);
 
             }
 
