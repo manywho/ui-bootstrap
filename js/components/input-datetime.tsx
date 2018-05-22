@@ -24,7 +24,8 @@ class InputDateTime extends React.Component<IInputProps, null> {
     }
 
     isEmptyDate(date) {
-        if (date == null
+        if (date === null
+            || date === ''
             || date.indexOf('01/01/0001') !== -1
             || date.indexOf('1/1/0001') !== -1
             || date.indexOf('0001-01-01') !== -1)
@@ -159,7 +160,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
     }
 
     componentDidUpdate(nextProps) {
-        if (this.props.value === null) {
+        if (this.props.value === null || this.props.value === '') {
             this.setPickerDate(null);
         }
     }
