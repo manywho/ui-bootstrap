@@ -1,12 +1,12 @@
 import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
-import IChartComponentProps from '../interfaces/IChartComponentProps';
+import IChartContainerProps from '../interfaces/IChartContainerProps';
 import { getChartBase } from './chart-base';
 import { getWait } from './wait';
 
 declare var manywho: any;
 
-const ChartContainer: React.SFC<IChartComponentProps> = ({ id, flowKey, isDesignTime }) => {
+const ChartContainer: React.SFC<IChartContainerProps> = ({ id, flowKey, children, isDesignTime }) => {
 
     const onClick = (externalId, index) => {
         const children = manywho.model.getChildren(id, flowKey);
@@ -53,13 +53,31 @@ const ChartContainer: React.SFC<IChartComponentProps> = ({ id, flowKey, isDesign
             });
     };
 
+    
     const model = manywho.model.getContainer(id, flowKey);
-    const children = manywho.model.getChildren(id, flowKey);
 
-    const models = children.map(item => 
+    if (isDesignTime)
+
+        // When in design time it does not matter
+        // if children just returns an empty array
+        // Note: chart containers parent component is
+        // always the container wrapper component inside the tooling
+        return <div className="clearfix">
+            {children}
+        </div>;
+
+    let chartContainerChildren = children;
+
+    // This components child components (e.g bar charts etc) 
+    // should be passed down from the parent component
+    // if not then try to retrieve child components from the model
+    if (!chartContainerChildren)
+        chartContainerChildren = manywho.model.getChildren(id, flowKey);
+
+    const models = chartContainerChildren.map(item => 
         manywho.model.getComponent(item.id, flowKey));
 
-    const states = children.map(item => 
+    const states = chartContainerChildren.map(item => 
         manywho.state.getComponent(item.id, flowKey));
 
     const columns = manywho.component.getDisplayColumns(models[0].columns) || [];
@@ -75,35 +93,13 @@ const ChartContainer: React.SFC<IChartComponentProps> = ({ id, flowKey, isDesign
     const options = {};
 
     const refreshButton = 
-        ((model.objectDataRequest || model.fileDataRequest) && !isDesignTime) ?
+        ((model.objectDataRequest || model.fileDataRequest)) ?
         <button className="btn btn-sm btn-default pull-right" onClick={onRefresh}>
             <span className="glyphicon glyphicon-refresh" />
         </button>
         : null;
 
-    let objectData = models.map(item => item.objectData);    
-    if (isDesignTime)
-        objectData = models.map((item) => {
-            return [
-                Math.random() * 10, 
-                Math.random() * 15, 
-                Math.random() * 50, 
-                Math.random() * 25]
-                    .map((data) => {
-                        return {
-                            properties: [
-                                { 
-                                    contentValue: columns[0].label, 
-                                    typeElementPropertyId: columns[0].typeElementPropertyId, 
-                                },
-                                { 
-                                    contentValue: data, 
-                                    typeElementPropertyId: columns[1].typeElementPropertyId, 
-                                },
-                            ],
-                        };
-                    });
-        });
+    const objectData = models.map(item => item.objectData);    
 
     const ChartBase = getChartBase();
     const chartBaseProps = {
