@@ -4,12 +4,17 @@ import * as React from 'react';
 
 import { mount, shallow } from 'enzyme';
 
-import MaskedInput from 'react-maskedinput';
-
 import InputBoolean from '../js/components/input-boolean';
 import InputDateTime from '../js/components/input-datetime';
 import InputNumber from '../js/components/input-number';
 import Input from '../js/components/input';
+
+// react-maskedinput v4.0.1 has messed up default exports 
+// https://github.com/insin/react-maskedinput/issues/104
+let MaskedInput = require('react-maskedinput');
+if (MaskedInput.default) {
+    MaskedInput = MaskedInput.default;
+}
 
 describe('Input component behaviour', () => {
 
@@ -86,6 +91,7 @@ describe('Input component behaviour', () => {
                 }
                 return false;
             }),
+            isEqual: jest.fn(_ => true),
         };
 
         return shallowRender 

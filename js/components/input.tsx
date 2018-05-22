@@ -1,6 +1,4 @@
 import * as React from 'react';
-// tslint:disable-next-line
-import MaskedInput from 'react-maskedinput';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getInputDateTime } from './input-datetime';
@@ -9,6 +7,13 @@ import { getInputNumber } from './input-number';
 import { getOutcome } from './outcome';
 
 import '../../css/input.less';
+
+// react-maskedinput v4.0.1 has messed up default exports 
+// https://github.com/insin/react-maskedinput/issues/104
+let MaskedInput = require('react-maskedinput');
+if (MaskedInput.default) {
+    MaskedInput = MaskedInput.default;
+}
 
 declare var manywho: any;
 
@@ -213,9 +218,9 @@ class Input extends React.Component<IComponentProps, null> {
                 );
             } else {
                 inputElement = (
-                    <MaskedInput mask={'HH:mm'} /> 
-                        // className="form-control" 
-                        // type={model.attributes.type ? model.attributes.type : 'text'} />
+                    <MaskedInput {...props}
+                        className="form-control" 
+                        type={model.attributes.type ? model.attributes.type : 'text'} />
                 );
             }
             break;
