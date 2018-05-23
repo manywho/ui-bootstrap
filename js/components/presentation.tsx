@@ -31,7 +31,7 @@ class Presentation extends React.Component<IComponentProps, null> {
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         const outcomes: any = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
         const outcomeElements: JSX.Element[] = outcomes && outcomes
-            .map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey}/>);
+            .map(outcome => <Outcome key={outcome.id} id={outcome.id} flowKey={this.props.flowKey}/>);
 
         let className = manywho.styling.getClasses(
             this.props.parentId, 

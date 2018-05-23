@@ -97,6 +97,7 @@
     },
     "dependencies": {
         "@types/react-maskedinput": "^4.0.3",
-        "lint": "^1.1.2"
+        "lint": "^1.1.2",
+        "react-dropzone": "^4.2.9"
     }
 }

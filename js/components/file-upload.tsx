@@ -1,5 +1,7 @@
 ﻿import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+// tslint:disable-next-line
+import Dropzone from 'react-dropzone';
 import registeredComponents from '../constants/registeredComponents';
 import IFileUploadProps from '../interfaces/IFileUploadProps';
 import outcome from './outcome';
