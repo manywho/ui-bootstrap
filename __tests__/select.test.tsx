@@ -13,17 +13,6 @@ jest.useFakeTimers();
 const classOne = str(5);
 const classTwo = str(5);
 
-globalAny.reactSelectize = {
-    SimpleSelect: () => {
-        return (
-            <div>
-                <div className="dropdown-menu"></div>
-            </div>
-        );
-    },
-};
-
-
 describe('Select input component behaviour', () => {
 
     let selectWrapper;
@@ -318,26 +307,6 @@ describe('Select input component behaviour', () => {
     test('on next page that additional options are appended to option state', () => {
         const typeElementPropertyId = str(10);
         const developerName = str();
-
-        // {
-        //     "developerName": "My String",
-        //     "externalId": "26369c3a-79e3-494c-b391-a612a5b1267b",
-        //     "internalId": "26369c3a-79e3-494c-b391-a612a5b1267b",
-        //     "isSelected": true,
-        //     "order": 0,
-        //     "properties": [
-        //         {
-        //             "contentFormat": "",
-        //             "contentType": "ContentString",
-        //             "contentValue": "fgfgfg",
-        //             "developerName": "value",
-        //             "objectData": null,
-        //             "typeElementId": null,
-        //             "typeElementPropertyId": "77dc433a-eed2-4d0d-a952-4efbd10e21a3"
-        //         }
-        //     ],
-        //     "typeElementId": "d539250c-492f-4a38-ab36-b2a793b0f6f0"
-        // }
 
         const pageOneObjData = [
             { 
