@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Motion, spring } from 'react-motion';
 import registeredComponents from '../constants/registeredComponents';
 import ITilesProps from '../interfaces/ITilesProps';
 import { getOutcome } from './outcome';
@@ -218,33 +217,9 @@ class Tiles extends React.Component<ITilesProps, null> {
                     const key: string = `${this.props.page.toString()}-${index}`;
 
                     return (<div className="mw-tiles-item-container" key={key} ref="items">
-                        <Motion defaultStyle={{ rotate: 0 }}
-                            style={{ rotate: spring(
-                                180,
-                                { stiffness: 65, damping: 9.5 },
-                            ) }}>
-
-                            {(interpolatingStyle) => {
-                                const frontTransform: string = `rotateY(
-                                    ${interpolatingStyle.rotate}deg
-                                )`;
-                                const backTransform: string = `rotateY(
-                                    ${180 - interpolatingStyle.rotate}deg
-                                )`;
-
-                                return (<div>
-                                    <div className="front"
-                                        style={{ transform: frontTransform }}>
-                                    </div>
-                                    <div className="back"
-                                        style={{ transform: backTransform }}>
-                                        {this.renderItem(
-                                            item, columns, footerOutcomes, deleteOutcome,
-                                        )}
-                                    </div>
-                                </div>);
-                            } }
-                        </Motion>
+                                {this.renderItem(
+                                    item, columns, footerOutcomes, deleteOutcome,
+                                )}
                     </div>);
                 })}
             </div>);

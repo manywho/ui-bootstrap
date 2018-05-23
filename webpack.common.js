@@ -115,7 +115,6 @@ module.exports.rules = [
 
 module.exports.cssPaths = [
     'css/lib/bootstrap-datetimepicker.css',
-    'css/lib/jquery.textcomplete.css',
     'css/lib/react-selectize.css',
     'css/chart.less',
     'css/containers.less',
