@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
@@ -9,7 +9,7 @@ declare var manywho: any;
 class Presentation extends React.Component<IComponentProps, null> {
 
     replaceContent() {
-        const node = ReactDOM.findDOMNode(this.refs.content);
+        const node = findDOMNode(this.refs.content);
 
         const imgs = node.querySelectorAll('img');
         if (imgs && imgs.length > 0)

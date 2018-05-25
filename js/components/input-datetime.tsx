@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import * as $ from 'jquery';
 import * as moment from 'moment';
 import IInputProps from '../interfaces/IInputProps';
@@ -59,7 +59,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
 
     onKeyDown = (e) => {
         if (e.keyCode === 8) {
-            $(ReactDOM.findDOMNode(this.refs['datepicker'])).data('DateTimePicker').clear();
+            $(findDOMNode(this.refs['datepicker'])).data('DateTimePicker').clear();
             this.props.onChange(null);
             e.preventDefault();
             e.stopPropagation();
@@ -67,7 +67,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
     }
 
     setPickerDate(newDate) {
-        const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
+        const datepickerElement = findDOMNode(this.refs['datepicker']);
         const datepickerInstance = $(datepickerElement).data('DateTimePicker');
 
         let date = moment(
@@ -125,7 +125,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
                 customFormat.indexOf('m') === -1 && // minute is always lower case, M is always month
                 customFormat.toLowerCase().indexOf('s') === -1;
 
-        const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
+        const datepickerElement = findDOMNode(this.refs['datepicker']);
 
         $(datepickerElement).datetimepicker({
             useCurrent,
@@ -156,7 +156,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
 
     componentWillUnmount() {
         if (this.refs['datepicker'])
-            $(ReactDOM.findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
+            $(findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
     }
 
     componentDidUpdate(nextProps) {

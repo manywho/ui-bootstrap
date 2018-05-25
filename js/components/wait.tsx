@@ -1,6 +1,6 @@
 import IWaitProps from '../interfaces/IWaitProps';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import registeredComponents from '../constants/registeredComponents';
 
 declare var manywho: any;
@@ -8,8 +8,8 @@ declare var manywho: any;
 class Wait extends React.Component<IWaitProps, null> {
 
     componentDidUpdate() {
-        if (ReactDOM.findDOMNode(this.refs['wait'])) {
-            const element = ReactDOM.findDOMNode(this.refs['wait']);
+        if (findDOMNode(this.refs['wait'])) {
+            const element = findDOMNode(this.refs['wait']);
             if (element.clientHeight > window.innerHeight) {
                 (element.children[0] as HTMLElement)
                     .style.top = 'calc(40% + ' + window.scrollY + ')';

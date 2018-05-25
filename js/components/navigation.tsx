@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import INavigationProps from '../interfaces/INavigationProps';
 import registeredComponents from '../constants/registeredComponents';
 
@@ -92,7 +92,7 @@ class Navigation extends React.Component<INavigationProps, null> {
 
         const toggleButton : HTMLButtonElement = 
             this.refs.toggle ?
-            ReactDOM.findDOMNode(this.refs.toggle) :
+            findDOMNode(this.refs.toggle) :
             null;
 
 

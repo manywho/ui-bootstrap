@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import registeredComponents from '../constants/registeredComponents';
 import ITableLargeProps from '../interfaces/ITableLargeProps';
 import { getTableInput } from './table-input';
@@ -306,7 +306,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
     componentDidUpdate() {
         const selectAll: HTMLInputElement = 
-            ReactDOM.findDOMNode(this.refs.selectAll) as HTMLInputElement;
+            findDOMNode(this.refs.selectAll) as HTMLInputElement;
 
         if (selectAll) {
             selectAll.indeterminate = 

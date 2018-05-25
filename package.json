@@ -13,6 +13,7 @@
         "dev": "webpack --config webpack.development.config.js",
         "dist": "webpack -p --config webpack.production.config.js",
         "postdist": "node bundle",
+        "precommit": "lint-staged",
         "test": "jest"
     },
     "lint-staged": {
@@ -98,6 +99,6 @@
     },
     "dependencies": {
         "@types/react-maskedinput": "^4.0.3",
-        "lint": "^1.1.2"        
+        "lint": "^1.1.2"
     }
 }
