@@ -22,7 +22,7 @@ class Feed extends React.Component<IComponentProps, null> {
         manywho.social.getMessages(this.props.flowKey);
     }
 
-    onSendMessage(message, messageId, mentionedUsers, attachments) {
+    onSendMessage = (message, messageId, mentionedUsers, attachments) => {
 
         return manywho.social.sendMessage(
             this.props.flowKey, message, messageId, mentionedUsers, attachments,
