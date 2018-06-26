@@ -18,10 +18,11 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
         };
     }
 
-    send() {
+    send = () => {
 
         let deferred = null;
         const fileUploadElement = (this.refs.files as any);
+        const textAreaElement = (this.refs.textarea as any);
 
         if (this.refs.files && fileUploadElement.state.fileNames.length > 0) {
 
@@ -36,7 +37,7 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
         deferred.done((response) => {
 
             return this.props.send(
-                fileUploadElement.getDOMNode().value,
+                textAreaElement.value,
                 this.props.messageId,
                 this.state.mentionedUsers,
                 response && response.files,
@@ -44,12 +45,12 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
 
         })
         .then(() => {
-            fileUploadElement.getDOMNode().value = '';
+            textAreaElement.value = '';
         });
     }
 
 
-    onKeyPress(e) {
+    onKeyPress = (e) => {
 
         e.stopPropagation();
 
@@ -63,6 +64,8 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
     componentDidMount() {
 
         const textarea = (this.refs.textarea as any);
+        const flowKey = this.props.flowKey;
+        const mentionedUsers = this.state.mentionedUsers;
 
         $(ReactDOM.findDOMNode(textarea)).textcomplete(
             [{
@@ -70,7 +73,7 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
                 index: 1,
                 search(term, callback) {
 
-                    manywho.social.getUsers(this.props.flowKey, term)
+                    manywho.social.getUsers(flowKey, term)
                         .done(response => callback(response || []))
                         .fail(response => callback([]));
 
@@ -82,7 +85,7 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
                 },
                 replace(value) {
 
-                    this.state.mentionedUsers[value.id] = value;
+                    mentionedUsers[value.id] = value;
                     return '@[' + value.fullName + '] ';
                 },
             }],
