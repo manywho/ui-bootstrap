@@ -165,7 +165,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                                         size={60} 
                                         className="form-control" 
                                         ref="username" 
-                                        value={this.state.username} 
+                                        value={this.state.username || ''} 
                                         onChange={this.handleUsernameChange} 
                                         id="mw-username" />
                                     <span className="help-block">

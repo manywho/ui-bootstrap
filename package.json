@@ -99,6 +99,7 @@
     },
     "dependencies": {
         "@types/react-maskedinput": "^4.0.3",
+        "create-react-class": "^15.6.3",
         "lint": "^1.1.2"
     }
 }
