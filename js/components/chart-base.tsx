@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
 import IChartBaseProps from '../interfaces/IChartBaseProps';
@@ -146,7 +146,7 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
             this.chart.data.labels = data.labels;
             this.chart.update();
         } else {
-            const canvas = ReactDOM.findDOMNode(this.refs['canvas']);
+            const canvas = findDOMNode(this.refs['canvas']);
 
             this.chart = new Chart(canvas, {
                 data,

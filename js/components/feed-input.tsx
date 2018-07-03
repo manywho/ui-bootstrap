@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
 import IFeedInputProps from '../interfaces/IFeedInputProps';
@@ -67,7 +67,7 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
         const flowKey = this.props.flowKey;
         const mentionedUsers = this.state.mentionedUsers;
 
-        $(ReactDOM.findDOMNode(textarea)).textcomplete(
+        $(findDOMNode(textarea)).textcomplete(
             [{
                 match: /@([A-Za-z]{2,})$/,
                 index: 1,

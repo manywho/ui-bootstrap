@@ -53,13 +53,11 @@ module.exports.config = {
     externals: {
         'react': 'React',
         'react-dom': 'ReactDOM',
-        'react-transition-group/CSSTransitionGroup': 'React.addons.CSSTransitionGroup',
         'jquery': 'jQuery',
         'numbro': 'numbro',
         'moment': 'moment',
         'bootstrap': 'bootstrap',
         'socket.io-client': 'io',
-        'react-motion': 'react-motion',
     },
     output: {
         // Properties added for different environments
@@ -117,7 +115,6 @@ module.exports.rules = [
 
 module.exports.cssPaths = [
     'css/lib/bootstrap-datetimepicker.css',
-    'css/lib/jquery.textcomplete.css',
     'css/lib/react-selectize.css',
     'css/chart.less',
     'css/containers.less',

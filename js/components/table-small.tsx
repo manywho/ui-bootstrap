@@ -57,7 +57,7 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
     renderOutcomeColumn = (item, model, outcomes) => {
         const Outcome = getOutcome();
 
-        return(<tr>
+        return(<tr key={item.externalId}>
             <th className="table-small-column table-small-label">
                 Actions
             </th>
@@ -66,7 +66,7 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
                 data-model={model.id}>
                     {
                         outcomes.map(
-                            outcome => <Outcome id={outcome.id} onClick={this.onOutcomeClick} flowKey={this.props.flowKey} />,
+                            outcome => <Outcome key={outcome.id} id={outcome.id} onClick={this.onOutcomeClick} flowKey={this.props.flowKey} />,
                         )
                     }
             </td>
@@ -120,7 +120,7 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
             }
 
             return(
-                <li {...attributes}>
+                <li {...attributes} key={item.externalId}>
                     <table className = "table table-small-item">
                         <tbody>
                             {displayColumns.map((column) => {
@@ -180,7 +180,7 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
                                         }
 
                                         return(
-                                            <tr>
+                                            <tr key={selectedProperty.developerName}>
                                                 <th 
                                                 className="table-small-column table-small-label">{column.label}</th>
                                                 <td className="table-small-column">{element}</td>

@@ -8,6 +8,7 @@
         ],
         "max-line-length": [true, 150],
         "ter-indent": [true, 4],
-        "variable-name": [true, "check-format", "allow-pascal-case"]
+        "variable-name": [true, "check-format", "allow-pascal-case"],
+        "curly": false
     }
 }

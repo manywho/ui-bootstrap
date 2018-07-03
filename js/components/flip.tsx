@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/flip.less';
@@ -34,13 +34,13 @@ class Flip extends React.Component<IComponentProps, IFlipState> {
         if (this.props.isDesignTime)
             return;
 
-        const element = ReactDOM.findDOMNode(this) as HTMLElement;
+        const element = findDOMNode(this) as HTMLElement;
 
         if (this.state.isFlipped) {
-            const back = ReactDOM.findDOMNode(this.refs['back']).firstChild as HTMLElement;
+            const back = findDOMNode(this.refs['back']).firstChild as HTMLElement;
             element.style.setProperty('height', back.offsetHeight + 'px');
         } else {
-            const front = ReactDOM.findDOMNode(this.refs['front']).firstChild as HTMLElement;
+            const front = findDOMNode(this.refs['front']).firstChild as HTMLElement;
             element.style.setProperty('height', front.offsetHeight + 'px');
         }
     }

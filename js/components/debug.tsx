@@ -98,7 +98,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
 
         const isExpanded = this.state.toggle[id] || false;
 
-        return <div className={'debug-root'}>
+        return <div className={'debug-root'} key={id}>
             <div className={'debug-root-toggle'} id={id} onClick={this.toggleHeader}>
                 <span className={
                     'glyphicon glyphicon-triangle-' + ((isExpanded) ? 'bottom' : 'right')
@@ -131,7 +131,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
 
         const fullPath = value[name] + '.' + path;
 
-        return <li className={'clearfix'}>
+        return <li className={'clearfix'} key={value[idName]}>
             <span
                 className={'glyphicon debug-value-toggle glyphicon-triangle-' +
                     ((isExpanded) ? 'bottom' : 'right')}
@@ -148,7 +148,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
                             function (part) {
                                 if (!manywho.utils.isNullOrWhitespace(part)) {
 
-                                    return <li>
+                                    return <li key={value[idName]}>
                                         <a href={'#'}
                                             onClick={this.onBreadcrumbClick}
                                             data-value-id={value[idName]}>
@@ -189,7 +189,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
                                             </button>;
                                     }
 
-                                    return <tr>
+                                    return <tr key={value[idName]}>
                                         <td>{propertyCaption}</td>
                                         <td>{propertyValue || 'null'}</td>
                                     </tr>;
@@ -208,7 +208,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
 
         const isExpanded = this.state.toggle['executionlog'];
 
-        return <div className={'debug-root'}>
+        return <div className={'debug-root'} key={'debug-root'}>
             <div
                 className={'debug-root-toggle'}
                 id={'executionlog'}
@@ -230,7 +230,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
 
                             const timeStamp = new Date(entry.timestamp);
 
-                            return <tr>
+                            return <tr key={entry.timestamp}>
                                 <td>{timeStamp.toLocaleString()}</td>
                                 <td>{entry.message}</td>
                                 { /* TODO: display data */}

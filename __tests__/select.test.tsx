@@ -13,19 +13,6 @@ jest.useFakeTimers();
 const classOne = str(5);
 const classTwo = str(5);
 
-globalAny.reactSelectize = {
-    SimpleSelect: React.createClass({
-        render: () => {
-            return (
-                <div>
-                    <div className="dropdown-menu"></div>
-                </div>
-            );
-        },
-    }),
-};
-
-
 describe('Select input component behaviour', () => {
 
     let selectWrapper;
@@ -319,36 +306,53 @@ describe('Select input component behaviour', () => {
 
     test('on next page that additional options are appended to option state', () => {
         const typeElementPropertyId = str(10);
+        const developerName = str();
+
         const pageOneObjData = [
-            { properties: [
-                {
-                    typeElementPropertyId,
-                    contentValue:str(10),
-                    contentFormat: null,
-                    contentType: 'ContentString',
-                },
-            ] },
+            { 
+                developerName,
+                externalId: str(),
+                internalId: str(),
+                isSelected: true,
+                properties: [
+                    {
+                        typeElementPropertyId,
+                        contentValue: str(10),
+                        contentFormat: '',
+                        contentType: 'ContentString',
+                        developerName: 'value',
+                        externalId: str(10),
+                    },
+                ],
+            },
         ];
 
         const pageTwoObjData = [
-            { properties: [
-                {
-                    typeElementPropertyId,
-                    contentValue:str(10),
-                    contentFormat: null,
-                    contentType: 'ContentString',
-                },
-            ] },
+            { 
+                developerName,
+                externalId: str(),
+                internalId: str(),
+                isSelected: true,
+                properties: [
+                    {
+                        typeElementPropertyId,
+                        contentValue: str(10),
+                        contentFormat: '',
+                        contentType: 'ContentString',
+                        developerName: 'value',
+                        externalId: str(10),
+                    },
+                ],
+            },
         ];
 
         columns = [
             { typeElementPropertyId },
         ];
 
-        selectWrapper = manyWhoMount(false, [], true, false);
-        selectWrapper.setState({ options:pageOneObjData });
+        selectWrapper = manyWhoMount(false, pageOneObjData, true, false);        
 
-        selectWrapper.setProps({ isLoading:false, objectData:pageTwoObjData, page:2 });
+        selectWrapper.setProps({ isLoading: false, objectData: pageTwoObjData, page: 2 });
         expect(selectWrapper.state().options.length).toEqual(2);
         expect(selectWrapper.state().isOpen).toBeTruthy();
     });

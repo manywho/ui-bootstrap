@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import * as $ from 'jquery';
 import * as moment from 'moment';
 import registeredComponents from '../constants/registeredComponents';
@@ -29,7 +29,7 @@ class TableInputDateTime extends React.Component<ITableInputDateTimeProps, null>
     }
 
     componentDidMount() {
-        const target = ReactDOM.findDOMNode(this.datetime);
+        const target = findDOMNode(this.datetime);
         const defaultDate = 
             this.props.value ? 
             moment(

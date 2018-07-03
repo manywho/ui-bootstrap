@@ -1,5 +1,6 @@
 ﻿import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
+import { MultiSelect, SimpleSelect } from 'react-selectize';
 import registeredComponents from '../constants/registeredComponents';
 import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 import { getOutcome } from './outcome';
@@ -7,7 +8,6 @@ import { getOutcome } from './outcome';
 import '../../css/select.less';
 
 declare var manywho: any;
-declare var reactSelectize: any;
 
 interface IDropDownState {
     options?: any[];
@@ -151,7 +151,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
                 setTimeout(() => {
                     const dropdown : HTMLDivElement = 
-                        (ReactDOM.findDOMNode(this) as HTMLDivElement)
+                        (findDOMNode(this) as HTMLDivElement)
                         .querySelector('.dropdown-menu');
                     const scrollTarget = dropdown.children.item(index) as HTMLElement;
                     dropdown.scrollTop = scrollTarget.offsetTop;
@@ -197,7 +197,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
     componentDidUpdate(prevProps, prevState) {
         if (!prevState.isOpen && this.state.isOpen) {
             const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-            const element = (ReactDOM.findDOMNode(this) as HTMLElement);
+            const element = (findDOMNode(this) as HTMLElement);
 
             if (
                 model.attributes && 
@@ -287,8 +287,8 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
         const selectElement = 
             model.isMultiSelect ? 
-            <reactSelectize.MultiSelect {...props} /> : 
-            <reactSelectize.SimpleSelect {...props} />;
+            <MultiSelect {...props} /> : 
+            <SimpleSelect {...props} />;
 
         let refreshButton = null;
         if (model.objectDataRequest || model.fileDataRequest) {

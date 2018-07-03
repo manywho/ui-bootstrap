@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import * as $ from 'jquery';
 import * as moment from 'moment';
 import IInputProps from '../interfaces/IInputProps';
@@ -26,7 +26,8 @@ class InputDateTime extends React.Component<IInputProps, null> {
     }
 
     isEmptyDate(date) {
-        if (date == null
+        if (date === null
+            || date === ''
             || date.indexOf('01/01/0001') !== -1
             || date.indexOf('1/1/0001') !== -1
             || date.indexOf('0001-01-01') !== -1)
@@ -88,7 +89,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
 
     onKeyDown = (e) => {
         if (e.keyCode === 8) {
-            $(ReactDOM.findDOMNode(this.refs['datepicker'])).data('DateTimePicker').clear();
+            $(findDOMNode(this.refs['datepicker'])).data('DateTimePicker').clear();
             this.props.onChange(null);
             e.preventDefault();
             e.stopPropagation();
@@ -96,7 +97,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
     }
 
     setPickerDate(newDate) {
-        const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
+        const datepickerElement = findDOMNode(this.refs['datepicker']);
         const datepickerInstance = $(datepickerElement).data('DateTimePicker');
 
         let date = moment(
@@ -166,7 +167,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
             }
         }
 
-        const datepickerElement = ReactDOM.findDOMNode(this.refs['datepicker']);
+        const datepickerElement = findDOMNode(this.refs['datepicker']);
 
         $(datepickerElement).datetimepicker({
             useCurrent,
@@ -197,11 +198,11 @@ class InputDateTime extends React.Component<IInputProps, null> {
 
     componentWillUnmount() {
         if (this.refs['datepicker'])
-            $(ReactDOM.findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
+            $(findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
     }
 
     componentDidUpdate(nextProps) {
-        if (this.props.value === null) {
+        if (this.props.value === null || this.props.value === '') {
             this.setPickerDate(null);
         }
     }

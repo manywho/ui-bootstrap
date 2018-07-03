@@ -178,9 +178,9 @@ describe('ItemsHeader component behaviour', () => {
     test('Component renders bulk outcomes only', () => {
         componentWrapper = manyWhoMount({
             outcomes:[
-                { isBulkAction: true },
-                { isBulkAction: false },
-                { isBulkAction: true },
+                { isBulkAction: true, id: 1 },
+                { isBulkAction: false, id: 2 },
+                { isBulkAction: true, id: 3 },
             ],
         });
 

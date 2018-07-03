@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import IPaginationProps from '../interfaces/IPaginationProps';
 import IComponentProps from '../interfaces/IComponentProps';
 import registeredComponents from '../constants/registeredComponents';
@@ -112,7 +112,7 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
 
                 this.setState({
                     isVisible: false,
-                    height: ReactDOM.findDOMNode(this).clientHeight,
+                    height: findDOMNode(this).clientHeight,
                     icon: 'toggle-icon glyphicon glyphicon-triangle-right',
                 });
 

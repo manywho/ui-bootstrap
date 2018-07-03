@@ -208,9 +208,11 @@ describe('Table Large input component behaviour', () => {
         const columns = [
             {
                 isEditable: false,
+                typeElementPropertyId: str(),
             },
             {
                 isEditable: true,
+                typeElementPropertyId: str(),
             },
         ];
 
@@ -226,9 +228,11 @@ describe('Table Large input component behaviour', () => {
         const objectData = [
             {
                 externalId: str(),
+                typeElementPropertyId: str(),
             },
             {
                 externalId: str(),
+                typeElementPropertyId: str(),
             },
         ];
 
@@ -273,7 +277,7 @@ describe('Table Large input component behaviour', () => {
         tableLargeWrapper = manyWhoMount({
             isFiles: true,
             displayColumns: [
-                {},
+                { typeElementPropertyId: str() },
             ],
             objectData: [
                 {

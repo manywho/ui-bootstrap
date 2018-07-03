@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
@@ -9,7 +9,7 @@ declare var manywho: any;
 class Presentation extends React.Component<IComponentProps, null> {
 
     replaceContent() {
-        const node = ReactDOM.findDOMNode(this.refs.content);
+        const node = findDOMNode(this.refs.content);
 
         const imgs = node.querySelectorAll('img');
         if (imgs && imgs.length > 0)
@@ -31,7 +31,7 @@ class Presentation extends React.Component<IComponentProps, null> {
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         const outcomes: any = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
         const outcomeElements: JSX.Element[] = outcomes && outcomes
-            .map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey}/>);
+            .map(outcome => <Outcome key={outcome.id} id={outcome.id} flowKey={this.props.flowKey}/>);
 
         let className = manywho.styling.getClasses(
             this.props.parentId, 

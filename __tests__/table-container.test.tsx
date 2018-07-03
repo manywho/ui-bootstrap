@@ -2,17 +2,19 @@ import { str, int } from '../test-utils';
 
 import * as React from 'react';
 
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 
 import Table from '../js/components/table-container';
+import Pagination from '../js/components/pagination';
+import FileUpload from '../js/components/file-upload';
 
 describe('Table component behaviour', () => {
+
+    const globalAny:any = global;
 
     let tableWrapper;
     let props;
     let model;
-
-    const globalAny:any = global;
 
     function manyWhoMount(isVisible = true, isValid = true, isShallow = false) {
 
@@ -66,7 +68,7 @@ describe('Table component behaviour', () => {
         });
         globalAny.window.manywho.state.getAuthenticationToken = jest.fn(() => str(10));
         globalAny.window.manywho['ajax'] = {
-            uploadFile: jest.fn(() => str(10))
+            uploadFile: jest.fn(() => str(10)),
         };
         globalAny.window.manywho.state.getComponent = jest.fn(() => {
             return { search: str(10) };
@@ -77,17 +79,25 @@ describe('Table component behaviour', () => {
         globalAny.window.manywho.model.getComponent = jest.fn(() => {
             return model;
         });
-        globalAny.window.manywho.component.getByName = jest.fn((component, props) => {
-            return 'div';
+        globalAny.window.manywho.component.getByName = jest.fn((component, props) => {           
+
+            switch (component) {
+
+            case 'mw-pagination':
+                return Pagination;
+                
+            case 'file-upload':
+                return FileUpload;
+            
+            default:
+                return 'div';
+            }            
         });
         globalAny.window.manywho.component.getDisplayColumns = jest.fn((columns) => {
             return columns;
         });
 
-        if (isShallow)
-            return shallow(<Table {...props} />, { disableLifecycleMethods: true });
-
-        return mount(<Table {...props} />);
+        return shallow(<Table {...props} />, { disableLifecycleMethods: true });
     }
 
     afterEach(() => {
@@ -169,12 +179,12 @@ describe('Table component behaviour', () => {
 
     test('label gets rendered', () => {
         tableWrapper = manyWhoMount();
-        expect(tableWrapper.html()).toEqual(expect.stringContaining(model.label)); 
+        expect(tableWrapper.find('label').prop('children')).toEqual(expect.stringContaining(model.label)); 
     });
 
     test('model class attribute get rendered as html classes', () => {
         tableWrapper = manyWhoMount();
-        expect(tableWrapper.html()).toEqual(expect.stringContaining(model.attributes.classes)); 
+        expect(tableWrapper.prop('className')).toEqual(expect.stringContaining(model.attributes.classes)); 
     });
 
     test('table columns to be displayed are returned', () => {

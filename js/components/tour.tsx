@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ITourState, ITourProps, ITourStep } from '../interfaces/ITour';
-import * as CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
+import { CSSTransitionGroup } from 'react-transition-group';
 import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/tours.less';
@@ -10,6 +10,7 @@ declare var manywho: any;
 class Tour extends React.Component<ITourProps, ITourState> {
 
     domWatcher: any;
+    stepRef: any;
 
     constructor(props) {
         super(props);
@@ -22,6 +23,8 @@ class Tour extends React.Component<ITourProps, ITourState> {
         this.onNext = this.onNext.bind(this);
         this.onBack = this.onBack.bind(this);
         this.onDone = this.onDone.bind(this);
+
+        this.stepRef = null;
     }
 
     onInterval(stepIndex: number) {
@@ -59,7 +62,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
     componentDidUpdate(prevProps: ITourProps, prevState: ITourState) {
         if (prevState.foundTarget === false && this.state.foundTarget) {
             const step = this.props.tour.steps[this.props.tour.currentStep];
-            const stepRect = (this.refs['step'] as HTMLElement).getBoundingClientRect();
+            const stepBoundingRect = (this.stepRef as HTMLElement).getBoundingClientRect();
 
             const target = manywho.tours.getTargetElement(step);
             const targetRect = target.getBoundingClientRect();
@@ -71,7 +74,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
 
             switch (step.placement.toUpperCase()) {
             case 'LEFT':
-                style.left = targetRect.left - stepRect.width - 16;
+                style.left = targetRect.left - stepBoundingRect.width - 16;
                 break;
 
             case 'RIGHT':
@@ -83,7 +86,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
                 break;
 
             case 'TOP':
-                style.top = targetRect.top - stepRect.height - 16;
+                style.top = targetRect.top - stepBoundingRect.height - 16;
                 break;
             }
 
@@ -99,7 +102,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
                     break;
 
                 case 'RIGHT':
-                    style.left = targetRect.left + (targetRect.width - stepRect.width);
+                    style.left = targetRect.left + (targetRect.width - stepBoundingRect.width);
                     break;
                 }
 
@@ -111,11 +114,11 @@ class Tour extends React.Component<ITourProps, ITourState> {
                     break;
 
                 case 'CENTER':
-                    style.top = (targetRect.top + (targetRect.height / 2)) - (stepRect.height / 2);
+                    style.top = (targetRect.top + (targetRect.height / 2)) - (stepBoundingRect.height / 2);
                     break;
 
                 case 'BOTTOM':
-                    style.top = targetRect.bottom - stepRect.height;
+                    style.top = targetRect.bottom - stepBoundingRect.height;
                     break;
                 }
 
@@ -138,6 +141,7 @@ class Tour extends React.Component<ITourProps, ITourState> {
 
         let arrowStyle = null;
         const offset = manywho.utils.isNullOrUndefined(step.offset) ? 16 : step.offset;
+        
 
         switch (step.placement.toUpperCase()) {
         case 'LEFT':
@@ -171,7 +175,9 @@ class Tour extends React.Component<ITourProps, ITourState> {
             transitionLeaveTimeout={250}>
 
             <div className={className}
-                ref="step"
+                ref={ (node) => { 
+                    this.stepRef = node ? node : null;
+                }}
                 style={this.state.style}
                 key={this.props.stepIndex}
                 id={`tour-${this.props.tour.id}-step${this.props.stepIndex}`}>

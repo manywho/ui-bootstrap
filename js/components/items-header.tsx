@@ -48,7 +48,7 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
         if (this.props.isSearchable)
             search = <div className="mw-items-header-search input-group">
                 <input className="form-control" 
-                    value={this.state.search} 
+                    value={this.state.search ? this.state.search : undefined} 
                     onChange={this.onSearchChanged} 
                     onKeyUp={this.onSearchEnter} 
                     placeholder="Search" 
@@ -65,7 +65,7 @@ class ItemsHeader extends React.Component<IItemsHeaderProps, IItemsHeaderState> 
                 {
                     this.props.outcomes
                     .filter(outcome => outcome.isBulkAction)
-                    .map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey} />)
+                    .map(outcome => <Outcome key={outcome.id} id={outcome.id} flowKey={this.props.flowKey} />)
                 }
             </div>;
         }

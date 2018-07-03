@@ -1,6 +1,4 @@
 import * as React from 'react';
-import * as MaskedInput from '../lib/140-react-maskedinput';
-
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getInputDateTime } from './input-datetime';
@@ -10,13 +8,16 @@ import { getOutcome } from './outcome';
 
 import '../../css/input.less';
 
-declare var manywho: any;
-
-interface IInputState {
-
+// react-maskedinput v4.0.1 has messed up default exports 
+// https://github.com/insin/react-maskedinput/issues/104
+let MaskedInput = require('react-maskedinput');
+if (MaskedInput.default) {
+    MaskedInput = MaskedInput.default;
 }
 
-class Input extends React.Component<IComponentProps, IInputState> {
+declare var manywho: any;
+
+class Input extends React.Component<IComponentProps, null> {
 
     validationRegex: RegExp;
 
@@ -107,9 +108,9 @@ class Input extends React.Component<IComponentProps, IInputState> {
         const Outcome = getOutcome();
 
         const contentValue =
-            state && state.contentValue !== undefined ? 
-            state.contentValue : 
-            model.contentValue;
+            state.contentValue
+            ? state.contentValue
+            : model.contentValue || '';
 
         let mask = null;
         if (model.attributes && model.attributes.mask)
@@ -200,22 +201,28 @@ class Input extends React.Component<IComponentProps, IInputState> {
             break;
 
         case manywho.component.contentTypes.password:
+            delete props.flowKey;
+            delete props.format;
             inputElement = <input {...props} className="form-control" type="password" />;
             break;
 
         default:
-            if (manywho.utils.isNullOrEmpty(mask))
+            delete props.flowKey;
+            delete props.format;
+            
+            if (manywho.utils.isNullOrEmpty(mask)) {
                 inputElement = (
                     <input {...props} 
                         className="form-control" 
                         type={model.attributes.type ? model.attributes.type : 'text'} />
                 );
-            else
+            } else {
                 inputElement = (
-                    <MaskedInput {...props} 
+                    <MaskedInput {...props}
                         className="form-control" 
                         type={model.attributes.type ? model.attributes.type : 'text'} />
                 );
+            }
             break;
         }
 

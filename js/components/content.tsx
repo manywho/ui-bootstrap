@@ -134,7 +134,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
         });
     }
 
-    componentDidMount = () => {
+    componentDidMount() {
         if (!(window as any).tinymce) {
             if (!Content.isLoadingTinyMce) {
                 Content.loadTinyMce(() => this.initializeEditor());
@@ -154,7 +154,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
         }
     }
 
-    componentWillUnmount = () => {
+    componentWillUnmount() {
         if (this.editor) {
             try {
                 this.editor.remove();
@@ -287,9 +287,9 @@ class Content extends React.Component<IComponentProps, IContentState> {
         const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME); 
 
         const contentValue = 
-            state && state.contentValue !== undefined ? 
-            state.contentValue : 
-            model.contentValue;
+            state.contentValue
+            ? state.contentValue 
+            : model.contentValue || '';
 
         const props: any = {
             id: this.id,
@@ -304,9 +304,6 @@ class Content extends React.Component<IComponentProps, IContentState> {
         };
 
         props['data-flowkey'] = this.props.flowKey;
-
-        if (!this.props.isDesignTime)
-            props.defaultValue = contentValue;
 
         let className = manywho.styling.getClasses(
             this.props.parentId, this.props.id, 'input', this.props.flowKey,

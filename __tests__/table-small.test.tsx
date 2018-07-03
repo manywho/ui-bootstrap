@@ -55,8 +55,8 @@ describe('Table Small input component behaviour', () => {
 
     test('Outcome column gets rendered when there are multiple outcomes', () => {
         const outcomes = [
-            { id: 'string', pageActionBindingType: '' },
-            { id: 'string', pageActionBindingType: '' },
+            { id: '1', pageActionBindingType: '' },
+            { id: '2', pageActionBindingType: '' },
         ];
         const displayColumns = ['mw-outcomes'];
         const objectData = [
@@ -273,12 +273,14 @@ describe('Table Small input component behaviour', () => {
         const externalId2 = str();
         const typeElementPropertyId = str();
         const contentValue = str();
+        const developerName = str();
         
         const properties = {
             filter: () => {
                 return [{
                     typeElementPropertyId,
                     contentValue,
+                    developerName, 
                 }];
             },
         };

@@ -77,7 +77,7 @@ class Outcomes extends React.Component<IComponentProps, null> {
                     model.attributes && 
                     !manywho.utils.isNullOrWhitespace(model.attributes.columns)
                 ) {
-                    return <div className={'column col-' + model.attributes.columns}>
+                    return <div className={'column col-' + model.attributes.columns} key={outcome.id}>
                         {element}
                     </div>;
                 }
@@ -93,7 +93,7 @@ class Outcomes extends React.Component<IComponentProps, null> {
             ];
 
         if (!manywho.utils.isNullOrWhitespace(model.attributes.group))
-            outcomeElements = [<div className={groupClassName}>{outcomeElements}</div>];
+            outcomeElements = [<div className={groupClassName} key="outcomes">{outcomeElements}</div>];
 
         return <div className={className} id={this.props.id}>
             <label>{model.label}</label>

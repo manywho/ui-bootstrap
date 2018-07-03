@@ -105,7 +105,7 @@ class Outcome extends React.Component<IOutcomeProps, null> {
             case 'ICONNOBACKGROUND':
                 return <span className={'glyphicon ' + getIcon(model)} />;
             case 'ICONANDTEXT':
-                return [<span className={'glyphicon ' + getIcon(model)} />, model.label];
+                return [<span key="icon" className={'glyphicon ' + getIcon(model)} />, <span key="label">{ model.label }</span>];
             default:
                 return model.label;
             }
@@ -153,7 +153,7 @@ class Outcome extends React.Component<IOutcomeProps, null> {
         manywho.log.info('Rendering Outcome: ' + this.props.id);
 
         const model = manywho.model.getOutcome(this.props.id, this.props.flowKey);
-        let className = `outcome btn ${getType(model)} ${this.getSize(model)}`;
+        let className = `outcome btn ${getType(model)} ${this.getSize(model)} ${this.props.disabled ? 'disabled' : ''}`;
         let content = this.getContent(
             model, manywho.settings.global('outcomes.display', this.props.flowKey),
         );
@@ -192,8 +192,7 @@ class Outcome extends React.Component<IOutcomeProps, null> {
                     title={model.label} 
                     href={uri} 
                     target={target} 
-                    rel="noopener noreferrer" 
-                    disabled={this.props.disabled}>
+                    rel="noopener noreferrer">
                     {content}
                 </a>
             );

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import registeredComponents from '../constants/registeredComponents';
 import ILoginProps from '../interfaces/ILoginProps';
 import { getWait } from './wait';
@@ -105,7 +105,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
     componentDidMount() {
         if (this.refs.username) {
 
-            const usernameInput : HTMLInputElement = ReactDOM.findDOMNode(this.refs.username);
+            const usernameInput : HTMLInputElement = findDOMNode(this.refs.username);
 
             usernameInput.focus();
 
@@ -165,7 +165,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                                         size={60} 
                                         className="form-control" 
                                         ref="username" 
-                                        value={this.state.username} 
+                                        value={this.state.username || ''} 
                                         onChange={this.handleUsernameChange} 
                                         id="mw-username" />
                                     <span className="help-block">
