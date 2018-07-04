@@ -1,6 +1,6 @@
 import 'script-loader!./lib/010-pollyfills.js';
 
-import './createClassPatch.js'
+import './createClassPatch.ts'
 
 // Lib CSS
 import "../css/lib/react-selectize.css";
