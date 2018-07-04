@@ -1,6 +1,6 @@
 import createReactClass from 'create-react-class';
 
-window.React.createClass = args => {
+window.React.createClass = function(args) {
     console.error('React.createClass is no longer supported. ' +
         'This method is deprecated and has been removed from React. ' +
         'The method has been patched but this may cause unexpected results. ' +
