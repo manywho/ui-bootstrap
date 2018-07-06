@@ -196,25 +196,31 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
     componentDidUpdate(prevProps, prevState) {
         if (!prevState.isOpen && this.state.isOpen) {
-            const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-            const element = (findDOMNode(this) as HTMLElement);
 
-            if (
-                model.attributes && 
-                manywho.utils.isEqual(model.attributes.isTethered, 'true', true)
-            ) {
-                const dropdown: HTMLElement = 
-                    document.querySelector('.tether-element .dropdown-menu') as HTMLElement;
+            setTimeout(
+                () => {
+                    const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+                    const element = (findDOMNode(this) as HTMLElement);
 
-                const selectize: HTMLElement = 
-                    element.querySelector('.react-selectize') as HTMLElement;
+                    if (
+                        model.attributes && 
+                        manywho.utils.isEqual(model.attributes.isTethered, 'true', true)
+                    ) {
+                        const dropdown: HTMLElement = 
+                            document.querySelector('.tether-element .dropdown-menu') as HTMLElement;
 
-                dropdown.addEventListener('scroll', this.isScrollLimit);
-                dropdown.style.setProperty('width', selectize.offsetWidth + 'px');
-            } else {
-                element.querySelector('.dropdown-menu')
-                    .addEventListener('scroll', this.isScrollLimit);
-            }
+                        const selectize: HTMLElement = 
+                            element.querySelector('.react-selectize') as HTMLElement;
+
+                        dropdown.addEventListener('scroll', this.isScrollLimit);
+                        dropdown.style.setProperty('width', selectize.offsetWidth + 'px');
+                    } else {
+                        element.querySelector('.dropdown-menu')
+                            .addEventListener('scroll', this.isScrollLimit);
+                    }
+                },
+                10,
+            );
         }
     }
 
