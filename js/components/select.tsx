@@ -197,6 +197,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
     componentDidUpdate(prevProps, prevState) {
         if (!prevState.isOpen && this.state.isOpen) {
 
+            // Timeout to ensure the dropdown has had a chance to render before accessing it's child elements
             setTimeout(
                 () => {
                     const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
@@ -211,9 +212,12 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
                         const selectize: HTMLElement = 
                             element.querySelector('.react-selectize') as HTMLElement;
+                        
+                        if (dropdown !== null) {
+                            dropdown.addEventListener('scroll', this.isScrollLimit);
+                            dropdown.style.setProperty('width', selectize.offsetWidth + 'px');
+                        }
 
-                        dropdown.addEventListener('scroll', this.isScrollLimit);
-                        dropdown.style.setProperty('width', selectize.offsetWidth + 'px');
                     } else {
                         element.querySelector('.dropdown-menu')
                             .addEventListener('scroll', this.isScrollLimit);
