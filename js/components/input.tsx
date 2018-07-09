@@ -1,3 +1,5 @@
+
+
 import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
@@ -108,7 +110,7 @@ class Input extends React.Component<IComponentProps, null> {
         const Outcome = getOutcome();
 
         const contentValue =
-            state.contentValue
+            !manywho.utils.isNullOrUndefined(state.contentValue)
             ? state.contentValue
             : model.contentValue || '';
 
