@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import INavigationProps from '../interfaces/INavigationProps';
 import registeredComponents from '../constants/registeredComponents';
 
@@ -27,7 +27,8 @@ class Navigation extends React.Component<INavigationProps, null> {
 
     getHeaderElement(id: string, navigation: { label: string; }) {
         const children = [
-            <button className="navbar-toggle collapsed" 
+            <button className="navbar-toggle collapsed"
+                key={'toggle'}
                 data-toggle="collapse" 
                 data-target={'#' + id} 
                 ref="toggle">
@@ -39,7 +40,7 @@ class Navigation extends React.Component<INavigationProps, null> {
         ];
 
         if (navigation.label != null && navigation.label.trim().length > 0)
-            children.push(<a className="navbar-brand" href="#">{navigation.label}</a>);
+            children.push(<a className="navbar-brand" href="#" key={'brand'}>{navigation.label}</a>);
 
         return <div className="navbar-header">{children}</div>;
     }
@@ -64,7 +65,7 @@ class Navigation extends React.Component<INavigationProps, null> {
                     classNames.push('dropdown-submenu');
                 }
 
-                element = <li className={classNames.join(' ')}>
+                element = <li className={classNames.join(' ')} key={item.id}>
                     <a href="#" id={item.id} className="dropdown-toggle" data-toggle="dropdown">
                         {item.label}
                         <span className="caret" />
@@ -74,7 +75,7 @@ class Navigation extends React.Component<INavigationProps, null> {
                     </ul>
                 </li>;
             } else {
-                element = <li className={classNames.join(' ')}>
+                element = <li className={classNames.join(' ')} key={item.id}>
                     <a href="#" onClick={this.onClick.bind(this, item)} id={item.id}>
                         {item.label}
                     </a>
@@ -91,7 +92,7 @@ class Navigation extends React.Component<INavigationProps, null> {
 
         const toggleButton : HTMLButtonElement = 
             this.refs.toggle ?
-            ReactDOM.findDOMNode(this.refs.toggle) :
+            findDOMNode(this.refs.toggle) :
             null;
 
 
@@ -179,7 +180,8 @@ class Navigation extends React.Component<INavigationProps, null> {
                             }
 
                             return (
-                                <li onClick={this.onClick.bind(this, item)} 
+                                <li onClick={this.onClick.bind(this, item)}
+                                    key={item.id} 
                                     id={item.id} 
                                     className={className}>
                                     <span className="indicator" />

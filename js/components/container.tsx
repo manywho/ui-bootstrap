@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { presets } from 'react-motion';
+// tslint:disable-next-line
+import { Collapse } from 'react-collapse';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
@@ -8,10 +11,6 @@ import '../../css/containers.less';
 
 
 declare var manywho: any;
-
-// Awaiting react update
-declare var ReactCollapse: any;
-declare var ReactMotion: any;
 
 interface IContainerState {
     isCollapsed: boolean;
@@ -181,17 +180,16 @@ class Container extends React.Component<IComponentProps, IContainerState> {
 
         if (isCollapsible && model.label)
             content = (
-                <ReactCollapse 
+                <Collapse 
                     isOpened={!this.state.isCollapsed} 
-                    keepCollapsedContent={true} 
-                    springConfig={ReactMotion.presets.gentle}>
+                    springConfig={presets.gentle}>
                     <Dynamic name={`mw-${model.containerType}`} props={this.props} />
                     { outcomeButtons }
-                </ReactCollapse>
+                </Collapse>
             );
         else
             content = [
-                <Dynamic name={`mw-${model.containerType}`} props={this.props} />,
+                <Dynamic name={`mw-${model.containerType}`} props={this.props} key={'container'} />,
                 outcomeButtons,         
             ];
 

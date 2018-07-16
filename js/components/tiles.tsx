@@ -4,11 +4,11 @@ import ITilesProps from '../interfaces/ITilesProps';
 import { getOutcome } from './outcome';
 import { getItemsHeader } from './items-header';
 import { getWait } from './wait';
+import { Motion, spring } from 'react-motion';
 
 import '../../css/tiles.less';
 
 declare var manywho: any;
-declare var ReactMotion: any;
 
 class Tiles extends React.Component<ITilesProps, null> {
 
@@ -110,7 +110,7 @@ class Tiles extends React.Component<ITilesProps, null> {
                         selectedProperty.contentType,
                         this.props.flowKey,
                     );
-                    return <li><strong>{selectedProperty.developerName}</strong>: {content}</li>;
+                    return <li key={selectedProperty.developerName}><strong>{selectedProperty.developerName}</strong>: {content}</li>;
                 }
             })
             .filter(column => !!column);
@@ -180,6 +180,7 @@ class Tiles extends React.Component<ITilesProps, null> {
             true) && !outcome.isBulkAction)
         .map(
             outcome => <Outcome
+                key={outcome.id}
                 id={outcome.id}
                 flowKey={this.props.flowKey}
                 onClick={this.onOutcome}
@@ -217,8 +218,8 @@ class Tiles extends React.Component<ITilesProps, null> {
                     const key: string = `${this.props.page.toString()}-${index}`;
 
                     return (<div className="mw-tiles-item-container" key={key} ref="items">
-                        <ReactMotion.Motion defaultStyle={{ rotate: 0 }}
-                            style={{ rotate: ReactMotion.spring(
+                                <Motion defaultStyle={{ rotate: 0 }}
+                            style={{ rotate: spring(
                                 180,
                                 { stiffness: 65, damping: 9.5 },
                             ) }}>
@@ -243,7 +244,7 @@ class Tiles extends React.Component<ITilesProps, null> {
                                     </div>
                                 </div>);
                             } }
-                        </ReactMotion.Motion>
+                        </Motion>
                     </div>);
                 })}
             </div>);

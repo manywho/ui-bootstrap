@@ -1,5 +1,5 @@
 ﻿import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { findDOMNode } from 'react-dom';
 import registeredComponents from '../constants/registeredComponents';
 import ITableLargeProps from '../interfaces/ITableLargeProps';
 import { getTableInput } from './table-input';
@@ -55,10 +55,10 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                 checked: this.props.selectedRows.length === this.props.totalObjectData,
             };
 
-            columns.push(<th className="checkbox-cell"><input {...checkboxProps} /></th>);
+            columns.push(<th className="checkbox-cell" key="checkbox"><input {...checkboxProps} /></th>);
 
         } else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true))
-            columns.push(<th></th>);
+            columns.push(<th key="radio"></th>);
 
         columns = columns.concat(displayColumns.map((column) => {
 
@@ -95,7 +95,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
             
         }));
 
-        return <tr>{columns}</tr>;
+        return <tr key="header-row">{columns}</tr>;
     }
 
     onOutcomeClick = (e, outcome) => {
@@ -131,7 +131,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
             if (this.props.model.isMultiSelect) {
 
-                columns.push(<td className="checkbox-cell">
+                columns.push(<td className="checkbox-cell" key={'checkbox-cell'}>
                     <input id={item.externalId} 
                         type="checkbox" 
                         checked={isSelected} 
@@ -141,7 +141,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
             } else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true)) {
 
-                columns.push(<td className="checkbox-cell">
+                columns.push(<td className="checkbox-cell" key={'checkbox-cell'}>
                     <input id={item.externalId} 
                         type="radio" 
                         checked={isSelected} 
@@ -226,7 +226,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
                         props.className = buttonClasses.join(' ');
 
-                        return <td><a {...props}>Download</a></td>;
+                        return <td key="download"><a {...props}>Download</a></td>;
 
                     } 
                     
@@ -306,7 +306,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
     componentDidUpdate() {
         const selectAll: HTMLInputElement = 
-            ReactDOM.findDOMNode(this.refs.selectAll) as HTMLInputElement;
+            findDOMNode(this.refs.selectAll) as HTMLInputElement;
 
         if (selectAll) {
             selectAll.indeterminate = 

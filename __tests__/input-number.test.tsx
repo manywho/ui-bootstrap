@@ -13,7 +13,7 @@ describe('Number input component behaviour', () => {
     let numberInputWrapper;
     let model;
 
-    let props = {
+    const props = {
         id: str(10),
         flowKey: str(10),
         value: str(5),
@@ -115,7 +115,7 @@ describe('Number input component behaviour', () => {
 
         const input = numberInputWrapper.find('input');
 
-        expect(input.prop('style')).toEqual({ width: '180px !important' });
+        expect(input.prop('style')).toEqual({ width: '180px' });
     });
 
     test('Correct default min, max, step based on maxsize in input props', () => {
