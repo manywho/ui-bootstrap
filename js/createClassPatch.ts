@@ -1,4 +1,4 @@
-import createReactClass from 'create-react-class';
+const createReactClass = require('create-react-class');
 
 declare global {
     interface Window { React: any; }
