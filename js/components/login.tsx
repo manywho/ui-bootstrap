@@ -81,13 +81,11 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                         [this.props.callback].concat(this.props.callback.args),
                     );
                 }
-
-                this.setState({ loading: null });
             })
             .fail((error) => {
                 this.setState({
                     loading: null,
-                    password: null,
+                    password: '',
                     faults: error.responseText,
                 });
             });
