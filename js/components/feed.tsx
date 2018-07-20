@@ -5,7 +5,16 @@ import feedInput from './feed-input';
 import wait from './wait';
 import '../../css/feed.less';
 
-class Feed extends React.Component<IComponentProps, null> {
+interface ErrorBoundary {
+    hasError: boolean;
+}
+
+class Feed extends React.Component<IComponentProps, ErrorBoundary> {
+
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
 
     onToggleFollow(e) {
 
@@ -29,9 +38,14 @@ class Feed extends React.Component<IComponentProps, null> {
         );
     }
 
+    componentDidCatch(error, info) {
+        // Display fallback UI
+        this.setState({ hasError: true });
+    }
+
     renderThread(messages, isCommentingEnabled, isAttachmentsEnabled?) {
 
-        const FeedInput : typeof feedInput = manywho.component.getByName(registeredComponents.FEED_INPUT);
+        const FeedInput: typeof feedInput = manywho.component.getByName(registeredComponents.FEED_INPUT);
 
         if (messages) {
 
@@ -44,7 +58,7 @@ class Feed extends React.Component<IComponentProps, null> {
                                 const createdDate = new Date(message.createdDate);
                                 const attachments = message.attachments || [];
 
-                                return <li className={'media'}>
+                                return <li className={'media'} key={createdDate.toLocaleString()}>
                                     <div className={'media-left'}>
                                         <a href={'#'}>
                                             <img className={'media-object'}
@@ -67,8 +81,9 @@ class Feed extends React.Component<IComponentProps, null> {
                                         />
                                         <div className={'feed-message-attachments'}>
                                             {
-                                                attachments.map((attachment) => {
+                                                attachments.map((attachment, i) => {
                                                     return <a
+                                                        key={i}
                                                         href={attachment.downloadUrl}
                                                         target="_blank">
                                                         {attachment.name}
@@ -131,10 +146,14 @@ class Feed extends React.Component<IComponentProps, null> {
 
     render() {
 
-        const FeedInput : typeof feedInput = manywho.component.getByName(registeredComponents.FEED_INPUT);
-        const Wait : typeof wait = manywho.component.getByName(registeredComponents.WAIT);
+        const FeedInput: typeof feedInput = manywho.component.getByName(registeredComponents.FEED_INPUT);
+        const Wait: typeof wait = manywho.component.getByName(registeredComponents.WAIT);
 
         const stream = manywho.social.getStream(this.props.flowKey);
+
+        if (this.state.hasError) {
+            return <p className="text-danger">The feed cannot be displayed at this time.</p>;
+        }
 
         if (stream && stream.me) {
 
@@ -154,12 +173,12 @@ class Feed extends React.Component<IComponentProps, null> {
                             onClick={this.onToggleFollow}>
                             <span className={'glyphicon glyphicon-pushpin'} />
                             {' ' + followCaption}
-                            </button>
+                        </button>
                         <button className={'btn btn-default btn-sm'}
                             onClick={this.onRefresh}>
                             <span className={'glyphicon glyphicon-refresh'} />
                             {' Refresh'}
-                            </button>
+                        </button>
                     </div>
                 </div>
                 <div className={'panel-body'}>
@@ -190,6 +209,6 @@ class Feed extends React.Component<IComponentProps, null> {
 
 manywho.component.register(registeredComponents.FEED, Feed);
 
-export const getFeed = () : typeof Feed => manywho.component.getByName(registeredComponents.FEED) || Feed;
+export const getFeed = (): typeof Feed => manywho.component.getByName(registeredComponents.FEED) || Feed;
 
 export default Feed;

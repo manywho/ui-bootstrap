@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
 import * as $ from 'jquery';
+import 'jquery-textcomplete';
 import registeredComponents from '../constants/registeredComponents';
 import IFeedInputProps from '../interfaces/IFeedInputProps';
 
