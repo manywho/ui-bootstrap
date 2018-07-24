@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
 import * as $ from 'jquery';
+import 'jquery-textcomplete';
 import registeredComponents from '../constants/registeredComponents';
 import IFeedInputProps from '../interfaces/IFeedInputProps';
 
@@ -44,9 +45,12 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
             );
 
         })
-        .then(() => {
-            textAreaElement.value = '';
-        });
+            .then(() => {
+                textAreaElement.value = '';
+                this.setState({
+                    mentionedUsers: {},
+                });
+            });
     }
 
 
@@ -65,37 +69,42 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
 
         const textarea = (this.refs.textarea as any);
         const flowKey = this.props.flowKey;
-        const mentionedUsers = this.state.mentionedUsers;
 
-        $(findDOMNode(textarea)).textcomplete(
-            [{
-                match: /@([A-Za-z]{2,})$/,
-                index: 1,
-                search(term, callback) {
+        ((instance) => {
+            $(findDOMNode(textarea)).textcomplete(
+                [{
+                    match: /@([A-Za-z]{2,})$/,
+                    index: 1,
+                    search(term, callback) {
 
-                    manywho.social.getUsers(flowKey, term)
-                        .done(response => callback(response || []))
-                        .fail(response => callback([]));
+                        manywho.social.getUsers(flowKey, term)
+                            .done(response => callback(response || []))
+                            .fail(response => callback([]));
 
-                },
-                template(value) {
+                    },
+                    template(value) {
 
-                    return '<img src="' + value.avatarUrl + '"></img> ' + value.fullName;
+                        return '<img src="' + value.avatarUrl + '"></img> ' + value.fullName;
 
-                },
-                replace(value) {
+                    },
+                    replace(value) {
 
-                    mentionedUsers[value.id] = value;
-                    return '@[' + value.fullName + '] ';
-                },
-            }],
-            { appendTo: $('.mw-bs') },
-        );
+                        const mentionedUsers = instance.state.mentionedUsers;
+                        mentionedUsers[value.id] = value;
+
+                        instance.setState({ mentionedUsers });
+
+                        return '@[' + value.fullName + '] ';
+                    },
+                }],
+                { appendTo: $('.mw-bs') },
+            );
+        })(this);
     }
 
     render() {
 
-        const FileUpload : typeof fileUpload = manywho.component.getByName(registeredComponents.FILE_UPLOAD);
+        const FileUpload: typeof fileUpload = manywho.component.getByName(registeredComponents.FILE_UPLOAD);
 
         let fileUpload = null;
 
@@ -124,8 +133,8 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
                     onKeyPress={this.onKeyPress}
                     defaultValue={''}
                     ref={'textarea'} />
-                    {fileUpload}
-                </div>
+                {fileUpload}
+            </div>
             <button
                 className={'btn btn-sm btn-primary feed-post-send'}
                 onClick={this.send}>
@@ -137,6 +146,6 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
 
 manywho.component.register(registeredComponents.FEED_INPUT, FeedInput);
 
-export const getFeedInput = () : typeof FeedInput => manywho.component.getByName(registeredComponents.FEED_INPUT) || FeedInput;
+export const getFeedInput = (): typeof FeedInput => manywho.component.getByName(registeredComponents.FEED_INPUT) || FeedInput;
 
 export default FeedInput;

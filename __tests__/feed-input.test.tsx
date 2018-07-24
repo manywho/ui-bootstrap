@@ -9,6 +9,10 @@ jest.mock('jquery', () => {
     });
 });
 
+jest.mock('jquery-textcomplete', () => {
+    return () => {};
+});
+
 describe('FeedInput component behaviour', () => {
 
     let componentWrapper;
