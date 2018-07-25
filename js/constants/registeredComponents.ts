@@ -10,6 +10,7 @@ export default {
     CONTAINER: 'mw-container',
     CONTENT: 'content',
     DEBUG: 'debug',
+    ERROR_FALLBACK: 'error-fallback',
     FEED: 'feed',
     FEED_INPUT: 'feed-input',
     FILE_UPLOAD: 'file-upload',
