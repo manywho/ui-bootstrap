@@ -51,6 +51,7 @@ export default {
     TABLE_SMALL: 'mw-table-small',
     TEXTAREA: 'textarea',
     TILES: 'tiles',
+    TILE_ITEM: 'tile-item',
     TOGGLE: 'toggle',
     TOUR: 'mw-tour',
     VERTICAL: 'vertical_flow',
