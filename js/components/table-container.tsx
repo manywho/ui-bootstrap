@@ -60,7 +60,6 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         this.onHeaderClick = this.onHeaderClick.bind(this);
         this.onSelect = this.onSelect.bind(this);
         this.handleResize = this.handleResize.bind(this);
-        this.uploadFile = this.uploadFile.bind(this);
         this.uploadComplete = this.uploadComplete.bind(this);
 
         this.handleResizeDebounced = manywho.utils.debounce(this.handleResize, 200);
@@ -178,17 +177,6 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         }
     }
 
-    uploadFile(flowKey, formData, progress) {
-
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        formData.append('FileDataRequest', JSON.stringify(model.fileDataRequest));
-
-        const tenantId = manywho.utils.extractTenantId(this.props.flowKey);
-        const authenticationToken = manywho.state.getAuthenticationToken(this.props.flowKey);
-
-        return manywho.ajax.uploadFile(formData, tenantId, authenticationToken, progress);
-    }
-
     uploadComplete() {
 
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
@@ -280,7 +268,6 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
                 id: this.props.id,
                 fileDataRequest: model.fileDataRequest,
                 uploadComplete: this.uploadComplete,
-                upload: this.uploadFile,
                 isChildComponent: true,
                 multiple: true,
             };
