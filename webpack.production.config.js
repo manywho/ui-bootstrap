@@ -3,7 +3,7 @@ const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const common = require('./webpack.common.js');
-const filename = 'js/ui-bootstrap-[hash].js';
+const filename = 'js/ui-bootstrap-[chunkhash].js';
 
 const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap-[contenthash].css');
 const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap-[contenthash].css');

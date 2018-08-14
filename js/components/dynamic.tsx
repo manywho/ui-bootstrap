@@ -3,9 +3,13 @@ import * as React from 'react';
 declare var manywho: any;
 
 const Dynamic: React.SFC<{ name: string; props: any; }> = ({ name, props }) => {
-    const component = manywho.component.getByName(name);
+    const Component = manywho.component.getByName(name);
+    
+    if (typeof Component !== 'undefined') {
+        Component.displayName = name;
+    }
 
-    return component ? React.createElement(component, props) : <noscript />;
+    return Component ? React.createElement(Component, props) : <noscript />;
 };
 
 export default Dynamic;

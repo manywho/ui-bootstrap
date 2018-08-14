@@ -306,16 +306,6 @@ describe('Table component behaviour', () => {
         expect(tableWrapper.state().windowWidth).toEqual(1024);
     });
 
-    test('when uploading file data that ajax response from Manywho core is returned', () => {
-        const flowKey = str(10);
-        const mockFormData = new FormData();
-
-        tableWrapper = manyWhoMount(true, true, true);
-        const tableWrapperInstance = tableWrapper.instance();
-        tableWrapperInstance.uploadFile(flowKey, mockFormData);
-        expect(globalAny.window.manywho.ajax.uploadFile).toHaveBeenCalled();
-    });
-
     test('manyWho core function gets called when file has finished uploading', () => {
         tableWrapper = manyWhoMount(true, true, true);
         const tableWrapperInstance = tableWrapper.instance();

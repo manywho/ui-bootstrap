@@ -5,6 +5,7 @@ import { getOutcome } from './outcome';
 import { getItemsHeader } from './items-header';
 import { getWait } from './wait';
 import { Motion, spring } from 'react-motion';
+import { getTileItem } from './tile-item';
 
 import '../../css/tiles.less';
 
@@ -14,7 +15,6 @@ class Tiles extends React.Component<ITilesProps, null> {
 
     constructor(props: ITilesProps) {
         super(props);
-        this.renderItem = this.renderItem.bind(this);
     }
 
     onSelect = (e) => {
@@ -39,93 +39,6 @@ class Tiles extends React.Component<ITilesProps, null> {
         this.props.onSearch(search, clearSelection);
     }
 
-    renderItem (
-        item: any,
-        columns: (any)[],
-        outcomes: (any)[],
-        deleteOutcome: any,
-    ): JSX.Element {
-
-        const Outcome = getOutcome();
-
-        if (item.type === 'next')
-            return <div className="mw-tiles-next"
-                onClick={this.onNext}>
-                <span className="glyphicon glyphicon-arrow-right" />
-            </div>;
-
-        if (item.type === 'prev')
-            return <div className="mw-tiles-prev"
-                onClick={this.onPrev}>
-                <span className="glyphicon glyphicon-arrow-left" />
-            </div>;
-
-        let className = 'mw-tiles-item';
-        if (item.isSelected)
-            className += ' bg-info';
-
-        const selectedProperty = item.properties.find(
-            property => property.typeElementPropertyId === columns[0].typeElementPropertyId,
-        );
-        const header: string = manywho.formatting.format(
-            selectedProperty.contentValue,
-            selectedProperty.contentFormat,
-            selectedProperty.contentType,
-            this.props.flowKey,
-        );
-
-        let deleteOutcomeElement = null;
-        if (deleteOutcome)
-            deleteOutcomeElement = 
-                <Outcome 
-                    id={deleteOutcome.id}
-                    flowKey={this.props.flowKey}
-                    onClick={this.onOutcome}
-                    size={'sm'}
-                />;
-
-        let content: string = null;
-        if (columns.length > 1) {
-            const selectedProperty = item.properties.find(
-                property => property.typeElementPropertyId === columns[1].typeElementPropertyId,
-            );
-            content = manywho.formatting.format(
-                selectedProperty.contentValue,
-                selectedProperty.contentFormat,
-                selectedProperty.contentType,
-                this.props.flowKey,
-            );
-        }
-
-        let footer: (JSX.Element)[] = null;
-        if (columns.length > 2)
-            footer = columns.map((column, index) => {
-                if (index > 1) {
-                    const selectedProperty = item.properties.find(
-                        property => property.typeElementPropertyId === column.typeElementPropertyId,
-                    );
-                    const content = manywho.formatting.format(
-                        selectedProperty.contentValue,
-                        selectedProperty.contentFormat,
-                        selectedProperty.contentType,
-                        this.props.flowKey,
-                    );
-                    return <li key={selectedProperty.developerName}><strong>{selectedProperty.developerName}</strong>: {content}</li>;
-                }
-            })
-            .filter(column => !!column);
-
-        return (<div className={className} onClick={this.onSelect} id={item.externalId}>
-            <div className="mw-tiles-item-header">
-                <h4 title={header}>{header}</h4>
-                {deleteOutcomeElement}
-            </div>
-            <div className="mw-tiles-item-content">{content}</div>
-            <ul className="mw-tiles-item-footer list-unstyled">{footer}</ul>
-            <div className="mw-tiles-item-outcomes">{outcomes}</div>
-        </div>);
-    }
-
     render() {
         manywho.log.info('Rendering Tiles: ' + this.props.id);
 
@@ -135,6 +48,7 @@ class Tiles extends React.Component<ITilesProps, null> {
         const Outcome = getOutcome();
         const ItemsHeader = getItemsHeader();
         const Wait = getWait();
+        const TileItem = getTileItem();
 
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const state = this.props.isDesignTime ? { error: null, loading: false } :
@@ -238,9 +152,17 @@ class Tiles extends React.Component<ITilesProps, null> {
                                     </div>
                                     <div className="back"
                                         style={{ transform: backTransform }}>
-                                        {this.renderItem(
-                                            item, columns, footerOutcomes, deleteOutcome,
-                                        )}
+                                        <TileItem 
+                                            flowKey={this.props.flowKey}
+                                            item={item} 
+                                            columns={columns} 
+                                            outcomes={footerOutcomes} 
+                                            deleteOutcome={deleteOutcome}
+                                            onNext = {this.onNext}
+                                            onPrev = {this.onPrev}
+                                            onOutcome = {this.onOutcome}
+                                            onSelect = {this.onSelect}
+                                        />
                                     </div>
                                 </div>);
                             } }

@@ -153,6 +153,11 @@ class Outcome extends React.Component<IOutcomeProps, null> {
         manywho.log.info('Rendering Outcome: ' + this.props.id);
 
         const model = manywho.model.getOutcome(this.props.id, this.props.flowKey);
+
+        if (!model) {
+            return null;
+        }
+
         let className = `outcome btn ${getType(model)} ${this.getSize(model)} ${this.props.disabled ? 'disabled' : ''}`;
         let content = this.getContent(
             model, manywho.settings.global('outcomes.display', this.props.flowKey),

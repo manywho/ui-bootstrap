@@ -1,8 +1,8 @@
 import IComponentProps from './IComponentProps';
 
 interface IFileUploadProps extends IComponentProps {
-    upload: Function;
     multiple: boolean;
+    upload?: Function;
     uploadCaption?: string;
     isChildComponent?: boolean;
     uploadComplete?: Function;
