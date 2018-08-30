@@ -44,22 +44,26 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
             return objectData.map((item) => {
 
-                const label = item.properties.filter((value) => { 
+                const labelProperty = item.properties.find((value) => { 
                     return manywho.utils.isEqual(
                         value.typeElementPropertyId, 
                         columnTypeElementPropertyId, 
                         true,
                     ); 
-                })[0];
+                });
+
+                const optionText = labelProperty
+                    ? manywho.formatting.format(
+                        labelProperty.contentValue,
+                        labelProperty.contentFormat,
+                        labelProperty.contentType,
+                        this.props.flowKey,
+                    )
+                    : '';
 
                 return { 
                     value: item, 
-                    label: manywho.formatting.format(
-                        label.contentValue, 
-                        label.contentFormat, 
-                        label.contentType, 
-                        this.props.flowKey,
-                    ),
+                    label: optionText,
                 };
             });
         }
