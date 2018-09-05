@@ -52,6 +52,13 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                     ); 
                 });
 
+                if (!labelProperty) {
+                    console.error(
+                        `columnTypeElementPropertyId ${columnTypeElementPropertyId} cannot be found in objectData item:`, 
+                        item,
+                    );
+                }
+
                 const optionText = labelProperty
                     ? manywho.formatting.format(
                         labelProperty.contentValue,
