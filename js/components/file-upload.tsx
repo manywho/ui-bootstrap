@@ -26,11 +26,12 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
         smallInputs: false,
         isUploadVisible: true,
         uploadComplete: null,
-        upload: (flowKey, formData, onProgress) => {
+        upload: (flowKey, _, onProgress, files, request) => {
             const tenantId = manywho.utils.extractTenantId(flowKey);
             const authenticationToken = manywho.state.getAuthenticationToken(flowKey);
+            const stateId = manywho.utils.extractStateId(flowKey);
 
-            return manywho.ajax.uploadFile(formData, tenantId, authenticationToken, onProgress);
+            return manywho.ajax.uploadFiles(files, request, tenantId, authenticationToken, onProgress, stateId);
         },
     };
 
@@ -56,25 +57,31 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
                 error: null,
             });
 
-            const formData = new FormData();
-            Array.prototype.slice.call(this.state.files).forEach((file) => {
-                formData.append('FileData', file);
-            });
+            const files = [...this.state.files];
 
             const model = 
                 !manywho.utils.isNullOrWhitespace(this.props.id) ? 
                 manywho.model.getComponent(this.props.id, this.props.flowKey) : 
                 false;
 
-            if (model && model.fileDataRequest)
-                formData.append('FileDataRequest', JSON.stringify(model.fileDataRequest));
+            const request = model && model.fileDataRequest
+                ? model.fileDataRequest
+                : null;
 
-            return this.props.upload(this.props.flowKey, formData, (e: any) => {
-                if (e.lengthComputable)
-                    this.setState({ 
-                        progress: parseInt((e.loaded / e.total * 100).toString(), 10),
-                    });
-            })
+            // Second param (FileData) kept for backwards compatibility
+            return this.props.upload(
+                this.props.flowKey, 
+                null, 
+                ({ lengthComputable, loaded, total }) => {
+                    if (lengthComputable) {
+                        this.setState({ 
+                            progress: parseInt((loaded / total * 100).toString(), 10),
+                        });
+                    }
+                }, 
+                files, 
+                request,
+            )
             .done((response) => {
                 this.setState({
                     isUploadDisabled: false,
