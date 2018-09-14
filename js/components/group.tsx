@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as $ from 'jquery';
+import { path } from 'ramda'; 
 import registeredComponents from '../constants/registeredComponents';
+import { getErrorFallback } from './error-fallback';
 import IComponentProps from '../interfaces/IComponentProps';
 import '../../css/group.less';
 
@@ -9,9 +11,12 @@ declare var manywho: any;
 
 interface IGroupState {
     activeTabIndex: number;
+    error: Error;
+    componentStack: String;
+    hasError: Boolean;
 }
 
-function childContainsInvalidItems(child, flowKey) {
+const childContainsInvalidItems = (child, flowKey) => {
     if (!manywho.model.isContainer(child)) {
         return !manywho.state.isValid(child.id, flowKey).isValid;
     }
@@ -24,17 +29,21 @@ function childContainsInvalidItems(child, flowKey) {
     }
 
     return false;
-}
+};
 
-function clearActivePanes(groupContainer) {
-    for (let i = 0; i < groupContainer.children.length; i = i + 1) {
-        const child = groupContainer.children[i];
+const clearActivePanes = (tabsElement, panesElement) => {
 
-        for (let j = 0; j < child.children.length; j = j + 1) {
-            child.children[j].classList.remove('active');
-        }
+    const tabElements = path(['children'], tabsElement);
+    const paneElements = path(['children'], panesElement);
+
+    if (tabElements instanceof HTMLCollection) {
+        Array.from(tabElements).forEach(el => el.classList.remove('active'));
     }
-}
+
+    if (paneElements instanceof HTMLCollection) {
+        Array.from(paneElements).forEach(el => el.classList.remove('active'));
+    }
+};
 
 class Group extends React.Component<IComponentProps, IGroupState> {
 
@@ -43,42 +52,45 @@ class Group extends React.Component<IComponentProps, IGroupState> {
 
         this.state = {
             activeTabIndex: 0,
+            error: null,
+            componentStack: null,
+            hasError: false,
         };
 
         this.onTabSelected = this.onTabSelected.bind(this);
     }
 
+    componentDidCatch(error, { componentStack }) {
+        this.setState({ 
+            error,
+            componentStack,
+            hasError: true,
+        });
+    }
+
     componentDidMount() {
-        const groupElement = this.refs.group as HTMLElement;
-
-        if (
-            !this.props.isDesignTime &&
-            groupElement.children[0].children &&
-            groupElement.children[0].children.length > 0
-        ) {
-            clearActivePanes(groupElement);
-            groupElement.children[0].children[this.state.activeTabIndex]
-                .classList.add('active');
-
-            groupElement.children[1].children[this.state.activeTabIndex]
-                .classList.add('active');
-        }
+        this.setActivePane();
     }
 
     componentDidUpdate() {
-        const groupElement = this.refs.group as HTMLElement;
+        this.setActivePane();
+    }
 
-        if (
-            !this.props.isDesignTime &&
-            groupElement.children[0].children &&
-            groupElement.children[0].children.length > 0
-        ) {
-            clearActivePanes(groupElement);
-            groupElement.children[0].children[this.state.activeTabIndex]
-                .classList.add('active');
+    setActivePane() {
+        const tabsElement = this.refs.tabs as HTMLElement;
+        const panesElement = this.refs.panes as HTMLElement;
+        const activeTabIndex = this.state.activeTabIndex;
+        const activeTabElement = path(['children', activeTabIndex], tabsElement);
+        const activePaneElement = path(['children', activeTabIndex], panesElement);
 
-            groupElement.children[1].children[this.state.activeTabIndex]
-                .classList.add('active');
+        clearActivePanes(tabsElement, panesElement);
+
+        if (activeTabElement instanceof HTMLElement) {
+            activeTabElement.classList.add('active');
+        }
+
+        if (activePaneElement instanceof HTMLElement) {
+            activePaneElement.classList.add('active');
         }
     }
 
@@ -90,6 +102,19 @@ class Group extends React.Component<IComponentProps, IGroupState> {
     }
 
     render() {
+
+        const {
+            error,
+            componentStack,
+            hasError,
+        } = this.state;
+        
+        const ErrorFallback = getErrorFallback();
+        
+        if (hasError) {
+            return <ErrorFallback error={error} componentStack={componentStack} />;
+        }
+
         const children = manywho.model.getChildren(this.props.id, this.props.flowKey);
 
         const tabs = children.map((child, index) => {
@@ -102,7 +127,7 @@ class Group extends React.Component<IComponentProps, IGroupState> {
                 className += ' has-error';
             }
 
-            return <li className={className}>
+            return <li className={className} key={index}>
                 <a id={'tab-' + child.id} href={'#' + child.id}
                     className="control-label"
                     onClick={this.onTabSelected.bind(null, index, 'tab-' + child.id)}
@@ -126,7 +151,7 @@ class Group extends React.Component<IComponentProps, IGroupState> {
 
         return <div ref="group">
             <ul className="nav nav-tabs" ref="tabs">{tabs}</ul>
-            <div className="tab-content">
+            <div className="tab-content" ref="panes">
                 {
                     this.props.children ||
                     manywho.component.getChildComponents(
