@@ -14,7 +14,7 @@ export const bool = () => Math.round(Math.random()) > 0;
 export const str = (length = 5) => {
     let text = '';
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < length; i = i + 1) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
