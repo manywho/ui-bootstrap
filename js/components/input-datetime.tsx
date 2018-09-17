@@ -203,9 +203,10 @@ class InputDateTime extends React.Component<IInputProps, null> {
     }
 
     componentDidUpdate(nextProps) {
-        if (this.props.value === null || this.props.value === '') {
-            this.setPickerDate(null);
-        }
+        const newDate = this.props.value === ''
+            ? null
+            : this.props.value;
+        this.setPickerDate(newDate);
     }
 
     render() {
