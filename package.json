@@ -21,7 +21,7 @@
         "*.tsx": [
             "tslint",
             "git add",
-            "jest --bail"
+            "jest --findRelatedTests --bail"
         ]
     },
     "devDependencies": {
