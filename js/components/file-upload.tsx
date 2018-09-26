@@ -254,11 +254,15 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
             <Outcome id={outcome.id} flowKey={this.props.flowKey} />,
         );
 
+        const hintMessage = model.hintValue === ''
+            ? manywho.settings.global('localization.fileUploadMessage', this.props.flowKey)
+            : model.hintValue;
+
         return <div className={componentClassName} id={this.props.id}>
             <div className="clearfix">
                 {label}
                 <Dropzone {...dropzoneProps}>
-                    <div>Drop files here, or click to select files</div>
+                    <div>{ hintMessage }</div>
                 </Dropzone>
                 <div className={'input-group ' + ((isAutoUpload) ? 'hidden' : '')}>
                     <input type="text" 
