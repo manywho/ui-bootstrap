@@ -7,7 +7,13 @@ import IFileUploadProps from '../interfaces/IFileUploadProps';
 import outcome from './outcome';
 import '../../css/files.less';
 
+interface IFileStatus {
+    fileName: string;
+    uploadSuccessful: boolean;
+}
+
 interface IFileUploadState {
+    fileStatusList?: IFileStatus[];
     isUploadDisabled?: boolean;
     isFileSelected?: boolean;
     isProgressVisible?: boolean;
@@ -39,6 +45,7 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
         super(props);
 
         this.state = {
+            fileStatusList: [],
             isUploadDisabled: false,
             isFileSelected: false,
             isProgressVisible: false,
@@ -83,7 +90,15 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
                 request,
             )
             .done((response) => {
+
+                const newFileStatuses: IFileStatus[] = this.state.fileNames.map(
+                    fileName => ({ fileName, uploadSuccessful: true }),
+                );
+
+                const appendedFileStatusList = [...this.state.fileStatusList, ...newFileStatuses];
+
                 this.setState({
+                    fileStatusList: appendedFileStatusList,
                     isUploadDisabled: false,
                     isFileSelected: false,
                     isUploadComplete: true,
@@ -125,7 +140,15 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
                 }
             })
             .fail((response) => {
+
+                const newFileStatuses: IFileStatus[] = this.state.fileNames.map(
+                    fileName => ({ fileName, uploadSuccessful: false }),
+                );
+
+                const appendedFileStatusList = [...this.state.fileStatusList, ...newFileStatuses];
+
                 this.setState({
+                    fileStatusList: appendedFileStatusList,
                     isUploadDisabled: false,
                     isProgressVisible: false,
                     progress: 0,
@@ -223,8 +246,7 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
         }
 
         if (this.state.error) {
-            componentClassName += ' has-error';
-            validationMessage = <span className="help-block">{this.state.error}</span>;
+            validationMessage = <span className="has-error"><span className="help-block">{this.state.error}</span></span>;
         }
 
         const dropzoneProps: any = {
@@ -280,6 +302,19 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
                 <div className={progressClassName} style={{ width: progress }} />
             </div>
             {validationMessage}
+            <ul className="file-statuses">
+                {
+                    this.state.fileStatusList.map((fileStatus, index) => (
+                        <li key={index} className={fileStatus.uploadSuccessful ? 'has-success' : 'has-error'}>
+                            <span className="help-block">
+                                <span className={`glyphicon glyphicon-${fileStatus.uploadSuccessful ? 'ok' : 'remove'}`}>
+                                </span>
+                                    { fileStatus.fileName }
+                                </span>
+                        </li>
+                    ))
+                }
+            </ul>
             {helpInfo}
             {outcomeButtons}
         </div>;
