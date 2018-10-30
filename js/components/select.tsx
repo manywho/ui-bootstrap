@@ -201,6 +201,10 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         window.addEventListener('blur', this.onWindowBlur);
     }
 
+    componentDidMount() {
+        (findDOMNode(this) as HTMLElement).querySelector('input').classList.add('prevent-submit-on-enter');
+    }
+
     componentWillUnMount() {
         window.removeEventListener('blur', this.onWindowBlur);
     }
