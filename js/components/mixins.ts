@@ -11,7 +11,7 @@ import * as ReactDOM from 'react-dom';
 
             // When focused on an input element, 
             // if shortcuts.progressOnEnter is true (default is true)
-            // engine.move is called when enter key is .
+            // engine.move is called when enter key is pressed.
             // input elements can opt-out by having the prevent-submit-on-enter CSS class
 
             if (e.keyCode === 13
