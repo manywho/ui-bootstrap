@@ -46,7 +46,7 @@ class Notification extends React.Component<INotificationProps, null> {
                     </button> : 
                     null
                 }
-                <span>{ this.props.model.message }</span>
+                <span className="format-pre-line">{ this.props.model.message }</span>
             </div>
         );
 
