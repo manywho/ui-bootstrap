@@ -9,9 +9,15 @@ import * as ReactDOM from 'react-dom';
 
         onEnter: function (e) {
 
+            // When focused on an input element, 
+            // if shortcuts.progressOnEnter is true (default is true)
+            // engine.move is called when enter key is pressed.
+            // input elements can opt-out by having the prevent-submit-on-enter CSS class
+
             if (e.keyCode === 13
                 && !e.shiftKey
-                && (e.target.className && e.target.className.indexOf('feed') === -1)
+                && e.target.nodeName.toLowerCase() === 'input'
+                && (e.target.className && e.target.className.indexOf('prevent-submit-on-enter') === -1)
                 && manywho.settings.global('shortcuts.progressOnEnter', this.props.flowKey, true)) {
 
                 const outcome = manywho.model.getOutcomes(null, this.props.flowKey)

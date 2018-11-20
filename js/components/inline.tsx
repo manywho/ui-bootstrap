@@ -1,26 +1,60 @@
 import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
+import { getErrorFallback } from './error-fallback';
 import IComponentProps from '../interfaces/IComponentProps';
 
 declare var manywho: any;
 
-const Inline: React.SFC<IComponentProps> = ({ id, parentId, flowKey, children }) => {
+class Inline extends React.Component<IComponentProps> {
 
-    const childData = manywho.model.getChildren(id, flowKey);
+    state = {
+        error: null,
+        componentStack: null,
+        hasError: false,
+    };
 
-    return <div className="clearfix">
-        {
-            children ||
-            manywho.component.getChildComponents(childData, id, flowKey)
+    componentDidCatch(error, { componentStack }) {
+        this.setState({ 
+            error,
+            componentStack,
+            hasError: true,
+        });
+    }
+
+    render() {
+
+        const {
+            error,
+            componentStack,
+            hasError,
+        } = this.state;
+        
+        const ErrorFallback = getErrorFallback();
+        
+        if (hasError) {
+            return <ErrorFallback error={error} componentStack={componentStack} />;
         }
-    </div>;
-};
+
+        const { 
+            id, 
+            children, 
+            flowKey,
+        } = this.props;
+
+        const childData = manywho.model.getChildren(id, flowKey);
+
+        return <div className="clearfix">
+            {
+                children ||
+                manywho.component.getChildComponents(childData, id, flowKey)
+            }
+        </div>;
+    }
+}
 
 manywho.component.registerContainer(registeredComponents.INLINE, Inline);
 
-manywho.styling.registerContainer('inline_flow', (item, container) => {
-    return ['pull-left'];
-});
+manywho.styling.registerContainer('inline_flow', () => ['pull-left']);
 
 export const getInline = () : typeof Inline => manywho.component.getByName(registeredComponents.INLINE) || Inline;
 

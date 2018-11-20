@@ -14,14 +14,15 @@
         "dist": "webpack -p --config webpack.production.config.js",
         "postdist": "node bundle",
         "precommit": "lint-staged",
-        "test": "jest"
+        "test": "jest",
+        "lint": "tslint --project tsconfig.json --config tslint.json"
     },
     "lint-staged": {
         "*.ts": "tslint",
         "*.tsx": [
             "tslint",
             "git add",
-            "jest --bail"
+            "jest --findRelatedTests --bail"
         ]
     },
     "devDependencies": {
@@ -41,7 +42,7 @@
         "file-loader": "^1.1.11",
         "husky": "^0.14.3",
         "identity-obj-proxy": "^3.0.0",
-        "jest": "^22.4.3",
+        "jest": "22.4.3",
         "jest-junit-reporter": "^1.1.0",
         "jquery": "^2.1.4",
         "jquery-textcomplete": "^1.8.4",
@@ -101,6 +102,7 @@
     "dependencies": {
         "@types/react-maskedinput": "^4.0.3",
         "create-react-class": "^15.6.3",
-        "lint": "^1.1.2"
+        "lint": "^1.1.2",
+        "ramda": "^0.25.0"
     }
 }

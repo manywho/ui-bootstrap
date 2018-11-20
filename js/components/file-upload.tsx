@@ -7,7 +7,13 @@ import IFileUploadProps from '../interfaces/IFileUploadProps';
 import outcome from './outcome';
 import '../../css/files.less';
 
+interface IFileStatus {
+    fileName: string;
+    uploadSuccessful: boolean;
+}
+
 interface IFileUploadState {
+    fileStatusList?: IFileStatus[];
     isUploadDisabled?: boolean;
     isFileSelected?: boolean;
     isProgressVisible?: boolean;
@@ -26,11 +32,12 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
         smallInputs: false,
         isUploadVisible: true,
         uploadComplete: null,
-        upload: (flowKey, formData, onProgress) => {
+        upload: (flowKey, _, onProgress, files, request) => {
             const tenantId = manywho.utils.extractTenantId(flowKey);
             const authenticationToken = manywho.state.getAuthenticationToken(flowKey);
+            const stateId = manywho.utils.extractStateId(flowKey);
 
-            return manywho.ajax.uploadFile(formData, tenantId, authenticationToken, onProgress);
+            return manywho.ajax.uploadFiles(files, request, tenantId, authenticationToken, onProgress, stateId);
         },
     };
 
@@ -38,6 +45,7 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
         super(props);
 
         this.state = {
+            fileStatusList: [],
             isUploadDisabled: false,
             isFileSelected: false,
             isProgressVisible: false,
@@ -56,27 +64,41 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
                 error: null,
             });
 
-            const formData = new FormData();
-            Array.prototype.slice.call(this.state.files).forEach((file) => {
-                formData.append('FileData', file);
-            });
+            const files = [...this.state.files];
 
             const model = 
                 !manywho.utils.isNullOrWhitespace(this.props.id) ? 
                 manywho.model.getComponent(this.props.id, this.props.flowKey) : 
                 false;
 
-            if (model && model.fileDataRequest)
-                formData.append('FileDataRequest', JSON.stringify(model.fileDataRequest));
+            const request = model && model.fileDataRequest
+                ? model.fileDataRequest
+                : null;
 
-            return this.props.upload(this.props.flowKey, formData, (e: any) => {
-                if (e.lengthComputable)
-                    this.setState({ 
-                        progress: parseInt((e.loaded / e.total * 100).toString(), 10),
-                    });
-            })
+            // Second param (FileData) kept for backwards compatibility
+            return this.props.upload(
+                this.props.flowKey, 
+                null, 
+                ({ lengthComputable, loaded, total }) => {
+                    if (lengthComputable) {
+                        this.setState({ 
+                            progress: parseInt((loaded / total * 100).toString(), 10),
+                        });
+                    }
+                }, 
+                files, 
+                request,
+            )
             .done((response) => {
+
+                const newFileStatuses: IFileStatus[] = this.state.fileNames.map(
+                    fileName => ({ fileName, uploadSuccessful: true }),
+                );
+
+                const appendedFileStatusList = [...this.state.fileStatusList, ...newFileStatuses];
+
                 this.setState({
+                    fileStatusList: appendedFileStatusList,
                     isUploadDisabled: false,
                     isFileSelected: false,
                     isUploadComplete: true,
@@ -118,7 +140,15 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
                 }
             })
             .fail((response) => {
+
+                const newFileStatuses: IFileStatus[] = this.state.fileNames.map(
+                    fileName => ({ fileName, uploadSuccessful: false }),
+                );
+
+                const appendedFileStatusList = [...this.state.fileStatusList, ...newFileStatuses];
+
                 this.setState({
+                    fileStatusList: appendedFileStatusList,
                     isUploadDisabled: false,
                     isProgressVisible: false,
                     progress: 0,
@@ -216,8 +246,7 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
         }
 
         if (this.state.error) {
-            componentClassName += ' has-error';
-            validationMessage = <span className="help-block">{this.state.error}</span>;
+            validationMessage = <span className="has-error"><span className="help-block">{this.state.error}</span></span>;
         }
 
         const dropzoneProps: any = {
@@ -247,11 +276,15 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
             <Outcome id={outcome.id} flowKey={this.props.flowKey} />,
         );
 
+        const hintMessage = model.hintValue === ''
+            ? manywho.settings.global('localization.fileUploadMessage', this.props.flowKey)
+            : model.hintValue;
+
         return <div className={componentClassName} id={this.props.id}>
             <div className="clearfix">
                 {label}
                 <Dropzone {...dropzoneProps}>
-                    <div>Drop files here, or click to select files</div>
+                    <div>{ hintMessage }</div>
                 </Dropzone>
                 <div className={'input-group ' + ((isAutoUpload) ? 'hidden' : '')}>
                     <input type="text" 
@@ -269,6 +302,19 @@ class FileUpload extends React.Component<IFileUploadProps, IFileUploadState> {
                 <div className={progressClassName} style={{ width: progress }} />
             </div>
             {validationMessage}
+            <ul className="file-statuses">
+                {
+                    this.state.fileStatusList.map((fileStatus, index) => (
+                        <li key={index} className={fileStatus.uploadSuccessful ? 'has-success' : 'has-error'}>
+                            <span className="help-block">
+                                <span className={`glyphicon glyphicon-${fileStatus.uploadSuccessful ? 'ok' : 'remove'}`}>
+                                </span>
+                                    { fileStatus.fileName }
+                                </span>
+                        </li>
+                    ))
+                }
+            </ul>
             {helpInfo}
             {outcomeButtons}
         </div>;
