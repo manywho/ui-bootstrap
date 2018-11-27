@@ -138,6 +138,9 @@ class Main extends React.Component<any, any> {
                     <Notifications flowKey={this.props.flowKey} position={'right'} />
                 }
                 {
+                    <Notifications flowKey={this.props.flowKey} position={'bottom'} />
+                }
+                {
                     <Wait isVisible={state.loading} message={state.loading && state.loading.message} />
                 }
                 {

@@ -293,6 +293,8 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                 return <td key={column.typeElementPropertyId}></td>;                    
             }));
 
+            // The row key cannot be the objects external id, as if flow is 
+            // offline the external id does not necessarily exist
             return (
                 <tr className={className} 
                     id={item.internalId} 
