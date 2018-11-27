@@ -180,7 +180,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 
         if (typeof item === 'string') {
             selectedItem = model.objectData.filter(
-                objectData => manywho.utils.isEqual(objectData.externalId, item, true),
+                objectData => manywho.utils.isEqual(objectData.internalId, item, true),
             )[0];
         } else if (typeof item === 'object') {
             selectedItem = item;
@@ -190,7 +190,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         selectedItem = JSON.parse(JSON.stringify(selectedItem));
 
         const isSelected = selectedItems.filter(
-            item => item.externalId === selectedItem.externalId,
+            item => item.internalId === selectedItem.internalId,
         ).length > 0;
 
         selectedItem.isSelected = !isSelected;
@@ -199,7 +199,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
             selectedItem.isSelected ? 
                 selectedItems.push(selectedItem) : 
                 selectedItems = selectedItems.filter(
-                    item => !manywho.utils.isEqual(item.externalId, selectedItem.externalId, true),
+                    item => !manywho.utils.isEqual(item.internalId, selectedItem.internalId, true),
                 );
         else
             selectedItem.isSelected ? selectedItems = [selectedItem] : selectedItems = [];
