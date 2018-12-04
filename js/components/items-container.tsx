@@ -72,6 +72,19 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         let limit: number = manywho.settings.global('paging.' + model.componentType.toLowerCase());
         const paginationSize: number = parseInt(model.attributes.paginationSize, 10);
 
+        const hasAttributes = model.attributes !== null;
+        const shouldOnlyDisplaySearchResults = hasAttributes
+            && (
+                manywho.utils.isEqual(model.attributes.onlyDisplaySearchResults, 'true', true) 
+                || model.attributes.onlyDisplaySearchResults === true
+                );
+        const searchIsEmpty = manywho.utils.isNullOrWhitespace(state.search);
+        const hasObjectDataRequest = model.objectDataRequest;
+
+        const shouldRequestObjectData = 
+            hasObjectDataRequest && !shouldOnlyDisplaySearchResults
+            || (hasObjectDataRequest && shouldOnlyDisplaySearchResults && !searchIsEmpty);
+
         if (!isNaN(paginationSize))
             limit = paginationSize;
 
@@ -79,7 +92,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         if (!manywho.utils.isNullOrUndefined(this.state.sortedIsAscending))
             orderByDirection = this.state.sortedIsAscending ? 'ASC' : 'DESC';
 
-        if (model.objectDataRequest) {
+        if (shouldRequestObjectData) {
             manywho.engine.objectDataRequest(
                 this.props.id, 
                 model.objectDataRequest, 
@@ -125,7 +138,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
             sortedIsAscending: null,
         });
 
-        setTimeout(() => this.load());
+        this.load();
     }
 
     sort(by: string) {
@@ -167,7 +180,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 
         if (typeof item === 'string') {
             selectedItem = model.objectData.filter(
-                objectData => manywho.utils.isEqual(objectData.externalId, item, true),
+                objectData => manywho.utils.isEqual(objectData.internalId, item, true),
             )[0];
         } else if (typeof item === 'object') {
             selectedItem = item;
@@ -177,7 +190,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         selectedItem = JSON.parse(JSON.stringify(selectedItem));
 
         const isSelected = selectedItems.filter(
-            item => item.externalId === selectedItem.externalId,
+            item => item.internalId === selectedItem.internalId,
         ).length > 0;
 
         selectedItem.isSelected = !isSelected;
@@ -186,7 +199,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
             selectedItem.isSelected ? 
                 selectedItems.push(selectedItem) : 
                 selectedItems = selectedItems.filter(
-                    item => !manywho.utils.isEqual(item.externalId, selectedItem.externalId, true),
+                    item => !manywho.utils.isEqual(item.internalId, selectedItem.internalId, true),
                 );
         else
             selectedItem.isSelected ? selectedItems = [selectedItem] : selectedItems = [];
@@ -272,13 +285,25 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
         const columns = manywho.component.getDisplayColumns(model.columns) || [];
 
+        const hasAttributes = model.attributes !== null;
+        const shouldOnlyDisplaySearchResults = hasAttributes
+            && (
+                manywho.utils.isEqual(model.attributes.onlyDisplaySearchResults, 'true', true) 
+                || model.attributes.onlyDisplaySearchResults === true
+                );
+        const { isSearchable } = model;
+        const searchIsEmpty = manywho.utils.isNullOrWhitespace(state.search);
+        const isLoading = state.loading;
+
         let hasMoreResults: boolean = 
             (model.objectDataRequest && model.objectDataRequest.hasMoreResults) || 
             (model.fileDataRequest && model.fileDataRequest.hasMoreResults);
         let objectData = null;
         let limit = 0;
 
-        if (!model.objectDataRequest && !model.fileDataRequest) {
+        if (shouldOnlyDisplaySearchResults && isSearchable && (searchIsEmpty || isLoading)) {
+            objectData = null;
+        } else if (!model.objectDataRequest && !model.fileDataRequest) {
 
             if (!manywho.utils.isNullOrWhitespace(state.search)) {
                 objectData = model.objectData.filter((item) => {
@@ -355,15 +380,14 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                 </div>
             );
         }
+        
+        const hasObjectData = !manywho.utils.isNullOrUndefined(objectData);
 
         if (
-            model.attributes
-            && (manywho.utils.isEqual(model.attributes.onlyDisplaySearchResults, 'true', true) || 
-                model.attributes.onlyDisplaySearchResults === true)
-            && model.isSearchable
-            && manywho.utils.isNullOrWhitespace(state.search)
-            && manywho.utils.isNullOrUndefined(objectData)
-            && !state.loading
+            shouldOnlyDisplaySearchResults
+            && isSearchable
+            && !hasObjectData
+            && !isLoading
         ) {
             contentElement = (
                 <div className="mw-items-search-first">

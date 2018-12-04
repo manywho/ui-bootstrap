@@ -37,7 +37,8 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
     }
 
     onOutcomeClick = (e, outcome) => {
-        const objectDataId = e.target.parentElement.getAttribute('data-item');
+        const objectDataId = $(e.target).closest('[data-item]').attr('data-item');
+
         this.props.onOutcome(objectDataId, outcome.id);
     }
 
