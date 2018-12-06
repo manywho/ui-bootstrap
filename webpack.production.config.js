@@ -4,6 +4,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const common = require('./webpack.common.js');
 const filename = 'js/ui-bootstrap-[chunkhash].js';
+const WriteBundleFilePlugin = require('./WriteBundleFilePlugin');
 
 const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap-[contenthash].css');
 const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap-[contenthash].css');
@@ -67,7 +68,13 @@ const plugins = commonPlugins.concat([
     }),
     new webpack.optimize.ModuleConcatenationPlugin(),
     extractBootstrap,
-    extractComponentsLess
+    extractComponentsLess,
+    new WriteBundleFilePlugin({
+        bundleKey: 'bootstrap3',
+        pathPrefix: '/',
+        // remove sourcemaps and theme css files from the bundle list
+        filenameFilter: filename => !filename.endsWith('.map') && !/themes/.test(filename),
+    }),
 ]);
 
 const config = Object.assign({}, commonConfig, {

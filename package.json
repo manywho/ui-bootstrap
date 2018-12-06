@@ -12,7 +12,6 @@
         "start": "webpack --config webpack.development.config.js --env.build=../ui-html5/build --env.assets=local --env.watch --env.sourcemaps",
         "dev": "webpack --config webpack.development.config.js",
         "dist": "webpack -p --config webpack.production.config.js",
-        "postdist": "node bundle",
         "precommit": "lint-staged",
         "test": "jest",
         "lint": "tslint --project tsconfig.json --config tslint.json"
@@ -72,7 +71,8 @@
         "typedoc": "^0.9.0",
         "typescript": "2.8.3",
         "webpack": "^3.11.0",
-        "webpack-bundle-analyzer": "^2.11.1"
+        "webpack-bundle-analyzer": "^2.11.1",
+        "write-file": "1.0.0"
     },
     "jest": {
         "collectCoverage": true,
