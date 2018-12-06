@@ -157,7 +157,7 @@ describe('Table Large input component behaviour', () => {
         
         const objectData = [
             {
-                internalId: a,
+                externalId: a,
                 properties: [
                     {
                         typeElementPropertyId: b, // only this one should match
@@ -168,7 +168,7 @@ describe('Table Large input component behaviour', () => {
                 ],
             },
             {
-                internalId: c,
+                externalId: c,
                 properties: [
                     {
                         typeElementPropertyId: b,
@@ -181,7 +181,7 @@ describe('Table Large input component behaviour', () => {
 
         expect(setObjectData).toEqual([
             {
-                internalId: a,
+                externalId: a,
                 properties: [
                     {
                         typeElementPropertyId: b,
@@ -193,7 +193,7 @@ describe('Table Large input component behaviour', () => {
                 ],
             },
             {
-                internalId: c,
+                externalId: c,
                 properties: [
                     {
                         typeElementPropertyId: b,
@@ -257,8 +257,8 @@ describe('Table Large input component behaviour', () => {
 
         const contentValue = str();
         const typeElementPropertyId = str();
-        const internalId1 = str();
-        const internalId2 = str();
+        const externalId1 = str();
+        const externalId2 = str();
         
         const properties = {
             find: () => ({
@@ -282,17 +282,17 @@ describe('Table Large input component behaviour', () => {
             objectData: [
                 {
                     properties,
-                    internalId: internalId1,
+                    externalId: externalId1,
                 },
                 {
                     properties,
-                    internalId: internalId2,
+                    externalId: externalId2,
                 },
             ],
         });
 
         expect(
-            tableLargeWrapper.find(`#${internalId2} a`).first().props()['href'],
+            tableLargeWrapper.find(`#${externalId2} a`).first().props()['href'],
         ).toBe(
             contentValue,
         );
