@@ -1,6 +1,3 @@
-const path = require('path');
-const writefile = require('write-file');
-
 function WriteBundleFile(options) { 
     this.options = options; 
 }
@@ -24,7 +21,14 @@ WriteBundleFile.prototype.apply = function (compiler) {
         const bundle = {};
         bundle[options.bundleKey] = correctedFilePaths;
 
-        writefile(path.resolve(__dirname, 'dist', 'bundle.json'), bundle, callback);
+        const stringifiedFileContents = JSON.stringify(bundle, null, 4);
+
+        compilation.assets['bundle.json'] = {
+            source: function() { return new Buffer(stringifiedFileContents); },
+            size: function() { return Buffer.byteLength(stringifiedFileContents); }
+        };
+
+        callback();
     });
 };
 
