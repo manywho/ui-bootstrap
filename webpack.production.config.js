@@ -5,6 +5,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const common = require('./webpack.common.js');
 const filename = 'js/ui-bootstrap-[chunkhash].js';
 const WriteBundleFilePlugin = require('./WriteBundleFilePlugin');
+const Compression = require('compression-webpack-plugin');
 
 const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap-[contenthash].css');
 const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap-[contenthash].css');
@@ -74,6 +75,13 @@ const plugins = commonPlugins.concat([
         pathPrefix: '/',
         // remove sourcemaps and theme css files from the bundle list
         filenameFilter: filename => !filename.endsWith('.map') && !/themes/.test(filename),
+    }),
+    new Compression({
+        asset: '[path]',
+        algorithm: 'gzip',
+        test: /\.js$|\.css$|\.svg$/,
+        threshold: 10240,
+        minRatio: 0.8,
     }),
 ]);
 
