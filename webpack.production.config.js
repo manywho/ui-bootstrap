@@ -79,8 +79,6 @@ const plugins = commonPlugins.concat([
     new Compression({
         asset: '[path]',
         algorithm: 'gzip',
-        test: /\.js$|\.css$|\.svg$/,
-        threshold: 10240,
         minRatio: 0.8,
     }),
 ]);
