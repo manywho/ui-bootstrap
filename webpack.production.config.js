@@ -71,7 +71,7 @@ const plugins = commonPlugins.concat([
     extractBootstrap,
     extractComponentsLess,
     new WriteBundleFilePlugin({
-        filename: 'bootstrap-bundle',
+        filename: 'bootstrap-bundle.json',
         bundleKey: 'bootstrap3',
         pathPrefix: '/',
         // remove sourcemaps and theme css files from the bundle list
