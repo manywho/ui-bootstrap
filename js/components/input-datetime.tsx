@@ -202,7 +202,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
             $(findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
     }
 
-    componentDidUpdate(nextProps) {
+    componentDidUpdate() {
         const newDate = this.props.value === ''
             ? null
             : this.props.value;
