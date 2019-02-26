@@ -168,9 +168,6 @@ class InputDateTime extends React.Component<IInputProps, null> {
             format: customFormat || 
                 manywho.formatting.toMomentFormat(model.contentFormat) || 
                 'MM/DD/YYYY',
-            keyBinds: {
-                delete() { this.clear(); },
-            },
             timeZone: 'UTC',
         })
         .on('dp.change', !this.props.isDesignTime && this.onChange);
