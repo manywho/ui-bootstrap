@@ -155,6 +155,16 @@ describe('InputDateTime component behaviour', () => {
         expect(mockSetPickerDate).toHaveBeenCalledWith(null);
     });
 
+    test('make sure backspace doesn\'t clear input', () => {
+        const mockSetPickerDate = jest.spyOn(InputDateTime.prototype, 'setPickerDate');
+
+        componentWrapper = manyWhoMount(false, false, 'DD/MM/YYYY', '25/12/2018'); 
+        expect(mockSetPickerDate).toHaveBeenCalledWith('25/12/2018'); 
+
+        componentWrapper.find(InputDateTime).simulate('keydown', {keyCode: 8});
+        expect(componentWrapper.find(InputDateTime).props().value).toBeTruthy();
+    });
+
     test('setPickerDate is called with correct date value', () => {
         const mockSetPickerDate = jest.spyOn(InputDateTime.prototype, 'setPickerDate');
 
