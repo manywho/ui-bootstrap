@@ -84,10 +84,9 @@ describe('InputDateTime component behaviour', () => {
             autocomplete: str(),
         };
 
-        if (isShallow === true)
-            return shallow(<InputDateTime {...props} />);
-
-        return mount(<InputDateTime {...props} />);
+        return isShallow ?
+            shallow(<InputDateTime {...props} />) :
+            mount(<InputDateTime {...props} />);
     }
 
     afterEach(() => {
@@ -146,7 +145,7 @@ describe('InputDateTime component behaviour', () => {
         );
     });
 
-    test('setPickerDate is called with correct value', () => {
+    test('setPickerDate is called with correct null value', () => {
         const mockSetPickerDate = jest.spyOn(InputDateTime.prototype, 'setPickerDate');
 
         componentWrapper = manyWhoMount(false, false, 'YYYY/MM/DD', '2018/12/25'); 
@@ -164,6 +163,16 @@ describe('InputDateTime component behaviour', () => {
 
         componentWrapper.find(InputDateTime).simulate('keydown', {keyCode: 8});
         expect(componentWrapper.find(InputDateTime).props().value).toBeTruthy();
+    });
+
+    test('setPickerDate is called with correct date value', () => {
+        const mockSetPickerDate = jest.spyOn(InputDateTime.prototype, 'setPickerDate');
+
+        componentWrapper = manyWhoMount(false, false, 'YYYY/MM/DD', '2018/12/25'); 
+        expect(mockSetPickerDate).toHaveBeenCalledWith('2018/12/25');
+
+        componentWrapper.setProps({ value: '2017/11/24' });
+        expect(mockSetPickerDate).toHaveBeenCalledWith('2017/11/24');
     });
 
 });
