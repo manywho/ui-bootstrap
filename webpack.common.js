@@ -154,7 +154,7 @@ module.exports.run = (config, defaultDirectory) => (env = {}) => {
     const outputPath = env && env.build ? env.build : defaultDirectory;
     const watch = env && env.watch;
     const analyze = env && env.analyze;
-    const sourcemaps = env && env.sourcemaps;
+    const sourcemaps = (env && env.sourcemaps === false) ? false : true; // default to true unless explicitly set to false
 
     console.log('Build directory: ', outputPath)
     console.log('Assets url: ', publicPath);
