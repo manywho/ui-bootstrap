@@ -79,9 +79,9 @@ describe('Navigation component behaviour', () => {
 
         componentWrapper = manyWhoMount();
 
-        const test = shallow(componentWrapper.instance().getHeaderElement('1', { label: null; }));
-        expect(test.exists('.navbar-toggle collapsed')).toBeTruthy();
-        expect(test.exists('.icon-bar')).toBeTruthy();
+        const test = shallow(componentWrapper.instance().getHeaderElement('1', { label: null }));
+        expect(test.find('.navbar-toggle.collapsed').exists()).toBe(true);
+        expect(test.find('.icon-bar').exists()).toBe(true);
         expect(test.find('.navbar-brand').exists()).toBe(false);
     });
 
@@ -89,11 +89,122 @@ describe('Navigation component behaviour', () => {
 
         componentWrapper = manyWhoMount();
 
-        const test = shallow(componentWrapper.instance().getHeaderElement('1', { label: 'label'; }));
+        const test = shallow(componentWrapper.instance().getHeaderElement('1', { label: 'label' }));
         const text = test.html();
-        expect(test.exists('.navbar-toggle collapsed')).toBeTruthy();
-        expect(test.exists('.icon-bar')).toBeTruthy();
+        expect(test.find('.navbar-toggle.collapsed').exists()).toBe(true);
+        expect(test.find('.icon-bar').exists()).toBe(true);
         expect(test.find('.navbar-brand').exists()).toBe(true);
     });
 
+    test('GetNavElements renders nothing given no items', () => {
+
+        componentWrapper = manyWhoMount();
+
+        const items = [];
+
+        const test = componentWrapper.instance().getNavElements(items, true);
+        expect(test.length).toBe(0);
+    });
+
+    test('GetNavElements renders single top level item', () => {
+
+        componentWrapper = manyWhoMount();
+
+        const items = [
+            {
+                isCurrent: true,
+                isVisible: true,
+                isEnabled: true,
+            },
+        ];
+
+        const test = shallow(componentWrapper.instance().getNavElements(items, true)[0]);
+        expect(test.find('.active').exists()).toBe(true);
+        expect(test.find('.hidden').exists()).toBe(false);
+        expect(test.find('.disabled').exists()).toBe(false);
+        expect(test.find('.top-nav-element').exists()).toBe(true);
+        expect(test.find('.dropdown-submenu').exists()).toBe(false);
+        expect(test.find('.dropdown-toggle').exists()).toBe(false);
+        expect(test.find('.dropdown-menu').exists()).toBe(false);
+        expect(test.find('.caret').exists()).toBe(false);
+    });
+
+    test('GetNavElements renders multiple top level items, one with a child item', () => {
+
+        componentWrapper = manyWhoMount();
+
+        const items = [
+            {
+                isCurrent: true,
+                isVisible: true,
+                isEnabled: true,
+            },
+            {
+                isCurrent: true,
+                isVisible: true,
+                isEnabled: true,
+                items: [{
+                    isCurrent: true,
+                    isVisible: true,
+                    isEnabled: true,
+                }],
+            },
+        ];
+
+        const test = shallow(componentWrapper.instance().getNavElements(items, true)[1]);
+        expect(test.find('.active').length).toBe(2);
+        expect(test.find('.hidden').exists()).toBe(false);
+        expect(test.find('.disabled').exists()).toBe(false);
+        expect(test.find('.top-nav-element').length).toBe(1);
+        expect(test.find('.dropdown-submenu').length).toBe(0);
+        expect(test.find('.dropdown-toggle').length).toBe(1);
+        expect(test.find('.dropdown-menu').length).toBe(1);
+        expect(test.find('.caret').length).toBe(1);
+    });
+
+    test('GetNavElements renders multiple top level items, one with a child item which has a child item', () => {
+
+        componentWrapper = manyWhoMount();
+
+        const items = [{
+            isCurrent: true,
+            isVisible: true,
+            isEnabled: true,
+        }, {
+            isCurrent: true,
+            isVisible: true,
+            isEnabled: true,
+            items: [{
+                isCurrent: true,
+                isVisible: true,
+                isEnabled: true,
+                items: [{
+                    isCurrent: true,
+                    isVisible: true,
+                    isEnabled: true,
+                }],
+            }],
+        }];
+
+        const test = shallow(componentWrapper.instance().getNavElements(items, true)[1]);
+        expect(test.find('.active').length).toBe(3);
+        expect(test.find('.hidden').exists()).toBe(false);
+        expect(test.find('.disabled').exists()).toBe(false);
+        expect(test.find('.top-nav-element').length).toBe(1);
+        // This is true only in this case, where there is a unique type of nested horizontal navigation
+        expect(test.find('.dropdown-submenu').length).toBe(1);
+        // There are now two expandable drop down menus, one vertical, one horizontal
+        expect(test.find('.dropdown-toggle').length).toBe(2);
+        expect(test.find('.dropdown-menu').length).toBe(2);
+        expect(test.find('.caret').length).toBe(2);
+    });
+
+    test('onClick does nothing if the item is disabled', () => {
+
+        componentWrapper = manyWhoMount();
+
+        const result = componentWrapper.instance().onClick({ isEnabled: false, id: '1' });
+        expect(result).toBe(false);
+    });
+    
 });
