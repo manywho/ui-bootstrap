@@ -88,15 +88,6 @@ class InputDateTime extends React.Component<IInputProps, null> {
         }
     }
 
-    onKeyDown = (e) => {
-        if (e.keyCode === 8) {
-            $(findDOMNode(this.refs['datepicker'])).data('DateTimePicker').clear();
-            this.props.onChange(null);
-            e.preventDefault();
-            e.stopPropagation();
-        }
-    }
-
     setPickerDate(newDate) {
         const datepickerElement = findDOMNode(this.refs['datepicker']);
         const datepickerInstance = $(datepickerElement).data('DateTimePicker');
@@ -177,9 +168,6 @@ class InputDateTime extends React.Component<IInputProps, null> {
             format: customFormat || 
                 manywho.formatting.toMomentFormat(model.contentFormat) || 
                 'MM/DD/YYYY',
-            keyBinds: {
-                delete() { this.clear(); },
-            },
             timeZone: 'UTC',
         })
         .on('dp.change', !this.props.isDesignTime && this.onChange);
@@ -202,10 +190,11 @@ class InputDateTime extends React.Component<IInputProps, null> {
             $(findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
     }
 
-    componentDidUpdate(nextProps) {
-        if (this.props.value === null || this.props.value === '') {
-            this.setPickerDate(null);
-        }
+    componentDidUpdate() {
+        const newDate = this.props.value === ''
+            ? null
+            : this.props.value;
+        this.setPickerDate(newDate);
     }
 
     render() {
@@ -219,8 +208,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
             disabled={this.props.disabled}
             required={this.props.required}
             onBlur={this.props.onBlur}
-            autoComplete={this.props.autocomplete}
-            onKeyDown={this.onKeyDown} />;
+            autoComplete={this.props.autocomplete} />;
     }
 
 }
