@@ -98,6 +98,9 @@ class Content extends React.Component<IComponentProps, IContentState> {
             relative_urls: false,
             remove_script_host : false,
 
+            // entity_encoding: 'named',
+            // entities: '160,nbsp',
+
             setup: (editor) => {
                 this.editor = editor;
                 const props = this.props;
@@ -291,13 +294,34 @@ class Content extends React.Component<IComponentProps, IContentState> {
             ? state.contentValue 
             : model.contentValue || '';
 
+        const removeAllSpaces = string => string.indexOf(' ') !== -1 ?
+            removeAllSpaces(string.replace(' ', '&nbsp;')) :
+            string;
+        
+        const openBracket = '{![';
+        const closedBracket = ']}';
+
+        const removeSpacesInReferences = contentValue.split(openBracket).map((splitByStartString, index) => {
+            // splitByStartString is all text up until the next {![
+            // e.g. {![ , 'ReferencedValue]} normal text in the content' , {![
+            // If this text has index:0, then this text didn't have a start {![ OR
+            // If this text has no ending ]}
+            if (index === 0 || splitByStartString.indexOf(closedBracket) === -1) {
+                // Then this is not a valid reference, so we will leave it alone
+                return splitByStartString;
+            }
+            const splitByEndString = splitByStartString.split(closedBracket);
+            splitByEndString[0] = removeAllSpaces(splitByEndString[0]);
+            return splitByEndString.join(closedBracket);
+        }).join(openBracket);
+        
         const props: any = {
             id: this.id,
             placeholder: model.hintValue,
             maxLength: model.maxSize,
             cols: model.width,
             rows: model.height,
-            value: contentValue,
+            value: removeSpacesInReferences,
             readOnly: model.isEditable === false,
             disabled: model.isEnabled === false,
             required: model.isRequired === true,
@@ -320,6 +344,8 @@ class Content extends React.Component<IComponentProps, IContentState> {
         const outcomeButtons = outcomes && outcomes.map((outcome) => {
             return <Outcome id={outcome.id} flowKey={this.props.flowKey} />;
         });
+
+
 
         return <div className={className} id={this.props.id}>
             <label>

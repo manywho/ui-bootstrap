@@ -2290,6 +2290,7 @@ th {
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td {
   border: 1px solid #dddddd;
+  white-space: pre;
 }
 .table-bordered > thead > tr > th,
 .table-bordered > thead > tr > td {
@@ -2465,6 +2466,9 @@ table th[class*="col-"] {
   .table-responsive > .table-bordered > tfoot > tr:last-child > td {
     border-bottom: 0;
   }
+}
+.mw-tiles-item-header > h4 {
+  white-space: pre;
 }
 fieldset {
   padding: 0;
