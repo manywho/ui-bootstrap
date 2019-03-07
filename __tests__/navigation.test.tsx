@@ -90,7 +90,6 @@ describe('Navigation component behaviour', () => {
         componentWrapper = manyWhoMount();
 
         const test = shallow(componentWrapper.instance().getHeaderElement('1', { label: 'label' }));
-        const text = test.html();
         expect(test.find('.navbar-toggle.collapsed').exists()).toBe(true);
         expect(test.find('.icon-bar').exists()).toBe(true);
         expect(test.find('.navbar-brand').exists()).toBe(true);
