@@ -98,9 +98,6 @@ class Content extends React.Component<IComponentProps, IContentState> {
             relative_urls: false,
             remove_script_host : false,
 
-            // entity_encoding: 'named',
-            // entities: '160,nbsp',
-
             setup: (editor) => {
                 this.editor = editor;
                 const props = this.props;
@@ -293,15 +290,11 @@ class Content extends React.Component<IComponentProps, IContentState> {
             state.contentValue
             ? state.contentValue 
             : model.contentValue || '';
-
-        const removeAllSpaces = string => string.indexOf(' ') !== -1 ?
-            removeAllSpaces(string.replace(' ', '&nbsp;')) :
-            string;
         
         const openBracket = '{![';
         const closedBracket = ']}';
 
-        const removeSpacesInReferences = contentValue.split(openBracket).map((splitByStartString, index) => {
+        const replaceSpacesInReferences = contentValue.split(openBracket).map((splitByStartString, index) => {
             // splitByStartString is all text up until the next {![
             // e.g. {![ , 'ReferencedValue]} normal text in the content' , {![
             // If this text has index:0, then this text didn't have a start {![ OR
@@ -311,7 +304,8 @@ class Content extends React.Component<IComponentProps, IContentState> {
                 return splitByStartString;
             }
             const splitByEndString = splitByStartString.split(closedBracket);
-            splitByEndString[0] = removeAllSpaces(splitByEndString[0]);
+            // Using regex to replace spaces with &nbsp;
+            splitByEndString[0] = splitByEndString[0].replace(/ /g, '&nbsp;');
             return splitByEndString.join(closedBracket);
         }).join(openBracket);
         
@@ -321,7 +315,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
             maxLength: model.maxSize,
             cols: model.width,
             rows: model.height,
-            value: removeSpacesInReferences,
+            value: replaceSpacesInReferences,
             readOnly: model.isEditable === false,
             disabled: model.isEnabled === false,
             required: model.isRequired === true,
