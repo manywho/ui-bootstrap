@@ -73,7 +73,9 @@ class Toggle extends React.Component<IComponentProps, IToggleState> {
         };
 
         if (!this.props.isDesignTime) {
-            props.onChange = this.handleChange;
+            if (model.isEditable) {
+                props.onChange = this.handleChange;
+            }
             props.onBlur = this.handleEvent;
         }
 
