@@ -24,7 +24,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
             item.properties = item.properties.map((prop) => {
 
                 if (manywho.utils.isEqual(prop.typeElementPropertyId, propertyId, true)
-                    && manywho.utils.isEqual(item.externalId, id, true)) {
+                    && manywho.utils.isEqual(item.internalId, id, true)) {
 
                     Array.isArray(value) ? 
                     prop.objectData = value : 
@@ -122,7 +122,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
         return objectData.map((item) => {
             const isSelected = selectedRows.filter((row) => { 
-                return manywho.utils.isEqual(item.externalId, row.externalId, true); 
+                return manywho.utils.isEqual(item.internalId, row.internalId, true); 
             }).length > 0;
 
             const className = (isSelected) ? 'info' : null;
@@ -132,7 +132,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
             if (this.props.model.isMultiSelect) {
 
                 columns.push(<td className="checkbox-cell" key={'checkbox-cell'}>
-                    <input id={item.externalId} 
+                    <input id={item.internalId} 
                         type="checkbox" 
                         checked={isSelected} 
                         onClick={onSelect}>
@@ -142,7 +142,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
             } else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true)) {
 
                 columns.push(<td className="checkbox-cell" key={'checkbox-cell'}>
-                    <input id={item.externalId} 
+                    <input id={item.internalId} 
                         type="radio" 
                         checked={isSelected} 
                         onClick={onSelect}>
@@ -156,8 +156,8 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
                     return (
                         <td className="table-outcome-column" 
-                            key={item.externalId + column} 
-                            data-item={item.externalId}>
+                            key={item.internalId + column} 
+                            data-item={item.internalId}>
                             {
                                 outcomes.map(
                                     outcome => <Outcome flowKey={flowKey} id={outcome.id} key={outcome.id} 
@@ -233,7 +233,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                     if (!manywho.utils.isNullOrWhitespace(column.componentType)) {
 
                         const columnProps = {
-                            id: item.externalId,
+                            id: item.internalId,
                             propertyId: column.typeElementPropertyId,
                             contentValue: selectedProperty.contentValue,
                             objectData: selectedProperty.objectData,
@@ -261,7 +261,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                                 className="editable">
                                 {
                                     <TableInput
-                                        id={item.externalId}
+                                        id={item.internalId}
                                         propertyId={column.typeElementPropertyId}
                                         value={selectedProperty.contentValue}
                                         contentType={column.contentType}
@@ -297,7 +297,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
             // offline the external id does not necessarily exist
             return (
                 <tr className={className} 
-                    id={item.externalId} 
+                    id={item.internalId} 
                     key={item.internalId}
                     onClick={onRowClicked}>
                     {columns}
