@@ -116,11 +116,13 @@ body {
         padding-left: 0;
     }
 
-    .mw-horizontal_flow > .row > :first-child {
+    /* When a column container is directly nested in a row container remove left padding on first component */
+    .mw-vertical_flow > * > .mw-horizontal_flow > .row > :first-child {
         padding-left: 0px;
     }
 
-    .mw-horizontal_flow > .row > :last-child {
+    /* When a column container is directly nested in a row container remove right padding on last component */
+    .mw-vertical_flow > * > .mw-horizontal_flow > .row > :last-child {
         padding-right: 0px;
     }
 
@@ -194,6 +196,7 @@ body {
 
         .mw-horizontal_flow > .row > * {
             padding-left: 0;
+            padding-right: 0;
         }
 
     }
