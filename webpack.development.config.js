@@ -47,6 +47,7 @@ const plugins = commonPlugins.concat([
 ]);
 
 const config = Object.assign({}, commonConfig, {
+    mode: 'development',
     module: {
         rules,
     },
