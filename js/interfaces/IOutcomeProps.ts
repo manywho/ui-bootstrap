@@ -1,4 +1,6 @@
+import * as React from 'react';
 import IComponentProps from './IComponentProps';
+
 
 interface IOutcomeProps extends IComponentProps {
     size?: string;

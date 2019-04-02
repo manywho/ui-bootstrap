@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 interface ITileItemProps {
     flowKey: string;
     item: any;

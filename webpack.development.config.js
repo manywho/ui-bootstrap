@@ -14,15 +14,6 @@ const defaultDirectory = 'build';
 
 const rules = commonRules.concat([
     {
-        test: /\.tsx?$/,
-        enforce: 'pre',
-        loader: 'tslint-loader',
-        options: {
-            emitErrors: true,
-            failOnHint: true
-        },
-    },
-    {
         exclude: /node_modules/,
         test: /\.(less)$/,
         include: path.resolve(__dirname, 'css/mw-bootstrap.less'),

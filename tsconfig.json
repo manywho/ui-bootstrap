@@ -3,10 +3,14 @@
         "pretty": true,
         "target": "es5",
         "allowJs": true,
+        "noEmit": true,
         "sourceMap": true,
         "jsx": "react",
         "lib": ["dom", "es6", "es2015"],
         "moduleResolution": "node" ,
         "noUnusedLocals": true      
-    }
+    },
+    "include": [
+		"js/**/*"
+    ]
 }
