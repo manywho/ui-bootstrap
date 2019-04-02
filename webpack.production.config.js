@@ -1,14 +1,18 @@
 const webpack = require('webpack');
 const path = require('path');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const common = require('./webpack.common.js');
 const filename = 'js/ui-bootstrap-[chunkhash].js';
 const WriteBundleFilePlugin = require('./WriteBundleFilePlugin');
 const Compression = require('compression-webpack-plugin');
 
-const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap-[contenthash].css');
-const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap-[contenthash].css');
+const extractBootstrap = new MiniCssExtractPlugin({
+    filename: 'css/mw-bootstrap-[contenthash].css',
+});
+const extractComponentsLess = new MiniCssExtractPlugin({
+    filename: 'css/ui-bootstrap-[contenthash].css',
+});
 
 const commonConfig = common.config;
 const commonRules = common.rules;

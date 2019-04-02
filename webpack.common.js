@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -169,7 +169,7 @@ module.exports.run = (config, defaultDirectory) => (env = {}) => {
                 // We are only interested in LESS files
                 if (file.includes('less')) {
                     fileName = file.split('.')[0];
-                    extractInstance = new ExtractTextPlugin('css/themes/' + fileName + '.css');
+                    extractInstance = new MiniCssExtractPlugin({ filename: 'css/themes/' + fileName + '.css' });
                     ruleObj = {
                         test: /\.less$/,
                         include: path.resolve(__dirname, 'css/themes/' + file),
