@@ -1,10 +1,12 @@
 const path = require('path');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 const common = require('./webpack.common.js');
+
 const filename = 'js/ui-bootstrap.js';
 
-const extractBootstrap = new MiniCssExtractPlugin({ filename: 'css/mw-bootstrap.css' });
-const extractComponentsLess = new MiniCssExtractPlugin({ filename: 'css/ui-bootstrap.css' });
+const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap.css');
+const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap.css');
 
 const commonConfig = common.config;
 const commonRules = common.rules;

@@ -79,8 +79,8 @@
         "typedoc": "^0.9.0",
         "typescript": "^3.3.4000",
         "webpack": "4.26.1",
-        "webpack-cli": "3.1.2",
         "webpack-bundle-analyzer": "^2.11.1",
+        "webpack-cli": "3.1.2",
         "write-file": "1.0.0"
     },
     "jest": {
@@ -113,6 +113,7 @@
         "@types/react-maskedinput": "^4.0.3",
         "babel-loader": "^8.0.5",
         "create-react-class": "^15.6.3",
+        "extract-text-webpack-plugin": "^4.0.0-beta.0",
         "lint": "^1.1.2",
         "mini-css-extract-plugin": "^0.5.0",
         "ramda": "^0.25.0"
