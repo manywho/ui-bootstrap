@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 export interface ITourState {
     foundTarget: boolean;
     style: React.CSSProperties;

@@ -1,6 +1,8 @@
 const path = require('path');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 const common = require('./webpack.common.js');
+
 const filename = 'js/ui-bootstrap.js';
 
 const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap.css');
@@ -13,15 +15,6 @@ const run = common.run;
 const defaultDirectory = 'build';
 
 const rules = commonRules.concat([
-    {
-        test: /\.tsx?$/,
-        enforce: 'pre',
-        loader: 'tslint-loader',
-        options: {
-            emitErrors: true,
-            failOnHint: true
-        },
-    },
     {
         exclude: /node_modules/,
         test: /\.(less)$/,
@@ -56,6 +49,7 @@ const plugins = commonPlugins.concat([
 ]);
 
 const config = Object.assign({}, commonConfig, {
+    mode: 'development',
     module: {
         rules,
     },
