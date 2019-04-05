@@ -372,13 +372,13 @@ describe('Select input component behaviour', () => {
     test('getUid always returns an external ID', () => {
         const option = {
             value: {
-                externalId: str(10),
+                internalId: str(10),
             },
             label: str(10),
         };
         selectWrapper = manyWhoMount();
         const selectWrapperInstance = selectWrapper.instance();
-        expect(selectWrapperInstance.getUid(option)).toEqual(option.value.externalId);
+        expect(selectWrapperInstance.getUid(option)).toEqual(option.value.internalId);
     });
 
     test('when isScrollLimit is called that onNext is then invoked', () => {
