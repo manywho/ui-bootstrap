@@ -7,8 +7,8 @@ const filename = 'js/ui-bootstrap-[chunkhash].js';
 const WriteBundleFilePlugin = require('./WriteBundleFilePlugin');
 const Compression = require('compression-webpack-plugin');
 
-const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap-[contenthash].css');
-const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap-[contenthash].css');
+const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap-[hash].css');
+const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap-[hash].css');
 
 const commonConfig = common.config;
 const commonRules = common.rules;
@@ -51,14 +51,6 @@ const rules = commonRules.concat([
 ]);
 
 const plugins = commonPlugins.concat([
-    new webpack.optimize.UglifyJsPlugin({
-        compress: {
-            screw_ie8: true,
-            warnings: false            
-        },
-        sourceMap: true,
-        minimize: true
-    }),
     new webpack.LoaderOptionsPlugin({
         minimize: true,
         debug: false
@@ -86,6 +78,7 @@ const plugins = commonPlugins.concat([
 ]);
 
 const config = Object.assign({}, commonConfig, {
+    mode: 'production',
     module: {
         rules,
     },

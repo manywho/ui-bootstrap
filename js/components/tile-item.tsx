@@ -23,7 +23,7 @@ class TileItem extends React.PureComponent<ITileItemProps, null> {
             onSelect, 
         } = this.props;
 
-        manywho.log.info('Rendering Tile Item: ' + item.externalId);
+        manywho.log.info('Rendering Tile Item: ' + item.internalId);
 
         const Outcome = getOutcome();
 
@@ -94,7 +94,7 @@ class TileItem extends React.PureComponent<ITileItemProps, null> {
             })
             .filter(column => !!column);
 
-        return (<div className={className} onClick={onSelect} id={item.externalId}>
+        return (<div className={className} onClick={onSelect} id={item.internalId}>
             <div className="mw-tiles-item-header">
                 <h4 title={header}>{header}</h4>
                 {deleteOutcomeElement}

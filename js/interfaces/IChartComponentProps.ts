@@ -1,3 +1,4 @@
+import * as React from 'react';
 import IComponentProps from './IComponentProps';
 
 interface IChartComponentProps extends IComponentProps {
