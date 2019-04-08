@@ -289,8 +289,12 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                         });
 
                         if (matchingColumns && matchingColumns.length > 0) {
-                            return prop.contentValue.toLowerCase()
-                                .indexOf(state.search.toLowerCase()) !== -1;
+                            return manywho.formatting.format(
+                                prop.contentValue, 
+                                prop.contentFormat, 
+                                prop.contentType, 
+                                this.props.flowKey,
+                            ).toLowerCase().indexOf(state.search.toLowerCase()) !== -1;
                         }
 
                         return false;
