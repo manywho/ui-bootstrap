@@ -1,17 +1,9 @@
 ﻿import * as React from 'react';
-import { findDOMNode } from 'react-dom';
-// tslint:disable-next-line
-import Dropzone from 'react-dropzone';
 import registeredComponents from '../constants/registeredComponents';
 import IFileUploadProps from '../interfaces/IFileUploadProps';
 import outcome from './outcome';
 import '../../css/files.less';
 import FileUpload from '@boomi/react-file-upload';
-
-interface IFileStatus {
-    fileName: string;
-    uploadSuccessful: boolean;
-}
 
 class FileUploadWrapper extends React.Component<IFileUploadProps> {
 
@@ -57,7 +49,15 @@ class FileUploadWrapper extends React.Component<IFileUploadProps> {
         return <React.Fragment>
             <FileUpload
                 multiple={manywho.utils.isNullOrUndefined(this.props.multiple) ? model.isMultiSelect : this.props.multiple}
-                upload={this.onUpload}
+                upload={ (files, progress) => this.props.upload(
+                        this.props.flowKey, 
+                        null, 
+                        progress, 
+                        files, 
+                        model && model.fileDataRequest
+                            ? model.fileDataRequest
+                            : null,
+                )}
                 uploadCaption={this.props.uploadCaption}
                 uploadComplete={this.props.uploadComplete}
                 smallInputs={this.props.smallInputs}
