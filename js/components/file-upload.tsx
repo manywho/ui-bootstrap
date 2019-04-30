@@ -38,8 +38,6 @@ class FileUploadWrapper extends React.Component<IFileUploadProps> {
         if (!this.props.isChildComponent && this.props.id)
             outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
-        //connect ondrop and on upload to the dropzone
-
         const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME); 
 
         const outcomeButtons = outcomes && outcomes.map(outcome => 
@@ -51,7 +49,7 @@ class FileUploadWrapper extends React.Component<IFileUploadProps> {
                 multiple={manywho.utils.isNullOrUndefined(this.props.multiple) ? model.isMultiSelect : this.props.multiple}
                 upload={ (files, progress) => this.props.upload(
                         this.props.flowKey, 
-                        null, 
+                        null, // this param (FileData) kept for backwards compatibility
                         progress, 
                         files, 
                         model && model.fileDataRequest
