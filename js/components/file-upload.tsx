@@ -21,10 +21,10 @@ class FileUploadWrapper extends React.Component<IFileUploadProps> {
         },
     };
 
-    uploadComplete(response) {
+    uploadComplete(response, id, flowKey) {
         if (
             response && 
-            !manywho.utils.isNullOrWhitespace(this.props.id)
+            !manywho.utils.isNullOrWhitespace(id)
         ) {
             const objectData = response.objectData.map((item) => {
                 item.isSelected = true;
@@ -32,13 +32,13 @@ class FileUploadWrapper extends React.Component<IFileUploadProps> {
             });
 
             manywho.state.setComponent(
-                this.props.id, { objectData }, this.props.flowKey, true,
+                id, { objectData }, flowKey, true,
             );
 
             manywho.component.handleEvent(
                 this, 
-                manywho.model.getComponent(this.props.id, this.props.flowKey), 
-                this.props.flowKey,
+                manywho.model.getComponent(id, flowKey), 
+                flowKey,
             );
         }
     }
@@ -77,10 +77,10 @@ class FileUploadWrapper extends React.Component<IFileUploadProps> {
                             : null,
                     ))}
                     uploadCaption={this.props.uploadCaption}
-                    uploadComplete={this.uploadComplete}
+                    uploadComplete={response => this.uploadComplete(response, this.props.id, this.props.flowKey)}
                     smallInputs={this.props.smallInputs}
                     isUploadVisible={this.props.isUploadVisible}
-                    isAutoUpload={model.attributes ? model.attributes.isAutoUpload : false}
+                    isAutoUpload={model.attributes && model.attributes.isAutoUpload ? model.attributes.isAutoUpload.toLowerCase() === 'true' : false}
                     label={model.label}
                     isRequired={model.isRequired}
                     validationMessage={model.validationMessage}

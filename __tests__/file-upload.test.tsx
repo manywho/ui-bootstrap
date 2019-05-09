@@ -83,7 +83,7 @@ describe('FileUpload component behaviour', () => {
                     data: 2,
                 },
             ],
-        });
+        }, '1', '2');
         expect(globalAny.window.manywho.state.setComponent).toHaveBeenCalledWith(
             '1',
             { objectData:
