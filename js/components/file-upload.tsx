@@ -12,7 +12,6 @@ class FileUploadWrapper extends React.Component<IFileUploadProps> {
         browseCaption: 'Browse',
         smallInputs: false,
         isUploadVisible: true,
-        uploadComplete: null,
         upload: (flowKey, _, onProgress, files, request) => {
             const tenantId = manywho.utils.extractTenantId(flowKey);
             const authenticationToken = manywho.state.getAuthenticationToken(flowKey);
@@ -22,8 +21,26 @@ class FileUploadWrapper extends React.Component<IFileUploadProps> {
         },
     };
 
-    constructor(props) {
-        super(props);
+    uploadComplete(response) {
+        if (
+            response && 
+            !manywho.utils.isNullOrWhitespace(this.props.id)
+        ) {
+            const objectData = response.objectData.map((item) => {
+                item.isSelected = true;
+                return item;
+            });
+
+            manywho.state.setComponent(
+                this.props.id, { objectData }, this.props.flowKey, true,
+            );
+
+            manywho.component.handleEvent(
+                this, 
+                manywho.model.getComponent(this.props.id, this.props.flowKey), 
+                this.props.flowKey,
+            );
+        }
     }
 
     render() {
@@ -35,19 +52,22 @@ class FileUploadWrapper extends React.Component<IFileUploadProps> {
 
         let outcomes = null;
 
-        if (!this.props.isChildComponent && this.props.id)
+        if (!this.props.isChildComponent && this.props.id) {
             outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
+        }
 
         const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME); 
 
-        const outcomeButtons = outcomes && outcomes.map(outcome => 
-            <Outcome id={outcome.id} flowKey={this.props.flowKey} />,
-        );
+        const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} key={outcome.id} flowKey={this.props.flowKey} />);
 
-        return <React.Fragment>
-            <FileUpload
-                multiple={manywho.utils.isNullOrUndefined(this.props.multiple) ? model.isMultiSelect : this.props.multiple}
-                upload={ (files, progress) => this.props.upload(
+        manywho.log.info(`Rendering File Upload: ${this.props.id}`);
+
+        return (
+            <React.Fragment>
+                <FileUpload
+                    id={this.props.id}
+                    multiple={manywho.utils.isNullOrUndefined(this.props.multiple) ? model.isMultiSelect : this.props.multiple}
+                    upload={(files, progress) => Promise.resolve(this.props.upload(
                         this.props.flowKey, 
                         null, // this param (FileData) kept for backwards compatibility
                         progress, 
@@ -55,31 +75,26 @@ class FileUploadWrapper extends React.Component<IFileUploadProps> {
                         model && model.fileDataRequest
                             ? model.fileDataRequest
                             : null,
-                )}
-                uploadCaption={this.props.uploadCaption}
-                uploadComplete={this.props.uploadComplete}
-                smallInputs={this.props.smallInputs}
-                isUploadVisible={this.props.isUploadVisible}
-                completedUpload={this.props.uploadComplete}
-                getFileUploadMessage={manywho.settings.global('localization.fileUploadMessage')}
-                loggingFunction={manywho.log.info}
-                handleEvent={() => manywho.component.handleEvent(
-                    this, 
-                    manywho.model.getComponent(this.props.id, this.props.flowKey), 
-                    this.props.flowKey,
-                )}
-                isAutoUpload={model.attributes ? model.attributes.isAutoUpload : false}
-                label={model.label}
-                isRequired={model.isRequired}
-                validationMessage={model.validationMessage}
-                isVisible={model.isVisible}
-                isValid={model.isValid}
-                hintValue={model.hintValue}
-                helpInfo={model.helpInfo}
-                disabled={this.props.isDesignTime}
-            />
-            {outcomeButtons}
-        </React.Fragment>;
+                    ))}
+                    uploadCaption={this.props.uploadCaption}
+                    uploadComplete={this.uploadComplete}
+                    smallInputs={this.props.smallInputs}
+                    isUploadVisible={this.props.isUploadVisible}
+                    isAutoUpload={model.attributes ? model.attributes.isAutoUpload : false}
+                    label={model.label}
+                    isRequired={model.isRequired}
+                    validationMessage={model.validationMessage}
+                    isVisible={model.isVisible}
+                    isValid={model.isValid}
+                    hintValue={model.hintValue === ''
+                        ? manywho.settings.global('localization.fileUploadMessage', this.props.flowKey)
+                        : model.hintValue}
+                    helpInfo={model.helpInfo}
+                    disabled={this.props.isDesignTime}
+                />
+                {outcomeButtons}
+            </React.Fragment>
+        );
     }
 
 }
