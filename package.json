@@ -13,7 +13,6 @@
         "start": "webpack --config webpack.development.config.js --env.build=../ui-html5/build --env.assets=local --env.watch --env.sourcemaps",
         "dev": "webpack --config webpack.development.config.js",
         "dist": "webpack -p --config webpack.production.config.js",
-        "precommit": "lint-staged",
         "test": "jest",
         "lint": "eslint js/**"
     },
