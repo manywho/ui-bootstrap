@@ -87,7 +87,7 @@ describe('FileUpload component behaviour', () => {
                 ],
             },
             '1',
-            '2'
+            '2',
         );
         expect(globalAny.window.manywho.state.setComponent).toHaveBeenCalledWith(
             '1',
