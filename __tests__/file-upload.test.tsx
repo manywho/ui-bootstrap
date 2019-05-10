@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import FileUpload from '../js/components/file-upload';
+import FileUpload, { uploadComplete } from '../js/components/file-upload';
 
 describe('FileUpload component behaviour', () => {
 
@@ -72,18 +72,23 @@ describe('FileUpload component behaviour', () => {
 
     test('Component uploadComplete function marks items as selected and calls setComponent and handleEvent', () => {
         componentWrapper = manyWhoMount();
-        componentWrapper.instance().uploadComplete({
-            objectData: [
-                {
-                    isSelected: false,
-                    data: 1,
-                },
-                {
-                    isSelected: false,
-                    data: 2,
-                },
-            ],
-        }, '1', '2');
+        uploadComplete(
+            componentWrapper.instance(),
+            {
+                objectData: [
+                    {
+                        isSelected: false,
+                        data: 1,
+                    },
+                    {
+                        isSelected: false,
+                        data: 2,
+                    },
+                ],
+            },
+            '1',
+            '2'
+        );
         expect(globalAny.window.manywho.state.setComponent).toHaveBeenCalledWith(
             '1',
             { objectData:
