@@ -5,7 +5,7 @@ import outcome from './outcome';
 import '../../css/files.less';
 import FileUpload from '@boomi/react-file-upload';
 
-export function uploadComplete(component, response, id, flowKey) {
+export function uploadComplete(response, id, flowKey) {
     if (
         response && 
         !manywho.utils.isNullOrWhitespace(id)
@@ -20,7 +20,7 @@ export function uploadComplete(component, response, id, flowKey) {
         );
 
         manywho.component.handleEvent(
-            component, 
+            null, // This parameter is only used for forceUpdating, which we don't need
             manywho.model.getComponent(id, flowKey), 
             flowKey,
         );
@@ -62,7 +62,7 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
                         : null,
                 ))}
                 uploadCaption={props.uploadCaption}
-                uploadComplete={response => uploadComplete(this, response, props.id, props.flowKey)}
+                uploadComplete={response => uploadComplete(response, props.id, props.flowKey)}
                 smallInputs={props.smallInputs}
                 isUploadVisible={props.isUploadVisible}
                 isAutoUpload={model.attributes && model.attributes.isAutoUpload ? model.attributes.isAutoUpload.toLowerCase() === 'true' : false}
