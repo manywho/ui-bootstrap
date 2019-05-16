@@ -3,8 +3,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const common = require('./webpack.common.js');
 
-const filename = 'js/ui-bootstrap.js';
-
 const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap.css');
 const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap.css');
 
@@ -56,6 +54,6 @@ const config = Object.assign({}, commonConfig, {
     plugins
 });
 
-config.output.filename = filename;
+config.output.filename = '[name].js';
 
 module.exports = common.run(config, defaultDirectory);
