@@ -10,7 +10,7 @@ import FileUpload from '@boomi/react-file-upload';
  * 
  * @param response Successful response from the file upload 
  * @param id The identifier given to this component
- * @param flowKey Key used when interacting with the engine or collaboration servers
+ * @param flowKey
  */
 export function uploadComplete(response: {objectData}, id: string, flowKey: string) {
     if (
