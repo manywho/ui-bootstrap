@@ -5,7 +5,14 @@ import outcome from './outcome';
 import '../../css/files.less';
 import FileUpload from '@boomi/react-file-upload';
 
-export function uploadComplete(response, id, flowKey) {
+/**
+ * This function handles the saving of data to state, engine and collaboration servers
+ * 
+ * @param response Successful response from the file upload 
+ * @param id The identifier given to this component
+ * @param flowKey Key used when interacting with the engine or collaboration servers
+ */
+export function uploadComplete(response: {objectData}, id: string, flowKey: string) {
     if (
         response && 
         !manywho.utils.isNullOrWhitespace(id)
@@ -15,10 +22,12 @@ export function uploadComplete(response, id, flowKey) {
             return item;
         });
 
+        // Save the objectData from the response to the component state
         manywho.state.setComponent(
             id, { objectData }, flowKey, true,
         );
 
+        // Re-sync with the server so that any events attached to the component are processed
         manywho.component.handleEvent(
             null, // This parameter is only used for forceUpdating, which we don't need
             manywho.model.getComponent(id, flowKey), 
@@ -27,6 +36,15 @@ export function uploadComplete(response, id, flowKey) {
     }
 }
 
+/**
+ * This is a file upload component that has a dropzone to accept files from a user's local machine,
+ * and uploads them to the Service selected in the Flow
+ * 
+ * This component is a wrapper for: [@boomi/react-file-upload](https://github.com/manywho/react-file-upload)
+ * 
+ * @param props Setup configuration for the fileupload component e.g. props.multiple, props.smallInputs, props.isUploadVisible
+ * @return File upload react component with props options configured and set
+ */
 const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
 
     const model = 
