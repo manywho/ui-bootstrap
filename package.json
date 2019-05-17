@@ -110,7 +110,7 @@
         "testResultsProcessor": "./node_modules/jest-junit-reporter",
         "globals": {
             "ts-jest": {
-              "diagnostics": false
+                "diagnostics": false
             }
         }
     },
