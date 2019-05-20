@@ -73,7 +73,6 @@ describe('FileUpload component behaviour', () => {
     test('Component uploadComplete function marks items as selected and calls setComponent and handleEvent', () => {
         componentWrapper = manyWhoMount();
         uploadComplete(
-            componentWrapper.instance(),
             {
                 objectData: [
                     {
@@ -107,7 +106,7 @@ describe('FileUpload component behaviour', () => {
             true,
         );
         expect(globalAny.window.manywho.component.handleEvent).toHaveBeenCalledWith(
-            componentWrapper.instance(),
+            null,
             '3',
             '2',
         );
