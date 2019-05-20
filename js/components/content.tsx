@@ -290,14 +290,32 @@ class Content extends React.Component<IComponentProps, IContentState> {
             state.contentValue
             ? state.contentValue 
             : model.contentValue || '';
+        
+        const openBracket = '{![';
+        const closedBracket = ']}';
 
+        const replaceSpacesInReferences = contentValue.split(openBracket).map((splitByStartString, index) => {
+            // splitByStartString is all text up until the next {![
+            // e.g. {![ , 'ReferencedValue]} normal text in the content' , {![
+            // If this text has index:0, then this text didn't have a start {![ OR
+            // If this text has no ending ]}
+            if (index === 0 || splitByStartString.indexOf(closedBracket) === -1) {
+                // Then this is not a valid reference, so we will leave it alone
+                return splitByStartString;
+            }
+            const splitByEndString = splitByStartString.split(closedBracket);
+            // Using regex to replace spaces with &nbsp;
+            splitByEndString[0] = splitByEndString[0].replace(/ /g, '&nbsp;');
+            return splitByEndString.join(closedBracket);
+        }).join(openBracket);
+        
         const props: any = {
             id: this.id,
             placeholder: model.hintValue,
             maxLength: model.maxSize,
             cols: model.width,
             rows: model.height,
-            value: contentValue,
+            value: replaceSpacesInReferences,
             readOnly: model.isEditable === false,
             disabled: model.isEnabled === false,
             required: model.isRequired === true,
@@ -320,6 +338,8 @@ class Content extends React.Component<IComponentProps, IContentState> {
         const outcomeButtons = outcomes && outcomes.map((outcome) => {
             return <Outcome id={outcome.id} flowKey={this.props.flowKey} />;
         });
+
+
 
         return <div className={className} id={this.props.id}>
             <label>

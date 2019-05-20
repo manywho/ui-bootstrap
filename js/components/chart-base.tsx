@@ -22,10 +22,10 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
     onClick(e) {
         const element = this.chart.getElementAtEvent(e);
         const objectData = this.props.objectData;
-        const externalId = objectData[element[0]._datasetIndex][element[0]._index].externalId;
+        const internalId = objectData[element[0]._datasetIndex][element[0]._index].internalId;
 
         if (element && element.length > 0 && this.props.onClick)
-            this.props.onClick(externalId, element[0]._datasetIndex);
+            this.props.onClick(internalId, element[0]._datasetIndex);
     }
 
     updateChart() {

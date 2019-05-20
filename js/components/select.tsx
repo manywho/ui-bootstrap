@@ -124,7 +124,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
     }
 
     getUid(option) {
-        return option.value.externalId;
+        return option.value.internalId;
     }
 
     isScrollLimit(e) {
@@ -174,7 +174,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             if (state && state.objectData) {
 
                 const selectedOptions = state.objectData.filter(
-                    item => options.find(option => option.value.externalId === item.externalId),
+                    item => options.find(option => option.value.internalId === item.internalId),
                 );
 
                 if (selectedOptions.length === 0)
@@ -285,20 +285,20 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
             if (this.props.objectData) {
 
-                let externalIds = null;
+                let internalIds = null;
 
                 if (state && state.objectData)
-                    externalIds = state.objectData.map(item => item.externalId);
+                    internalIds = state.objectData.map(item => item.internalId);
                 else
-                    externalIds = this.props.objectData.filter(item => item.isSelected)
-                        .map(item => item.externalId);
+                    internalIds = this.props.objectData.filter(item => item.isSelected)
+                        .map(item => item.internalId);
 
                 let values = null;
 
-                if (externalIds && externalIds.length > 0)
+                if (internalIds && internalIds.length > 0)
                     values = 
                         this.state.options
-                        .filter(option => externalIds.indexOf(option.value.externalId) !== -1);
+                        .filter(option => internalIds.indexOf(option.value.internalId) !== -1);
 
                 if (values)
                     if (!model.isMultiSelect) {

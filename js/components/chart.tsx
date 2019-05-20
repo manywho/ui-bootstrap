@@ -16,11 +16,11 @@ const ChartComponent: React.SFC<IChartComponentProps> = (
     const ChartBase = getChartBase();
     const Wait = getWait();
 
-    const onClick = (externalId) => {
+    const onClick = (internalId) => {
         const outcome = outcomes.filter(item => !item.isBulkAction)[0];
 
         if (outcome)
-            onOutcome(externalId, outcome.id);
+            onOutcome(internalId, outcome.id);
     };
 
     const model = manywho.model.getComponent(id, flowKey);

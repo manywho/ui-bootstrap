@@ -1,0 +1,60 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true,
+        "jest": true
+    },
+    "extends": [
+        "airbnb-typescript",
+        "plugin:react/recommended"
+    ],
+    "globals": {
+        "manywho": false,
+        "$": false,
+        "ga": false,
+        "module": false,
+        "jest": false,
+        "expect": false,
+        "test": false,
+        "beforeEach": false,
+        "describe": false
+    },
+    "rules": {
+        "semi": 2,
+        "indent": [2, 4],
+        "max-len": [2, 150],
+        "no-trailing-spaces": 0,
+        "brace-style": [ 2, "1tbs", { "allowSingleLine": true }],
+        "import/order": 0,
+        "padded-blocks": 0,
+        "class-methods-use-this": 0,
+        "operator-linebreak": 0,
+        "no-confusing-arrow": 0,
+        "object-curly-newline": 0,
+        "no-param-reassign": ["error", { "props": false }],
+        "linebreak-style": 0,
+        "no-nested-ternary": 0,
+        "no-unused-vars": "off",
+        
+        "@typescript-eslint/no-unused-vars": "error",
+
+        "react/jsx-uses-vars": [2],
+        "react/jsx-no-undef": [2, { "allowGlobals": true }],
+        "react/prop-types": [0],
+        "react/destructuring-assignment": 0,
+        "react/jsx-filename-extension": 0,
+        "react/jsx-indent": [2, 4],
+        "react/jsx-indent-props": [2, 4],
+        "react/no-unescaped-entities": 0,
+        "react/no-access-state-in-setstate": 0,
+        "react/button-has-type": 0,
+        "jsx-a11y/label-has-associated-control": 0,
+        "jsx-a11y/label-has-for": 0,
+        "react/no-array-index-key": 0
+    }
+}
