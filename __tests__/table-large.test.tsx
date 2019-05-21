@@ -73,7 +73,9 @@ describe('Table Large input component behaviour', () => {
     }
 
     afterEach(() => {
-        tableLargeWrapper.unmount();
+        if (tableLargeWrapper && !tableLargeWrapper.isEmpty()) {
+            tableLargeWrapper.unmount();
+        }
     });
 
     test('Table Large component renders without crashing', () => {
