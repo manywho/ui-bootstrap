@@ -7,24 +7,6 @@ import "../css/lib/react-selectize.css";
 
 // Themes
 import "../css/mw-bootstrap.less";
-import "../css/themes/mw-cerulean.less";
-import "../css/themes/mw-cosmo.less";
-import "../css/themes/mw-cyborg.less";
-import "../css/themes/mw-darkly.less";
-import "../css/themes/mw-flatly.less";
-import "../css/themes/mw-journal.less";
-import "../css/themes/mw-lumen.less";
-import "../css/themes/mw-paper.less";
-import "../css/themes/mw-readable.less";
-import "../css/themes/mw-sandstone.less";
-import "../css/themes/mw-sf1.less";
-import "../css/themes/mw-simplex.less";
-import "../css/themes/mw-slate.less";
-import "../css/themes/mw-spacelab.less";
-import "../css/themes/mw-superhero.less";
-import "../css/themes/mw-tooling.less";
-import "../css/themes/mw-united.less";
-import "../css/themes/mw-yeti.less";
 
 // Services
 import './services/theming.ts';

@@ -276,6 +276,16 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             props.options = this.state.options;
             props.disabled = (model.isEnabled === false || model.isEditable === false);
 
+            // If a multiselect is used then the values prop
+            // must always be set on re-render as react selectize will
+            // just reuse a previously selected value if no new values
+            // are given back by the engine (e.g if an operator clears out the values).
+            // I have just wrapped it in a condition just in case adding the values prop
+            // for a simple select causes some kind of conflict.
+            if (model.isMultiSelect) {
+                props.values = [];
+            }
+
             if (
                 model.attributes && 
                 manywho.utils.isEqual(model.attributes.isTethered, 'true', true)

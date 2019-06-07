@@ -3,7 +3,6 @@ const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const common = require('./webpack.common.js');
-const filename = 'js/ui-bootstrap-[chunkhash].js';
 const WriteBundleFilePlugin = require('./WriteBundleFilePlugin');
 const Compression = require('compression-webpack-plugin');
 
@@ -35,8 +34,7 @@ const rules = commonRules.concat([
                 {
                     loader: "css-loader",
                     options: {
-                        importLoaders: true,
-                        minimize: true
+                        importLoaders: 1,
                     }
                 },
                 { loader: "less-loader" }
@@ -85,6 +83,6 @@ const config = Object.assign({}, commonConfig, {
     plugins
 });
 
-config.output.filename = filename;
+config.output.filename = '[name]-[chunkhash].js';
 
 module.exports = common.run(config, defaultDirectory);

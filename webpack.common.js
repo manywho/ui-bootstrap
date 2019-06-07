@@ -4,6 +4,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const pathsToClean = [
     'dist',
@@ -46,7 +47,9 @@ const mapPublicPath = (assets, publicPaths) => {
 }
 
 module.exports.config = {
-    entry: './js/index.js',
+    entry: {
+        'js/ui-bootstrap': './js/index.js',        
+    },
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
     },
@@ -95,6 +98,9 @@ module.exports.plugins = [
         abortOnUnacceptableLicense: true
     }),
     new CleanWebpackPlugin(pathsToClean),
+    new MiniCssExtractPlugin({
+        filename: '[name].css',
+    }),    
 ];
 
 module.exports.rules = [
@@ -110,7 +116,15 @@ module.exports.rules = [
     {
         test: /\.(png|svg|jpg|gif)$/,
         use: 'file-loader?name=[path][name].[ext]'
-    }
+    },
+    {
+        test: /themes.*\.less$/,
+        use: [
+            MiniCssExtractPlugin.loader, 
+            'css-loader', 
+            'less-loader',
+        ],
+    },
 ];
 
 module.exports.cssPaths = [
@@ -164,28 +178,18 @@ module.exports.run = (config, defaultDirectory) => (env = {}) => {
         fs.readdir(themeDir, (err, files) => {
 
             // Check for every theme in the themes folder
-            files.forEach((file, index) => {
+            files.forEach((filename) => {
 
                 // We are only interested in LESS files
-                if (file.includes('less')) {
-                    fileName = file.split('.')[0];
-                    extractInstance = new ExtractTextPlugin('css/themes/' + fileName + '.css');
-                    ruleObj = {
-                        test: /\.less$/,
-                        include: path.resolve(__dirname, 'css/themes/' + file),
-                        use: extractInstance.extract({
-                            use: [
-                                { loader: "css-loader" },
-                                { loader: "less-loader" }
-                            ],
-                        })
-                    };
+                if (filename.includes('less')) {
 
-                    // Adding a rule for every theme
-                    config.module.rules.push(ruleObj);
+                    const filenameWithoutExtension = filename.split('.')[0];
 
-                    // Adding a plugin for every theme
-                    config.plugins.push(extractInstance);
+                    // add an entry for each theme
+                    // this will then output a separate file for each
+                    // eg. config.entry['css/themes/mw-cerulean'] = './css/themes/mw-cerulean.less'
+                    config.entry[`css/themes/${filenameWithoutExtension}`] = `./css/themes/${filename}`;
+
                 }
             });
 
