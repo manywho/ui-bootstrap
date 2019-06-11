@@ -165,7 +165,9 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.isLoading && !nextProps.isLoading)
+        const isEqual = require('react-fast-compare');
+
+        if ((this.props.isLoading && !nextProps.isLoading) || isEqual(this.props.objectData, nextProps.objectData))
             setTimeout(() => this.updateChart());
     }
 
