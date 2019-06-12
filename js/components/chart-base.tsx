@@ -164,11 +164,12 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
         this.updateChart();
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         const isEqual = require('react-fast-compare');
 
-        if ((this.props.isLoading && !nextProps.isLoading) || isEqual(this.props.objectData, nextProps.objectData))
-            setTimeout(() => this.updateChart());
+        if ((this.props.isLoading && !prevProps.isLoading) || !isEqual(this.props.objectData, prevProps.objectData)) {
+            this.updateChart();
+        }
     }
 
     render() {
