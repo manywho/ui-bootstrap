@@ -5,9 +5,10 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const common = require('./webpack.common.js');
 const WriteBundleFilePlugin = require('./WriteBundleFilePlugin');
 const Compression = require('compression-webpack-plugin');
+const package = require('./package.json');
 
-const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap-[hash].css');
-const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap-[hash].css');
+const extractBootstrap = new ExtractTextPlugin(`css/flow-ui-bootstrap-${package.version}.css`);
+const extractComponentsLess = new ExtractTextPlugin(`css/flow-ui-bootstrap-components-${package.version}.css`);
 
 const commonConfig = common.config;
 const commonRules = common.rules;
@@ -83,6 +84,6 @@ const config = Object.assign({}, commonConfig, {
     plugins
 });
 
-config.output.filename = '[name]-[chunkhash].js';
+config.output.filename = `[name]-${package.version}.js`;
 
 module.exports = common.run(config, defaultDirectory);
