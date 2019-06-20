@@ -4,6 +4,7 @@ import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
 import IChartBaseProps from '../interfaces/IChartBaseProps';
 import { Chart } from 'chart.js';
+import { equals } from 'ramda';
 
 import '../../css/chart.less';
 
@@ -32,7 +33,7 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
         if (this.props.isVisible === false)
             return;
 
-        const chartSettings = 
+        const chartSettings =
             manywho.settings.global('charts.' + this.props.type, this.props.flowKey, null);
 
         const backgroundColors = chartSettings && chartSettings.backgroundColors ?
@@ -64,7 +65,7 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
 
                     this.props.columns.forEach((column, columnIndex) => {
 
-                        const property = objectDatum.properties.find(prop => 
+                        const property = objectDatum.properties.find(prop =>
                                 manywho.utils.isEqual(
                                     prop.typeElementPropertyId, column.typeElementPropertyId,
                                 ),
@@ -85,7 +86,7 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
                             case 2:
                                 let backgroundColor = property.contentValue;
                                 if (manywho.utils.isNullOrWhitespace(property.contentValue))
-                                    backgroundColor = 
+                                    backgroundColor =
                                         backgroundColors[rowIndex % backgroundColors.length];
 
                                 dataset.backgroundColor.push(backgroundColor);
@@ -165,18 +166,16 @@ class ChartBase extends React.Component<IChartBaseProps, null> {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const isEqual = require('react-fast-compare');
-
-        if ((this.props.isLoading && !prevProps.isLoading) || !isEqual(this.props.objectData, prevProps.objectData)) {
+        if ((this.props.isLoading && !prevProps.isLoading) || !equals(this.props.objectData, prevProps.objectData)) {
             this.updateChart();
         }
     }
 
     render() {
-        return <canvas 
-            onClick={this.onClick} 
-            ref="canvas" 
-            width={this.props.width} 
+        return <canvas
+            onClick={this.onClick}
+            ref="canvas"
+            width={this.props.width}
             height={this.props.height} />;
     }
 
