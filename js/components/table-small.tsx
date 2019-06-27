@@ -58,12 +58,12 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
     renderOutcomeColumn = (item, model, outcomes) => {
         const Outcome = getOutcome();
 
-        return(<tr key={item.externalId}>
+        return(<tr key={item.internalId}>
             <th className="table-small-column table-small-label">
                 Actions
             </th>
             <td className="table-small-column"
-                data-item={item.externalId}
+                data-item={item.internalId}
                 data-model={model.id}>
                     {
                         outcomes.map(
@@ -82,8 +82,8 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
             const classNames = ['list-group-item', 'clearfix'];
             const isSelected = this.props.selectedRows.filter((row) => {
                     return manywho.utils.isEqual(
-                        item.externalId,
-                        row.externalId,
+                        item.internalId,
+                        row.internalId,
                         true,
                 );
             }).length > 0;
@@ -94,8 +94,8 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
 
             const attributes = {
                 className: classNames.join(' '),
-                id: item.externalId,
-                'data-item': item.externalId,
+                id: item.internalId,
+                'data-item': item.internalId,
                 onClick: null,
             };
 
@@ -121,7 +121,7 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
             }
 
             return(
-                <li {...attributes} key={item.externalId}>
+                <li {...attributes} key={item.internalId}>
                     <table className = "table table-small-item">
                         <tbody>
                             {displayColumns.map((column) => {
