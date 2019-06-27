@@ -61,7 +61,7 @@ describe('Table Small input component behaviour', () => {
         const displayColumns = ['mw-outcomes'];
         const objectData = [
             {
-                externalId: '0',
+                internalId: '0',
             },
         ];
         
@@ -111,15 +111,15 @@ describe('Table Small input component behaviour', () => {
         tableSmallWrapper = manyWhoMount({
             selectedRows: [
                 {
-                    externalId: '1',
+                    internalId: '1',
                 },
             ],
             objectData: [
                 {
-                    externalId: '0',
+                    internalId: '0',
                 },
                 {
-                    externalId: '1',
+                    internalId: '1',
                 },
             ],
         });
@@ -127,45 +127,45 @@ describe('Table Small input component behaviour', () => {
         expect(tableSmallWrapper.find('ul li').last().hasClass('active')).toBe(true);
     });
 
-    test('externalId gets added to node as id attribute', () => {
-        const externalId1 = str();
-        const externalId2 = str();
+    test('internalId gets added to node as id attribute', () => {
+        const internalId1 = str();
+        const internalId2 = str();
 
         tableSmallWrapper = manyWhoMount({
             objectData: [
                 {
-                    externalId: externalId1,
+                    internalId: internalId1,
                 },
                 {
-                    externalId: externalId2,
+                    internalId: internalId2,
                 },
             ],
         });
 
-        expect(tableSmallWrapper.find(`li#${externalId2}`).length).toBe(1);
+        expect(tableSmallWrapper.find(`li#${internalId2}`).length).toBe(1);
     });
 
-    test('externalId gets added to node as data-item attribute', () => {
-        const externalId1 = str();
-        const externalId2 = str();
+    test('internalId gets added to node as data-item attribute', () => {
+        const internalId1 = str();
+        const internalId2 = str();
 
         tableSmallWrapper = manyWhoMount({
             objectData: [
                 {
-                    externalId: externalId1,
+                    internalId: internalId1,
                 },
                 {
-                    externalId: externalId2,
+                    internalId: internalId2,
                 },
             ],
         });
 
-        expect(tableSmallWrapper.find(`li#${externalId2}`).first().props()['data-item']).toBe(externalId2);
+        expect(tableSmallWrapper.find(`li#${internalId2}`).first().props()['data-item']).toBe(internalId2);
     });
 
     test('onClick gets added to rows when there is a single, non-destructive outcome', () => {
-        const externalId1 = str();
-        const externalId2 = str();
+        const internalId1 = str();
+        const internalId2 = str();
         const pageActionBindingType = str();
 
         globalAny.window.manywho.utils.isEqual = (a) => {
@@ -183,24 +183,24 @@ describe('Table Small input component behaviour', () => {
             ],
             objectData: [
                 {
-                    externalId: externalId1,
+                    internalId: internalId1,
                 },
                 {
-                    externalId: externalId2,
+                    internalId: internalId2,
                 },
             ],
         });
 
         expect(
-            tableSmallWrapper.find(`li#${externalId2}`).first().props()['onClick'],
+            tableSmallWrapper.find(`li#${internalId2}`).first().props()['onClick'],
         ).toBe(
             tableSmallWrapper.instance().onItemClick,
         );
     });
 
     test('glyphicon-chevron-right gets added to rows when there is a single, non-destructive outcome', () => {
-        const externalId1 = str();
-        const externalId2 = str();
+        const internalId1 = str();
+        const internalId2 = str();
         const pageActionBindingType = str();
 
         globalAny.window.manywho.utils.isEqual = (a) => {
@@ -218,10 +218,10 @@ describe('Table Small input component behaviour', () => {
             ],
             objectData: [
                 {
-                    externalId: externalId1,
+                    internalId: internalId1,
                 },
                 {
-                    externalId: externalId2,
+                    internalId: internalId2,
                 },
             ],
         });
@@ -234,8 +234,8 @@ describe('Table Small input component behaviour', () => {
     });
 
     test('props.onRowClicked gets added to rows when there isn\'t a single outcome', () => {
-        const externalId1 = str();
-        const externalId2 = str();
+        const internalId1 = str();
+        const internalId2 = str();
 
         const onRowClicked = jest.fn();
         
@@ -253,24 +253,24 @@ describe('Table Small input component behaviour', () => {
             ],
             objectData: [
                 {
-                    externalId: externalId1,
+                    internalId: internalId1,
                 },
                 {
-                    externalId: externalId2,
+                    internalId: internalId2,
                 },
             ],
         });
 
         expect(
-            tableSmallWrapper.find(`li#${externalId2}`).first().props()['onClick'],
+            tableSmallWrapper.find(`li#${internalId2}`).first().props()['onClick'],
         ).toBe(
             onRowClicked,
         );
     });
 
     test('Download anchor tags are rendered in rows when props.isFiles is true', () => {
-        const externalId1 = str();
-        const externalId2 = str();
+        const internalId1 = str();
+        const internalId2 = str();
         const typeElementPropertyId = str();
         const contentValue = str();
         const developerName = str();
@@ -299,17 +299,17 @@ describe('Table Small input component behaviour', () => {
             objectData: [
                 {
                     properties,
-                    externalId: externalId1,
+                    internalId: internalId1,
                 },
                 {
                     properties,
-                    externalId: externalId2,
+                    internalId: internalId2,
                 },
             ],
         });
 
         expect(
-            tableSmallWrapper.find(`li#${externalId2} a`).first().props()['href'],
+            tableSmallWrapper.find(`li#${internalId2} a`).first().props()['href'],
         ).toBe(
             contentValue,
         );
