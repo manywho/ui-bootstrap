@@ -16,7 +16,8 @@ const publicPaths = {
     DEVELOPMENT: 'https://manywho-ui-development.s3.eu-west-2.amazonaws.com/',
     QA: 'https://s3.amazonaws.com/manywho-cdn-react-qa/',
     STAGING: 'https://s3.amazonaws.com/manywho-cdn-react-staging/',
-    PRODUCTION: 'https://assets.manywho.com/'
+    PRODUCTION: 'https://assets.manywho.com/',
+	END2END: 'http://localhost:9000/flow/'
 }
 
 const mapPublicPath = (assets, publicPaths) => {
@@ -39,6 +40,9 @@ const mapPublicPath = (assets, publicPaths) => {
 
         case 'production':
             return publicPaths.PRODUCTION;
+			
+		case 'end2end':
+			return publicPaths.END2END;
 
         default:
             return publicPaths.PRODUCTION;
