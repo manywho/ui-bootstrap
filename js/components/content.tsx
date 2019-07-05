@@ -49,49 +49,35 @@ class Content extends React.Component<IComponentProps, IContentState> {
     initializeEditor = () => {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
-        const customPlugins = 
+        const customPlugins =
             manywho.settings.global('richtext.custom_plugins', this.props.flowKey, null);
 
-        if (customPlugins)
-            Object.keys(customPlugins).forEach(name => 
+        if (customPlugins) {
+            Object.keys(customPlugins).forEach(name =>
                 tinymce.PluginManager.add(name, customPlugins[name]),
             );
+        }
 
         tinymce.init({
             selector: `textarea#${this.id}`,
             plugins: manywho.settings.global('richtext.plugins', this.props.flowKey, []),
             external_plugins: manywho.settings.global(
-                'richtext.external_plugins', 
-                this.props.flowKey, 
+                'richtext.external_plugins',
+                this.props.flowKey,
                 [],
             ),
-            // Multiply the width by a "best guess" font-size as the manywho width is columns 
+            // Multiply the width by a "best guess" font-size as the manywho width is columns
             // and tinymce width is pixels
-            width: model.width * 19, 
+            width: model.width * 19,
             // Do the same for the height
-            height: model.height * 16, 
+            height: model.height * 16,
             readonly: !model.isEditable,
             menubar: 'edit insert view format table',
             browser_spellcheck: true,
             toolbar: manywho.settings.global(
-                'richtext.toolbar', 
-                this.props.flowKey, 
+                'richtext.toolbar',
+                this.props.flowKey,
                 [],
-            ),
-            content_css: manywho.settings.global(
-                'richtext.content_css', 
-                this.props.flowKey, 
-                [],
-            ),
-            importcss_append: manywho.settings.global(
-                'richtext.importcss_append', 
-                this.props.flowKey, 
-                false,
-            ),
-            importcss_file_filter: manywho.settings.global(
-                'richtext.importcss_file_filter',
-                this.props.flowKey, 
-                null,
             ),
             file_picker_callback: null,
             convert_urls: false,
@@ -100,7 +86,6 @@ class Content extends React.Component<IComponentProps, IContentState> {
 
             setup: (editor) => {
                 this.editor = editor;
-                const props = this.props;
 
                 if (!this.props.isDesignTime) {
 
@@ -121,15 +106,12 @@ class Content extends React.Component<IComponentProps, IContentState> {
 
                     editor.on('change', this.onChange);
 
-                    if (model.hasEvents)
+                    if (model.hasEvents) {
                         editor.on('blur', this.onEvent);
+                    }
                 }
 
-                editor.on('init', function () {
-                    this.getDoc().body.style.fontSize = manywho.settings.global(
-                        'richtext.fontsize', props.flowKey, '13px',
-                    );
-                });
+                editor.on('init', this.onInit);
             },
         });
     }
@@ -145,7 +127,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
                             this.initializeEditor();
                             clearInterval(loaderInterval);
                         }
-                    }, 
+                    },
                     50,
                 );
             }
@@ -164,6 +146,38 @@ class Content extends React.Component<IComponentProps, IContentState> {
         }
     }
 
+    /**
+     * tinyMCE init
+     *
+     * Previously we used the importcss plugin to load custom CSS. However with a slow connection
+     * the CSS assets took a long time to load delaying this init event, consequently leaving a
+     * large timing window for a user to enter text and click save without the state being updated.
+     * This meant data loss or erroneous 'This field is required' messages.
+     *
+     * As a workaround we inject the custom CSS after the editor has initialized.
+     *
+     * Note - we are currently ignoring the settings richtext.importcss_append and richtext.importcss_file_filter
+     * options for the importcss plugin as they are not used and, by default, richtext.importcss_file_filter has the
+     * same URI as richtext.content_css
+     */
+    onInit = (e) => {
+        const iframe = this.editor.getDoc();
+        iframe.body.style.fontSize = manywho.settings.global('richtext.fontsize', this.props.flowKey, '13px');
+
+        const content_css = manywho.settings.global('richtext.content_css', this.props.flowKey, []);
+        for (const uri of content_css) {
+            const css = document.createElement("link");
+            css.href = uri;
+            css.rel = "stylesheet";
+            css.type = "text/css";
+            css.crossOrigin = "anonymous";
+            iframe.head.appendChild(css);
+        }
+        // Ensure the new styles are applied and we update state for any text modifications made by the user
+        // between presenting the <textarea> UI and initializing tinyMCE
+        this.editor.fire('change');
+    }
+
     onChange = (e) => {
         const contentValue = this.editor.getContent();
         manywho.state.setComponent(this.props.id, { contentValue }, this.props.flowKey, true);
@@ -172,16 +186,16 @@ class Content extends React.Component<IComponentProps, IContentState> {
 
     onEvent = (e) => {
         manywho.component.handleEvent(
-            this, 
-            manywho.model.getComponent(this.props.id, this.props.flowKey), 
+            this,
+            manywho.model.getComponent(this.props.id, this.props.flowKey),
             this.props.flowKey,
         );
     }
 
     renderFileDialog = () => {
 
-        const TableContainer : typeof tableContainer = manywho.component.getByName(registeredComponents.TABLE_CONTAINER); 
-        const FileUpload : typeof fileUpload = manywho.component.getByName(registeredComponents.FILE_UPLOAD); 
+        const TableContainer : typeof tableContainer = manywho.component.getByName(registeredComponents.TABLE_CONTAINER);
+        const FileUpload : typeof fileUpload = manywho.component.getByName(registeredComponents.FILE_UPLOAD);
 
         const tableProps: any = {
             flowKey: this.props.flowKey,
@@ -209,7 +223,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
                                 <a href="#files" data-toggle="tab">File List</a>
                             </li>
                             <li>
-                                <a href="#files" data-toggle="tab">Direct Upload</a>   
+                                <a href="#files" data-toggle="tab">Direct Upload</a>
                             </li>
                         </ul>
                         <div className="tab-content">
@@ -241,9 +255,9 @@ class Content extends React.Component<IComponentProps, IContentState> {
 
         if (imageUri) {
             tinymce.activeEditor.execCommand(
-                'mceInsertContent', 
-                false, 
-                '<img src="' + imageUri.contentValue + '" alt="' + 
+                'mceInsertContent',
+                false,
+                '<img src="' + imageUri.contentValue + '" alt="' +
                     imageName.contentValue + '"/>',
             );
 
@@ -265,8 +279,8 @@ class Content extends React.Component<IComponentProps, IContentState> {
 
         if (imageUri != null && imageUri.length > 0) {
             tinymce.activeEditor.execCommand(
-                'mceInsertContent', 
-                false, 
+                'mceInsertContent',
+                false,
                 '<img src="' + imageUri + '" alt="' + imageName + '"/>',
             );
 
@@ -284,13 +298,13 @@ class Content extends React.Component<IComponentProps, IContentState> {
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
-        const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME); 
+        const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME);
 
-        const contentValue = 
+        const contentValue =
             state.contentValue
-            ? state.contentValue 
+            ? state.contentValue
             : model.contentValue || '';
-        
+
         const openBracket = '{![';
         const closedBracket = ']}';
 
@@ -308,7 +322,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
             splitByEndString[0] = splitByEndString[0].replace(/ /g, '&nbsp;');
             return splitByEndString.join(closedBracket);
         }).join(openBracket);
-        
+
         const props: any = {
             id: this.id,
             placeholder: model.hintValue,
@@ -327,11 +341,13 @@ class Content extends React.Component<IComponentProps, IContentState> {
             this.props.parentId, this.props.id, 'input', this.props.flowKey,
         ).join(' ');
 
-        if (model.isValid === false || state.isValid === false)
+        if (model.isValid === false || state.isValid === false) {
             className += ' has-error';
+        }
 
-        if (model.isVisible === false)
+        if (model.isVisible === false) {
             className += ' hidden';
+        }
 
         className += ' form-group';
 
@@ -345,8 +361,8 @@ class Content extends React.Component<IComponentProps, IContentState> {
             <label>
                 {model.label}
                 {
-                    model.isRequired ? 
-                        <span className="input-required"> *</span> : 
+                    model.isRequired ?
+                        <span className="input-required"> *</span> :
                         null
                 }
             </label>
