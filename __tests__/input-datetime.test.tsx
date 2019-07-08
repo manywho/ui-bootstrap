@@ -13,14 +13,29 @@ const mockDatetimepicker = jest.fn((options) => {
 
 globalAny['datetimepickerMock'] = mockDatetimepicker;
 
+const fakeDateObject = {
+    utc() {
+        return fakeDateObject;
+    },
+    local() {
+        return true;
+    },
+    format() { 
+        return str();
+    },
+    year() {
+        return 'xxx';
+    },
+    month() {
+        return 'xxx';
+    },
+    date() {
+        return 'xxx';
+    }
+}
+
 jest.mock('moment', () => {
-    return jest.fn(() => {
-        return {
-            year: () => 'xxx',
-            month: () => 'xxx',
-            date: () => 'xxx',
-        };
-    });
+    return jest.fn(() => fakeDateObject);
 });
 
 jest.mock('jquery', () => {
@@ -56,19 +71,6 @@ describe('InputDateTime component behaviour', () => {
         globalAny.window.manywho['utils'] = {
             isEqual: jest.fn(),
         };
-
-        globalAny.window.moment = () => ({
-            utc() {
-                return {
-                    format() { 
-                        return str();
-                    },
-                };
-            },
-            local() {
-                return true;
-            },
-        });
 
         const props = {
             value,
