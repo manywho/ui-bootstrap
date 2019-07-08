@@ -105,10 +105,12 @@ class InputDateTime extends React.Component<IInputProps, null> {
         } else if (this.isDateOnly) {
             // Create a new date with no time information
 
+            // With a Date only input box, we do not show time,
+            // so we do not want timezones and so use utc
             date = moment({
-                year: date.year(),
-                month: date.month(),
-                day: date.date(),
+                year: date.utc().year(),
+                month: date.utc().month(),
+                day: date.utc().date(),
             });
             
             datepickerInstance.date(date);
