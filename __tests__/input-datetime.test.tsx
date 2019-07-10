@@ -13,9 +13,9 @@ const mockDatetimepicker = jest.fn((options) => {
 
 globalAny['datetimepickerMock'] = mockDatetimepicker;
 
-const fakeDateObject = {
+const mockDateObject = {
     utc() {
-        return fakeDateObject;
+        return mockDateObject;
     },
     local() {
         return true;
@@ -34,9 +34,7 @@ const fakeDateObject = {
     }
 }
 
-jest.mock('moment', () => {
-    return jest.fn(() => fakeDateObject);
-});
+jest.mock('moment', mockDateObject);
 
 jest.mock('jquery', () => {
     return jest.fn(() => {
