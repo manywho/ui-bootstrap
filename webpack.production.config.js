@@ -6,8 +6,14 @@ const common = require('./webpack.common.js');
 const WriteBundleFilePlugin = require('./WriteBundleFilePlugin');
 const Compression = require('compression-webpack-plugin');
 
-const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap-[hash].css');
-const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap-[hash].css');
+const { PACKAGE_VERSION } = process.env;
+
+if (!PACKAGE_VERSION) {
+    throw new Error('A version number must be supplied for a production build. eg. 1.0.0');
+}
+
+const extractBootstrap = new ExtractTextPlugin(`css/flow-ui-bootstrap-${PACKAGE_VERSION}.css`);
+const extractComponentsLess = new ExtractTextPlugin(`css/flow-ui-bootstrap-components-${PACKAGE_VERSION}.css`);
 
 const commonConfig = common.config;
 const commonRules = common.rules;
@@ -83,6 +89,6 @@ const config = Object.assign({}, commonConfig, {
     plugins
 });
 
-config.output.filename = '[name]-[chunkhash].js';
+config.output.filename = `[name]-${PACKAGE_VERSION}.js`;
 
 module.exports = common.run(config, defaultDirectory);

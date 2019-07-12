@@ -9,8 +9,8 @@ WriteBundleFile.prototype.apply = function (compiler) {
     // eslint-disable-next-line prefer-arrow-callback
     compiler.plugin('emit', function (compilation, callback) {
 
-        // We're only interested in the 'js/ui-bootstrap' chunk
-        const chunk = compilation.chunks.find(chunk => chunk.name === 'js/ui-bootstrap');
+        // We're only interested in the 'js/flow-ui-bootstrap' chunk
+        const chunk = compilation.chunks.find(chunk => chunk.name === 'js/flow-ui-bootstrap');
 
         const filteredFiles = chunk.files.filter(options.filenameFilter);
 

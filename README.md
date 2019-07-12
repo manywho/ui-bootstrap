@@ -33,7 +33,7 @@ npm run dev -- --env.build="custom-folder" --env.assets=local --env.watch --env.
 Or dist build:
 
 ```
-npm run dist
+PACKAGE_VERSION=<version_number> npm run dist
 ```
 
 The compiled assets will be output to the 'dist' folder and the assets will be set to `production`.
