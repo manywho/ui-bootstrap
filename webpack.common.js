@@ -48,7 +48,7 @@ const mapPublicPath = (assets, publicPaths) => {
 
 module.exports.config = {
     entry: {
-        'js/ui-bootstrap': './js/index.js',        
+        'js/flow-ui-bootstrap': './js/index.js',        
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
