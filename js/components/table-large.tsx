@@ -11,33 +11,52 @@ import Dynamic from './dynamic';
 
 import '../../css/table.less';
 
-declare var manywho: any;
-        
+declare const manywho: any;
+
+/* eslint-disable import/prefer-default-export */
 class TableLarge extends React.Component<ITableLargeProps, null> {
 
-    constructor(props) {
-        super(props);
+    componentDidUpdate() {
+        const selectAll: HTMLInputElement = 
+            findDOMNode(this.refs.selectAll) as HTMLInputElement;
+
+        if (selectAll) {
+            selectAll.indeterminate = 
+                (this.props.selectedRows.length > 0 && 
+                    this.props.selectedRows.length !== this.props.totalObjectData);
+        }
     }
 
     setPropertyValue(objectData, id, propertyId, value) {
-
         return objectData.map((item) => {
-
             item.properties = item.properties.map((prop) => {
-
                 if (manywho.utils.isEqual(prop.typeElementPropertyId, propertyId, true)
                     && manywho.utils.isEqual(item.internalId, id, true)) {
-
-                    Array.isArray(value) ? 
-                    prop.objectData = value : 
-                    prop.contentValue = value;
+                    if (Array.isArray(value)) {
+                        prop.objectData = value;
+                    } else {
+                        prop.contentValue = value;
+                    }
                 }
-
                 return prop;
             });
-
             return item;
         });
+    }
+
+    onOutcomeClick = (e, outcome) => {
+        const objectDataId = e.currentTarget.parentElement.getAttribute('data-item');
+        this.props.onOutcome(objectDataId, outcome.id);
+    }
+
+    onCellEditCommitted = (id, propertyId, value) => {
+        const objectData = this.setPropertyValue(this.props.objectData, id, propertyId, value);
+        manywho.state.setComponent(
+            this.props.id, 
+            { objectData }, 
+            this.props.flowKey, 
+            false,
+        );
     }
 
     isTableEditable(columns) {
@@ -59,20 +78,20 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
             columns.push(<th className="checkbox-cell" key="checkbox"><input {...checkboxProps} /></th>);
 
-        } else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true))
-            columns.push(<th key="radio"></th>);
+        } else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true)) {
+            columns.push(<th key="radio" />);
+        }
 
         columns = columns.concat(displayColumns.map((column) => {
 
             if (column === 'mw-outcomes') {
                 return <th className="table-outcome-column" key="actions">Actions</th>;
-
             }
 
             const headerProps = {
                 id: column.typeElementPropertyId,
                 'data-sort-property': column.developerName,
-                key: 'header-' + column.typeElementPropertyId,
+                key: `header-${column.typeElementPropertyId}`,
                 onClick: (this.props.onHeaderClick) ? this.props.onHeaderClick : null,
             };
 
@@ -87,32 +106,17 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                 let iconClassName = 'table-header-icon glyphicon ';
                 iconClassName += 
                     this.props.sortedIsAscending ? 
-                    'glyphicon-menu-down' : 
-                    'glyphicon-menu-up';
+                        'glyphicon-menu-down' : 
+                        'glyphicon-menu-up';
 
-                headerChildren.push(<span className={iconClassName}></span>);
+                headerChildren.push(<span className={iconClassName} />);
             }
 
-            return <th {...headerProps}>{headerChildren}</th>;
+            return <th key={column.typeElementPropertyId} {...headerProps}>{headerChildren}</th>;
             
         }));
 
         return <tr key="header-row">{columns}</tr>;
-    }
-
-    onOutcomeClick = (e, outcome) => {
-        const objectDataId = e.currentTarget.parentElement.getAttribute('data-item');
-        this.props.onOutcome(objectDataId, outcome.id);
-    }
-
-    onCellEditCommitted = (id, propertyId, value) => {
-        const objectData = this.setPropertyValue(this.props.objectData, id, propertyId, value);
-        manywho.state.setComponent(
-            this.props.id, 
-            { objectData }, 
-            this.props.flowKey, 
-            false,
-        );
     }
 
     renderRows(
@@ -130,48 +134,56 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
             let columns = [];
 
             if (this.props.model.isMultiSelect) {
-
-                columns.push(<td className="checkbox-cell" key={'checkbox-cell'}>
-                    <input id={item.internalId} 
-                        type="checkbox" 
-                        checked={isSelected} 
-                        onClick={onSelect}>
-                    </input>
-                </td>);
+                columns.push(
+                    <td className="checkbox-cell" key="checkbox-cell">
+                        <input 
+                            id={item.internalId} 
+                            type="checkbox" 
+                            checked={isSelected} 
+                            onClick={onSelect}
+                        />
+                    </td>,
+                );
 
             } else if (manywho.utils.isEqual(this.props.model.attributes.radio, 'true', true)) {
-
-                columns.push(<td className="checkbox-cell" key={'checkbox-cell'}>
-                    <input id={item.internalId} 
-                        type="radio" 
-                        checked={isSelected} 
-                        onClick={onSelect}>
-                    </input>
-                </td>);
+                columns.push(
+                    <td className="checkbox-cell" key="checkbox-cell">
+                        <input
+                            id={item.internalId} 
+                            type="radio" 
+                            checked={isSelected} 
+                            onClick={onSelect}
+                        />
+                    </td>,
+                );
             }
 
             columns = columns.concat(displayColumns.map((column) => {
-
                 if (column === 'mw-outcomes') {
-
                     return (
-                        <td className="table-outcome-column" 
+                        <td 
+                            className="table-outcome-column" 
                             key={item.internalId + column} 
-                            data-item={item.internalId}>
+                            data-item={item.internalId}
+                        >
                             {
                                 outcomes.map(
-                                    outcome => <Outcome flowKey={flowKey} id={outcome.id} key={outcome.id} 
-                                        onClick={this.onOutcomeClick} display={outcomeDisplay.outcomes} />,
+                                    outcome => (
+                                        <Outcome 
+                                            flowKey={flowKey}
+                                            id={outcome.id}
+                                            key={outcome.id} 
+                                            onClick={this.onOutcomeClick}
+                                            display={outcomeDisplay.outcomes}
+                                        />
+                                    ),
                                 )
                             }
                         </td>
                     );
-
                 }
                     
-                let selectedProperty = item.properties.find((property) => {
-                    return property.typeElementPropertyId === column.typeElementPropertyId;
-                });
+                let selectedProperty = item.properties.find(property => property.typeElementPropertyId === column.typeElementPropertyId);
 
                 if (
                     !manywho.utils.isNullOrWhitespace(column.typeElementPropertyToDisplayId)
@@ -184,10 +196,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                     ) {
                         selectedProperty = 
                             selectedProperty.objectData[0].properties
-                            .find((childProperty) => {
-                                return childProperty.typeElementPropertyId === 
-                                    column.typeElementPropertyToDisplayId;
-                            });
+                                .find(childProperty => childProperty.typeElementPropertyId === column.typeElementPropertyToDisplayId);
                     }
                 }
 
@@ -199,7 +208,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                             selectedProperty.typeElementPropertyId, 
                             manywho.settings.global('files.downloadUriPropertyId'), 
                             true,
-                            ) || 
+                        ) || 
                             manywho.utils.isEqual(
                                 selectedProperty.developerName, 
                                 manywho.settings.global('files.downloadUriPropertyName'), 
@@ -245,8 +254,10 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                         };
 
                         return (
-                            <td id={column.typeElementPropertyId} 
-                                key={column.typeElementPropertyId}>
+                            <td 
+                                id={column.typeElementPropertyId} 
+                                key={column.typeElementPropertyId}
+                            >
                                 <Dynamic name={column.componentType} props={columnProps} />
                             </td>
                         );
@@ -254,11 +265,12 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                     }
                     
                     if (column.isEditable) {
-
                         return (
-                            <td id={column.typeElementPropertyId} 
+                            <td 
+                                id={column.typeElementPropertyId} 
                                 key={column.typeElementPropertyId} 
-                                className="editable">
+                                className="editable"
+                            >
                                 {
                                     <TableInput
                                         id={item.internalId}
@@ -283,38 +295,31 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
                     );
 
                     return (
-                        <td id={column.typeElementPropertyId} 
-                            key={column.typeElementPropertyId}>
+                        <td 
+                            id={column.typeElementPropertyId} 
+                            key={column.typeElementPropertyId}
+                        >
                             <span>{contentValue}</span>
                         </td>
                     );                        
                 }
 
-                return <td key={column.typeElementPropertyId}></td>;                    
+                return <td key={column.typeElementPropertyId} />;                    
             }));
 
             // The row key cannot be the objects external id, as if flow is 
             // offline the external id does not necessarily exist
             return (
-                <tr className={className} 
+                <tr 
+                    className={className} 
                     id={item.internalId} 
                     key={item.internalId}
-                    onClick={onRowClicked}>
+                    onClick={onRowClicked}
+                >
                     {columns}
                 </tr>
             );
         });
-    }
-
-    componentDidUpdate() {
-        const selectAll: HTMLInputElement = 
-            findDOMNode(this.refs.selectAll) as HTMLInputElement;
-
-        if (selectAll) {
-            selectAll.indeterminate = 
-                (this.props.selectedRows.length > 0 && 
-                    this.props.selectedRows.length !== this.props.totalObjectData);
-        }
     }
 
     render() {
@@ -322,8 +327,8 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
         const isValid = 
             (this.props.model.isValid !== undefined) ? 
-            this.props.model.isValid : 
-            this.props.isDesignTime && true;
+                this.props.model.isValid : 
+                this.props.isDesignTime && true;
 
         const tableClassName = [
             'table',
@@ -353,13 +358,15 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
             ),
         );
 
-        return <div className="table-responsive">
-            <table className={tableClassName}>
-                <tbody>
-                    {rows}
-                </tbody>
-            </table>
-        </div>;
+        return (
+            <div className="table-responsive">
+                <table className={tableClassName}>
+                    <tbody>
+                        {rows}
+                    </tbody>
+                </table>
+            </div>
+        );
     }
 
 }
