@@ -4,6 +4,8 @@ import registeredComponents from '../constants/registeredComponents';
 import ITableLargeProps from '../interfaces/ITableLargeProps';
 import { getTableInput } from './table-input';
 import { getOutcome } from './outcome';
+import { checkRowIsSelected } from './utils/TableUtils';
+
 // tslint:disable-next-line
 import Dynamic from './dynamic';
 
@@ -121,11 +123,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
         const TableInput = getTableInput();
 
         return objectData.map((item) => {
-            const isSelected = selectedRows.filter((row) => { 
-                const rowSelectedOnClientSide = row.externalId || row.internalId;
-                const rowSelectedOnServerSide = item.externalId || item.internaId;
-                return manywho.utils.isEqual(rowSelectedOnServerSide, rowSelectedOnClientSide, true);
-            }).length > 0;
+            const isSelected = selectedRows.filter(row => checkRowIsSelected(row, item)).length > 0;
 
             const className = (isSelected) ? 'info' : null;
 

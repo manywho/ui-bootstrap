@@ -3,6 +3,7 @@ import * as $ from 'jquery';
 import registeredComponents from '../constants/registeredComponents';
 import ITableSmallProps from '../interfaces/ITableSmallProps';
 import { getOutcome } from './outcome';
+import { checkRowIsSelected } from './utils/TableUtils';
 
 import '../../css/table.less';
 
@@ -80,13 +81,7 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
         return objectData.map((item) => {
 
             const classNames = ['list-group-item', 'clearfix'];
-            const isSelected = this.props.selectedRows.filter((row) => {
-                    return manywho.utils.isEqual(
-                        item.internalId,
-                        row.internalId,
-                        true,
-                );
-            }).length > 0;
+            const isSelected = this.props.selectedRows.filter(row => checkRowIsSelected(row, item)).length > 0;
 
             if (isSelected) {
                 classNames.push('active');
