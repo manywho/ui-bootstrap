@@ -7,12 +7,9 @@ import { checkRowIsSelected } from './utils/TableUtils';
 
 import '../../css/table.less';
 
-declare var manywho: any;
+declare const manywho: any;
 
 class TableSmall extends React.Component<ITableSmallProps, null> {
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.centerChevrons();
@@ -21,58 +18,56 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
     componentDidUpdate() {
         this.centerChevrons();
     }
-    
-    centerChevrons() {
-        
-        const chevrons = document.querySelectorAll('.table-small-chevron');
-
-        for (let i = 0; i < chevrons.length; i += 1) {
-
-            const $chevron = $(chevrons[i]);
-            const parentHeight = $chevron.parent().height();
-
-            $chevron.css('margin-top', ((parentHeight / 2) - ($chevron.height() / 2)) + 'px');
-
-        }
-
-    }
 
     onOutcomeClick = (e, outcome) => {
         const objectDataId = $(e.target).closest('[data-item]').attr('data-item');
-
         this.props.onOutcome(objectDataId, outcome.id);
     }
 
     onItemClick = (e) => {  
-        if (this.props.isDesignTime)
+        if (this.props.isDesignTime) {
             return;
+        }
 
         e.preventDefault();
 
         const objectDataId = e.currentTarget.getAttribute('data-item');
         const outcomeId = e.currentTarget.getAttribute('data-outcome');
-
         this.props.onOutcome(objectDataId, outcomeId);
+    }
 
+    centerChevrons() {
+        
+        const chevrons = document.querySelectorAll('.table-small-chevron');
+
+        for (let i = 0; i < chevrons.length; i += 1) {
+            const $chevron = $(chevrons[i]);
+            const parentHeight = $chevron.parent().height();
+            $chevron.css('margin-top', `${((parentHeight / 2) - ($chevron.height() / 2))}px`);
+        }
     }
 
     renderOutcomeColumn = (item, model, outcomes) => {
         const Outcome = getOutcome();
 
-        return(<tr key={item.internalId}>
-            <th className="table-small-column table-small-label">
-                Actions
-            </th>
-            <td className="table-small-column"
-                data-item={item.internalId}
-                data-model={model.id}>
+        return (
+            <tr key={item.internalId}>
+                <th className="table-small-column table-small-label">
+                    Actions
+                </th>
+                <td 
+                    className="table-small-column"
+                    data-item={item.internalId}
+                    data-model={model.id}
+                >
                     {
                         outcomes.map(
                             outcome => <Outcome key={outcome.id} id={outcome.id} onClick={this.onOutcomeClick} flowKey={this.props.flowKey} />,
                         )
                     }
-            </td>
-        </tr>);
+                </td>
+            </tr>
+        );
     }
 
     renderRows = (objectData, outcomes, displayColumns) => {
@@ -94,10 +89,10 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
                 onClick: null,
             };
 
-            const isOutcomeDestructive = outcomes.filter((outcome) => {
-                return manywho.utils.isEqual(outcome.pageActionBindingType, 'remove', true)
-                    || manywho.utils.isEqual(outcome.pageActionBindingType, 'delete', true);
-            }).length > 0;
+            const isOutcomeDestructive = outcomes.filter(
+                outcome => manywho.utils.isEqual(outcome.pageActionBindingType, 'remove', true) ||
+                    manywho.utils.isEqual(outcome.pageActionBindingType, 'delete', true),
+            ).length > 0;
 
             let chevron = null;
 
@@ -105,19 +100,16 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
 
                 attributes['data-outcome'] = outcomes[0].id;
                 attributes.onClick = this.onItemClick;
-                chevron = <span
-                    className = "glyphicon glyphicon-chevron-right table-small-chevron">
-                </span>;
-
+                chevron = <span className="glyphicon glyphicon-chevron-right table-small-chevron" />;
             }
 
             if (outcomes.length !== 1) {
                 attributes.onClick = this.props.onRowClicked;
             }
 
-            return(
+            return (
                 <li {...attributes} key={item.internalId}>
-                    <table className = "table table-small-item">
+                    <table className="table table-small-item">
                         <tbody>
                             {displayColumns.map((column) => {
                                 if (column === 'mw-outcomes') {
@@ -126,14 +118,10 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
                                     }
                                 } else {
                                     let selectedProperty = item.properties.filter(
-                                        (property) => {
-                                            return property.typeElementPropertyId ===
-                                            column.typeElementPropertyId;
-                                        })[0];
+                                        property => property.typeElementPropertyId === column.typeElementPropertyId,
+                                    )[0];
 
-                                    
-                                    if (!manywho.utils.isNullOrWhitespace(
-                                        column.typeElementPropertyToDisplayId)) {
+                                    if (!manywho.utils.isNullOrWhitespace(column.typeElementPropertyToDisplayId)) {
                                         if (selectedProperty != null &&
                                             selectedProperty.objectData != null) {
                                             selectedProperty = selectedProperty.objectData[0].properties.filter(
@@ -145,14 +133,16 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
 
                                     if (selectedProperty) {
                                         
-                                        let element = <span>
-                                            {manywho.formatting.format(
-                                                selectedProperty.contentValue,
-                                                selectedProperty.contentFormat,
-                                                selectedProperty.contentType,
-                                                this.props.flowKey,
-                                            )}
-                                        </span>;
+                                        let element = (
+                                            <span>
+                                                {manywho.formatting.format(
+                                                    selectedProperty.contentValue,
+                                                    selectedProperty.contentFormat,
+                                                    selectedProperty.contentType,
+                                                    this.props.flowKey,
+                                                )}
+                                            </span>
+                                        );
     
                                         if (this.props.isFiles &&
                                             (manywho.utils.isEqual(
@@ -170,21 +160,27 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
                                                 true,
                                             ))
                                         ) {
-                                            element = <a href={selectedProperty.contentValue}
-                                                className="btn btn-info"
-                                                target="_blank">Download</a>;        
+                                            element = (
+                                                <a 
+                                                    href={selectedProperty.contentValue}
+                                                    className="btn btn-info"
+                                                    rel="noopener noreferrer"
+                                                    target="_blank"
+                                                >
+                                                    Download
+                                                </a>
+                                            );        
                                         }
 
-                                        return(
+                                        return (
                                             <tr key={selectedProperty.developerName}>
-                                                <th 
-                                                className="table-small-column table-small-label">{column.label}</th>
+                                                <th className="table-small-column table-small-label">
+                                                    {column.label}
+                                                </th>
                                                 <td className="table-small-column">{element}</td>
                                             </tr>
                                         );
-    
                                     }
-
                                 }
                             })}
                         </tbody>
@@ -192,7 +188,6 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
                     {chevron}
                 </li>
             );
-
         });
     }
 
@@ -210,9 +205,11 @@ class TableSmall extends React.Component<ITableSmallProps, null> {
             this.props.displayColumns,
         );
 
-        return <ul className={classNames}>
-            {items}
-        </ul>;
+        return (
+            <ul className={classNames}>
+                {items}
+            </ul>
+        );
     }
 }
 
