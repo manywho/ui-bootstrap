@@ -122,7 +122,9 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
 
         return objectData.map((item) => {
             const isSelected = selectedRows.filter((row) => { 
-                return manywho.utils.isEqual(item.internalId, row.internalId, true); 
+                const rowSelectedOnClientSide = row.externalId || row.internalId;
+                const rowSelectedOnServerSide = item.externalId || item.internaId;
+                return manywho.utils.isEqual(rowSelectedOnServerSide, rowSelectedOnClientSide, true);
             }).length > 0;
 
             const className = (isSelected) ? 'info' : null;
