@@ -1,5 +1,4 @@
 ﻿import * as React from 'react';
-import { findDOMNode } from 'react-dom';
 import registeredComponents from '../constants/registeredComponents';
 import ITableLargeProps from '../interfaces/ITableLargeProps';
 import { getTableInput } from './table-input';
@@ -13,12 +12,14 @@ import '../../css/table.less';
 
 declare const manywho: any;
 
+const selectAllRef = React.createRef();
+
 /* eslint-disable import/prefer-default-export */
 class TableLarge extends React.Component<ITableLargeProps, null> {
 
     componentDidUpdate() {
         const selectAll: HTMLInputElement = 
-            findDOMNode(this.refs.selectAll) as HTMLInputElement;
+            selectAllRef.current as HTMLInputElement;
 
         if (selectAll) {
             selectAll.indeterminate = 
@@ -72,7 +73,7 @@ class TableLarge extends React.Component<ITableLargeProps, null> {
             const checkboxProps = {
                 type: 'checkbox',
                 onChange: this.props.selectAll,
-                ref: 'selectAll',
+                ref: selectAllRef,
                 checked: this.props.selectedRows.length === this.props.totalObjectData,
             };
 
