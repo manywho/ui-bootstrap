@@ -72,13 +72,13 @@ const plugins = commonPlugins.concat([
         algorithm: 'gzip',
         minRatio: 0.8,
     }),
-    /*new WriteBundleFilePlugin({
+    new WriteBundleFilePlugin({
         filename: 'bootstrap-bundle.json',
         bundleKey: 'bootstrap3',
         pathPrefix: '/',
         // remove sourcemaps and theme css files from the bundle list
         filenameFilter: filename => !filename.endsWith('.map') && !/themes/.test(filename),
-    })*/
+    })
 ]);
 
 const config = Object.assign({}, commonConfig, {
