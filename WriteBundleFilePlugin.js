@@ -25,7 +25,7 @@ WriteBundleFile.prototype.apply = function (compiler) {
         const stringifiedFileContents = JSON.stringify(bundle, null, 4);
 
         compilation.assets[options.filename] = {
-            source: function() { return new Buffer(stringifiedFileContents); },
+            source: function() { return Buffer.from(stringifiedFileContents); },
             size: function() { return Buffer.byteLength(stringifiedFileContents); }
         };
 
