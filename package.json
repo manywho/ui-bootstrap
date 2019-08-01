@@ -66,7 +66,6 @@
         "react-dropzone": "4.2.10",
         "react-maskedinput": "4.0.1",
         "react-motion": "0.5.2",
-        "react-selectize": "3.0.1",
         "react-test-renderer": "16.8.6",
         "react-transition-group": "1.2.1",
         "script-loader": "0.7.2",
@@ -124,6 +123,7 @@
         "mini-css-extract-plugin": "0.5.0",
         "ramda": "0.25.0",
         "react": "16.8.6",
-        "react-dom": "16.8.6"
+        "react-dom": "16.8.6",
+        "react-selectize": "3.0.1"
     }
 }
