@@ -4,6 +4,7 @@ import { MultiSelect, SimpleSelect } from 'react-selectize';
 import registeredComponents from '../constants/registeredComponents';
 import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 import { getOutcome } from './outcome';
+import { unionWith, path, eqBy } from 'ramda';
 
 import '../../css/select.less';
 
@@ -75,14 +76,8 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             }
 
             if (state && state.objectData) {
-
-                const selectedOptions = state.objectData.filter(
-                    item => options.find(option => option.value.internalId === item.internalId),
-                );
-
-                if (selectedOptions.length === 0) {
-                    options = (this.getOptions(state.objectData) || []).concat(options);
-                }
+                // Replace 'selected' item in the option list. Match on `externalId` because the internalId is volatile
+                options = unionWith(eqBy(path(['value', 'externalId'])), this.getOptions(state.objectData), options);
             }
 
             this.setState({ options });
@@ -257,7 +252,6 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         const Outcome = getOutcome();
 
         manywho.log.info(`Rendering Select: ${this.props.id}, ${model.developerName}`);
-        console.log(this.props, this.state.options);
 
         const state =
             this.props.isDesignTime ?
@@ -312,7 +306,6 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                     internalIds = this.props.objectData.filter(item => item.isSelected)
                         .map(item => item.internalId);
                 }
-
                 let values = null;
 
                 if (internalIds && internalIds.length > 0) {
