@@ -3,8 +3,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const common = require('./webpack.common.js');
 
-const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap.css');
-const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap.css');
+const extractBootstrap = new ExtractTextPlugin('css/flow-ui-bootstrap.css');
+const extractComponentsLess = new ExtractTextPlugin('css/flow-ui-bootstrap-components.css');
 
 const commonConfig = common.config;
 const commonRules = common.rules;
