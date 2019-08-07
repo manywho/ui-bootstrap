@@ -4,6 +4,7 @@ import { MultiSelect, SimpleSelect } from 'react-selectize';
 import registeredComponents from '../constants/registeredComponents';
 import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 import { getOutcome } from './outcome';
+import { checkBooleanString } from './utils/DataUtils';
 
 import '../../css/select.less';
 
@@ -376,7 +377,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         return <div className={className} id={this.props.id}>
             <label>
                 {model.label}
-                {(model.isRequired) ? <span className="input-required"> * </span> : null}
+                {checkBooleanString(model.isRequired) ? <span className="input-required"> * </span> : null}
             </label>
             <div style={style} className={widthClassName}>
                 {selectElement}
