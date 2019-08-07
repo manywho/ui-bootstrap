@@ -4,7 +4,6 @@ import { MultiSelect, SimpleSelect } from 'react-selectize';
 import registeredComponents from '../constants/registeredComponents';
 import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 import { getOutcome } from './outcome';
-import { unionWith, path, eqBy } from 'ramda';
 
 import '../../css/select.less';
 
@@ -76,8 +75,12 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             }
 
             if (state && state.objectData) {
-                // Replace 'selected' item in the option list. Match on `externalId` because the internalId is volatile
-                options = unionWith(eqBy(path(['value', 'externalId'])), this.getOptions(state.objectData), options);
+                // Replace 'selected' item(s) from `this.getOptions()`, in the `options` list.
+                // Match on `externalId` or the `internalId` because when offline there is no externalId
+                options = options
+                    .map(option => this.getOptions(state.objectData)
+                        .find(selection => (selection.value.externalId && selection.value.externalId === option.value.externalId) ||
+                                            selection.value.internalId === option.value.internalId) || option);
             }
 
             this.setState({ options });
