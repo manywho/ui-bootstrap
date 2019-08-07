@@ -4,6 +4,6 @@
 
 /* eslint-disable import/prefer-default-export */
 
-export const checkBooleanString: any = (inputString) => typeof inputString === "boolean" ? inputString :
-    typeof inputString === "string" ? inputString.toLowerCase() === 'true' :
+export const checkBooleanString = (value: boolean | string): boolean => typeof value === "boolean" ? value :
+    typeof value === "string" ? value.toLowerCase() === 'true' :
     false

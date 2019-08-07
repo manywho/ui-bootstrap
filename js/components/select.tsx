@@ -374,8 +374,6 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             widthClassName = 'width-specified';
         }
 
-        const test = typeof model.isRequired;
-
         return <div className={className} id={this.props.id}>
             <label>
                 {model.label}
