@@ -4,7 +4,6 @@ import ITilesProps from '../interfaces/ITilesProps';
 import { getOutcome } from './outcome';
 import { getItemsHeader } from './items-header';
 import { getWait } from './wait';
-import { Motion, spring } from 'react-motion';
 import { getTileItem } from './tile-item';
 
 import '../../css/tiles.less';
@@ -127,50 +126,29 @@ class Tiles extends React.Component<ITilesProps, null> {
         if (this.props.contentElement)
             contentElement = this.props.contentElement;
         else
-            contentElement = (<div className="mw-tiles-items">
-                {items.map((item, index) => {
-                    const key: string = `${this.props.page.toString()}-${index}`;
+            contentElement = (
+                <div className="mw-tiles-items">
+                    {items.map((item, index) => {
+                        const key: string = `${this.props.page.toString()}-${index}`;
 
-                    return (<div className="mw-tiles-item-container" key={key} ref="items">
-                                <Motion defaultStyle={{ rotate: 0 }}
-                            style={{ rotate: spring(
-                                180,
-                                { stiffness: 65, damping: 9.5 },
-                            ) }}>
-
-                            {(interpolatingStyle) => {
-                                const frontTransform: string = `rotateY(
-                                    ${interpolatingStyle.rotate}deg
-                                )`;
-                                const backTransform: string = `rotateY(
-                                    ${180 - interpolatingStyle.rotate}deg
-                                )`;
-
-                                return (<div>
-                                    <div className="front"
-                                        style={{ transform: frontTransform }}>
-                                    </div>
-                                    <div className="back"
-                                        style={{ transform: backTransform }}>
-                                        <TileItem 
-                                            flowKey={this.props.flowKey}
-                                            item={item} 
-                                            columns={columns} 
-                                            outcomes={footerOutcomes} 
-                                            deleteOutcome={deleteOutcome}
-                                            onNext = {this.onNext}
-                                            onPrev = {this.onPrev}
-                                            onOutcome = {this.onOutcome}
-                                            onSelect = {this.onSelect}
-                                        />
-                                    </div>
-                                </div>);
-                            } }
-                        </Motion>
-                    </div>);
-                })}
-            </div>);
-
+                        return (
+                            <div className="mw-tiles-item-container" key={key} ref="items">
+                                <TileItem
+                                    flowKey={this.props.flowKey}
+                                    item={item}
+                                    columns={columns}
+                                    outcomes={footerOutcomes}
+                                    deleteOutcome={deleteOutcome}
+                                    onNext={this.onNext}
+                                    onPrev={this.onPrev}
+                                    onOutcome={this.onOutcome}
+                                    onSelect={this.onSelect}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            );
 
         return (
             <div className={className} id={this.props.id} ref="container">
