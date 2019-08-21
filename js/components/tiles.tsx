@@ -8,12 +8,13 @@ import { getTileItem } from './tile-item';
 
 import '../../css/tiles.less';
 
-declare var manywho: any;
+declare let manywho: any;
 
 class Tiles extends React.Component<ITilesProps, null> {
 
     constructor(props: ITilesProps) {
         super(props);
+        this.containerRef = React.createRef();
     }
 
     onSelect = (e) => {
@@ -26,12 +27,12 @@ class Tiles extends React.Component<ITilesProps, null> {
 
     onPrev = () => {
         this.props.onPrev();
-        setTimeout(() => (this.refs['container'] as HTMLElement).scrollIntoView(true));
+        setTimeout(() => (this.containerRef as HTMLElement).scrollIntoView(true));
     }
 
     onNext = () => {
         this.props.onNext();
-        setTimeout(() => (this.refs['container'] as HTMLElement).scrollIntoView(true));
+        setTimeout(() => (this.containerRef as HTMLElement).scrollIntoView(true));
     }
 
     onSearch = (search: string, clearSelection: boolean) => {
@@ -39,10 +40,11 @@ class Tiles extends React.Component<ITilesProps, null> {
     }
 
     render() {
-        manywho.log.info('Rendering Tiles: ' + this.props.id);
+        manywho.log.info(`Rendering Tiles: ${this.props.id}`);
 
-        if (this.props.isDesignTime)
+        if (this.props.isDesignTime) {
             return null;
+        }
 
         const Outcome = getOutcome();
         const ItemsHeader = getItemsHeader();
@@ -63,16 +65,19 @@ class Tiles extends React.Component<ITilesProps, null> {
             this.props.flowKey,
         ).join(' ');
 
-        if (model.isVisible === false)
+        if (model.isVisible === false) {
             className += ' hidden';
+        }
 
         let labelElement = null;
-        if (!manywho.utils.isNullOrWhitespace(model.label))
+        if (!manywho.utils.isNullOrWhitespace(model.label)) {
             labelElement = <label>{model.label}</label>;
+        }
 
         let isDisabled = false;
-        if (model.isEnabled === false || this.props.isLoading)
+        if (model.isEnabled === false || this.props.isLoading) {
             isDisabled = true;
+        }
 
         const headerProps = {
             isDisabled,
@@ -87,19 +92,22 @@ class Tiles extends React.Component<ITilesProps, null> {
         const headerElement = <ItemsHeader {...headerProps} />;
 
         const footerOutcomes: object[] = outcomes && outcomes
-        .filter(outcome => !manywho.utils.isEqual(
-            outcome.pageActionType,
-            'Delete', 
-            true) && !outcome.isBulkAction)
-        .map(
-            outcome => <Outcome
-                key={outcome.id}
-                id={outcome.id}
-                flowKey={this.props.flowKey}
-                onClick={this.onOutcome}
-                size={'default'}
-            />,
-        );
+            .filter(outcome => !manywho.utils.isEqual(
+                outcome.pageActionType,
+                'Delete',
+                true,
+            ) && !outcome.isBulkAction)
+            .map(
+                outcome => (
+                    <Outcome
+                        key={outcome.id}
+                        id={outcome.id}
+                        flowKey={this.props.flowKey}
+                        onClick={this.onOutcome}
+                        size="default"
+                    />
+                ),
+            );
 
         const deleteOutcome: any = outcomes && outcomes
             .filter(outcome => manywho.utils.isEqual(
@@ -116,23 +124,26 @@ class Tiles extends React.Component<ITilesProps, null> {
         )) {
             items = this.props.objectData.map(item => item);
 
-            if (this.props.page > 1)
+            if (this.props.page > 1) {
                 items.unshift({ type: 'prev' });
+            }
 
-            if (this.props.hasMoreResults === true)
+            if (this.props.hasMoreResults === true) {
                 items = items.concat([{ type: 'next' }]);
+            }
         }
 
-        if (this.props.contentElement)
-            contentElement = this.props.contentElement;
-        else
+        if (this.props.contentElement) {
+            ({ contentElement } = this.props.contentElement);
+        } else {
             contentElement = (
                 <div className="mw-tiles-items">
                     {items.map((item, index) => {
                         const key: string = `${this.props.page.toString()}-${index}`;
+                        const itemsRef = React.createRef();
 
                         return (
-                            <div className="mw-tiles-item-container" key={key} ref="items">
+                            <div className="mw-tiles-item-container" key={key} ref={itemsRef}>
                                 <TileItem
                                     flowKey={this.props.flowKey}
                                     item={item}
@@ -149,9 +160,10 @@ class Tiles extends React.Component<ITilesProps, null> {
                     })}
                 </div>
             );
+        }
 
         return (
-            <div className={className} id={this.props.id} ref="container">
+            <div className={className} id={this.props.id} ref={this.containerRef}>
                 {labelElement}
                 {headerElement}
                 {contentElement}
