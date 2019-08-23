@@ -208,4 +208,11 @@
     .react-selectize.default {
         font-family: 'Open Sans', sans-serif;
     }
+
+    // FUI-413: Override the default tile animation only for tooling.
+    .mw-tiles-item-container {
+        .back {
+            transform: none !important;
+        }
+    }
 }
