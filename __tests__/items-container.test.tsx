@@ -12,8 +12,8 @@ describe('ItemsContainer component behaviour', () => {
     const globalAny:any = global;
 
     function manyWhoMount({
-        id = str(), 
-        parentId = str(), 
+        id = str(),
+        parentId = str(),
         flowKey = str(),
         isDesignTime = false,
         objectData = [],
@@ -59,7 +59,7 @@ describe('ItemsContainer component behaviour', () => {
     test('Component gets registered', () => {
         componentWrapper = manyWhoMount();
         expect(globalAny.window.manywho.component.register)
-        .toHaveBeenCalledWith('mw-items-container', ItemsContainer); 
+        .toHaveBeenCalledWith('mw-items-container', ItemsContainer);
     });
 
     test('areBulkActionsDefined returns true when bulk actions present', () => {
@@ -93,17 +93,17 @@ describe('ItemsContainer component behaviour', () => {
             componentType,
         });
 
-        expect(globalAny.window.manywho.component.getByName).toHaveBeenCalledWith(`mw-${componentType}`); 
+        expect(globalAny.window.manywho.component.getByName).toHaveBeenCalledWith(`mw-${componentType}`);
     });
 
     test('Empty items element is rendered when objectData is empty array', () => {
-        
+
         globalAny.window.manywho.component.getDisplayColumns = () => [{}];
 
         componentWrapper = manyWhoMount({
             objectData: [],
         });
-        
+
         expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 contentElement: expect.objectContaining({
@@ -112,18 +112,18 @@ describe('ItemsContainer component behaviour', () => {
                     }),
                 }),
             }),
-        ); 
+        );
 
     });
 
     test('Error element is rendered when no display columns have been defined', () => {
-        
+
         globalAny.window.manywho.component.getDisplayColumns = () => [];
 
         componentWrapper = manyWhoMount({
             objectData: [],
         });
-        
+
         expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 contentElement: expect.objectContaining({
@@ -132,7 +132,7 @@ describe('ItemsContainer component behaviour', () => {
                     }),
                 }),
             }),
-        ); 
+        );
 
     });
 
@@ -145,7 +145,7 @@ describe('ItemsContainer component behaviour', () => {
         componentWrapper = manyWhoMount({
             objectData: [],
         });
-        
+
         expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 contentElement: expect.objectContaining({
@@ -154,7 +154,7 @@ describe('ItemsContainer component behaviour', () => {
                     }),
                 }),
             }),
-        ); 
+        );
 
     });
 
@@ -166,12 +166,12 @@ describe('ItemsContainer component behaviour', () => {
             objectData: [],
             paginationSize: 23,
         });
-        
+
         expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 limit: 23,
             }),
-        ); 
+        );
 
     });
 
@@ -183,12 +183,12 @@ describe('ItemsContainer component behaviour', () => {
         componentWrapper = manyWhoMount({
             objectData: [],
         });
-        
+
         expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 limit: 16,
             }),
-        ); 
+        );
 
     });
 
@@ -202,12 +202,12 @@ describe('ItemsContainer component behaviour', () => {
         componentWrapper = manyWhoMount({
             id, parentId, flowKey, isDesignTime,
         });
-        
+
         expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 id, parentId, flowKey, isDesignTime,
             }),
-        ); 
+        );
     });
 
     test('isLoading is correctly passed to child component', () => {
@@ -215,12 +215,12 @@ describe('ItemsContainer component behaviour', () => {
         componentWrapper = manyWhoMount({
             loading: true,
         });
-        
+
         expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 isLoading: true,
             }),
-        ); 
+        );
     });
 
     test('Page number is correctly passed to child component', () => {
@@ -228,12 +228,12 @@ describe('ItemsContainer component behaviour', () => {
         componentWrapper = manyWhoMount({
             page: 42,
         });
-        
+
         expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
             expect.objectContaining({
                 page: 42,
             }),
-        ); 
+        );
     });
 
     test('sort method updates state.sortedBy property', () => {
@@ -252,7 +252,7 @@ describe('ItemsContainer component behaviour', () => {
         componentWrapper = manyWhoMount({
             objectDataRequest: {},
         });
-        
+
         const testString = str(5);
 
         expect(componentWrapper.state().sortedIsAscending).toBe(null);
@@ -266,16 +266,20 @@ describe('ItemsContainer component behaviour', () => {
         expect(componentWrapper.state().sortedIsAscending).toBe(false);
     });
 
-    test('sort method logs an error when ObjectDataRequest is null', () => {
+    test('sort method toggles state.sortedIsAscending property when ObjectDataRequest is null', () => {
         componentWrapper = manyWhoMount({
             objectDataRequest: null,
         });
 
         const testString = str(5);
 
-        componentWrapper.instance().sort(testString);
+        expect(componentWrapper.state().sortedIsAscending).toBe(null);
 
-        expect(globalAny.window.manywho.log.error).toBeCalledWith(expect.any(String));
+        componentWrapper.instance().sort(testString);
+        expect(componentWrapper.state().sortedIsAscending).toBe(true);
+
+        componentWrapper.instance().sort(testString);
+        expect(componentWrapper.state().sortedIsAscending).toBe(false);
     });
 
     test('search method resets sorting state', () => {
@@ -323,7 +327,7 @@ describe('ItemsContainer component behaviour', () => {
             expect.anything(),
         );
     });
-    
+
     test('component.onOutcome gets called within instance onOutcome method', () => {
         componentWrapper = manyWhoMount();
 
@@ -334,24 +338,24 @@ describe('ItemsContainer component behaviour', () => {
 
         expect(globalAny.window.manywho.component.onOutcome).toBeCalled();
     });
-    
+
     test('load method calls manywho.engine.objectDataRequest if model.objectDataRequest is present', () => {
         componentWrapper = manyWhoMount({
             objectDataRequest: {},
         });
 
         componentWrapper.instance().load();
-        
+
         expect(globalAny.window.manywho.engine.objectDataRequest).toBeCalled();
     });
-    
+
     test('load method calls manywho.engine.fileDataRequest if model.fileDataRequest is present', () => {
         componentWrapper = manyWhoMount({
             fileDataRequest: {},
         });
 
         componentWrapper.instance().load();
-        
+
         expect(globalAny.window.manywho.engine.fileDataRequest).toBeCalled();
     });
 
@@ -359,7 +363,7 @@ describe('ItemsContainer component behaviour', () => {
         componentWrapper = manyWhoMount();
 
         const forceUpdateSpy = jest.spyOn(componentWrapper.instance(), 'forceUpdate');
-        
+
         componentWrapper.instance().load();
 
         expect(forceUpdateSpy).toBeCalled();
@@ -367,11 +371,11 @@ describe('ItemsContainer component behaviour', () => {
 
     test('onNext calls onPaginate with next page number', () => {
         const onPaginateSpy = jest.spyOn(ItemsContainer.prototype, 'onPaginate');
-        
+
         componentWrapper = manyWhoMount();
 
         globalAny.window.manywho.state.getComponent = () => ({ page: 3 });
-        
+
         componentWrapper.instance().onNext();
 
         expect(onPaginateSpy).toBeCalledWith(4);
@@ -379,11 +383,11 @@ describe('ItemsContainer component behaviour', () => {
 
     test('onPrev calls onPaginate with previous page number', () => {
         const onPaginateSpy = jest.spyOn(ItemsContainer.prototype, 'onPaginate');
-        
+
         componentWrapper = manyWhoMount();
 
         globalAny.window.manywho.state.getComponent = () => ({ page: 3 });
-        
+
         componentWrapper.instance().onPrev();
 
         expect(onPaginateSpy).toBeCalledWith(2);
@@ -391,11 +395,11 @@ describe('ItemsContainer component behaviour', () => {
 
     test('onFirstPage calls onPaginate with 1', () => {
         const onPaginateSpy = jest.spyOn(ItemsContainer.prototype, 'onPaginate');
-        
+
         componentWrapper = manyWhoMount();
 
         globalAny.window.manywho.state.getComponent = () => ({ page: 3 });
-        
+
         componentWrapper.instance().onFirstPage();
 
         expect(onPaginateSpy).toBeCalledWith(1);

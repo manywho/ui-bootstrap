@@ -3,6 +3,7 @@ import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 // tslint:disable-next-line
 import Dynamic from './dynamic';
+import { checkBooleanString } from './utils/DataUtils';
 
 import '../../css/items.less';
 
@@ -149,6 +150,56 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         }
     }
 
+    /**
+     * Client side sorting of objectData from a List
+     *
+     * Note, only handles scalar content types, e.g. Objects and Lists are assumed equal.
+     *
+     * @param sortedBy the key to sort by
+     * @param sortedIsAscending true for ASC, otherwise DESC
+     * @return int comparison result, -1, 0, 1, for < == or > compare
+     */
+    compare(sortedBy, sortedIsAscending) {
+
+        return function callback(a, b) {
+
+            const l = a.properties.find(item => item.developerName === sortedBy);
+            const r = b.properties.find(item => item.developerName === sortedBy);
+
+            if (!l || !r) {
+                return 0;
+            }
+
+            let result = 0;
+            switch (l.contentType.toUpperCase()) {
+            case manywho.component.contentTypes.datetime: // Fallthrough
+            case manywho.component.contentTypes.number: // Fallthrough
+            case manywho.component.contentTypes.password: // Fallthrough
+            case manywho.component.contentTypes.content: // Fallthrough
+            case manywho.component.contentTypes.string:
+                result = l.contentValue.localeCompare(r.contentValue);
+                break;
+
+            case manywho.component.contentTypes.boolean:
+                if (checkBooleanString(l.contentValue) === checkBooleanString(r.contentValue)) {
+                    result = 0;
+                } else if (checkBooleanString(l.contentValue) && !checkBooleanString(r.contentValue)) {
+                    result = 1;
+                } else {
+                    result = -1;
+                }
+                break;
+
+            default:
+                result = 0;
+                break;
+            }
+
+
+            return (sortedIsAscending ? result : (result * -1));
+        };
+    }
+
     search(search: string, clearSelection: boolean) {
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
@@ -168,27 +219,18 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
     }
 
     sort(by: string) {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+        let isAscending = true;
 
-        if (model.objectDataRequest) {
-            let isAscending = true;
-
-            if (manywho.utils.isEqual(this.state.sortedBy, by, true)) {
-                isAscending = !this.state.sortedIsAscending;
-            }
-
-            this.setState({
-                sortedIsAscending: isAscending,
-                sortedBy: by,
-            });
-
-            setTimeout(() => this.load());
-        } else {
-            manywho.log.error(
-                `Sorting is only supported with ObjectDataRequests,
-                attempting to sort component ${model.developerName}, ${this.props.id}`,
-            );
+        if (manywho.utils.isEqual(this.state.sortedBy, by, true)) {
+            isAscending = !this.state.sortedIsAscending;
         }
+
+        this.setState({
+            sortedIsAscending: isAscending,
+            sortedBy: by,
+        });
+
+        setTimeout(() => this.load());
     }
 
     refresh() {
@@ -298,7 +340,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                                 column.isDisplayValue;
                         });
 
-                        if (matchingColumns && matchingColumns.length > 0) {
+                        if (matchingColumns && matchingColumns.length > 0 && prop.contentValue) {
                             return manywho.formatting.format(
                                 prop.contentValue,
                                 prop.contentFormat,
@@ -338,6 +380,12 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                     objectData = objectData.slice(page * limit, (page * limit) + limit);
                 }
             }
+
+            // Finally sort the filtered and sliced list
+            if (this.state.sortedBy) {
+                objectData.sort(this.compare(this.state.sortedBy, this.state.sortedIsAscending));
+            }
+
         } else if (model.objectDataRequest || model.fileDataRequest) {
             objectData = model.objectData;
             limit = parseInt(
