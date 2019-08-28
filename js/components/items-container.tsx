@@ -354,6 +354,11 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                 objectData = model.objectData;
             }
 
+            // Sort the filtered list before slicing
+            if (this.state.sortedBy) {
+                objectData.sort(this.compare(this.state.sortedBy, this.state.sortedIsAscending));
+            }
+
             if (
                 model.attributes.pagination &&
                 manywho.utils.isEqual(model.attributes.pagination, 'true', true) &&
@@ -377,11 +382,6 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                     hasMoreResults = (page * limit) + limit + 1 <= objectData.length;
                     objectData = objectData.slice(page * limit, (page * limit) + limit);
                 }
-            }
-
-            // Finally sort the filtered and sliced list
-            if (this.state.sortedBy) {
-                objectData.sort(this.compare(this.state.sortedBy, this.state.sortedIsAscending));
             }
 
         } else if (model.objectDataRequest || model.fileDataRequest) {
