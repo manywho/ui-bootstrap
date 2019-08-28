@@ -161,7 +161,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
      */
     compare(sortedBy, sortedIsAscending) {
 
-        return function callback(a, b) {
+        return (a, b) => {
 
             const l = a.properties.find(item => item.developerName === sortedBy);
             const r = b.properties.find(item => item.developerName === sortedBy);
@@ -184,9 +184,9 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                 if (checkBooleanString(l.contentValue) === checkBooleanString(r.contentValue)) {
                     result = 0;
                 } else if (checkBooleanString(l.contentValue) && !checkBooleanString(r.contentValue)) {
-                    result = 1;
-                } else {
                     result = -1;
+                } else {
+                    result = 1;
                 }
                 break;
 
@@ -194,7 +194,6 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                 result = 0;
                 break;
             }
-
 
             return (sortedIsAscending ? result : (result * -1));
         };
@@ -333,12 +332,11 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         if (!model.objectDataRequest && !model.fileDataRequest) {
 
             if (!manywho.utils.isNullOrWhitespace(state.search)) {
-                objectData = model.objectData.filter((item) => {
-                    return item.properties.filter((prop) => {
-                        const matchingColumns = columns.filter((column) => {
-                            return column.typeElementPropertyId === prop.typeElementPropertyId &&
-                                column.isDisplayValue;
-                        });
+                objectData = model.objectData.filter(
+                    item => item.properties.filter((prop) => {
+                        const matchingColumns = columns.filter(
+                            column => column.typeElementPropertyId === prop.typeElementPropertyId && column.isDisplayValue,
+                        );
 
                         if (matchingColumns && matchingColumns.length > 0 && prop.contentValue) {
                             return manywho.formatting.format(
@@ -350,8 +348,8 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                         }
 
                         return false;
-                    }).length > 0;
-                });
+                    }).length > 0,
+                );
             } else {
                 objectData = model.objectData;
             }
