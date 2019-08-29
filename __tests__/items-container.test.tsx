@@ -908,14 +908,17 @@ describe('ItemsContainer component behaviour', () => {
         componentWrapper = manyWhoMount();
         const objectData = Object.assign([], sortingTestData);
 
+        // The compare() method treats 'true' as true and any other value as false, so only two unique values
+        // are sorted which means the result of sorting these three rows is non-deterministic
+        // All 'true' values should be first for an ASC sort and last for a DESC sort.
         objectData.sort(componentWrapper.instance().compare('boolean', false));
-        expect(objectData[0].properties[0].contentValue).toEqual('false');
-        expect(objectData[1].properties[0].contentValue).toEqual('');
+        expect(['false', '']).toContain(objectData[0].properties[0].contentValue);
+        expect(['false', '']).toContain(objectData[1].properties[0].contentValue);
         expect(objectData[2].properties[0].contentValue).toEqual('true');
         objectData.sort(componentWrapper.instance().compare('boolean', true));
         expect(objectData[0].properties[0].contentValue).toEqual('true');
-        expect(objectData[1].properties[0].contentValue).toEqual('false');
-        expect(objectData[2].properties[0].contentValue).toEqual('');
+        expect(['false', '']).toContain(objectData[1].properties[0].contentValue);
+        expect(['false', '']).toContain(objectData[2].properties[0].contentValue);
     });
 
     test('Verify sort method handles contentType:encrypted', () => {
