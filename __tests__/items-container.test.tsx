@@ -184,7 +184,7 @@ describe('ItemsContainer component behaviour', () => {
                 {
                     contentFormat: '',
                     contentType: 'ContentBoolean',
-                    contentValue: '',
+                    contentValue: 'false',
                     developerName: 'boolean',
                     objectData: null,
                 },
@@ -298,7 +298,7 @@ describe('ItemsContainer component behaviour', () => {
                 {
                     contentFormat: '',
                     contentType: 'ContentBoolean',
-                    contentValue: 'true',
+                    contentValue: '',
                     developerName: 'boolean',
                     objectData: null,
                 },
@@ -808,7 +808,7 @@ describe('ItemsContainer component behaviour', () => {
                 ],
             },
         ];
-        const objectData = Object.assign(single);
+        const objectData = Object.assign([], single);
 
         objectData.sort(componentWrapper.instance().compare('stuff', true));
         expect(objectData).toEqual(single);
@@ -818,7 +818,7 @@ describe('ItemsContainer component behaviour', () => {
 
     test('Sanity check for our test sorting data', () => {
         componentWrapper = manyWhoMount();
-        const objectData = Object.assign(sortingTestData);
+        const objectData = Object.assign([], sortingTestData);
 
         expect(objectData.length).toEqual(3);
         expect(objectData[0].order).toEqual(0);
@@ -828,7 +828,7 @@ describe('ItemsContainer component behaviour', () => {
 
     test('Unknown sort key leaves order intact', () => {
         componentWrapper = manyWhoMount();
-        const objectData = Object.assign(sortingTestData);
+        const objectData = Object.assign([], sortingTestData);
 
         objectData.sort(componentWrapper.instance().compare('no such key', true));
         expect(objectData[0].order).toEqual(0);
@@ -842,7 +842,7 @@ describe('ItemsContainer component behaviour', () => {
 
     test('Verify sort method handles contentType:string', () => {
         componentWrapper = manyWhoMount();
-        const objectData = Object.assign(sortingTestData);
+        const objectData = Object.assign([], sortingTestData);
 
         objectData.sort(componentWrapper.instance().compare('string', false));
         expect(objectData[0].order).toEqual(2);
@@ -858,7 +858,7 @@ describe('ItemsContainer component behaviour', () => {
 
     test('Verify sort method handles contentType:password', () => {
         componentWrapper = manyWhoMount();
-        const objectData = Object.assign(sortingTestData);
+        const objectData = Object.assign([], sortingTestData);
 
         objectData.sort(componentWrapper.instance().compare('password', false));
         expect(objectData[0].order).toEqual(2);
@@ -874,7 +874,7 @@ describe('ItemsContainer component behaviour', () => {
 
     test('Verify sort method handles contentType:datetime', () => {
         componentWrapper = manyWhoMount();
-        const objectData = Object.assign(sortingTestData);
+        const objectData = Object.assign([], sortingTestData);
 
         objectData.sort(componentWrapper.instance().compare('datetime', false));
         expect(objectData[0].order).toEqual(2);
@@ -890,7 +890,7 @@ describe('ItemsContainer component behaviour', () => {
 
     test('Verify sort method handles contentType:number', () => {
         componentWrapper = manyWhoMount();
-        const objectData = Object.assign(sortingTestData);
+        const objectData = Object.assign([], sortingTestData);
 
         objectData.sort(componentWrapper.instance().compare('number', false));
         expect(objectData[0].order).toEqual(2);
@@ -906,22 +906,21 @@ describe('ItemsContainer component behaviour', () => {
 
     test('Verify sort method handles contentType:boolean', () => {
         componentWrapper = manyWhoMount();
-        const objectData = Object.assign(sortingTestData);
+        const objectData = Object.assign([], sortingTestData);
 
         objectData.sort(componentWrapper.instance().compare('boolean', false));
-        // Only two unique values so the result of sorting three rows is non-deterministic
-        expect(objectData[0].properties[0].contentValue).toEqual('');
-        expect(objectData[1].properties[0].contentValue).toEqual('true');
+        expect(objectData[0].properties[0].contentValue).toEqual('false');
+        expect(objectData[1].properties[0].contentValue).toEqual('');
         expect(objectData[2].properties[0].contentValue).toEqual('true');
         objectData.sort(componentWrapper.instance().compare('boolean', true));
         expect(objectData[0].properties[0].contentValue).toEqual('true');
-        expect(objectData[1].properties[0].contentValue).toEqual('true');
+        expect(objectData[1].properties[0].contentValue).toEqual('false');
         expect(objectData[2].properties[0].contentValue).toEqual('');
     });
 
     test('Verify sort method handles contentType:encrypted', () => {
         componentWrapper = manyWhoMount();
-        const objectData = Object.assign(sortingTestData);
+        const objectData = Object.assign([], sortingTestData);
 
         // Nothing should happen as we can not sort this type of data
         objectData.sort(componentWrapper.instance().compare('encrypted', false));
@@ -932,7 +931,7 @@ describe('ItemsContainer component behaviour', () => {
 
     test('Verify sort method handles contentType:list', () => {
         componentWrapper = manyWhoMount();
-        const objectData = Object.assign(sortingTestData);
+        const objectData = Object.assign([], sortingTestData);
 
         // Nothing should happen as we can not compare lists
         objectData.sort(componentWrapper.instance().compare('list', false));
@@ -943,7 +942,7 @@ describe('ItemsContainer component behaviour', () => {
 
     test('Verify sort method handles contentType:object', () => {
         componentWrapper = manyWhoMount();
-        const objectData = Object.assign(sortingTestData);
+        const objectData = Object.assign([], sortingTestData);
 
         // Nothing should happen as we can not compare user defined objects
         objectData.sort(componentWrapper.instance().compare('object', false));
