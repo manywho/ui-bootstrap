@@ -55,7 +55,7 @@
         "identity-obj-proxy": "3.0.0",
         "jest": "24.8.0",
         "jest-junit-reporter": "1.1.0",
-        "jquery-textcomplete": "1.8.4",
+        "jquery-textcomplete": "1.8.5",
         "less": "3.9.0",
         "less-loader": "5.0.0",
         "license-webpack-plugin": "2.1.2",
