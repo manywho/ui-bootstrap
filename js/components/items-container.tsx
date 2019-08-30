@@ -3,10 +3,11 @@ import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 // tslint:disable-next-line
 import Dynamic from './dynamic';
+import { checkBooleanString } from './utils/DataUtils';
 
 import '../../css/items.less';
 
-declare var manywho: any;
+declare const manywho: any;
 
 interface IItemsContainerState {
     search?: null;
@@ -18,7 +19,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 
     constructor(props: IComponentProps) {
         super(props);
-        this.state = { search: null, sortedBy: null, sortedIsAscending: null };
+        this.state = { sortedBy: null, sortedIsAscending: null };
 
         this.onOutcome = this.onOutcome.bind(this);
         this.load = this.load.bind(this);
@@ -34,16 +35,10 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         this.onFirstPage = this.onFirstPage.bind(this);
     }
 
-    areBulkActionsDefined(outcomes): boolean {
-        if (outcomes)
-            return outcomes.filter(outcome => outcome.isBulkAction).length > 0;
-
-        return false;
-    }
-
     onOutcome(objectDataId: string, outcomeId: string) {
-        if (this.props.isDesignTime)
+        if (this.props.isDesignTime) {
             return;
+        }
 
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const objectData = manywho.component.getSelectedRows(model, [objectDataId]);
@@ -54,13 +49,55 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         manywho.component.onOutcome(outcome, objectData, this.props.flowKey);
     }
 
+    onPaginate(page) {
+        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+        const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
+
+        state.page = page;
+        manywho.state.setComponent(this.props.id, state, this.props.flowKey, true);
+
+        if (model.objectDataRequest || model.fileDataRequest) {
+            this.load();
+        } else if (
+            model.attributes.pagination &&
+            manywho.utils.isEqual(model.attributes.pagination, 'true', true)
+        ) {
+            this.forceUpdate();
+        }
+    }
+
+    onNext() {
+        let page = manywho.state.getComponent(this.props.id, this.props.flowKey).page || 1;
+        page += 1;
+        this.onPaginate(page);
+    }
+
+    onPrev() {
+        let page = manywho.state.getComponent(this.props.id, this.props.flowKey).page || 1;
+        page -= 1;
+        this.onPaginate(Math.max(1, page));
+    }
+
+    onFirstPage() {
+        this.onPaginate(1);
+    }
+
+    areBulkActionsDefined(outcomes): boolean {
+        if (outcomes) {
+            return outcomes.filter(outcome => outcome.isBulkAction).length > 0;
+        }
+
+        return false;
+    }
+
     updateState(objectData: any[], clearSearch: boolean) {
         const newState: any = {
             objectData,
         };
 
-        if (clearSearch)
+        if (clearSearch) {
             newState.search = null;
+        }
 
         manywho.state.setComponent(this.props.id, newState, this.props.flowKey, true);
     }
@@ -69,53 +106,105 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
-        let limit: number = manywho.settings.global('paging.' + model.componentType.toLowerCase());
+        let limit: number = manywho.settings.global(`paging.${model.componentType.toLowerCase()}`);
         const paginationSize: number = parseInt(model.attributes.paginationSize, 10);
 
-        if (!isNaN(paginationSize))
+        if (!isNaN(paginationSize)) {
             limit = paginationSize;
+        }
 
         let orderByDirection = null;
-        if (!manywho.utils.isNullOrUndefined(this.state.sortedIsAscending))
+        if (!manywho.utils.isNullOrUndefined(this.state.sortedIsAscending)) {
             orderByDirection = this.state.sortedIsAscending ? 'ASC' : 'DESC';
+        }
 
         if (model.objectDataRequest) {
             manywho.engine.objectDataRequest(
-                this.props.id, 
-                model.objectDataRequest, 
-                this.props.flowKey, 
-                limit, state.search, 
-                this.state.sortedBy, 
-                orderByDirection, 
+                this.props.id,
+                model.objectDataRequest,
+                this.props.flowKey,
+                limit, state.search,
+                this.state.sortedBy,
+                orderByDirection,
                 state.page,
             );
         } else if (model.fileDataRequest) {
             manywho.engine.fileDataRequest(
-                this.props.id, 
-                model.fileDataRequest, 
-                this.props.flowKey, 
-                limit, 
-                state.search, 
-                null, 
-                null, 
+                this.props.id,
+                model.fileDataRequest,
+                this.props.flowKey,
+                limit,
+                state.search,
+                null,
+                null,
                 state.page,
             );
         } else {
             manywho.state.setComponent(
-                this.props.id, 
-                state, 
-                this.props.flowKey, 
+                this.props.id,
+                state,
+                this.props.flowKey,
                 true,
             );
             this.forceUpdate();
         }
     }
 
+    /**
+     * Client side sorting of objectData from a List
+     *
+     * Note, only handles scalar content types, e.g. Objects and Lists are assumed equal.
+     *
+     * @param sortedBy the key to sort by
+     * @param sortedIsAscending true for ASC, otherwise DESC
+     * @return int comparison result, -1, 0, 1, for < == or > compare
+     */
+    compare(sortedBy, sortedIsAscending) {
+
+        return (a, b) => {
+
+            const l = a.properties.find(item => item.developerName === sortedBy);
+            const r = b.properties.find(item => item.developerName === sortedBy);
+
+            if (!l || !r) {
+                return 0;
+            }
+
+            let result = 0;
+            switch (l.contentType.toUpperCase()) {
+            case manywho.component.contentTypes.datetime: // Fallthrough
+            case manywho.component.contentTypes.number: // Fallthrough
+            case manywho.component.contentTypes.password: // Fallthrough
+            case manywho.component.contentTypes.content: // Fallthrough
+            case manywho.component.contentTypes.string:
+                result = l.contentValue.localeCompare(r.contentValue);
+                break;
+
+            case manywho.component.contentTypes.boolean:
+                if (checkBooleanString(l.contentValue) === checkBooleanString(r.contentValue)) {
+                    result = 0;
+                } else if (checkBooleanString(l.contentValue) && !checkBooleanString(r.contentValue)) {
+                    result = -1;
+                } else {
+                    result = 1;
+                }
+                break;
+
+            default:
+                result = 0;
+                break;
+            }
+
+            return (sortedIsAscending ? result : (result * -1));
+        };
+    }
+
     search(search: string, clearSelection: boolean) {
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
-        if (clearSelection)
+        if (clearSelection) {
             this.clearSelection(false);
+        }
 
         state.search = search;
         state.page = 1;
@@ -129,29 +218,21 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
     }
 
     sort(by: string) {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+        let isAscending = true;
 
-        if (model.objectDataRequest) {
-            let isAscending = true;
-
-            if (manywho.utils.isEqual(this.state.sortedBy, by, true))
-                isAscending = !this.state.sortedIsAscending;
-
-            this.setState({
-                sortedIsAscending: isAscending,
-                sortedBy: by,
-            });
-
-            setTimeout(() => this.load());
-        } else {
-            manywho.log.error(
-                `Sorting is only supported with ObjectDataRequests, 
-                attempting to sort component ${model.developerName}, ${this.props.id}`,
-            );
+        if (manywho.utils.isEqual(this.state.sortedBy, by, true)) {
+            isAscending = !this.state.sortedIsAscending;
         }
+
+        this.setState({
+            sortedIsAscending: isAscending,
+            sortedBy: by,
+        });
+
+        setTimeout(() => this.load());
     }
 
-    refresh(e) {
+    refresh() {
         this.search(null, true);
     }
 
@@ -160,15 +241,15 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
         let selectedItems = (state.objectData || [])
-            .filter(item => item.isSelected)
-            .map(item => item);
+            .filter(anItem => anItem.isSelected)
+            .map(anItem => anItem);
 
         let selectedItem = null;
 
         if (typeof item === 'string') {
-            selectedItem = model.objectData.filter(
+            [selectedItem] = model.objectData.filter(
                 objectData => manywho.utils.isEqual(objectData.internalId, item, true),
-            )[0];
+            );
         } else if (typeof item === 'object') {
             selectedItem = item;
         }
@@ -177,24 +258,27 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         selectedItem = JSON.parse(JSON.stringify(selectedItem));
 
         const isSelected = selectedItems.filter(
-            item => item.internalId === selectedItem.internalId,
+            anItem => anItem.internalId === selectedItem.internalId,
         ).length > 0;
 
         selectedItem.isSelected = !isSelected;
 
-        if (model.isMultiSelect)
-            selectedItem.isSelected ? 
-                selectedItems.push(selectedItem) : 
-                selectedItems = selectedItems.filter(
-                    item => !manywho.utils.isEqual(item.internalId, selectedItem.internalId, true),
-                );
-        else
-            selectedItem.isSelected ? selectedItems = [selectedItem] : selectedItems = [];
+        if (model.isMultiSelect) {
+            if (selectedItem.isSelected) {
+                selectedItems.push(selectedItem);
+            } else {
+                selectedItems = selectedItems.filter(anItem => !manywho.utils.isEqual(anItem.internalId, selectedItem.internalId, true));
+            }
+        } else if (selectedItem.isSelected) {
+            selectedItems = [selectedItem];
+        } else {
+            selectedItems = [];
+        }
 
         this.updateState(selectedItems, clearSearch);
         manywho.component.handleEvent(
-            this, 
-            manywho.model.getComponent(this.props.id, this.props.flowKey), 
+            this,
+            manywho.model.getComponent(this.props.id, this.props.flowKey),
             this.props.flowKey,
         );
     }
@@ -214,8 +298,8 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 
             this.updateState(selectedItems, clearSearch);
             manywho.component.handleEvent(
-                this, 
-                manywho.model.getComponent(this.props.id, this.props.flowKey), 
+                this,
+                manywho.model.getComponent(this.props.id, this.props.flowKey),
                 this.props.flowKey,
             );
         }
@@ -224,56 +308,23 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
     clearSelection(clearSearch: boolean) {
         this.updateState([], clearSearch);
         manywho.component.handleEvent(
-            this, 
-            manywho.model.getComponent(this.props.id, this.props.flowKey), 
+            this,
+            manywho.model.getComponent(this.props.id, this.props.flowKey),
             this.props.flowKey,
         );
     }
 
-    onPaginate(page) {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
-
-        state.page = page;
-        manywho.state.setComponent(this.props.id, state, this.props.flowKey, true);
-
-        if (model.objectDataRequest || model.fileDataRequest) {
-            this.load();
-        } else if (
-            model.attributes.pagination && 
-            manywho.utils.isEqual(model.attributes.pagination, 'true', true)
-        ) {
-            this.forceUpdate();
-        }
-    }
-
-    onNext() {
-        let page = manywho.state.getComponent(this.props.id, this.props.flowKey).page || 1;
-        page = page + 1;
-        this.onPaginate(page);
-    }
-
-    onPrev() {
-        let page = manywho.state.getComponent(this.props.id, this.props.flowKey).page || 1;
-        page = page - 1;
-        this.onPaginate(Math.max(1, page));
-    }
-
-    onFirstPage() {
-        this.onPaginate(1);
-    }
-
     render() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        const state = 
-            this.props.isDesignTime ? 
-            { error: null, loading: null } : 
-            manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
+        const state =
+            this.props.isDesignTime ?
+                { error: null, loading: null } :
+                manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
         const columns = manywho.component.getDisplayColumns(model.columns) || [];
 
-        let hasMoreResults: boolean = 
-            (model.objectDataRequest && model.objectDataRequest.hasMoreResults) || 
+        let hasMoreResults: boolean =
+            (model.objectDataRequest && model.objectDataRequest.hasMoreResults) ||
             (model.fileDataRequest && model.fileDataRequest.hasMoreResults);
         let objectData = null;
         let limit = 0;
@@ -281,32 +332,36 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         if (!model.objectDataRequest && !model.fileDataRequest) {
 
             if (!manywho.utils.isNullOrWhitespace(state.search)) {
-                objectData = model.objectData.filter((item) => {
-                    return item.properties.filter((prop) => {
-                        const matchingColumns = columns.filter((column) => {
-                            return column.typeElementPropertyId === prop.typeElementPropertyId && 
-                                column.isDisplayValue;
-                        });
+                objectData = model.objectData.filter(
+                    item => item.properties.filter((prop) => {
+                        const matchingColumns = columns.filter(
+                            column => column.typeElementPropertyId === prop.typeElementPropertyId && column.isDisplayValue,
+                        );
 
-                        if (matchingColumns && matchingColumns.length > 0) {
+                        if (matchingColumns && matchingColumns.length > 0 && prop.contentValue) {
                             return manywho.formatting.format(
-                                prop.contentValue, 
-                                prop.contentFormat, 
-                                prop.contentType, 
+                                prop.contentValue,
+                                prop.contentFormat,
+                                prop.contentType,
                                 this.props.flowKey,
                             ).toLowerCase().indexOf(state.search.toLowerCase()) !== -1;
                         }
 
                         return false;
-                    }).length > 0;
-                });
+                    }).length > 0,
+                );
             } else {
                 objectData = model.objectData;
             }
 
+            // Sort the filtered list before slicing
+            if (this.state.sortedBy) {
+                objectData.sort(this.compare(this.state.sortedBy, this.state.sortedIsAscending));
+            }
+
             if (
-                model.attributes.pagination && 
-                manywho.utils.isEqual(model.attributes.pagination, 'true', true) && 
+                model.attributes.pagination &&
+                manywho.utils.isEqual(model.attributes.pagination, 'true', true) &&
                 objectData
             ) {
                 const page = (state.page - 1) || 0;
@@ -314,24 +369,26 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 
                 limit = parseInt(
                     manywho.settings.flow(
-                        'paging.' + model.componentType.toLowerCase(), this.props.flowKey,
+                        `paging.${model.componentType.toLowerCase()}`, this.props.flowKey,
                     ) || 10,
                     10,
                 );
 
-                if (!isNaN(paginationSize))
+                if (!isNaN(paginationSize)) {
                     limit = paginationSize;
+                }
 
                 if (limit > 0) {
                     hasMoreResults = (page * limit) + limit + 1 <= objectData.length;
                     objectData = objectData.slice(page * limit, (page * limit) + limit);
                 }
             }
+
         } else if (model.objectDataRequest || model.fileDataRequest) {
             objectData = model.objectData;
             limit = parseInt(
                 manywho.settings.flow(
-                    'paging.' + model.componentType.toLowerCase(), this.props.flowKey,
+                    `paging.${model.componentType.toLowerCase()}`, this.props.flowKey,
                 ) || 10,
                 10,
             );
@@ -340,21 +397,21 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         let contentElement = null;
 
         if (
-            !state.loading && 
-            !this.props.isDesignTime && 
+            !state.loading &&
+            !this.props.isDesignTime &&
             columns.length > 0 &&
             (!objectData || objectData.length === 0)
         ) {
-            let noResultsCaption = 
+            let noResultsCaption =
                 manywho.settings.global('localization.noResults', this.props.flowKey);
 
-            if (model.attributes && !manywho.utils.isNullOrUndefined(model.attributes.noResults))
+            if (model.attributes && !manywho.utils.isNullOrUndefined(model.attributes.noResults)) {
                 noResultsCaption = model.attributes.noResults;
-
+            }
             contentElement = (
                 <div className="mw-items-empty">
                     <p className="lead">
-                    {noResultsCaption}
+                        {noResultsCaption}
                     </p>
                 </div>
             );
@@ -362,7 +419,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 
         if (
             model.attributes
-            && (manywho.utils.isEqual(model.attributes.onlyDisplaySearchResults, 'true', true) || 
+            && (manywho.utils.isEqual(model.attributes.onlyDisplaySearchResults, 'true', true) ||
                 model.attributes.onlyDisplaySearchResults === true)
             && model.isSearchable
             && manywho.utils.isNullOrWhitespace(state.search)
@@ -376,32 +433,33 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                             manywho.utils.isNullOrWhitespace(
                                 model.attributes.onDisplaySearchResultsCaption,
                             ) ?
-                            manywho.settings.global(
-                                'localization.searchFirst', this.props.flowKey,
-                            ) :
-                            model.attributes.onDisplaySearchResultsCaption
+                                manywho.settings.global(
+                                    'localization.searchFirst', this.props.flowKey,
+                                ) :
+                                model.attributes.onDisplaySearchResultsCaption
                         }
                     </p>
                 </div>
             );
         }
 
-        if (columns.length === 0)
+        if (columns.length === 0) {
             contentElement = (
                 <div className="mw-items-error">
                     <p className="lead">No display columns have been defined</p>
                 </div>
             );
+        }
 
-        if (state.error)
+        if (state.error) {
             contentElement = (
                 <div className="mw-items-error">
                     <p className="lead">{state.error.message}</p>
                     <button className="btn btn-danger" onClick={this.refresh}>Retry</button>
                 </div>
             );
-
-        // If contentElement remains null when passed into the child props 
+        }
+        // If contentElement remains null when passed into the child props
         // the child component will decide what gets rendered as the content
 
         const props = {
