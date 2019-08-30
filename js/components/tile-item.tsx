@@ -5,43 +5,48 @@ import { getOutcome } from './outcome';
 
 import '../../css/outcome.less';
 
-declare var manywho: any;
+declare const manywho: any;
 
 class TileItem extends React.PureComponent<ITileItemProps, null> {
 
     render() {
 
-        const { 
+        const {
             flowKey,
-            item, 
-            columns, 
-            outcomes, 
-            deleteOutcome, 
+            item,
+            columns,
+            outcomes,
+            deleteOutcome,
             onNext,
             onPrev,
             onOutcome,
-            onSelect, 
+            onSelect,
         } = this.props;
 
-        manywho.log.info('Rendering Tile Item: ' + item.internalId);
+        manywho.log.info(`Rendering Tile Item: ${item.internalId}`);
 
         const Outcome = getOutcome();
 
-        if (item.type === 'next')
-            return <div className="mw-tiles-next"
-                onClick={onNext}>
-                <span className="glyphicon glyphicon-arrow-right" />
-            </div>;
+        if (item.type === 'next') {
+            return (
+                <div className="mw-tiles-next" onClick={onNext}>
+                    <span className="glyphicon glyphicon-arrow-right" />
+                </div>
+            );
+        }
 
-        if (item.type === 'prev')
-            return <div className="mw-tiles-prev"
-                onClick={onPrev}>
-                <span className="glyphicon glyphicon-arrow-left" />
-            </div>;
+        if (item.type === 'prev') {
+            return (
+                <div className="mw-tiles-prev" onClick={onPrev}>
+                    <span className="glyphicon glyphicon-arrow-left" />
+                </div>
+            );
+        }
 
         let className = 'mw-tiles-item';
-        if (item.isSelected)
+        if (item.isSelected) {
             className += ' bg-info';
+        }
 
         const selectedProperty = item.properties.find(
             property => property.typeElementPropertyId === columns[0].typeElementPropertyId,
@@ -54,55 +59,58 @@ class TileItem extends React.PureComponent<ITileItemProps, null> {
         );
 
         let deleteOutcomeElement = null;
-        if (deleteOutcome)
-            deleteOutcomeElement = 
-                <Outcome 
-                    id={deleteOutcome.id}
-                    flowKey={flowKey}
-                    onClick={onOutcome}
-                    size={'sm'}
-                />;
+        if (deleteOutcome) {
+            deleteOutcomeElement = <Outcome id={deleteOutcome.id} flowKey={flowKey} onClick={onOutcome} size={'sm'} />;
+        }
 
         let content: string = null;
         if (columns.length > 1) {
-            const selectedProperty = item.properties.find(
+            const contentSelectedProperty = item.properties.find(
                 property => property.typeElementPropertyId === columns[1].typeElementPropertyId,
             );
             content = manywho.formatting.format(
-                selectedProperty.contentValue,
-                selectedProperty.contentFormat,
-                selectedProperty.contentType,
+                contentSelectedProperty.contentValue,
+                contentSelectedProperty.contentFormat,
+                contentSelectedProperty.contentType,
                 flowKey,
             );
         }
 
         let footer: (JSX.Element)[] = null;
-        if (columns.length > 2)
+        if (columns.length > 2) {
             footer = columns.map((column, index) => {
                 if (index > 1) {
-                    const selectedProperty = item.properties.find(
+                    const footerSelectedProperty = item.properties.find(
                         property => property.typeElementPropertyId === column.typeElementPropertyId,
                     );
-                    const content = manywho.formatting.format(
-                        selectedProperty.contentValue,
-                        selectedProperty.contentFormat,
-                        selectedProperty.contentType,
+                    const footerContent = manywho.formatting.format(
+                        footerSelectedProperty.contentValue,
+                        footerSelectedProperty.contentFormat,
+                        footerSelectedProperty.contentType,
                         flowKey,
                     );
-                    return <li key={selectedProperty.developerName}><strong>{selectedProperty.developerName}</strong>: {content}</li>;
+                    const label = column.label ? column.label : footerSelectedProperty.developerName;
+                    return (
+                        <li data-developer-name={footerSelectedProperty.developerName} key={footerSelectedProperty.developerName}>
+                            <strong>{label}</strong>
+                            {`: ${footerContent}`}
+                        </li>
+                    );
                 }
-            })
-            .filter(column => !!column);
+            }).filter(column => !!column);
+        }
 
-        return (<div className={className} onClick={onSelect} id={item.internalId}>
-            <div className="mw-tiles-item-header">
-                <h4 title={header}>{header}</h4>
-                {deleteOutcomeElement}
+        return (
+            <div className={className} onClick={onSelect} id={item.internalId}>
+                <div className="mw-tiles-item-header">
+                    <h4 title={header}>{header}</h4>
+                    {deleteOutcomeElement}
+                </div>
+                <div className="mw-tiles-item-content">{content}</div>
+                <ul className="mw-tiles-item-footer list-unstyled">{footer}</ul>
+                <div className="mw-tiles-item-outcomes">{outcomes}</div>
             </div>
-            <div className="mw-tiles-item-content">{content}</div>
-            <ul className="mw-tiles-item-footer list-unstyled">{footer}</ul>
-            <div className="mw-tiles-item-outcomes">{outcomes}</div>
-        </div>);
+        );
     }
 }
 
