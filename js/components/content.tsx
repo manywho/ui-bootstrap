@@ -82,7 +82,8 @@ class Content extends React.Component<IComponentProps, IContentState> {
             file_picker_callback: null,
             convert_urls: false,
             relative_urls: false,
-            remove_script_host : false,
+            remove_script_host: false,
+            importcss_append: true,
 
             setup: (editor) => {
                 this.editor = editor;
