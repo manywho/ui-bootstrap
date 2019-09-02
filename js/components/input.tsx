@@ -10,18 +10,17 @@ import { getOutcome } from './outcome';
 
 import '../../css/input.less';
 
-// react-maskedinput v4.0.1 has messed up default exports 
+// react-maskedinput v4.0.1 has messed up default exports
 // https://github.com/insin/react-maskedinput/issues/104
 let MaskedInput = require('react-maskedinput');
+
 if (MaskedInput.default) {
     MaskedInput = MaskedInput.default;
 }
 
-declare var manywho: any;
+declare const manywho: any;
 
 class Input extends React.Component<IComponentProps, null> {
-
-    validationRegex: RegExp;
 
     constructor(props) {
         super(props);
@@ -30,13 +29,20 @@ class Input extends React.Component<IComponentProps, null> {
         this.onBlur = this.onBlur.bind(this);
     }
 
+    componentWillMount() {
+        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+        if (model && model.attributes && model.attributes.validation) {
+            this.validationRegex = new RegExp(model.attributes.validation);
+        }
+    }
+
     onChange(e: any | string | boolean | number | null) {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
         if (
-            typeof e === 'string' || 
-            typeof e === 'boolean' || 
-            typeof e === 'number' || 
+            typeof e === 'string' ||
+            typeof e === 'boolean' ||
+            typeof e === 'number' ||
             e === null
         ) {
             manywho.state.setComponent(
@@ -44,23 +50,24 @@ class Input extends React.Component<IComponentProps, null> {
             );
         } else {
             manywho.state.setComponent(
-                this.props.id, 
-                { contentValue: (e.target as HTMLInputElement).value }, 
-                this.props.flowKey, 
+                this.props.id,
+                { contentValue: (e.target as HTMLInputElement).value },
+                this.props.flowKey,
                 true,
             );
         }
 
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         manywho.state.setComponent(
-            this.props.id, 
-            manywho.validation.validate(model, state, this.props.flowKey), 
-            this.props.flowKey, 
+            this.props.id,
+            manywho.validation.validate(model, state, this.props.flowKey),
+            this.props.flowKey,
             true,
         );
 
-        if (model.contentType.toUpperCase() === manywho.component.contentTypes.boolean)
+        if (model.contentType.toUpperCase() === manywho.component.contentTypes.boolean) {
             this.onBlur(e);
+        }
 
         this.forceUpdate();
     }
@@ -70,9 +77,9 @@ class Input extends React.Component<IComponentProps, null> {
         const relatedElement = e.relatedTarget;
 
         if (
-            relatedElement && 
+            relatedElement &&
             (
-                relatedElement.classList.contains('outcome') || 
+                relatedElement.classList.contains('outcome') ||
                 relatedElement.classList.contains('control-label')
             )
         ) {
@@ -80,21 +87,17 @@ class Input extends React.Component<IComponentProps, null> {
         }
 
         manywho.component.handleEvent(
-            this, 
+            this,
             manywho.model.getComponent(
-                this.props.id, 
+                this.props.id,
                 this.props.flowKey,
-            ), 
-            this.props.flowKey, 
+            ),
+            this.props.flowKey,
             callback,
         );
     }
 
-    componentWillMount() {
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        if (model && model.attributes && model.attributes.validation)
-            this.validationRegex = new RegExp(model.attributes.validation);
-    }
+    validationRegex: RegExp;
 
     render() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
@@ -111,16 +114,18 @@ class Input extends React.Component<IComponentProps, null> {
 
         const contentValue =
             !manywho.utils.isNullOrUndefined(state.contentValue)
-            ? state.contentValue
-            : model.contentValue || '';
+                ? state.contentValue
+                : model.contentValue || '';
 
         let mask = null;
-        if (model.attributes && model.attributes.mask)
+        if (model.attributes && model.attributes.mask) {
             mask = model.attributes.mask;
+        }
 
         let autocomplete = null;
-        if (model.attributes && model.attributes.autocomplete)
+        if (model.attributes && model.attributes.autocomplete) {
             autocomplete = model.attributes.autocomplete;
+        }
 
         const props: any = {
             mask,
@@ -144,36 +149,40 @@ class Input extends React.Component<IComponentProps, null> {
             props.isDesignTime = true;
         }
 
-        if (!manywho.utils.isNullOrWhitespace(model.hintValue))
+        if (!manywho.utils.isNullOrWhitespace(model.hintValue)) {
             props.placeholder = model.hintValue;
+        }
 
         let className = manywho.styling.getClasses(
             this.props.parentId, this.props.id, 'input', this.props.flowKey,
         ).join(' ');
 
-        if (model.isValid === false || state.isValid === false)
+        if (model.isValid === false || state.isValid === false) {
             className += ' has-error';
+        }
 
-        if (model.isVisible === false)
+        if (model.isVisible === false) {
             className += ' hidden';
+        }
 
-        if (outcomes)
+        if (outcomes) {
             className += ' has-outcomes';
+        }
 
         className += ' form-group';
 
         let contentType = model.contentType || 'ContentString';
         if (model.valueElementValueBindingReferenceId) {
-            
+
             if (model.valueElementValueBindingReferenceId.contentType) {
                 contentType = model.valueElementValueBindingReferenceId.contentType;
             } else if (
-                Array.isArray(model.valueElementValueBindingReferenceId) && 
-                model.valueElementValueBindingReferenceId.length > 0 && 
+                Array.isArray(model.valueElementValueBindingReferenceId) &&
+                model.valueElementValueBindingReferenceId.length > 0 &&
                 model.valueElementValueBindingReferenceId[0].properties
             ) {
                 contentType = (manywho.utils.getObjectDataProperty(
-                    model.valueElementValueBindingReferenceId[0].properties, 
+                    model.valueElementValueBindingReferenceId[0].properties,
                     'ContentType',
                 ) || {}).contentValue;
             }
@@ -184,7 +193,12 @@ class Input extends React.Component<IComponentProps, null> {
             manywho.utils.isEqual(model.isRequired, 'True', true) :
             model.isRequired;
 
-        let label = <label>{model.label}{isRequired ? <span className="input-required"> *</span> : null}</label>;
+        let label = (
+            <label>
+                {model.label}
+                {isRequired ? <span className="input-required"> *</span> : null}
+            </label>
+        );
 
         let inputElement = null;
 
@@ -211,18 +225,22 @@ class Input extends React.Component<IComponentProps, null> {
         default:
             delete props.flowKey;
             delete props.format;
-            
+
             if (manywho.utils.isNullOrEmpty(mask)) {
                 inputElement = (
-                    <input {...props} 
-                        className="form-control" 
-                        type={model.attributes.type ? model.attributes.type : 'text'} />
+                    <input
+                        {...props}
+                        className="form-control"
+                        type={model.attributes.type ? model.attributes.type : 'text'}
+                    />
                 );
             } else {
                 inputElement = (
-                    <MaskedInput {...props}
-                        className="form-control" 
-                        type={model.attributes.type ? model.attributes.type : 'text'} />
+                    <MaskedInput
+                        {...props}
+                        className="form-control"
+                        type={model.attributes.type ? model.attributes.type : 'text'}
+                    />
                 );
             }
             break;
@@ -230,13 +248,15 @@ class Input extends React.Component<IComponentProps, null> {
 
         const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey} />);
 
-        return <div className={className}>
-            {label}
-            {inputElement}
-            <span className="help-block">{model.validationMessage || state.validationMessage}</span>
-            <span className="help-block">{model.helpInfo}</span>
-            {outcomeButtons}
-        </div>;
+        return (
+            <div className={className}>
+                {label}
+                {inputElement}
+                <span className="help-block">{model.validationMessage || state.validationMessage}</span>
+                <span className="help-block">{model.helpInfo}</span>
+                {outcomeButtons}
+            </div>
+        );
     }
 }
 

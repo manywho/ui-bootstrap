@@ -9,7 +9,7 @@ import InputDateTime from '../js/components/input-datetime';
 import InputNumber from '../js/components/input-number';
 import Input from '../js/components/input';
 
-// react-maskedinput v4.0.1 has messed up default exports 
+// react-maskedinput v4.0.1 has messed up default exports
 // https://github.com/insin/react-maskedinput/issues/104
 let MaskedInput = require('react-maskedinput');
 if (MaskedInput.default) {
@@ -39,7 +39,7 @@ describe('Input component behaviour', () => {
             str(5),
             str(5),
         ];
-    
+
         model = {
             isVisible,
             label: str(5),
@@ -94,7 +94,7 @@ describe('Input component behaviour', () => {
             isEqual: jest.fn(_ => true),
         };
 
-        return shallowRender 
+        return shallowRender
             ? shallow(<Input id={propID} parentId={propparentId} flowKey={propflowKey} />)
             : mount(<Input id={propID} parentId={propparentId} flowKey={propflowKey} />);
     }
