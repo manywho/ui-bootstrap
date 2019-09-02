@@ -219,7 +219,14 @@ class Input extends React.Component<IComponentProps, null> {
         case manywho.component.contentTypes.password:
             delete props.flowKey;
             delete props.format;
-            inputElement = <input {...props} className="form-control" type="password" />;
+            if (manywho.utils.isNullOrWhitespace(props.value)) {
+                // Prevent browser from autofilling the wrong password. Chrome in particular guesses the autofill
+                // value and generally gets it wrong because there is no username field associated with this
+                // value. Also we do not store passwords in plain-text so this value should never be pre-populated.
+                props.autoComplete = 'new-password';
+            }
+            // A type of 'hidden' prevents browsers trying to autofill the previous form input as a username.
+            inputElement = <input {...props} className="form-control" type={model.isVisible ? 'password' : 'hidden'} />;
             break;
 
         default:

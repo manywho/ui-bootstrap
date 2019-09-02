@@ -28,7 +28,8 @@ describe('Input component behaviour', () => {
 
     const globalAny:any = global;
 
-    function manyWhoMount(modelcontentType = 'ContentString', mask = null, isVisible = false, isNullOrWhitespace = null, shallowRender = false) {
+    function manyWhoMount(modelcontentType = 'ContentString', mask = null, isVisible = false,
+        isNullOrWhitespace = null, shallowRender = false, autocomplete = null) {
 
         propID = str(5);
         propparentId = str(5);
@@ -48,6 +49,7 @@ describe('Input component behaviour', () => {
             attributes: {
                 mask,
                 type: 'text',
+                autocomplete,
             },
         };
 
@@ -141,9 +143,30 @@ describe('Input component behaviour', () => {
         expect(inputWrapper.find(InputNumber).exists()).toEqual(true);
     });
 
-    test('Password input gets rendered', () => {
-        inputWrapper = manyWhoMount('ContentPassword');
+    test('Visible Password input gets rendered as password type', () => {
+        inputWrapper = manyWhoMount('ContentPassword', null, true);
         expect(inputWrapper.find('input').prop('type')).toEqual('password');
+    });
+
+    test('Invisible Password input gets rendered as hidden type', () => {
+        inputWrapper = manyWhoMount('ContentPassword', null, false);
+        expect(inputWrapper.find('input').prop('type')).toEqual('hidden');
+    });
+
+    test('Password input set as autocomplete="new-password" by default', () => {
+        const isnullorwhitespace = (value: string): boolean => {
+            if (typeof value === 'undefined' || value === null) {
+                return true;
+            }
+            return value.replace(/\s/g, '').length < 1;
+        };
+        inputWrapper = manyWhoMount('ContentPassword', null, true, isnullorwhitespace);
+        expect(inputWrapper.find('input').prop('autoComplete')).toEqual('new-password');
+    });
+
+    test('Can override Password input autocomplete', () => {
+        inputWrapper = manyWhoMount('ContentPassword', null, true, null, true, 'override');
+        expect(inputWrapper.find('input').prop('autoComplete')).toEqual('override');
     });
 
     test('MaskedInput input gets rendered', () => {
