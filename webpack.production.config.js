@@ -4,7 +4,6 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const common = require('./webpack.common.js');
 const WriteBundleFilePlugin = require('./WriteBundleFilePlugin');
-const Compression = require('compression-webpack-plugin');
 
 const { PACKAGE_VERSION } = process.env;
 
@@ -32,8 +31,8 @@ const rules = commonRules.concat([
                     // This is caused by nesting the entire bootstrap.css file within mw-bootstrap.less
                     loader: 'string-replace-loader',
                     options: {
-                        search: '\.mw-bs html|\.mw-bs body', 
-                        replace: '.mw-bs', 
+                        search: '\.mw-bs html|\.mw-bs body',
+                        replace: '.mw-bs',
                         flags: 'g' ,
                     }
                 },
@@ -66,12 +65,6 @@ const plugins = commonPlugins.concat([
     new webpack.optimize.ModuleConcatenationPlugin(),
     extractBootstrap,
     extractComponentsLess,
-    new Compression({
-        asset: '[path]',
-        exclude: /bundle\.json/,
-        algorithm: 'gzip',
-        minRatio: 0.8,
-    }),
     new WriteBundleFilePlugin({
         filename: 'bootstrap-bundle.json',
         bundleKey: 'bootstrap3',
