@@ -4,10 +4,15 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const common = require('./webpack.common.js');
 const WriteBundleFilePlugin = require('./WriteBundleFilePlugin');
-const Compression = require('compression-webpack-plugin');
 
-const extractBootstrap = new ExtractTextPlugin('css/mw-bootstrap-[hash].css');
-const extractComponentsLess = new ExtractTextPlugin('css/ui-bootstrap-[hash].css');
+const { PACKAGE_VERSION } = process.env;
+
+if (!PACKAGE_VERSION) {
+    throw new Error('A version number must be supplied for a production build. eg. 1.0.0');
+}
+
+const extractBootstrap = new ExtractTextPlugin(`css/flow-ui-bootstrap-${PACKAGE_VERSION}.css`);
+const extractComponentsLess = new ExtractTextPlugin(`css/flow-ui-bootstrap-components-${PACKAGE_VERSION}.css`);
 
 const commonConfig = common.config;
 const commonRules = common.rules;
@@ -26,8 +31,8 @@ const rules = commonRules.concat([
                     // This is caused by nesting the entire bootstrap.css file within mw-bootstrap.less
                     loader: 'string-replace-loader',
                     options: {
-                        search: '\.mw-bs html|\.mw-bs body', 
-                        replace: '.mw-bs', 
+                        search: '\.mw-bs html|\.mw-bs body',
+                        replace: '.mw-bs',
                         flags: 'g' ,
                     }
                 },
@@ -60,12 +65,6 @@ const plugins = commonPlugins.concat([
     new webpack.optimize.ModuleConcatenationPlugin(),
     extractBootstrap,
     extractComponentsLess,
-    new Compression({
-        asset: '[path]',
-        exclude: /bundle\.json/,
-        algorithm: 'gzip',
-        minRatio: 0.8,
-    }),
     new WriteBundleFilePlugin({
         filename: 'bootstrap-bundle.json',
         bundleKey: 'bootstrap3',
@@ -83,6 +82,6 @@ const config = Object.assign({}, commonConfig, {
     plugins
 });
 
-config.output.filename = '[name]-[chunkhash].js';
+config.output.filename = `[name]-${PACKAGE_VERSION}.js`;
 
 module.exports = common.run(config, defaultDirectory);

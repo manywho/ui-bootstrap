@@ -1,6 +1,9 @@
 import 'script-loader!./lib/010-pollyfills.js';
 
-import './createClassPatch.ts'
+// Polyfill for Promises in IE - Can be removed when when support for IE is dropped
+import 'promise-polyfill/src/polyfill';
+
+import './createClassPatch.ts';
 
 // Lib CSS
 import "../css/lib/react-selectize.css";

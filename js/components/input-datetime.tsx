@@ -99,19 +99,22 @@ class InputDateTime extends React.Component<IInputProps, null> {
                 moment.ISO_8601,
             ],
         );
+        let UTCdate = moment.utc(
+            newDate,
+            [
+                'MM/DD/YYYY hh:mm:ss A ZZ', 'YYYY-MM-DDTHH:mm:ss.SSSSSSSZ', 
+                moment.ISO_8601,
+            ],
+        );
 
         if (newDate === null) {
             datepickerInstance.date(null);
         } else if (this.isDateOnly) {
             // Create a new date with no time information
 
-            date = moment({
-                year: date.year(),
-                month: date.month(),
-                day: date.date(),
-            });
-            
-            datepickerInstance.date(date);
+            // With a Date only input box, we do not show time,
+            // so we do not want timezones and so use utc
+            datepickerInstance.date(UTCdate);
 
         } else {
 
@@ -120,7 +123,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
             ) {
                 datepickerInstance.date(date.local());
             } else {
-                datepickerInstance.date(date.utc());
+                datepickerInstance.date(UTCdate);
             }
         }
     }

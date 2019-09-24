@@ -7,14 +7,14 @@ import FileUpload from '@boomi/react-file-upload';
 
 /**
  * This function handles the saving of data to state, engine and collaboration servers
- * 
- * @param response Successful response from the file upload 
+ *
+ * @param response Successful response from the file upload
  * @param id The identifier given to this component
  * @param flowKey
  */
 export function uploadComplete(response: {objectData}, id: string, flowKey: string) {
     if (
-        response && 
+        response &&
         !manywho.utils.isNullOrWhitespace(id)
     ) {
         const objectData = response.objectData.map((item) => {
@@ -30,7 +30,7 @@ export function uploadComplete(response: {objectData}, id: string, flowKey: stri
         // Re-sync with the server so that any events attached to the component are processed
         manywho.component.handleEvent(
             null, // This parameter is only used for forceUpdating, which we don't need
-            manywho.model.getComponent(id, flowKey), 
+            manywho.model.getComponent(id, flowKey),
             flowKey,
         );
     }
@@ -39,17 +39,19 @@ export function uploadComplete(response: {objectData}, id: string, flowKey: stri
 /**
  * This is a file upload component that has a dropzone to accept files from a user's local machine,
  * and uploads them to the Service selected in the Flow
- * 
+ *
  * This component is a wrapper for: [@boomi/react-file-upload](https://github.com/manywho/react-file-upload)
- * 
+ *
  * @param props Setup configuration for the fileupload component e.g. props.multiple, props.smallInputs, props.isUploadVisible
  * @return File upload react component with props options configured and set
  */
 const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
 
-    const model = 
-        !manywho.utils.isNullOrWhitespace(props.id) && 
+    const model =
+        !manywho.utils.isNullOrWhitespace(props.id) &&
         manywho.model.getComponent(props.id, props.flowKey);
+    // If client-side validation is enabled (IValidationResult), local state overrides the validity of the server-side model validation
+    const state = { ...{ isValid: true, validationMessage: null }, ...manywho.state.getComponent(props.id, props.flowKey) };
 
     manywho.log.info(`Rendering File Upload: ${props.id}`);
 
@@ -59,7 +61,7 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
         outcomes = manywho.model.getOutcomes(props.id, props.flowKey);
     }
 
-    const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME); 
+    const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME);
 
     const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} key={outcome.id} flowKey={props.flowKey} />);
 
@@ -71,10 +73,10 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
                 id={props.id}
                 multiple={manywho.utils.isNullOrUndefined(props.multiple) ? model.isMultiSelect : props.multiple}
                 upload={(files, progress) => Promise.resolve(props.upload(
-                    props.flowKey, 
+                    props.flowKey,
                     null, // this param (FileData) kept for backwards compatibility
-                    progress, 
-                    files, 
+                    progress,
+                    files,
                     model && model.fileDataRequest
                         ? model.fileDataRequest
                         : null,
@@ -86,9 +88,9 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
                 isAutoUpload={model.attributes && model.attributes.isAutoUpload ? model.attributes.isAutoUpload.toLowerCase() === 'true' : false}
                 label={model.label}
                 isRequired={model.isRequired}
-                validationMessage={model.validationMessage}
+                validationMessage={state.validationMessage || model.validationMessage}
                 isVisible={model.isVisible}
-                isValid={model.isValid}
+                isValid={state.isValid && model.isValid} // If client-side validation is disabled state.isValid is true. See IValidationResult.
                 hintValue={model.hintValue === ''
                     ? manywho.settings.global('localization.fileUploadMessage', props.flowKey)
                     : model.hintValue}
