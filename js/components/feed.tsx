@@ -16,12 +16,14 @@ class Feed extends React.Component<IComponentProps, ErrorBoundary> {
         this.state = { hasError: false };
     }
 
-    onToggleFollow(e) {
+    // these two functions need to be arrow functions to preserve "this"
+    onToggleFollow = (e) => {
 
         manywho.social.toggleFollow(this.props.flowKey);
     }
 
-    onRefresh(e) {
+    // these two functions need to be arrow functions to preserve "this"
+    onRefresh = (e) => {
 
         manywho.social.refreshMessages(this.props.flowKey);
     }
