@@ -211,7 +211,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
             disabled={this.props.disabled}
             required={this.props.required}
             onBlur={this.props.onBlur}
-            autoComplete={this.props.autocomplete} />;
+            autoComplete={this.props.autoComplete} />;
     }
 
 }
