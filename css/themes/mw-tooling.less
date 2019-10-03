@@ -98,8 +98,13 @@
             box-shadow: none;
         }
 
-        & .glyphicon:not(:only-child) {
+        & .glyphicon:first-child {
             margin-right: 5px;
+        }
+
+        & .glyphicon:last-child,
+        & .caret {
+            margin-left: 5px;
         }
     }
 
@@ -183,6 +188,11 @@
 
         &:focus {
             outline: 1px solid @COLOUR_MARINE;
+        }
+
+        & .glyphicon {
+            margin-left: 0px;
+            margin-right: 0px;
         }
     }
 
