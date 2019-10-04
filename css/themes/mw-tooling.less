@@ -1,4 +1,11 @@
-﻿.mw-bs  {
+﻿@COLOUR_MARINE: #033d58;
+@COLOUR_METALIC_BLUE: #426e82;
+@COLOUR_ICE_BLUE: #e8f6f5;
+@COLOUR_GREENISH_BLUE: #107a86;
+@COLOUR_RED: #b13f56;
+@COLOUR_RED_DARK: #8e3245;
+
+.mw-bs  {
 
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     font-family: 'Open Sans', sans-serif;
@@ -29,26 +36,26 @@
         font-size: 39px;
         font-weight: 300;
     }
-    
+
     h2,
     .h2 {
         font-size: 32px;
         font-weight: 300;
     }
-    
+
     h3,
     .h3 {
         font-size: 26px;
         font-weight: 400;
     }
-        
+
     h4,
     .h4 {
         font-size: 19px;
         font-weight: 400;
         letter-spacing: -1px;
     }
-    
+
     h5,
     .h5 {
         font-size: 15px;
@@ -56,53 +63,147 @@
         letter-spacing: -1px;
     }
 
-    .btn-default.btn-outline {
-        color: #cccccc;
+    .react-selectize-control {
+        height: 39px;
     }
 
-    .btn-primary.btn-outline {
-        color: #008cba;
+    .outcome {
+        margin-right: 0;
     }
 
-    .btn-success.btn-outline {
-        color: #43ac6a;
+    .btn {
+        height: 39px;
+        border-radius: 2px;
+        padding: 0px 16px;
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        &:not(.input-group-btn .btn):not(.btn-nobackground):not(.btn-sm):not(.btn-xs) {
+            min-width: 65px;
+        }
+
+        &:focus {
+            outline-offset: -4px;
+            transition:
+                background-color 200ms ease,
+                color 200ms ease,
+                outline 50ms ease,
+                outline-offset 50ms ease,
+                box-shadow 50ms ease;
+        }
+
+        &:active {
+            box-shadow: none;
+        }
+
+        & .glyphicon:first-child {
+            margin-right: 5px;
+        }
+
+        & .glyphicon:last-child,
+        & .caret {
+            margin-left: 5px;
+        }
     }
 
-    .btn-info.btn-outline {
-        color: #46b8da;
+    .input-group-btn .btn,
+    .form-control + .btn,
+    .react-selectize + .btn {
+        height: 39px;
+        border-color: #ccc;
     }
 
-    .btn-warning.btn-outline {
-        color: #f8b156;
+    .btn-default,
+    .btn-outline,
+    .btn.btn-outline,
+    .btn-default.btn-outline,
+    .btn-info {
+        background-color: #fff;
+        border: 1px solid @COLOUR_MARINE;
+        color: @COLOUR_MARINE;
+
+        &:hover,
+        &:active,
+        &:focus {
+            background-color: @COLOUR_ICE_BLUE;
+            color: @COLOUR_MARINE;
+        }
+
+        &:focus {
+            outline: 1px solid @COLOUR_MARINE;
+        }
     }
 
-    .btn-danger.btn-outline {
-        color: #ea2f10;
+    .btn-success,
+    .btn-primary {
+        background-color: @COLOUR_MARINE;
+        border: 1px solid @COLOUR_MARINE;
+        color: #fff;
+
+        &:hover,
+        &:active,
+        &:focus {
+            background-color: @COLOUR_METALIC_BLUE;
+            border-color: @COLOUR_METALIC_BLUE;
+            color: #fff;
+        }
+
+        &:focus {
+            outline: 1px solid #ffffff;
+        }
     }
 
-    .btn-primary.btn-nobackground:hover {
-        border-color: #006687;
-        color: #006687;
+    .btn-danger {
+        background-color: @COLOUR_RED;
+        border: 1px solid @COLOUR_RED;
+
+        &:hover,
+        &:active,
+        &:focus {
+            background-color: @COLOUR_RED_DARK;
+            border-color: @COLOUR_RED_DARK;
+        }
+
+        &:focus {
+            outline: 1px solid #ffffff;
+        }
     }
 
-    .btn-success.btn-nobackground:hover {
-        border-color: #43ac6a;
-        color: #43ac6a;
+    /* Needs extra .btn selector weight to override ui-bootstrap styles */
+    .btn.btn-nobackground {
+        width: 30px;
+        height: 30px;
+        border: solid 1px #cccccc;
+        background-color: #ffffff;
+        font-size: 16px;
+        padding: 0;
+        color: @COLOUR_MARINE;
+
+        &:hover {
+            border: solid 1px @COLOUR_GREENISH_BLUE;
+            background-color: @COLOUR_ICE_BLUE;
+        }
+
+        &:focus {
+            outline: 1px solid @COLOUR_MARINE;
+        }
+
+        & .glyphicon {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
     }
 
-    .btn-info.btn-nobackground:hover {
-        border-color: #31b0d5;
-        color: #31b0d5;
+    .btn.btn[disabled] {
+        background: #e5e5e5;
+        border: solid 1px #e5e5e5;
+        color: #666666;
     }
 
-    .btn-warning.btn-nobackground:hover {
-        border-color: #b67102;
-        color: #b67102;
-    }
-
-    .btn-danger.btn-nobackground:hover {
-        border-color: #d32a0e;
-        color: #d32a0e;
+    .btn + .btn {
+        margin-left: 12px;
     }
 
     .table-container > label {
@@ -156,7 +257,7 @@
     }
 
     .navbar-wizard .steps {
-        & > li {              
+        & > li {
             color: #43ac6a;
 
             & > .glyphicon {
@@ -173,7 +274,7 @@
             }
         }
 
-        & > li.active {                
+        & > li.active {
             color: #008cba;
 
             & > .indicator {
@@ -209,10 +310,34 @@
         font-family: 'Open Sans', sans-serif;
     }
 
+    .mw-pagination > .btn:first-child {
+        margin-right: 0;
+    }
+
     // FUI-413: Override the default tile animation only for tooling.
     .mw-tiles-item-container {
         .back {
             transform: none !important;
         }
+    }
+
+    .mw-tiles-item-header > button.btn.btn-nobackground {
+        padding: 0;
+    }
+
+    .mw-tiles-item-footer {
+        display: none;
+    }
+
+    .mw-tiles-item-outcomes {
+        padding: 15px;
+        justify-content: flex-start;
+    }
+
+    .mw-tiles-item-outcomes .outcome {
+        border-radius: inherit;
+        min-width: 90px;
+        flex-grow: unset;
+        border-radius: 2px;
     }
 }
