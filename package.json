@@ -124,6 +124,7 @@
         "ramda": "0.26.1",
         "react": "16.8.6",
         "react-dom": "16.8.6",
-        "react-selectize": "3.0.1"
+        "react-selectize": "3.0.1",
+        "tinymce": "^4.8.5"
     }
 }
