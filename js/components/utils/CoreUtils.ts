@@ -18,8 +18,11 @@ interface IRenderOutcomesInOrder {
  * @returns JSX
  */
 export const renderOutcomesInOrder: IRenderOutcomesInOrder = (element, outcomes, outcomeMeta) => {
+    if (!outcomes || outcomes.length === 0) {
+        return element;
+    }
+
     const displayTop = outcomeMeta[0].isBulkAction;
-    return outcomes.length === 0 ? element :
-        displayTop ? prepend(outcomes[0], [element]) :
-            append(outcomes[0], [element]);
+    return displayTop ? prepend(outcomes[0], [element]) :
+        append(outcomes[0], [element]);
 };
