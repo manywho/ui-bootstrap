@@ -75,11 +75,11 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
     }
 
     renderFooter(
-        pageIndex: number, 
-        hasMoreResults: boolean, 
-        onNext: Function, 
-        onPrev: Function, 
-        onFirstPage: Function, 
+        pageIndex: number,
+        hasMoreResults: boolean,
+        onNext: Function,
+        onPrev: Function,
+        onFirstPage: Function,
         isDesignTime: boolean,
     ) {
         const Pagination = getPagination();
@@ -100,7 +100,7 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
 
         return null;
     }
-        
+
     toggleVisibility(event) {
 
         event.preventDefault();
@@ -135,14 +135,14 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
 
         if (!manywho.utils.isNullOrWhitespace(label)) {
 
-            const labelClasses = 
-                manywho.settings.global('collapsible', this.props.flowKey) ? 
-                'container-label clickable-section' : 
+            const labelClasses =
+                manywho.settings.global('collapsible', this.props.flowKey) ?
+                'container-label clickable-section' :
                 'container-label';
 
-            const labelContent = 
-                manywho.settings.global('collapsible', this.props.flowKey) && label ? 
-                [<i className={this.state.icon}/>, label] : 
+            const labelContent =
+                manywho.settings.global('collapsible', this.props.flowKey) && label ?
+                [<i className={this.state.icon}/>, label] :
                 [label];
 
             if (required) {
@@ -183,12 +183,12 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
         manywho.engine.fileDataRequest(
-            this.props.id, model.fileDataRequest, 
-            this.props.flowKey, 
-            manywho.settings.global('paging.table'), 
-            state.search, 
-            null, 
-            null, 
+            this.props.id, model.fileDataRequest,
+            this.props.flowKey,
+            manywho.settings.global('paging.table'),
+            state.search,
+            null,
+            null,
             state.page,
         );
     }
@@ -205,15 +205,15 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
 
         manywho.log.info('Rendering Table: ' + this.props.id);
 
-        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);            
-        const state = 
-            this.props.isDesignTime ? 
-            { error: null, loading: false } : 
+        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
+        const state =
+            this.props.isDesignTime ?
+            { error: null, loading: false } :
             manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
 
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
-        const selectedRows = 
+        const selectedRows =
             (state.objectData || []).filter(objectData => objectData.isSelected);
 
         let props: any = {
@@ -221,8 +221,8 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
             selectedRows,
             id: this.props.id,
             objectData: this.props.objectData,
-            totalObjectData: (!model.objectDataRequest && model.objectData) ? 
-                model.objectData.length : 
+            totalObjectData: (!model.objectDataRequest && model.objectData) ?
+                model.objectData.length :
                 null,
             outcomes: outcomes.filter(outcome => !outcome.isBulkAction),
             displayColumns: this.getDisplayColumns(model.columns, outcomes),
@@ -250,10 +250,10 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
 
         const TableLarge = getTableLarge();
         const TableSmall = getTableSmall();
-        
+
         let contentElement = this.props.contentElement;
         if (!contentElement) {
-            contentElement = this.state.windowWidth <= 768 ? 
+            contentElement = this.state.windowWidth <= 768 ?
                 <TableSmall {...props} /> :
                 <TableLarge {...props} />;
         }
@@ -284,14 +284,11 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
             classNames += ' hidden';
 
         classNames += ' ' + manywho.styling.getClasses(
-            this.props.parentId, 
-            this.props.id, 
-            'table', 
+            this.props.parentId,
+            this.props.id,
+            'table',
             this.props.flowKey,
         ).join(' ');
-
-        if (model.attributes && model.attributes.classes)
-            classNames += ' ' + model.attributes.classes;
 
         let labelElement = null;
         if (!manywho.utils.isNullOrWhitespace(model.label))
@@ -337,11 +334,11 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
                 {contentElement}
                 {
                     this.renderFooter(
-                        this.props.page, 
-                        this.props.hasMoreResults, 
-                        this.props.onNext, 
-                        this.props.onPrev, 
-                        this.props.onFirstPage, 
+                        this.props.page,
+                        this.props.hasMoreResults,
+                        this.props.onNext,
+                        this.props.onPrev,
+                        this.props.onFirstPage,
                         this.props.isDesignTime,
                     )
                 }
