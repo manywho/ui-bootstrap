@@ -6,6 +6,7 @@ import registeredComponents from '../constants/registeredComponents';
 import '../../css/navigation.less';
 
 declare var manywho: any;
+const menuRefs = [];
 
 class Navigation extends React.Component<INavigationProps, null> {
 
@@ -13,7 +14,7 @@ class Navigation extends React.Component<INavigationProps, null> {
         for (const itemId in items) {
             if (itemId === id) {
                 return items[id];
-            } 
+            }
 
             const item = items[itemId];
             if (item.items) {
@@ -21,7 +22,7 @@ class Navigation extends React.Component<INavigationProps, null> {
                 if (foundItem)
                     return foundItem;
             }
-            
+
         }
     }
 
@@ -29,8 +30,8 @@ class Navigation extends React.Component<INavigationProps, null> {
         const children = [
             <button className="navbar-toggle collapsed"
                 key={'toggle'}
-                data-toggle="collapse" 
-                data-target={'#' + id} 
+                data-toggle="collapse"
+                data-target={'#' + id}
                 ref="toggle">
                 <span className="sr-only">Toggle Navigation</span>
                 <span className="icon-bar" />
@@ -61,12 +62,15 @@ class Navigation extends React.Component<INavigationProps, null> {
 
             if (item.items != null) {
 
+                const ref = React.createRef<HTMLInputElement>();
+                menuRefs.push(ref);
+
                 if (isTopLevel === false) {
                     classNames.push('dropdown-submenu');
                 }
 
-                element = <li className={classNames.join(' ')} key={item.id}>
-                    <a href="#" id={item.id} className="dropdown-toggle" data-toggle="dropdown">
+                element = <li onClick={(e) => this.onSubMenuClick(e, ref)} ref={ref} className={classNames.join(' ')} key={item.id}>
+                    <a href="#" id={item.id} className="dropdown-toggle">
                         {item.label}
                         <span className="caret" />
                     </a>
@@ -88,9 +92,25 @@ class Navigation extends React.Component<INavigationProps, null> {
         return elements;
     }
 
+    onSubMenuClick = (e, ref) => {
+        e.stopPropagation();
+        e.preventDefault();
+        ref.current.classList.toggle('open');
+    };
+
+    onDocumentClick = (e) => {
+        if (menuRefs.length > 0) {
+            menuRefs.forEach((item) => {
+                if (item.current && !e.target.contains('dropdown-toggle')) {
+                    item.current.classList.toggle('open');
+                }
+            });
+        }
+    }
+
     onClick(item: { isEnabled: boolean; id: string; }) {
 
-        const toggleButton : HTMLButtonElement = 
+        const toggleButton : HTMLButtonElement =
             this.refs.toggle ?
             findDOMNode(this.refs.toggle) :
             null;
@@ -100,7 +120,7 @@ class Navigation extends React.Component<INavigationProps, null> {
             return false;
 
         if (
-            this.refs.toggle && 
+            this.refs.toggle &&
             !manywho.utils.isEqual(
                 window.getComputedStyle(toggleButton).display, 'none', true)
         ) {
@@ -108,6 +128,10 @@ class Navigation extends React.Component<INavigationProps, null> {
         }
 
         manywho.engine.navigate(this.props.id, item.id, null, this.props.flowKey);
+    }
+
+    componentDidMount() {
+        document.addEventListener('click', this.onDocumentClick);
     }
 
     render() {
@@ -137,7 +161,7 @@ class Navigation extends React.Component<INavigationProps, null> {
                 return (<nav className="navbar navbar-default" ref="navigationBar">
                     <div className={innerClassName}>
                         {this.getHeaderElement(this.props.id, navigation)}
-                        <div className="collapse navbar-collapse" 
+                        <div className="collapse navbar-collapse"
                             id={this.props.id} ref="container">
                             <ul className="nav navbar-nav">
                                 {navElements}
@@ -150,8 +174,8 @@ class Navigation extends React.Component<INavigationProps, null> {
 
             return <div className="navbar-wizard">
                 {
-                    !manywho.utils.isNullOrWhitespace(navigation.label) ? 
-                    <span className="navbar-brand">{navigation.label}</span> : 
+                    !manywho.utils.isNullOrWhitespace(navigation.label) ?
+                    <span className="navbar-brand">{navigation.label}</span> :
                     null
                 }
                 <ul className="steps">
@@ -181,8 +205,8 @@ class Navigation extends React.Component<INavigationProps, null> {
 
                             return (
                                 <li onClick={this.onClick.bind(this, item)}
-                                    key={item.id} 
-                                    id={item.id} 
+                                    key={item.id}
+                                    id={item.id}
                                     className={className}>
                                     <span className="indicator" />
                                     <span className="glyphicon glyphicon-ok" />
