@@ -1,36 +1,44 @@
 import * as React from 'react';
+import * as tinymce from 'tinymce';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import outcome from './outcome';
 import tableContainer from './table-container';
 import fileUpload from './file-upload';
 import '../../css/content.less';
+import 'tinymce/skins/lightgray/skin.min.css';
+import 'tinymce/themes/modern';
+import 'tinymce/plugins/anchor';
+import 'tinymce/plugins/autolink';
+import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/charmap';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/contextmenu';
+import 'tinymce/plugins/directionality';
+import 'tinymce/plugins/emoticons';
+import 'tinymce/plugins/fullscreen';
+import 'tinymce/plugins/hr';
+import 'tinymce/plugins/importcss';
+import 'tinymce/plugins/image';
+import 'tinymce/plugins/insertdatetime';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/media';
+import 'tinymce/plugins/paste';
+import 'tinymce/plugins/print';
+import 'tinymce/plugins/searchreplace';
+import 'tinymce/plugins/table';
+import 'tinymce/plugins/textcolor';
+import 'tinymce/plugins/visualblocks';
+import 'tinymce/plugins/wordcount';
 
 declare var manywho: any;
-
-// lazy loaded
-declare var tinymce: any;
 
 interface IContentState {
     isImageUploadOpen: boolean;
 }
 
 class Content extends React.Component<IComponentProps, IContentState> {
-
-    static isLoadingTinyMce: boolean = false;
-    static loadTinyMce(callback) {
-        Content.isLoadingTinyMce = true;
-
-        const script = document.createElement('script');
-        script.src = manywho.settings.global('richtext.url');
-
-        script.onload = () => {
-            Content.isLoadingTinyMce = false;
-            callback.apply();
-        };
-
-        window.document.body.appendChild(script);
-    }
 
     constructor(props) {
         super(props);
@@ -84,6 +92,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
             relative_urls: false,
             remove_script_host: false,
             importcss_append: true,
+            skin: false,
 
             setup: (editor) => {
                 this.editor = editor;
@@ -118,23 +127,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
     }
 
     componentDidMount() {
-        if (!(window as any).tinymce) {
-            if (!Content.isLoadingTinyMce) {
-                Content.loadTinyMce(() => this.initializeEditor());
-            } else {
-                const loaderInterval = setInterval(
-                    () => {
-                        if ((window as any).tinymce) {
-                            this.initializeEditor();
-                            clearInterval(loaderInterval);
-                        }
-                    },
-                    50,
-                );
-            }
-        } else {
-            this.initializeEditor();
-        }
+        this.initializeEditor();
     }
 
     componentWillUnmount() {
