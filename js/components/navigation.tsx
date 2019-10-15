@@ -1,95 +1,22 @@
 import * as React from 'react';
-import { findDOMNode } from 'react-dom';
 import INavigationProps from '../interfaces/INavigationProps';
 import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/navigation.less';
 
-declare var manywho: any;
+declare const manywho: any;
+
 const menuRefs = [];
+const toggleRef = React.createRef<HTMLButtonElement>();
 
 class Navigation extends React.Component<INavigationProps, null> {
 
-    getItem(items: any, id: string) {
-        for (const itemId in items) {
-            if (itemId === id) {
-                return items[id];
-            }
-
-            const item = items[itemId];
-            if (item.items) {
-                const foundItem = this.getItem(item.items, id);
-                if (foundItem)
-                    return foundItem;
-            }
-
-        }
+    componentDidMount() {
+        document.addEventListener('click', this.onDocumentClick);
     }
 
-    getHeaderElement(id: string, navigation: { label: string; }) {
-        const children = [
-            <button className="navbar-toggle collapsed"
-                key={'toggle'}
-                data-toggle="collapse"
-                data-target={'#' + id}
-                ref="toggle">
-                <span className="sr-only">Toggle Navigation</span>
-                <span className="icon-bar" />
-                <span className="icon-bar" />
-                <span className="icon-bar" />
-            </button>,
-        ];
-
-        if (navigation.label != null && navigation.label.trim().length > 0)
-            children.push(<a className="navbar-brand" href="#" key={'brand'}>{navigation.label}</a>);
-
-        return <div className="navbar-header">{children}</div>;
-    }
-
-    getNavElements(items: any, isTopLevel: boolean) {
-        const elements = [];
-
-        for (const itemId in items) {
-            const item = items[itemId];
-            let element = null;
-
-            const classNames = [
-                (item.isCurrent) ? 'active' : '',
-                (item.isVisible === false) ? 'hidden' : '',
-                (item.isEnabled) ? '' : 'disabled',
-                (isTopLevel) ? 'top-nav-element' : '',
-            ];
-
-            if (item.items != null) {
-
-                const ref = React.createRef<HTMLInputElement>();
-                menuRefs.push(ref);
-
-                if (isTopLevel === false) {
-                    classNames.push('dropdown-submenu');
-                }
-
-                element = <li onClick={(e) => this.onSubMenuClick(e, ref)} ref={ref} className={classNames.join(' ')} key={item.id}>
-                    <a href="#" id={item.id} className="dropdown-toggle">
-                        {item.label}
-                        <span className="caret" />
-                    </a>
-                    <ul className="dropdown-menu">
-                        {this.getNavElements(item.items, false)}
-                    </ul>
-                </li>;
-            } else {
-                element = <li className={classNames.join(' ')} key={item.id}>
-                    <a href="#" onClick={this.onClick.bind(this, item)} id={item.id}>
-                        {item.label}
-                    </a>
-                </li>;
-            }
-
-            elements.push(element);
-        }
-
-        return elements;
+    componentWillUnmount() {
+        document.removeEventListener('click', this.onDocumentClick);
     }
 
     onSubMenuClick = (e, ref) => {
@@ -108,32 +35,112 @@ class Navigation extends React.Component<INavigationProps, null> {
 
     onClick(item: { isEnabled: boolean; id: string; }) {
 
-        const toggleButton : HTMLButtonElement =
-            this.refs.toggle ?
-            findDOMNode(this.refs.toggle) :
-            null;
-
-
-        if (!item.isEnabled)
+        if (!item.isEnabled) {
             return false;
+        }
 
         if (
-            this.refs.toggle &&
-            !manywho.utils.isEqual(
-                window.getComputedStyle(toggleButton).display, 'none', true)
+            toggleRef.current &&
+            !manywho.utils.isEqual(window.getComputedStyle(toggleRef.current).display, 'none', true)
         ) {
-            toggleButton.click();
+            toggleRef.current.click();
         }
 
         manywho.engine.navigate(this.props.id, item.id, null, this.props.flowKey);
+        return true;
     }
 
-    componentDidMount() {
-        document.addEventListener('click', this.onDocumentClick);
+    getItem(items: any, id: string) {
+        return items.map((itemId) => {
+            if (itemId === id) {
+                return items[id];
+            }
+
+            const item = items[itemId];
+            if (item.items) {
+                const foundItem = this.getItem(item.items, id);
+                if (foundItem) {
+                    return foundItem;
+                }
+            }
+
+            return null;
+        });
     }
 
-    componentWillUnmount() {
-        document.removeEventListener('click', this.onDocumentClick);
+    getHeaderElement(id: string, navigation: { label: string; }) {
+        const children = [
+            <button
+                className="navbar-toggle collapsed"
+                key="toggle"
+                data-toggle="collapse"
+                data-target={`#${id}`}
+                ref={toggleRef}
+            >
+                <span className="sr-only">Toggle Navigation</span>
+                <span className="icon-bar" />
+                <span className="icon-bar" />
+                <span className="icon-bar" />
+            </button>,
+        ];
+
+        if (navigation.label != null && navigation.label.trim().length > 0) {
+
+            /* eslint-disable jsx-a11y/anchor-is-valid */
+            // TODO: Generate a join URI to anchor to the brand element
+            children.push(<a className="navbar-brand" href="#" key="brand">{navigation.label}</a>);
+        }
+
+        return <div className="navbar-header">{children}</div>;
+    }
+
+    getNavElements(items: any, isTopLevel: boolean) {
+        const elements = [];
+
+        Object.keys(items).forEach((itemId) => {
+            const item = items[itemId];
+            let element = null;
+
+            const classNames = [
+                (item.isCurrent) ? 'active' : '',
+                (item.isVisible === false) ? 'hidden' : '',
+                (item.isEnabled) ? '' : 'disabled',
+                (isTopLevel) ? 'top-nav-element' : '',
+            ];
+
+            if (item.items != null) {
+
+                const ref = React.createRef<HTMLLIElement>();
+                menuRefs.push(ref);
+
+                if (isTopLevel === false) {
+                    classNames.push('dropdown-submenu');
+                }
+
+                element = (
+                    <li ref={ref} className={classNames.join(' ')} key={item.id}>
+                        <a onClick={e => this.onSubMenuClick(e, ref)} href="#" id={item.id} className="dropdown-toggle">
+                            {item.label}
+                            <span className="caret" />
+                        </a>
+                        <ul className="dropdown-menu">
+                            {this.getNavElements(item.items, false)}
+                        </ul>
+                    </li>
+                );
+            } else {
+                element = (
+                    <li className={classNames.join(' ')} key={item.id}>
+                        <a href="#" onClick={this.onClick.bind(this, item)} id={item.id}>
+                            {item.label}
+                        </a>
+                    </li>
+                );
+            }
+            elements.push(element);
+        });
+
+        return elements;
     }
 
     render() {
@@ -157,68 +164,80 @@ class Navigation extends React.Component<INavigationProps, null> {
             if (!manywho.settings.global('navigation.isWizard', this.props.flowKey, true)) {
                 let innerClassName = '';
 
-                if (!this.props.isFullWidth)
+                if (!this.props.isFullWidth) {
                     innerClassName += ' container';
+                }
 
-                return (<nav className="navbar navbar-default" ref="navigationBar">
-                    <div className={innerClassName}>
-                        {this.getHeaderElement(this.props.id, navigation)}
-                        <div className="collapse navbar-collapse"
-                            id={this.props.id} ref="container">
-                            <ul className="nav navbar-nav">
-                                {navElements}
-                            </ul>
-                            {returnToParent}
+                return (
+                    <nav className="navbar navbar-default">
+                        <div className={innerClassName}>
+                            {this.getHeaderElement(this.props.id, navigation)}
+                            <div
+                                className="collapse navbar-collapse"
+                                id={this.props.id}
+                            >
+                                <ul className="nav navbar-nav">
+                                    {navElements}
+                                </ul>
+                                {returnToParent}
+                            </div>
                         </div>
-                    </div>
-                </nav>);
+                    </nav>
+                );
             }
 
-            return <div className="navbar-wizard">
-                {
-                    !manywho.utils.isNullOrWhitespace(navigation.label) ?
-                    <span className="navbar-brand">{navigation.label}</span> :
-                    null
-                }
-                <ul className="steps">
-                    {manywho.utils.convertToArray(navigation.items)
-                        .filter(item => item.isVisible)
-                        .map((item) => {
-                            let className = null;
+            return (
+                <div className="navbar-wizard">
+                    {
+                        !manywho.utils.isNullOrWhitespace(navigation.label) ?
+                            <span className="navbar-brand">{navigation.label}</span> :
+                            null
+                    }
+                    <ul className="steps">
+                        {manywho.utils.convertToArray(navigation.items)
+                            .filter(item => item.isVisible)
+                            .map((item) => {
+                                let className = null;
 
-                            if (item.isCurrent)
-                                className += ' active';
-
-                            if (item.isEnabled === false)
-                                className += ' disabled';
-
-                            if (item.tags) {
-                                const tag = item.tags.find((tag) => {
-                                    return manywho.utils.isEqual(
-                                        tag.developerName, 'isComplete', true,
-                                    );
-                                });
-                                if (tag && manywho.utils.isEqual(
-                                    tag.contentValue, 'false', true,
-                                )) {
+                                if (item.isCurrent) {
                                     className += ' active';
                                 }
-                            }
 
-                            return (
-                                <li onClick={this.onClick.bind(this, item)}
-                                    key={item.id}
-                                    id={item.id}
-                                    className={className}>
-                                    <span className="indicator" />
-                                    <span className="glyphicon glyphicon-ok" />
-                                    {item.label}
-                                </li>
-                            );
-                        })}
-                </ul>
-                {returnToParent}
-            </div>;
+                                if (item.isEnabled === false) {
+                                    className += ' disabled';
+                                }
+
+                                if (item.tags) {
+                                    const tag = item.tags.find(itemTag => manywho.utils.isEqual(
+                                        itemTag.developerName, 'isComplete', true,
+                                    ));
+                                    if (tag && manywho.utils.isEqual(
+                                        tag.contentValue, 'false', true,
+                                    )) {
+                                        className += ' active';
+                                    }
+                                }
+
+                                return (
+                                    // TODO: Use more accessible elements for navigation items
+                                    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+                                    <li
+                                        onClick={this.onClick.bind(this, item)}
+                                        onKeyDown={this.onClick.bind(this, item)}
+                                        key={item.id}
+                                        id={item.id}
+                                        className={className}
+                                    >
+                                        <span className="indicator" />
+                                        <span className="glyphicon glyphicon-ok" />
+                                        {item.label}
+                                    </li>
+                                );
+                            })}
+                    </ul>
+                    {returnToParent}
+                </div>
+            );
         }
 
         return null;
