@@ -6,9 +6,19 @@ import '../../css/navigation.less';
 
 declare const manywho: any;
 
+// Holds the refs for each dropdown navigation item
+// so that their open/closed state can be altered
 const menuRefs = [];
 const toggleRef = React.createRef<HTMLButtonElement>();
 
+/**
+ * @description The navigation component renders a Bootstrap 3
+ * Navbar populated with menu items. Menu items may have children and
+ * grand children etc which are displayed by clicking the parent navigation
+ * items.
+ * We are not using Bootstraps JS for handling dropdown toggle state,
+ * as in v3, Bootstrap had removed support for mobile friendly sub-navigation.
+ */
 class Navigation extends React.Component<INavigationProps, null> {
 
     componentDidMount() {
@@ -19,12 +29,15 @@ class Navigation extends React.Component<INavigationProps, null> {
         document.removeEventListener('click', this.onDocumentClick);
     }
 
+    // Concerns toggling a dropdowns sub menu
     onSubMenuClick = (e, ref) => {
         e.stopPropagation();
         e.preventDefault();
         ref.current.classList.toggle('open');
     };
 
+    // This is for ensuring dropdown navigation is hidden when
+    // parts of the document other than the dropdown are clicked
     onDocumentClick = (e) => {
         menuRefs.forEach((item) => {
             if (item.current && !item.current.contains(e.target) && item.current.classList.contains('open')) {
@@ -33,6 +46,8 @@ class Navigation extends React.Component<INavigationProps, null> {
         });
     }
 
+    // Concerns navigating the Flow if the navigation
+    // item clicked has not got a sub menu
     onClick(item: { isEnabled: boolean; id: string; }) {
 
         if (!item.isEnabled) {
