@@ -132,6 +132,10 @@ class Navigation extends React.Component<INavigationProps, null> {
         document.addEventListener('click', this.onDocumentClick);
     }
 
+    componentWillUnmount() {
+        document.removeEventListener('click', this.onDocumentClick);
+    }
+
     render() {
         const navigation = manywho.model.getNavigation(this.props.id, this.props.flowKey);
 
