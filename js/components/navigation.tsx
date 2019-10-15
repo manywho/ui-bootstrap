@@ -99,13 +99,11 @@ class Navigation extends React.Component<INavigationProps, null> {
     };
 
     onDocumentClick = (e) => {
-        if (menuRefs.length > 0) {
-            menuRefs.forEach((item) => {
-                if (item.current && !e.target.contains('dropdown-toggle')) {
-                    item.current.classList.toggle('open');
-                }
-            });
-        }
+        menuRefs.forEach((item) => {
+            if (item.current && !item.current.contains(e.target) && item.current.classList.contains('open')) {
+                item.current.classList.toggle('open');
+            }
+        });
     }
 
     onClick(item: { isEnabled: boolean; id: string; }) {
