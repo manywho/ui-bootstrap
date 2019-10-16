@@ -2,9 +2,10 @@
 import registeredComponents from '../constants/registeredComponents';
 import IFileUploadProps from '../interfaces/IFileUploadProps';
 import outcome from './outcome';
-import '../../css/files.less';
 import FileUpload from '@boomi/react-file-upload';
 import { renderOutcomesInOrder } from './utils/CoreUtils';
+
+import '../../css/files.less';
 
 /**
  * This function handles the saving of data to state, engine and collaboration servers
@@ -70,7 +71,9 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
 
     const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME);
 
-    const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} key={outcome.id} flowKey={props.flowKey} />);
+    const outcomeButtons = outcomes && outcomes.map(
+        outcomeButton => <Outcome id={outcomeButton.id} key={outcomeButton.id} flowKey={props.flowKey} />,
+    );
 
     manywho.log.info(`Rendering File Upload: ${props.id}`);
 
