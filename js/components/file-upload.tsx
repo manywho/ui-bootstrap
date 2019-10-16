@@ -12,8 +12,10 @@ import { renderOutcomesInOrder } from './utils/CoreUtils';
  * @param response Successful response from the file upload
  * @param id The identifier given to this component
  * @param flowKey
+ * @param onComplete Function to be called from the parent component. This is for when the upload component
+ * is listing files. The callback typically would be to fetch files to be displayed
  */
-export function uploadComplete(response: {objectData}, id: string, flowKey: string) {
+export function uploadComplete(response: {objectData}, id: string, flowKey: string, onComplete: Function) {
     if (
         response &&
         !manywho.utils.isNullOrWhitespace(id)
@@ -34,6 +36,10 @@ export function uploadComplete(response: {objectData}, id: string, flowKey: stri
             manywho.model.getComponent(id, flowKey),
             flowKey,
         );
+
+        if (onComplete) {
+            onComplete();
+        }
     }
 }
 
@@ -82,7 +88,7 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
                     : null,
             ))}
             uploadCaption={props.uploadCaption}
-            uploadComplete={response => uploadComplete(response, props.id, props.flowKey)}
+            uploadComplete={response => uploadComplete(response, props.id, props.flowKey, props.uploadComplete)}
             smallInputs={props.smallInputs}
             isUploadVisible={props.isUploadVisible}
             isAutoUpload={model.attributes && model.attributes.isAutoUpload ? model.attributes.isAutoUpload.toLowerCase() === 'true' : false}
