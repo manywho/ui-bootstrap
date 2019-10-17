@@ -7,6 +7,7 @@ import tableContainer from './table-container';
 import fileUpload from './file-upload';
 import '../../css/content.less';
 import 'tinymce/skins/lightgray/skin.min.css';
+import 'tinymce/skins/lightgray/content.min.css';
 import 'tinymce/themes/modern';
 import 'tinymce/plugins/anchor';
 import 'tinymce/plugins/autolink';
