@@ -2,7 +2,6 @@
  * @description Some utility functions that can be shared across UI components
  */
 
-import { append, prepend } from 'ramda';
 import IOutcomeMetaData from '../../interfaces/IOutcomeMetaData';
 
 /* eslint-disable import/prefer-default-export */
