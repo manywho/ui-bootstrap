@@ -2,9 +2,10 @@
 import registeredComponents from '../constants/registeredComponents';
 import IFileUploadProps from '../interfaces/IFileUploadProps';
 import outcome from './outcome';
-import '../../css/files.less';
 import FileUpload from '@boomi/react-file-upload';
 import { renderOutcomesInOrder } from './utils/CoreUtils';
+
+import '../../css/files.less';
 
 /**
  * This function handles the saving of data to state, engine and collaboration servers
@@ -12,8 +13,10 @@ import { renderOutcomesInOrder } from './utils/CoreUtils';
  * @param response Successful response from the file upload
  * @param id The identifier given to this component
  * @param flowKey
+ * @param onComplete Function to be called from the parent component. This is for when the upload component
+ * is listing files. The callback typically would be to fetch files to be displayed
  */
-export function uploadComplete(response: {objectData}, id: string, flowKey: string) {
+export function uploadComplete(response: {objectData}, id: string, flowKey: string, onComplete: Function) {
     if (
         response &&
         !manywho.utils.isNullOrWhitespace(id)
@@ -34,6 +37,10 @@ export function uploadComplete(response: {objectData}, id: string, flowKey: stri
             manywho.model.getComponent(id, flowKey),
             flowKey,
         );
+
+        if (onComplete) {
+            onComplete();
+        }
     }
 }
 
@@ -64,7 +71,9 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
 
     const Outcome : typeof outcome = manywho.component.getByName(registeredComponents.OUTCOME);
 
-    const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} key={outcome.id} flowKey={props.flowKey} />);
+    const outcomeButtons = outcomes && outcomes.map(
+        outcomeButton => <Outcome id={outcomeButton.id} key={outcomeButton.id} flowKey={props.flowKey} />,
+    );
 
     manywho.log.info(`Rendering File Upload: ${props.id}`);
 
@@ -82,7 +91,7 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
                     : null,
             ))}
             uploadCaption={props.uploadCaption}
-            uploadComplete={response => uploadComplete(response, props.id, props.flowKey)}
+            uploadComplete={response => uploadComplete(response, props.id, props.flowKey, props.uploadComplete)}
             smallInputs={props.smallInputs}
             isUploadVisible={props.isUploadVisible}
             isAutoUpload={model.attributes && model.attributes.isAutoUpload ? model.attributes.isAutoUpload.toLowerCase() === 'true' : false}
