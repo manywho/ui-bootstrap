@@ -2,7 +2,6 @@
  * @description Some utility functions that can be shared across UI components
  */
 
-import { append, prepend } from 'ramda';
 import IOutcomeMetaData from '../../interfaces/IOutcomeMetaData';
 
 /* eslint-disable import/prefer-default-export */
@@ -27,7 +26,23 @@ export const renderOutcomesInOrder: IRenderOutcomesInOrder = (element, outcomes,
         return element;
     }
 
-    const displayTop = outcomeMeta[0].isBulkAction;
-    return displayTop ? prepend(outcomes[0], [element]) :
-        append(outcomes[0], [element]);
+    const resultToRender = [element];
+
+    outcomeMeta.forEach((outcome, currentIndex) => {
+        const displayTop = outcome.isBulkAction;
+        if (displayTop && currentIndex === 0) {
+            resultToRender.unshift(outcomes[currentIndex]);
+        }
+
+        if (displayTop && currentIndex > 0) {
+            const elementPosition = resultToRender.indexOf(element);
+            resultToRender.splice(elementPosition, 0, outcomes[currentIndex]);
+        }
+
+        if (!displayTop) {
+            resultToRender.push(outcomes[currentIndex]);
+        }
+    });
+
+    return resultToRender;
 };

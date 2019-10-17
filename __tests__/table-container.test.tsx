@@ -312,7 +312,7 @@ describe('Table component behaviour', () => {
     test('manyWho core function gets called when file has finished uploading', () => {
         tableWrapper = manyWhoMount(true, true, true);
         const tableWrapperInstance = tableWrapper.instance();
-        tableWrapperInstance.uploadComplete();
+        tableWrapperInstance.fetchFiles();
         expect(globalAny.window.manywho.engine.fileDataRequest).toHaveBeenCalled();
     });
 

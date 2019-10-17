@@ -34,4 +34,12 @@ describe('Core utilities expected functionality', () => {
         const result = renderOutcomesInOrder(element, [outcome], [{ isBulkAction: false }]);
         expect(result).toEqual([element, outcome]);
     });
+
+    test('Multiple inline outcomes with different positioning', () => {
+        const element = <div />;
+        const outcome1 = <span id="outcome1" />;
+        const outcome2 = <span id="outcome2" />;
+        const result = renderOutcomesInOrder(element, [outcome1, outcome2], [{ isBulkAction: true }, { isBulkAction: false }]);
+        expect(result).toEqual([outcome1, element, outcome2]);
+    });
 });

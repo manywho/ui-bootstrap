@@ -60,7 +60,7 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         this.onHeaderClick = this.onHeaderClick.bind(this);
         this.onSelect = this.onSelect.bind(this);
         this.handleResize = this.handleResize.bind(this);
-        this.uploadComplete = this.uploadComplete.bind(this);
+        this.fetchFiles = this.fetchFiles.bind(this);
 
         this.handleResizeDebounced = manywho.utils.debounce(this.handleResize, 200);
     }
@@ -177,24 +177,25 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         }
     }
 
-    uploadComplete() {
-
+    fetchFiles() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
-
-        manywho.engine.fileDataRequest(
-            this.props.id, model.fileDataRequest,
-            this.props.flowKey,
-            manywho.settings.global('paging.table'),
-            state.search,
-            null,
-            null,
-            state.page,
-        );
+        if (model.fileDataRequest) {
+            const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
+            manywho.engine.fileDataRequest(
+                this.props.id, model.fileDataRequest,
+                this.props.flowKey,
+                manywho.settings.global('paging.table'),
+                state.search,
+                null,
+                null,
+                state.page,
+            );
+        }
     }
 
     componentDidMount() {
         window.addEventListener('resize', this.handleResizeDebounced);
+        this.fetchFiles();
     }
 
     componentWillUnmount() {
@@ -267,7 +268,7 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
                 flowKey: this.props.flowKey,
                 id: this.props.id,
                 fileDataRequest: model.fileDataRequest,
-                uploadComplete: this.uploadComplete,
+                uploadComplete: this.fetchFiles,
                 isChildComponent: true,
                 multiple: true,
             };
