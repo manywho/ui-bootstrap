@@ -7,7 +7,9 @@ import tableContainer from './table-container';
 import fileUpload from './file-upload';
 import '../../css/content.less';
 import 'tinymce/skins/lightgray/skin.min.css';
-import 'tinymce/skins/lightgray/content.min.css';
+
+/* eslint import/no-webpack-loader-syntax: off */
+import rawTinyMceContentStyles from '!!raw-loader!tinymce/skins/lightgray/content.min.css';
 import 'tinymce/themes/modern';
 import 'tinymce/plugins/anchor';
 import 'tinymce/plugins/autolink';
@@ -174,6 +176,17 @@ class Content extends React.Component<IComponentProps, IContentState> {
         iframe.body.style.fontSize = manywho.settings.global('richtext.fontsize', this.props.flowKey, '13px');
 
         const content_css = manywho.settings.global('richtext.content_css', this.props.flowKey, []);
+
+        /**
+         * Hacking the TinyMCE content CSS into the editor iframe
+         * as since tinyMCE CSS is no longer being loaded externally
+         * the importcss_append is no longer honoured
+         */
+        const tinyMceContentStyleTag = document.createElement('style'); // tinymce/skins/lightgray/content.min.css
+        tinyMceContentStyleTag.type = 'text/css';
+        tinyMceContentStyleTag.appendChild(document.createTextNode(rawTinyMceContentStyles));
+        iframe.head.appendChild(tinyMceContentStyleTag);
+
         for (const uri of content_css) {
             const css = document.createElement("link");
             css.href = uri;
@@ -182,6 +195,8 @@ class Content extends React.Component<IComponentProps, IContentState> {
             css.crossOrigin = "anonymous";
             iframe.head.appendChild(css);
         }
+
+
         // Ensure the new styles are applied and we update state for any text modifications made by the user
         // between presenting the <textarea> UI and initializing tinyMCE
 
