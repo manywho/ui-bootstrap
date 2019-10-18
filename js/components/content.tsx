@@ -117,7 +117,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
                         });
                     }
 
-                    editor.on('change', this.onChange);
+                    editor.on('nodechange', this.onChange);
 
                     if (model.hasEvents) {
                         editor.on('blur', this.onEvent);
@@ -131,6 +131,20 @@ class Content extends React.Component<IComponentProps, IContentState> {
 
     componentDidMount() {
         this.initializeEditor();
+    }
+
+    componentDidUpdate() {
+        const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
+
+        // If the given content is the same, we don't want to set anything
+        if (state.contentValue === this.editor.getContent()) {
+            return;
+        }
+
+        // Otherwise, we want to update the editor with the given content
+        if (this.editor && state.contentValue) {
+            this.editor.setContent(state.contentValue);
+        }
     }
 
     componentWillUnmount() {
@@ -185,13 +199,13 @@ class Content extends React.Component<IComponentProps, IContentState> {
 
         // Ensure the new styles are applied and we update state for any text modifications made by the user
         // between presenting the <textarea> UI and initializing tinyMCE
+
         this.editor.fire('change');
     }
 
     onChange = (e) => {
         const contentValue = this.editor.getContent();
         manywho.state.setComponent(this.props.id, { contentValue }, this.props.flowKey, true);
-        this.forceUpdate();
     }
 
     onEvent = (e) => {

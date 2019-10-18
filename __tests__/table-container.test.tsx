@@ -43,7 +43,7 @@ describe('Table component behaviour', () => {
             onNext: jest.fn(),
             hasMoreResults: true,
         };
-    
+
         model = {
             isVisible,
             isValid,
@@ -79,22 +79,25 @@ describe('Table component behaviour', () => {
         globalAny.window.manywho.model.getComponent = jest.fn(() => {
             return model;
         });
-        globalAny.window.manywho.component.getByName = jest.fn((component, props) => {           
+        globalAny.window.manywho.component.getByName = jest.fn((component, props) => {
 
             switch (component) {
 
             case 'mw-pagination':
                 return Pagination;
-                
+
             case 'file-upload':
                 return FileUpload;
-            
+
             default:
                 return 'div';
-            }            
+            }
         });
         globalAny.window.manywho.component.getDisplayColumns = jest.fn((columns) => {
             return columns;
+        });
+        globalAny.window.manywho.styling.getClasses = jest.fn(() => {
+            return [model.attributes.classes];
         });
 
         return shallow(<Table {...props} />, { disableLifecycleMethods: true });
@@ -179,12 +182,12 @@ describe('Table component behaviour', () => {
 
     test('label gets rendered', () => {
         tableWrapper = manyWhoMount();
-        expect(tableWrapper.find('label').prop('children')).toEqual(expect.stringContaining(model.label)); 
+        expect(tableWrapper.find('label').prop('children')).toEqual(expect.stringContaining(model.label));
     });
 
     test('model class attribute get rendered as html classes', () => {
         tableWrapper = manyWhoMount();
-        expect(tableWrapper.prop('className')).toEqual(expect.stringContaining(model.attributes.classes)); 
+        expect(tableWrapper.prop('className')).toEqual(expect.stringContaining(model.attributes.classes));
     });
 
     test('table columns to be displayed are returned', () => {
@@ -236,34 +239,34 @@ describe('Table component behaviour', () => {
         tableWrapper = manyWhoMount(true, true, true);
 
         const mockArgs = {
-            pageIndex: 2, 
-            hasMoreResults: false, 
-            onNext: jest.fn(), 
-            onPrev: jest.fn(), 
-            onFirstPage: jest.fn(), 
+            pageIndex: 2,
+            hasMoreResults: false,
+            onNext: jest.fn(),
+            onPrev: jest.fn(),
+            onFirstPage: jest.fn(),
             isDesignTime: false,
         };
 
         const tableWrapperInstance = tableWrapper.instance();
         tableWrapperInstance.renderFooter(mockArgs);
-        expect(globalAny.window.manywho.component.getByName).toBeCalledWith('mw-pagination'); 
+        expect(globalAny.window.manywho.component.getByName).toBeCalledWith('mw-pagination');
     });
 
     test('footer renders with no pagination', () => {
         tableWrapper = manyWhoMount(true, true, true);
 
         const mockArgs = {
-            pageIndex: 1, 
-            hasMoreResults: false, 
-            onNext: jest.fn(), 
-            onPrev: jest.fn(), 
-            onFirstPage: jest.fn(), 
+            pageIndex: 1,
+            hasMoreResults: false,
+            onNext: jest.fn(),
+            onPrev: jest.fn(),
+            onFirstPage: jest.fn(),
             isDesignTime: false,
         };
 
         const tableWrapperInstance = tableWrapper.instance();
         tableWrapperInstance.renderFooter(mockArgs);
-        expect(tableWrapperInstance.renderFooter(mockArgs)).toBeNull(); 
+        expect(tableWrapperInstance.renderFooter(mockArgs)).toBeNull();
     });
 
     test('header click calls sort function from component props', () => {
@@ -309,8 +312,8 @@ describe('Table component behaviour', () => {
     test('manyWho core function gets called when file has finished uploading', () => {
         tableWrapper = manyWhoMount(true, true, true);
         const tableWrapperInstance = tableWrapper.instance();
-        tableWrapperInstance.uploadComplete();
+        tableWrapperInstance.fetchFiles();
         expect(globalAny.window.manywho.engine.fileDataRequest).toHaveBeenCalled();
     });
-    
+
 });
