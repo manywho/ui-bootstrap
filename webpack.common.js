@@ -133,6 +133,7 @@ module.exports.rules = [
 ];
 
 module.exports.cssPaths = [
+    'node_modules/tinymce/skins/lightgray/skin.min.css',
     'css/lib/bootstrap-datetimepicker.css',
     'css/lib/react-selectize.css',
     'css/chart.less',
