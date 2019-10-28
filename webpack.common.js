@@ -106,7 +106,7 @@ module.exports.plugins = [
 module.exports.rules = [
     {
         test: /\.css$/,
-        include: /node_modules\/tinymce\//,
+        include: [/node_modules\/tinymce\//, /node_modules\\tinymce\\/],
         use: ['style-loader', 'css-loader'],
     },
     {
@@ -133,7 +133,6 @@ module.exports.rules = [
 ];
 
 module.exports.cssPaths = [
-    'node_modules/tinymce/skins/lightgray/skin.min.css',
     'css/lib/bootstrap-datetimepicker.css',
     'css/lib/react-selectize.css',
     'css/chart.less',
