@@ -40,7 +40,7 @@ const Image: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
 
     return (
         <div className={classes.join(' ')} id={id}>
-            {renderOutcomesInOrder(image, outcomeButtons, outcomes)}
+            {renderOutcomesInOrder(image, outcomeButtons, outcomes, model.isVisible)}
         </div>
     );
 };

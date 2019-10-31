@@ -66,7 +66,7 @@ class Presentation extends React.Component<IComponentProps, null> {
 
         return (
             <div className={className} id={this.props.id}>
-                {renderOutcomesInOrder(presentationField, outcomeElements, outcomes)}
+                {renderOutcomesInOrder(presentationField, outcomeElements, outcomes, model.isVisible)}
             </div>
         );
     }
