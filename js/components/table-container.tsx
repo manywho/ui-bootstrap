@@ -185,17 +185,19 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
                 this.props.id, model.fileDataRequest,
                 this.props.flowKey,
                 manywho.settings.global('paging.table'),
-                state.search,
+                state ? state.search : '',
                 null,
                 null,
-                state.page,
+                state ? state.page : 1,
             );
         }
     }
 
     componentDidMount() {
         window.addEventListener('resize', this.handleResizeDebounced);
-        this.fetchFiles();
+        if (!this.props.isDesignTime) {
+            this.fetchFiles();
+        }
     }
 
     componentWillUnmount() {
