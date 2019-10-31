@@ -7,13 +7,14 @@ import IOutcomeMetaData from '../../interfaces/IOutcomeMetaData';
 /* eslint-disable import/prefer-default-export */
 
 interface IRenderOutcomesInOrder {
-    (element: JSX.Element, outcomes : JSX.Element[], outcomeMeta : Array<IOutcomeMetaData>);
+    (element: JSX.Element, outcomes: JSX.Element[], outcomeMeta: Array<IOutcomeMetaData>, isVisible: boolean);
 }
 
 /**
  * @param element A JSX snippet describing the component to be rendered
  * @param outcomes An array of outcome components to be displayed inline
  * @param outcomeMeta An array of objects, each describing an outcome
+ * @param isVisible A boolean of whether the component is visible or not (usually model.isVisible)
  *
  * @description Determines whether to render a just the UI component or the component with an inline outcome
  *
@@ -21,8 +22,8 @@ interface IRenderOutcomesInOrder {
  * an inline outcome to be displayed, an array of JSX snippets (one being the outcome, the other the component)
  * the order of which depends on the isBulkAction key value in the outcome metadata
  */
-export const renderOutcomesInOrder: IRenderOutcomesInOrder = (element, outcomes, outcomeMeta) => {
-    if ((!outcomes || outcomes.length === 0) || (!outcomeMeta || outcomeMeta.length === 0)) {
+export const renderOutcomesInOrder: IRenderOutcomesInOrder = (element, outcomes, outcomeMeta, isVisible) => {
+    if ((!outcomes || outcomes.length === 0) || (!outcomeMeta || outcomeMeta.length === 0) || isVisible === false) {
         return element;
     }
 

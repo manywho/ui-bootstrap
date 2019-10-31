@@ -105,7 +105,7 @@ class Textarea extends React.Component<IComponentProps, null> {
 
         return (
             <div className={className}>
-                {renderOutcomesInOrder(textArea, outcomeButtons, outcomes)}
+                {renderOutcomesInOrder(textArea, outcomeButtons, outcomes, model.isVisible)}
             </div>
         );
     }
