@@ -92,7 +92,7 @@ const List: React.SFC<IComponentProps> = ({ id, parentId, flowKey, isDesignTime 
 
     return (
         <div className={className} id={id}>
-            {renderOutcomesInOrder(listElement, outcomeButtons, outcomes)}
+            {renderOutcomesInOrder(listElement, outcomeButtons, outcomes, model.isVisible)}
             <Wait isVisible={state.loading} message={state.loading && state.loading.message} isSmall />
         </div>
     );

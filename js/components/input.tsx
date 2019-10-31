@@ -269,7 +269,7 @@ class Input extends React.Component<IComponentProps, null> {
 
         return (
             <div className={className}>
-                {renderOutcomesInOrder(inputField, outcomeButtons, outcomes)}
+                {renderOutcomesInOrder(inputField, outcomeButtons, outcomes, model.isVisible)}
             </div>
         );
     }

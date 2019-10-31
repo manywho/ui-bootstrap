@@ -300,7 +300,7 @@ class Radio extends React.Component<IComponentProps, any> {
 
         return (
             <div className={containerClassNames.join(' ')} id={this.props.id}>
-                {renderOutcomesInOrder(radioElement, outcomeButtons, outcomes)}
+                {renderOutcomesInOrder(radioElement, outcomeButtons, outcomes, model.isVisible)}
             </div>
         );
     }

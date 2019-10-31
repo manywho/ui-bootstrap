@@ -110,7 +110,7 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
 
     return (
         <React.Fragment>
-            {renderOutcomesInOrder(fileUploadComponent, outcomeButtons, outcomes)}
+            {renderOutcomesInOrder(fileUploadComponent, outcomeButtons, outcomes, model.isVisible)}
         </React.Fragment>
     );
 };
