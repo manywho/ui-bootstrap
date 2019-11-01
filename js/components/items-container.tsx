@@ -326,7 +326,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
             (model.objectDataRequest && model.objectDataRequest.hasMoreResults) ||
             (model.fileDataRequest && model.fileDataRequest.hasMoreResults);
         let objectData = null;
-        let limit = 0;
+        const limit = this.getPageSize(model, this.props.flowKey);
 
         if (!model.objectDataRequest && !model.fileDataRequest) {
 
@@ -365,8 +365,6 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
             ) {
                 const page = (state.page - 1) || 0;
 
-                limit = this.getPageSize(model, this.props.flowKey);
-
                 if (limit > 0) {
                     hasMoreResults = (page * limit) + limit + 1 <= objectData.length;
                     objectData = objectData.slice(page * limit, (page * limit) + limit);
@@ -375,8 +373,6 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 
         } else if (model.objectDataRequest || model.fileDataRequest) {
             objectData = model.objectData;
-
-            limit = this.getPageSize(model, this.props.flowKey);
         }
 
         let contentElement = null;
