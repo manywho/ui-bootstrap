@@ -273,6 +273,7 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
                 uploadComplete: this.fetchFiles,
                 isChildComponent: true,
                 multiple: true,
+                isDesignTime: this.props.isDesignTime,
             };
 
             fileUploadElement = <FileUpload {...props} />;
