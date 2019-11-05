@@ -4,6 +4,7 @@ import IComponentProps from '../interfaces/IComponentProps';
 
 import '../../css/radio.less';
 import { getOutcome } from './outcome';
+import { renderOutcomesInOrder } from './utils/CoreUtils';
 
 class Radio extends React.Component<IComponentProps, any> {
     constructor(props) {
@@ -25,12 +26,12 @@ class Radio extends React.Component<IComponentProps, any> {
             const type = attributes.multiSelect ? 'checkbox' : 'radio';
 
             manywho.utils.extend(
-                optionAttributes, 
+                optionAttributes,
                 [
-                    attributes, 
-                    { 
-                        type, 
-                        name: developerName, 
+                    attributes,
+                    {
+                        type,
+                        name: developerName,
                         value: item.externalId,
                     },
                 ],
@@ -57,9 +58,9 @@ class Radio extends React.Component<IComponentProps, any> {
                     <input {...optionAttributes} />
                     {
                         manywho.formatting.format(
-                            label.contentValue, 
-                            label.contentFormat, 
-                            label.contentType, 
+                            label.contentValue,
+                            label.contentFormat,
+                            label.contentType,
                             flowKey,
                         )
                     }
@@ -150,9 +151,9 @@ class Radio extends React.Component<IComponentProps, any> {
         });
 
         manywho.state.setComponent(
-            this.props.id, 
-            { objectData: selectedObjectData }, 
-            this.props.flowKey, 
+            this.props.id,
+            { objectData: selectedObjectData },
+            this.props.flowKey,
             true,
         );
 
@@ -163,71 +164,71 @@ class Radio extends React.Component<IComponentProps, any> {
         let options = [];
 
         const Outcome = getOutcome();
-        
+
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        const state = 
-        this.props.isDesignTime ? 
-            { error: null, loading: false } : 
+        const state =
+        this.props.isDesignTime ?
+            { error: null, loading: false } :
             manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
-    
+
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
-    
+
         const attributes : any = {
             required: model.isRequired && 'required',
             disabled: (!model.isEnabled || !model.isEditable) && 'disabled',
             multiSelect: model.isMultiSelect,
         };
-    
+
         if (!this.props.isDesignTime) {
 
             const displayColumns = manywho.component.getDisplayColumns(model.columns);
-    
-            const columnTypeElementPropertyId = 
-                displayColumns 
+
+            const columnTypeElementPropertyId =
+                displayColumns
                 ? displayColumns[0].typeElementPropertyId
                 : null;
-    
+
             manywho.utils.extend(attributes, { onClick: this.handleChange });
-    
+
             if (!this.isEmptyObjectData(model)) {
-    
+
                 let selectedItems = null;
-    
+
                 if (state && state.objectData) {
-    
+
                     selectedItems = state.objectData.map(item => item.externalId);
                 } else {
-    
-                    selectedItems = 
+
+                    selectedItems =
                         model.objectData
                         .filter(item => item.isSelected)
                         .map(item => item.externalId);
                 }
-    
+
                 if (selectedItems && !model.isMultiSelect) {
-    
+
                     attributes.value = selectedItems[0];
                 }
-    
-                options = 
-                    columnTypeElementPropertyId 
+
+                options =
+                    columnTypeElementPropertyId
                     ? model.objectData.map((item) => {
                         return this.renderOption(
-                            item, 
-                            attributes, 
-                            columnTypeElementPropertyId, 
-                            model.developerName, 
-                            selectedItems, 
+                            item,
+                            attributes,
+                            columnTypeElementPropertyId,
+                            model.developerName,
+                            selectedItems,
                             this.props.flowKey,
                         );
                     })
                     : null;
             }
         } else {
-    
+
             const type = attributes.multiSelect ? 'checkbox' : 'radio';
             options = [];
-    
+
             for (let i = 1; i < 4; i += 1) {
                 options.push((
                     <label className={type}>
@@ -237,42 +238,42 @@ class Radio extends React.Component<IComponentProps, any> {
                 ));
             }
         }
-    
+
         let containerClassNames = ['form-group'];
-    
+
         if (model.isValid === false || state.isValid === false || state.error)
             containerClassNames.push('has-error');
-    
+
         if (model.isVisible === false)
             containerClassNames.push('hidden');
-    
+
         containerClassNames = containerClassNames.concat(
             manywho.styling.getClasses(
                 this.props.parentId,
-                this.props.id, 
-                'radio', 
+                this.props.id,
+                'radio',
                 this.props.flowKey,
             ),
         );
-    
+
         const iconClassNames = ['select-loading-icon'];
-    
+
         if (!state.loading || state.error)
             iconClassNames.push('hidden');
-    
+
         const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey}/>);
-    
-        return (
-            <div className={containerClassNames.join(' ')} id={this.props.id}>
+
+        const radioElement = (
+            <div>
                 <label htmlFor={ this.props.id }>
                     {model.label}
-                    { 
-                        model.isRequired ? 
-                        <span className={'input-required'}> *</span> : 
-                        null
+                    {
+                        model.isRequired ?
+                            <span className={'input-required'}> *</span> :
+                            null
                     }
                 </label>
-                { 
+                {
                     options ? (
                         <div className={'radio-group'}>
                             {options}
@@ -287,14 +288,19 @@ class Radio extends React.Component<IComponentProps, any> {
                     <span className={'glyphicon glyphicon-refresh spin'} />
                 </div>
                 <span className={'help-block'}>
-                {
-                    (state.error && state.error.message) || 
-                    model.validationMessage || 
-                    state.validationMessage
-                }
+                    {
+                        (state.error && state.error.message) ||
+                        model.validationMessage ||
+                        state.validationMessage
+                    }
                 </span>
                 <span className={'help-block'}>{model.helpInfo}</span>
-                {outcomeButtons}
+            </div>
+        );
+
+        return (
+            <div className={containerClassNames.join(' ')} id={this.props.id}>
+                {renderOutcomesInOrder(radioElement, outcomeButtons, outcomes, model.isVisible)}
             </div>
         );
     }

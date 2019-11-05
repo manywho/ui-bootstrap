@@ -3,6 +3,7 @@ import { findDOMNode } from 'react-dom';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
+import { renderOutcomesInOrder } from './utils/CoreUtils';
 
 declare var manywho: any;
 
@@ -34,9 +35,9 @@ class Presentation extends React.Component<IComponentProps, null> {
             .map(outcome => <Outcome key={outcome.id} id={outcome.id} flowKey={this.props.flowKey}/>);
 
         let className = manywho.styling.getClasses(
-            this.props.parentId, 
-            this.props.id, 
-            'presentation', 
+            this.props.parentId,
+            this.props.id,
+            'presentation',
             this.props.flowKey,
         ).join(' ');
 
@@ -52,15 +53,22 @@ class Presentation extends React.Component<IComponentProps, null> {
                 .replace(/&gt;/g, '>')
                 .replace(/&amp;/g, '&');
 
-        return <div className={className} id={this.props.id}>
-            <label>{model.label}</label>
-            <div ref="content" dangerouslySetInnerHTML={{ __html: html }} />
-            <span className="help-block">
-                {model.validationMessage || state.validationMessage}
-            </span>
-            <span className="help-block">{model.helpInfo}</span>
-            {outcomeElements}
-        </div>;
+        const presentationField = (
+            <div>
+                <label>{model.label}</label>
+                <div ref="content" dangerouslySetInnerHTML={{ __html: html }} />
+                <span className="help-block">
+                    {model.validationMessage || state.validationMessage}
+                </span>
+                <span className="help-block">{model.helpInfo}</span>
+            </div>
+        );
+
+        return (
+            <div className={className} id={this.props.id}>
+                {renderOutcomesInOrder(presentationField, outcomeElements, outcomes, model.isVisible)}
+            </div>
+        );
     }
 
 }

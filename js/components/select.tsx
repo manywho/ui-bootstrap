@@ -5,6 +5,7 @@ import registeredComponents from '../constants/registeredComponents';
 import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 import { getOutcome } from './outcome';
 import { checkBooleanString } from './utils/DataUtils';
+import { renderOutcomesInOrder } from './utils/CoreUtils';
 
 import '../../css/select.less';
 
@@ -385,7 +386,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             widthClassName = 'width-specified';
         }
 
-        return (
+        const comboBox = (
             <div className={className} id={this.props.id}>
                 <label>
                     {model.label}
@@ -403,7 +404,12 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                     }
                 </span>
                 <span className="help-block">{model.helpInfo}</span>
-                {outcomeButtons}
+            </div>
+        );
+
+        return (
+            <div>
+                {renderOutcomesInOrder(comboBox, outcomeButtons, this.props.outcomes, model.isVisible)}
             </div>
         );
     }

@@ -48,7 +48,7 @@ const mapPublicPath = (assets, publicPaths) => {
 
 module.exports.config = {
     entry: {
-        'js/flow-ui-bootstrap': './js/index.js',        
+        'js/flow-ui-bootstrap': './js/index.js',
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js']
@@ -100,10 +100,15 @@ module.exports.plugins = [
     new CleanWebpackPlugin(pathsToClean),
     new MiniCssExtractPlugin({
         filename: '[name].css',
-    }),    
+    }),
 ];
 
 module.exports.rules = [
+    {
+        test: /\.css$/,
+        include: /node_modules\/tinymce\//,
+        use: ['style-loader', 'css-loader'],
+    },
     {
         test: /\.tsx?$/,
         use: 'babel-loader',
@@ -111,17 +116,17 @@ module.exports.rules = [
     },
     {
         test: /\.(woff|woff2|eot|ttf|svg|otf)$/,
-        use: 'file-loader?name=[path][name].[ext]'
+        use: 'file-loader?name=[name].[ext]&outputPath=css/fonts',
     },
     {
         test: /\.(png|svg|jpg|gif)$/,
-        use: 'file-loader?name=[path][name].[ext]'
+        use: 'file-loader?name=[name].[ext]&outputPath=img'
     },
     {
         test: /themes.*\.less$/,
         use: [
-            MiniCssExtractPlugin.loader, 
-            'css-loader', 
+            MiniCssExtractPlugin.loader,
+            'css-loader',
             'less-loader',
         ],
     },
@@ -207,7 +212,7 @@ module.exports.run = (config, defaultDirectory) => (env = {}) => {
             }
 
             config.devtool = sourcemaps ? 'source-map' : 'none';
-            
+
             config.output.publicPath = publicPath;
 
             config.output.path = path.resolve(__dirname, outputPath);

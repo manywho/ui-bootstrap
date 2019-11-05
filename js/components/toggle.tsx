@@ -2,6 +2,7 @@ import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
+import { renderOutcomesInOrder } from './utils/CoreUtils';
 
 import '../../css/toggle.less';
 
@@ -44,7 +45,7 @@ class Toggle extends React.Component<IComponentProps, IToggleState> {
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
         const outcomes: any = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
         const outcomeElements: (JSX.Element)[] = outcomes && outcomes
-            .map(({ outcome }) => <Outcome id={outcome.id} flowKey={this.props.flowKey} />);
+            .map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey} />);
 
         let className = (manywho.styling.getClasses(
             this.props.parentId,
@@ -98,18 +99,25 @@ class Toggle extends React.Component<IComponentProps, IToggleState> {
         if (backgrounds.indexOf(background) === -1)
             style = { background };
 
-        return <div className={className} id={this.props.id}>
-            <label>{model.label}</label>
-            <div>
-                <label>
-                    <input {...props} />
-                    <div className={sliderClassName} style={style}></div>
-                </label>
+        const toggle = (
+            <div className={className} id={this.props.id}>
+                <label>{model.label}</label>
+                <div>
+                    <label>
+                        <input {...props} />
+                        <div className={sliderClassName} style={style} />
+                    </label>
+                </div>
+                <span className="help-block">{model.validationMessage || state.validationMessage}</span>
+                <span className="help-block">{model.helpInfo}</span>
             </div>
-            <span className="help-block">{model.validationMessage || state.validationMessage}</span>
-            <span className="help-block">{model.helpInfo}</span>
-            {outcomeElements}
-        </div>;
+        );
+
+        return (
+            <div>
+                {renderOutcomesInOrder(toggle, outcomeElements, outcomes, model.isVisible)}
+            </div>
+        );
     }
 
 }

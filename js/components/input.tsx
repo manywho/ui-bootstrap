@@ -7,6 +7,7 @@ import { getInputDateTime } from './input-datetime';
 import { getInputBoolean } from './input-boolean';
 import { getInputNumber } from './input-number';
 import { getOutcome } from './outcome';
+import { renderOutcomesInOrder } from './utils/CoreUtils';
 
 import '../../css/input.less';
 
@@ -19,6 +20,8 @@ if (MaskedInput.default) {
 }
 
 declare const manywho: any;
+
+const Test = Comp => <Comp />;
 
 class Input extends React.Component<IComponentProps, null> {
 
@@ -253,15 +256,20 @@ class Input extends React.Component<IComponentProps, null> {
             break;
         }
 
-        const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey} />);
+        const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome key={outcome.id} id={outcome.id} flowKey={this.props.flowKey} />);
 
-        return (
-            <div className={className}>
+        const inputField = (
+            <div key="">
                 {label}
                 {inputElement}
                 <span className="help-block">{model.validationMessage || state.validationMessage}</span>
                 <span className="help-block">{model.helpInfo}</span>
-                {outcomeButtons}
+            </div>
+        );
+
+        return (
+            <div className={className}>
+                {renderOutcomesInOrder(inputField, outcomeButtons, outcomes, model.isVisible)}
             </div>
         );
     }

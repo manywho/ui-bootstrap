@@ -1,36 +1,47 @@
 import * as React from 'react';
+import * as tinymce from 'tinymce';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import outcome from './outcome';
 import tableContainer from './table-container';
 import fileUpload from './file-upload';
 import '../../css/content.less';
+import 'tinymce/skins/lightgray/skin.min.css';
+
+/* eslint import/no-webpack-loader-syntax: off */
+import rawTinyMceContentStyles from '!!raw-loader!tinymce/skins/lightgray/content.min.css';
+import 'tinymce/themes/modern';
+import 'tinymce/plugins/anchor';
+import 'tinymce/plugins/autolink';
+import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/charmap';
+import 'tinymce/plugins/code';
+import 'tinymce/plugins/contextmenu';
+import 'tinymce/plugins/directionality';
+import 'tinymce/plugins/emoticons';
+import 'tinymce/plugins/fullscreen';
+import 'tinymce/plugins/hr';
+import 'tinymce/plugins/importcss';
+import 'tinymce/plugins/image';
+import 'tinymce/plugins/insertdatetime';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/media';
+import 'tinymce/plugins/paste';
+import 'tinymce/plugins/print';
+import 'tinymce/plugins/searchreplace';
+import 'tinymce/plugins/table';
+import 'tinymce/plugins/textcolor';
+import 'tinymce/plugins/visualblocks';
+import 'tinymce/plugins/wordcount';
 
 declare var manywho: any;
-
-// lazy loaded
-declare var tinymce: any;
 
 interface IContentState {
     isImageUploadOpen: boolean;
 }
 
 class Content extends React.Component<IComponentProps, IContentState> {
-
-    static isLoadingTinyMce: boolean = false;
-    static loadTinyMce(callback) {
-        Content.isLoadingTinyMce = true;
-
-        const script = document.createElement('script');
-        script.src = manywho.settings.global('richtext.url');
-
-        script.onload = () => {
-            Content.isLoadingTinyMce = false;
-            callback.apply();
-        };
-
-        window.document.body.appendChild(script);
-    }
 
     constructor(props) {
         super(props);
@@ -84,6 +95,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
             relative_urls: false,
             remove_script_host: false,
             importcss_append: true,
+            skin: false,
 
             setup: (editor) => {
                 this.editor = editor;
@@ -105,7 +117,7 @@ class Content extends React.Component<IComponentProps, IContentState> {
                         });
                     }
 
-                    editor.on('change', this.onChange);
+                    editor.on('nodechange', this.onChange);
 
                     if (model.hasEvents) {
                         editor.on('blur', this.onEvent);
@@ -118,22 +130,20 @@ class Content extends React.Component<IComponentProps, IContentState> {
     }
 
     componentDidMount() {
-        if (!(window as any).tinymce) {
-            if (!Content.isLoadingTinyMce) {
-                Content.loadTinyMce(() => this.initializeEditor());
-            } else {
-                const loaderInterval = setInterval(
-                    () => {
-                        if ((window as any).tinymce) {
-                            this.initializeEditor();
-                            clearInterval(loaderInterval);
-                        }
-                    },
-                    50,
-                );
-            }
-        } else {
-            this.initializeEditor();
+        this.initializeEditor();
+    }
+
+    componentDidUpdate() {
+        const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
+
+        // If the given content is the same, we don't want to set anything
+        if (state.contentValue === this.editor.getContent()) {
+            return;
+        }
+
+        // Otherwise, we want to update the editor with the given content
+        if (this.editor && state.contentValue) {
+            this.editor.setContent(state.contentValue);
         }
     }
 
@@ -166,6 +176,17 @@ class Content extends React.Component<IComponentProps, IContentState> {
         iframe.body.style.fontSize = manywho.settings.global('richtext.fontsize', this.props.flowKey, '13px');
 
         const content_css = manywho.settings.global('richtext.content_css', this.props.flowKey, []);
+
+        /**
+         * Hacking the TinyMCE content CSS into the editor iframe
+         * as since tinyMCE CSS is no longer being loaded externally
+         * the importcss_append is no longer honoured
+         */
+        const tinyMceContentStyleTag = document.createElement('style'); // tinymce/skins/lightgray/content.min.css
+        tinyMceContentStyleTag.type = 'text/css';
+        tinyMceContentStyleTag.appendChild(document.createTextNode(rawTinyMceContentStyles));
+        iframe.head.appendChild(tinyMceContentStyleTag);
+
         for (const uri of content_css) {
             const css = document.createElement("link");
             css.href = uri;
@@ -174,15 +195,17 @@ class Content extends React.Component<IComponentProps, IContentState> {
             css.crossOrigin = "anonymous";
             iframe.head.appendChild(css);
         }
+
+
         // Ensure the new styles are applied and we update state for any text modifications made by the user
         // between presenting the <textarea> UI and initializing tinyMCE
+
         this.editor.fire('change');
     }
 
     onChange = (e) => {
         const contentValue = this.editor.getContent();
         manywho.state.setComponent(this.props.id, { contentValue }, this.props.flowKey, true);
-        this.forceUpdate();
     }
 
     onEvent = (e) => {

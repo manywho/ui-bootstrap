@@ -2,6 +2,7 @@ import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
+import { renderOutcomesInOrder } from './utils/CoreUtils';
 
 import '../../css/textarea.less';
 
@@ -90,16 +91,23 @@ class Textarea extends React.Component<IComponentProps, null> {
 
         const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey} />);
 
-        return <div className={className}>
-            <label>
-                {model.label}
-                {model.isRequired ? <span className="input-required"> *</span> : null}
-            </label>
-            <textarea {...props} />
-            <span className="help-block">{model.validationMessage || state.validationMessage}</span>
-            <span className="help-block">{model.helpInfo}</span>
-            {outcomeButtons}
-        </div>;
+        const textArea = (
+            <div>
+                <label>
+                    {model.label}
+                    {model.isRequired ? <span className="input-required"> *</span> : null}
+                </label>
+                <textarea {...props} />
+                <span className="help-block">{model.validationMessage || state.validationMessage}</span>
+                <span className="help-block">{model.helpInfo}</span>
+            </div>
+        );
+
+        return (
+            <div className={className}>
+                {renderOutcomesInOrder(textArea, outcomeButtons, outcomes, model.isVisible)}
+            </div>
+        );
     }
 
 }
