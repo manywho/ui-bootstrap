@@ -106,12 +106,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
-        let limit: number = manywho.settings.global(`paging.${model.componentType.toLowerCase()}`);
-        const paginationSize: number = parseInt(model.attributes.paginationSize, 10);
-
-        if (!isNaN(paginationSize)) {
-            limit = paginationSize;
-        }
+        const limit = this.getPageSize(model, this.props.flowKey);
 
         let orderByDirection = null;
         if (!manywho.utils.isNullOrUndefined(this.state.sortedIsAscending)) {
@@ -314,6 +309,10 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         );
     }
 
+    getPageSize(model, flowKey) {
+        return manywho.component.getPageSize(model, flowKey);
+    }
+
     render() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         const state =
@@ -327,7 +326,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
             (model.objectDataRequest && model.objectDataRequest.hasMoreResults) ||
             (model.fileDataRequest && model.fileDataRequest.hasMoreResults);
         let objectData = null;
-        let limit = 0;
+        const limit = this.getPageSize(model, this.props.flowKey);
 
         if (!model.objectDataRequest && !model.fileDataRequest) {
 
@@ -365,18 +364,6 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                 objectData
             ) {
                 const page = (state.page - 1) || 0;
-                const paginationSize = parseInt(model.attributes.paginationSize, 10);
-
-                limit = parseInt(
-                    manywho.settings.flow(
-                        `paging.${model.componentType.toLowerCase()}`, this.props.flowKey,
-                    ) || 10,
-                    10,
-                );
-
-                if (!isNaN(paginationSize)) {
-                    limit = paginationSize;
-                }
 
                 if (limit > 0) {
                     hasMoreResults = (page * limit) + limit + 1 <= objectData.length;
@@ -386,12 +373,6 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 
         } else if (model.objectDataRequest || model.fileDataRequest) {
             objectData = model.objectData;
-            limit = parseInt(
-                manywho.settings.flow(
-                    `paging.${model.componentType.toLowerCase()}`, this.props.flowKey,
-                ) || 10,
-                10,
-            );
         }
 
         let contentElement = null;
