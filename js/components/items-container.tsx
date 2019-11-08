@@ -354,7 +354,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
             }
 
             // Sort the filtered list before slicing
-            if (this.state.sortedBy) {
+            if (this.state.sortedBy && Array.isArray(objectData)) {
                 objectData.sort(this.compare(this.state.sortedBy, this.state.sortedIsAscending));
             }
 
