@@ -959,4 +959,11 @@ describe('ItemsContainer component behaviour', () => {
         objectData.sort(componentWrapper.instance().compare('object', true));
         expect(objectData).toEqual(sortingTestData);
     });
+
+    test('Verify sort method not called on null objectData', () => {
+        globalAny.window.manywho.utils.isNullOrWhitespace = () => true;
+        componentWrapper = manyWhoMount({ objectData: null });
+        expect(() => componentWrapper.setState({ search: null, sortedBy: 'test', sortedIsAscending: true })).not.toThrow();
+    });
+
 });
