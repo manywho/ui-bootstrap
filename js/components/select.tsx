@@ -54,12 +54,13 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         const hasRequest = model.objectDataRequest !== null || model.fileDataRequest !== null;
 
         if ((doneLoading || !hasRequest) && nextProps.objectData && !nextProps.isDesignTime) {
-            let options = this.getOptions(nextProps.objectData);
+            let options = [];
 
             if (
                 nextProps.page > 1 &&
                 this.state.options.length < nextProps.limit * nextProps.page
             ) {
+                options = this.state.options.concat(this.getOptions(nextProps.objectData));
                 this.setState({ isOpen: true });
 
                 const index = this.state.options.length + 1;
@@ -71,6 +72,8 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                     const scrollTarget = dropdown.children.item(index) as HTMLElement;
                     dropdown.scrollTop = scrollTarget.offsetTop;
                 });
+            } else {
+                options = this.getOptions(nextProps.objectData);
             }
 
             if (state && state.objectData) {
@@ -255,6 +258,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             this.props.hasMoreResults
         ) {
             this.props.onNext();
+            this.setState({ isOpen: true });
         }
     }
 
