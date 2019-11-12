@@ -54,13 +54,12 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         const hasRequest = model.objectDataRequest !== null || model.fileDataRequest !== null;
 
         if ((doneLoading || !hasRequest) && nextProps.objectData && !nextProps.isDesignTime) {
-            let options = [];
+            let options = this.getOptions(nextProps.objectData);
 
             if (
                 nextProps.page > 1 &&
                 this.state.options.length < nextProps.limit * nextProps.page
             ) {
-                options = this.state.options.concat(this.getOptions(nextProps.objectData));
                 this.setState({ isOpen: true });
 
                 const index = this.state.options.length + 1;
@@ -72,17 +71,29 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                     const scrollTarget = dropdown.children.item(index) as HTMLElement;
                     dropdown.scrollTop = scrollTarget.offsetTop;
                 });
-            } else {
-                options = this.getOptions(nextProps.objectData);
             }
 
             if (state && state.objectData) {
                 // Replace 'selected' item(s) from `this.getOptions()`, in the `options` list.
                 // Match on `externalId` or the `internalId` because when offline there is no externalId
+                const selectedOptions = this.getOptions(state.objectData);
                 options = options
-                    .map(option => this.getOptions(state.objectData)
+                    .map(option => selectedOptions
                         .find(selection => (selection.value.externalId && selection.value.externalId === option.value.externalId) ||
                                             selection.value.internalId === option.value.internalId) || option);
+
+                // When paginating we only get the first page of options from `nextProps.objectData` which may not contain
+                // the selected item. So add our selected item(s) to the current page of options if not already present.
+                // No need to check externalId as the internalId won't have changed, but it may next request.
+                selectedOptions.forEach((selectedOption) => {
+                    if (!options.find(option => option.value.internalId === selectedOption.value.internalId)) {
+                        options.unshift(selectedOption);
+                        if (options.length > nextProps.limit) {
+                            // Preserve page size
+                            options.pop();
+                        }
+                    }
+                });
             }
 
             this.setState({ options });
