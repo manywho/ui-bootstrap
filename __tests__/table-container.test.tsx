@@ -7,6 +7,9 @@ import { shallow } from 'enzyme';
 import Table from '../js/components/table-container';
 import Pagination from '../js/components/pagination';
 import FileUpload from '../js/components/file-upload';
+import TableSmall from '../js/components/table-small';
+import TableLarge from '../js/components/table-large';
+import ItemsHeader from '../js/components/items-header';
 
 describe('Table component behaviour', () => {
 
@@ -16,7 +19,7 @@ describe('Table component behaviour', () => {
     let props;
     let model;
 
-    function manyWhoMount(isVisible = true, isValid = true, isShallow = false) {
+    function manyWhoMount(isVisible = true, isValid = true, isEditable = false) {
 
         props = {
             id: 'string',
@@ -27,7 +30,25 @@ describe('Table component behaviour', () => {
             children: false,
             sort: jest.fn(),
             select: jest.fn(),
-            objectData: 'string',
+            // This objectData looks very ugly but helps to fix the tests so
+            // the TableSmall or TableLarge get rendered and can be tested
+            // against.
+            objectData: [
+                {
+                    properties: [
+                        {
+                            objectData: [
+                                {
+                                    properties: [
+                                        { typeElementPropertyId: 1 },
+                                    ],
+                                },
+                            ],
+                            typeElementPropertyId: 1,
+                        },
+                    ],
+                },
+            ],
             sortedBy: 'string',
             sortedIsAscending: true,
             onOutcome: jest.fn(),
@@ -52,34 +73,33 @@ describe('Table component behaviour', () => {
             attributes: {
                 classes: str(10),
             },
+            columns: [
+                {
+                    typeElementPropertyId: 1,
+                    isEditable,
+                },
+            ],
         };
 
-        globalAny.window.manywho['utils'] = {
+        globalAny.window.manywho.utils = {
             debounce: jest.fn(),
             isEqual: jest.fn(),
             isNullOrWhitespace: jest.fn(),
-            extend: jest.fn((props) => {
-                return props;
-            }),
+            isNullOrUndefined: jest.fn(),
+            extend: jest.fn(properties => properties),
             extractTenantId: jest.fn(() => str(10)),
         };
-        globalAny.window.manywho.model.getOutcomes = jest.fn(() => {
-            return [];
-        });
+        globalAny.window.manywho.model.getOutcomes = jest.fn(() => []);
         globalAny.window.manywho.state.getAuthenticationToken = jest.fn(() => str(10));
-        globalAny.window.manywho['ajax'] = {
+        globalAny.window.manywho.ajax = {
             uploadFile: jest.fn(() => str(10)),
         };
-        globalAny.window.manywho.state.getComponent = jest.fn(() => {
-            return { search: str(10) };
-        });
-        globalAny.window.manywho['engine'] = {
+        globalAny.window.manywho.state.getComponent = jest.fn(() => ({ search: str(10) }));
+        globalAny.window.manywho.engine = {
             fileDataRequest: jest.fn(),
         };
-        globalAny.window.manywho.model.getComponent = jest.fn(() => {
-            return model;
-        });
-        globalAny.window.manywho.component.getByName = jest.fn((component, props) => {
+        globalAny.window.manywho.model.getComponent = jest.fn(() => model);
+        globalAny.window.manywho.component.getByName = jest.fn((component) => {
 
             switch (component) {
 
@@ -89,16 +109,21 @@ describe('Table component behaviour', () => {
             case 'file-upload':
                 return FileUpload;
 
+            case 'mw-table-large':
+                return TableLarge;
+
+            case 'mw-table-small':
+                return TableSmall;
+
+            case 'mw-items-header':
+                return ItemsHeader;
+
             default:
-                return 'div';
+                return null; // returning just a div was breaking the tests
             }
         });
-        globalAny.window.manywho.component.getDisplayColumns = jest.fn((columns) => {
-            return columns;
-        });
-        globalAny.window.manywho.styling.getClasses = jest.fn(() => {
-            return [model.attributes.classes];
-        });
+        globalAny.window.manywho.component.getDisplayColumns = jest.fn(columns => columns);
+        globalAny.window.manywho.styling.getClasses = jest.fn(() => [model.attributes.classes]);
 
         return shallow(<Table {...props} />, { disableLifecycleMethods: true });
     }
@@ -134,12 +159,23 @@ describe('Table component behaviour', () => {
     test('Table Large gets rendered as a child component', () => {
         tableWrapper = manyWhoMount();
         expect(globalAny.window.manywho.component.getByName).toHaveBeenCalledWith('mw-table-large');
+        expect(tableWrapper.exists(TableSmall)).toEqual(false);
+        expect(tableWrapper.exists(TableLarge)).toEqual(true);
     });
 
     test('Table Small gets rendered as a child component', () => {
         tableWrapper = manyWhoMount();
         tableWrapper.setState({ windowWidth: int(100, 500) });
         expect(globalAny.window.manywho.component.getByName).toHaveBeenCalledWith('mw-table-small');
+        expect(tableWrapper.exists(TableSmall)).toEqual(true);
+        expect(tableWrapper.exists(TableLarge)).toEqual(false);
+    });
+
+    test('Table Large gets rendered below 768px if any table columns are editable', () => {
+        tableWrapper = manyWhoMount(true, true, true);
+        tableWrapper.setState({ windowWidth: int(100, 500) });
+        expect(tableWrapper.exists(TableSmall)).toEqual(false);
+        expect(tableWrapper.exists(TableLarge)).toEqual(true);
     });
 
     test('if window inner width is less than 768px then small tables class gets applied to rendered markup', () => {
@@ -195,11 +231,11 @@ describe('Table component behaviour', () => {
         const tableWrapperInstance = tableWrapper.instance();
         const tableColumns = [
             {
-                contentType:'ContentString',
+                contentType: 'ContentString',
                 label: str(10),
             },
             {
-                contentType:'ContentString',
+                contentType: 'ContentString',
                 label: str(10),
             },
         ];
@@ -211,22 +247,22 @@ describe('Table component behaviour', () => {
         const tableWrapperInstance = tableWrapper.instance();
         const tableColumns = [
             {
-                contentType:'ContentString',
+                contentType: 'ContentString',
                 label: str(10),
             },
             {
-                contentType:'ContentString',
+                contentType: 'ContentString',
                 label: str(10),
             },
         ];
 
         const outcomes = [
             {
-                contentType:'ContentString',
+                contentType: 'ContentString',
                 label: str(10),
             },
             {
-                contentType:'ContentString',
+                contentType: 'ContentString',
                 label: str(10),
                 isBulkAction: true,
             },
