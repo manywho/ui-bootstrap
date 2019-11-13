@@ -35,6 +35,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         this.isScrollLimit = this.isScrollLimit.bind(this);
 
         this.debouncedOnSearch = manywho.utils.debounce(this.props.onSearch, 750);
+        this.debouncedOnScroll = manywho.utils.debounce(this.isScrollLimit, 100);
     }
 
     componentWillMount() {
@@ -60,7 +61,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                 nextProps.page > 1 &&
                 this.state.options.length < nextProps.limit * nextProps.page
             ) {
-                options = this.state.options.concat(this.getOptions(nextProps.objectData));
+                options = this.addOptions(this.state.options, this.getOptions(nextProps.objectData));
                 this.setState({ isOpen: true });
 
                 const index = this.state.options.length + 1;
@@ -73,30 +74,11 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                     dropdown.scrollTop = scrollTarget.offsetTop;
                 });
             } else {
-                options = this.getOptions(nextProps.objectData);
+                options = this.addOptions(options, this.getOptions(nextProps.objectData));
             }
 
             if (state && state.objectData) {
-                // Replace 'selected' item(s) from `this.getOptions()`, in the `options` list.
-                // Match on `externalId` or the `internalId` because when offline there is no externalId
-                const selectedOptions = this.getOptions(state.objectData);
-                options = options
-                    .map(option => selectedOptions
-                        .find(selection => (selection.value.externalId && selection.value.externalId === option.value.externalId) ||
-                                            selection.value.internalId === option.value.internalId) || option);
-
-                // When paginating we only get the first page of options from `nextProps.objectData` which may not contain
-                // the selected item. So add our selected item(s) to the current page of options if not already present.
-                // No need to check externalId as the internalId won't have changed, but it may next request.
-                selectedOptions.forEach((selectedOption) => {
-                    if (!options.find(option => option.value.internalId === selectedOption.value.internalId)) {
-                        options.unshift(selectedOption);
-                        if (options.length > nextProps.limit) {
-                            // Preserve page size
-                            options.pop();
-                        }
-                    }
-                });
+                options = this.addOptions(options, this.getOptions(state.objectData));
             }
 
             this.setState({ options });
@@ -135,13 +117,13 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                             element.querySelector('.react-selectize') as HTMLElement;
 
                         if (dropdown !== null) {
-                            dropdown.addEventListener('scroll', this.isScrollLimit);
+                            dropdown.addEventListener('scroll', this.debouncedOnScroll);
                             dropdown.style.setProperty('width', `${selectize.offsetWidth}px`);
                         }
 
                     } else {
                         element.querySelector('.dropdown-menu')
-                            .addEventListener('scroll', this.isScrollLimit);
+                            .addEventListener('scroll', this.debouncedOnScroll);
                     }
                 },
                 10,
@@ -250,6 +232,25 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
     getUid(option) {
         return option.value.internalId;
+    }
+
+    /**
+     * Merge our two options arrays perserving the order
+     *
+     * In the event of a duplicate the newOption should replace the existing option
+     *
+     * Match on `externalId` or the `internalId` because when offline there is no externalId
+     *
+     * @param Array existingOptions current list of options
+     * @param Array newOptions extra options to append or replace. These new options may be the next page or the selected item(s).
+     */
+    addOptions(existingOptions, newOptions) {
+
+        return [...existingOptions, ...newOptions]
+            .reverse() // Promote new options to take precedence over existing options
+            .filter((item, pos, arr) => arr
+                .findIndex(item2 => ((item2.value.externalId && item2.value.externalId === item.value.externalId) ||
+                    item2.value.internalId === item.value.internalId)) === pos);
     }
 
     isScrollLimit(e) {
