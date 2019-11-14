@@ -21,6 +21,8 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
     debouncedOnSearch = null;
 
+    debouncedOnScroll = null;
+
     constructor(props) {
         super(props);
         this.state = { options: [], search: '', isOpen: false };
@@ -241,8 +243,8 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
      *
      * Match on `externalId` or the `internalId` because when offline there is no externalId
      *
-     * @param Array existingOptions current list of options
-     * @param Array newOptions extra options to append or replace. These new options may be the next page or the selected item(s).
+     * @param {Array} existingOptions current list of options
+     * @param {Array} newOptions extra options to append or replace. These new options may be the next page or the selected item(s).
      */
     addOptions(existingOptions, newOptions) {
 
