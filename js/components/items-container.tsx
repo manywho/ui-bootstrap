@@ -435,7 +435,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         if (state.error) {
             contentElement = (
                 <div className="mw-items-error">
-                    <p className="lead">{state.error.message}</p>
+                    <p className="lead alert alert-danger text-left">{state.error.message}</p>
                     <button className="btn btn-danger" onClick={this.refresh}>Retry</button>
                 </div>
             );
