@@ -152,7 +152,7 @@ class Input extends React.Component<IComponentProps, null> {
             props.isDesignTime = true;
         }
 
-        if (model.hintvalue && !manywho.utils.isNullOrWhitespace(model.hintValue)) {
+        if (typeof model.hintValue === 'number' || !manywho.utils.isNullOrWhitespace(model.hintValue)) {
             props.placeholder = model.hintValue;
         }
 
