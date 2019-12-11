@@ -33,6 +33,8 @@ describe('Image component behaviour', () => {
             label: str(5),
             imageUri: str(5),
             developerName: str(5),
+            width: '200',
+            height: '200',
         };
 
         globalAny.window.manywho['styling'] = {
@@ -92,11 +94,21 @@ describe('Image component behaviour', () => {
 
     test('Image src attribute is equal to model imageUri property', () => {
         imageWrapper = manyWhoMount();
-        expect(imageWrapper.find('.img-responsive').prop('src')).toEqual(model.imageUri);
+        expect(imageWrapper.find('.img-custom').prop('src')).toEqual(model.imageUri);
     });
 
     test('Image alt attribute is equal to model developerName property', () => {
         imageWrapper = manyWhoMount();
-        expect(imageWrapper.find('.img-responsive').prop('alt')).toEqual(model.developerName);
+        expect(imageWrapper.find('.img-custom').prop('alt')).toEqual(model.developerName);
+    });
+
+    test('Image width attribute is equal to model width property', () => {
+        imageWrapper = manyWhoMount();
+        expect(imageWrapper.find('.img-custom').prop('width')).toEqual(model.width);
+    });
+
+    test('Image height attribute is equal to model height property', () => {
+        imageWrapper = manyWhoMount();
+        expect(imageWrapper.find('.img-custom').prop('height')).toEqual(model.height);
     });
 });

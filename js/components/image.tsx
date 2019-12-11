@@ -4,14 +4,16 @@ import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
 import { renderOutcomesInOrder } from './utils/CoreUtils';
 
+import '../../css/image.less';
+
 declare const manywho: any;
 
-const Image: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
+const Image: React.FC<IComponentProps> = ({ id, parentId, flowKey }) => {
 
     const classes = manywho.styling.getClasses(parentId, id, 'image', flowKey);
     const model = manywho.model.getComponent(id, flowKey);
     const outcomes = manywho.model.getOutcomes(id, flowKey);
-    const { label } = model;
+    const { imageUri, developerName, label, width, height, attributes } = model;
 
     const Outcome = getOutcome();
 
@@ -30,10 +32,13 @@ const Image: React.SFC<IComponentProps> = ({ id, parentId, flowKey }) => {
                     null
             }
             <img
-                className="img-responsive"
-                src={model.imageUri}
-                alt={model.developerName}
+                className="img-custom"
+                src={imageUri}
+                alt={developerName}
                 id={id}
+                width={width}
+                height={height}
+                {...attributes}
             />
         </div>
     );
