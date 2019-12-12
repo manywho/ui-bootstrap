@@ -165,6 +165,7 @@ module.exports.cssPaths = [
     'css/tiles.less',
     'css/toggle.less',
     'css/tours.less',
+    'css/image.less',
 ];
 
 module.exports.run = (config, defaultDirectory) => (env = {}) => {

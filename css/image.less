@@ -1,0 +1,11 @@
+.mw-bs {
+    // allows the use of custom image dimensions without distorting the image
+    // (if the custom dimensions don't result in the same aspect ratio as the
+    // original image) while still keeping the image responsive
+    .img-custom {
+        display: block;
+        max-width: 100%;
+        object-fit: cover;
+        object-position: center center;
+    }
+}
