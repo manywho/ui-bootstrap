@@ -106,7 +106,7 @@ module.exports.plugins = [
 module.exports.rules = [
     {
         test: /\.css$/,
-        include: /node_modules\/tinymce\//,
+        include: [/node_modules\/tinymce\//, /node_modules\\tinymce\\/],
         use: ['style-loader', 'css-loader'],
     },
     {
@@ -165,6 +165,7 @@ module.exports.cssPaths = [
     'css/tiles.less',
     'css/toggle.less',
     'css/tours.less',
+    'css/image.less',
 ];
 
 module.exports.run = (config, defaultDirectory) => (env = {}) => {

@@ -55,15 +55,18 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
         const doneLoading = this.props.isLoading && !nextProps.isLoading;
         const hasRequest = model.objectDataRequest !== null || model.fileDataRequest !== null;
+        // if there is nothing in nextProps.objectData then use an [] to
+        // properly cover this case later when building the options array
+        const nextPropsObjectData = nextProps.objectData || [];
 
-        if ((doneLoading || !hasRequest) && nextProps.objectData && !nextProps.isDesignTime) {
+        if ((doneLoading || !hasRequest) && !nextProps.isDesignTime) {
             let options = [];
 
             if (
                 nextProps.page > 1 &&
                 this.state.options.length < nextProps.limit * nextProps.page
             ) {
-                options = this.addOptions(this.state.options, this.getOptions(nextProps.objectData));
+                options = this.addOptions(this.state.options, this.getOptions(nextPropsObjectData));
                 this.setState({ isOpen: true });
 
                 const index = this.state.options.length + 1;
@@ -76,7 +79,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                     dropdown.scrollTop = scrollTarget.offsetTop;
                 });
             } else {
-                options = this.addOptions(options, this.getOptions(nextProps.objectData));
+                options = this.addOptions(options, this.getOptions(nextPropsObjectData));
             }
 
             if (state && state.objectData) {

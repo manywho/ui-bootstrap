@@ -65,40 +65,60 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         this.handleResizeDebounced = manywho.utils.debounce(this.handleResize, 200);
     }
 
-    getDisplayColumns(columns, outcomes) {
-        const displayColumns = manywho.component.getDisplayColumns(columns) || [];
-
-        if (outcomes.filter(outcome => !outcome.isBulkAction).length > 0)
-            displayColumns.unshift('mw-outcomes');
-
-        return displayColumns;
+    componentDidMount() {
+        window.addEventListener('resize', this.handleResizeDebounced);
+        if (!this.props.isDesignTime) {
+            this.fetchFiles();
+        }
     }
 
-    renderFooter(
-        pageIndex: number,
-        hasMoreResults: boolean,
-        onNext: Function,
-        onPrev: Function,
-        onFirstPage: Function,
-        isDesignTime: boolean,
-    ) {
-        const Pagination = getPagination();
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResizeDebounced);
+    }
 
-        if (pageIndex > 1 || hasMoreResults) {
+    onHeaderClick(e) {
+        this.props.sort(e.currentTarget.dataset.sortProperty);
+    }
 
-            const props = {
-                pageIndex,
-                hasMoreResults,
-                onNext,
-                onPrev,
-                onFirstPage,
-                isDesignTime,
-            };
+    onSelect(e) {
+        e.stopPropagation();
+        this.props.select(e.currentTarget.id);
+    }
 
-            return <Pagination {...props} />;
+    getLabel(label, required) {
+
+        if (!manywho.utils.isNullOrWhitespace(label)) {
+
+            const labelClasses = manywho.settings.global('collapsible', this.props.flowKey)
+                ? 'container-label clickable-section'
+                : 'container-label';
+
+            const labelContent = (manywho.settings.global('collapsible', this.props.flowKey) && label)
+                ? [<i key={manywho.utils.guid()} className={this.state.icon} />, label]
+                : [label];
+
+            if (required) {
+                labelContent.push(<span className="input-required"> *</span>);
+            }
+
+            return (
+                <h3 className={labelClasses} onClick={this.toggleVisibility}>
+                    {labelContent}
+                </h3>
+            );
         }
 
         return null;
+    }
+
+    getDisplayColumns(columns, outcomes) {
+        const displayColumns = manywho.component.getDisplayColumns(columns) || [];
+
+        if (outcomes.filter(outcome => !outcome.isBulkAction).length > 0) {
+            displayColumns.unshift('mw-outcomes');
+        }
+
+        return displayColumns;
     }
 
     toggleVisibility(event) {
@@ -131,43 +151,6 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         }
     }
 
-    getLabel(label, required) {
-
-        if (!manywho.utils.isNullOrWhitespace(label)) {
-
-            const labelClasses =
-                manywho.settings.global('collapsible', this.props.flowKey) ?
-                'container-label clickable-section' :
-                'container-label';
-
-            const labelContent =
-                manywho.settings.global('collapsible', this.props.flowKey) && label ?
-                [<i className={this.state.icon}/>, label] :
-                [label];
-
-            if (required) {
-                labelContent.push(<span className={'input-required'}> *</span>);
-            }
-
-            return (
-                <h3 className={ labelClasses } onClick={ this.toggleVisibility }>
-                    {labelContent}
-                </h3>
-            );
-        }
-
-        return null;
-    }
-
-    onHeaderClick(e) {
-        this.props.sort(e.currentTarget.dataset.sortProperty);
-    }
-
-    onSelect(e) {
-        e.stopPropagation();
-        this.props.select(e.currentTarget.id);
-    }
-
     handleResize() {
 
         if ((this.state.windowWidth <= 768 && window.innerWidth > 768)
@@ -193,26 +176,41 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         }
     }
 
-    componentDidMount() {
-        window.addEventListener('resize', this.handleResizeDebounced);
-        if (!this.props.isDesignTime) {
-            this.fetchFiles();
-        }
-    }
+    renderFooter(
+        pageIndex: number,
+        hasMoreResults: boolean,
+        onNext: Function,
+        onPrev: Function,
+        onFirstPage: Function,
+        isDesignTime: boolean,
+    ) {
+        const Pagination = getPagination();
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResizeDebounced);
+        if (pageIndex > 1 || hasMoreResults) {
+
+            const props = {
+                pageIndex,
+                hasMoreResults,
+                onNext,
+                onPrev,
+                onFirstPage,
+                isDesignTime,
+            };
+
+            return <Pagination {...props} />;
+        }
+
+        return null;
     }
 
     render() {
 
-        manywho.log.info('Rendering Table: ' + this.props.id);
+        manywho.log.info(`Rendering Table: ${this.props.id}`);
 
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
-        const state =
-            this.props.isDesignTime ?
-            { error: null, loading: false } :
-            manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
+        const state = this.props.isDesignTime
+            ? { error: null, loading: false }
+            : manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
 
         const outcomes = manywho.model.getOutcomes(this.props.id, this.props.flowKey);
 
@@ -247,18 +245,20 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
                 onHeaderClick: this.onHeaderClick,
             });
 
-            if (model.attributes && !model.attributes.isRowSelectionDisabled)
+            if (model.attributes && !model.attributes.isRowSelectionDisabled) {
                 props.onRowClicked = this.onSelect;
+            }
         }
 
         const TableLarge = getTableLarge();
         const TableSmall = getTableSmall();
+        const tableIsEditable = props.displayColumns.some(column => column.isEditable);
 
-        let contentElement = this.props.contentElement;
+        let { contentElement } = this.props;
         if (!contentElement) {
-            contentElement = this.state.windowWidth <= 768 ?
-                <TableSmall {...props} /> :
-                <TableLarge {...props} />;
+            contentElement = (this.state.windowWidth <= 768 && !tableIsEditable)
+                ? <TableSmall {...props} />
+                : <TableLarge {...props} />;
         }
 
         const FileUpload = getFileUpload();
@@ -266,7 +266,7 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
         let fileUploadElement = null;
         if (model.fileDataRequest) {
 
-            const props = {
+            const fileUploadProps = {
                 flowKey: this.props.flowKey,
                 id: this.props.id,
                 fileDataRequest: model.fileDataRequest,
@@ -276,43 +276,50 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
                 isDesignTime: this.props.isDesignTime,
             };
 
-            fileUploadElement = <FileUpload {...props} />;
+            fileUploadElement = <FileUpload {...fileUploadProps} />;
         }
 
         let classNames = 'table-container clear-fix';
 
-        if (this.state.windowWidth <= 768)
+        if (this.state.windowWidth <= 768) {
             classNames += ' table-container-small';
+        }
 
-        if (model.isVisible === false)
+        if (model.isVisible === false) {
             classNames += ' hidden';
+        }
 
-        classNames += ' ' + manywho.styling.getClasses(
+        const stylingClasses = manywho.styling.getClasses(
             this.props.parentId,
             this.props.id,
             'table',
             this.props.flowKey,
         ).join(' ');
 
+        classNames += ` ${stylingClasses}`;
+
         let labelElement = null;
-        if (!manywho.utils.isNullOrWhitespace(model.label))
+        if (!manywho.utils.isNullOrWhitespace(model.label)) {
             labelElement = <label>{model.label}</label>;
+        }
 
         let validationElement = null;
-        if (!props.isValid)
+        if (!props.isValid) {
             validationElement = (
                 <div className="has-error">
                     <span className="help-block">
-                    {
-                        model.validationMessage || state.validationMessage
-                    }
+                        {
+                            model.validationMessage || state.validationMessage
+                        }
                     </span>
                 </div>
             );
+        }
 
         let isDisabled = false;
-        if (model.isEnabled === false || this.props.isLoading)
+        if (model.isEnabled === false || this.props.isLoading) {
             isDisabled = true;
+        }
 
         const ItemsHeader = getItemsHeader();
         const itemsHeaderProps = {
@@ -329,26 +336,28 @@ class Table extends React.Component<ITableContainerProps, ITableContainerState> 
 
         const Wait = getWait();
 
-        return <div className={classNames} id={this.props.id}>
-            {labelElement}
-            {validationElement}
-            <div className={'clearfix' + (this.state.isVisible ? '' : ' hidden')}>
-                {fileUploadElement}
-                {headerElement}
-                {contentElement}
-                {
-                    this.renderFooter(
-                        this.props.page,
-                        this.props.hasMoreResults,
-                        this.props.onNext,
-                        this.props.onPrev,
-                        this.props.onFirstPage,
-                        this.props.isDesignTime,
-                    )
-                }
-                <Wait isVisible={state.loading} message={state.loading && state.loading.message} isSmall={true} />
+        return (
+            <div className={classNames} id={this.props.id}>
+                {labelElement}
+                {validationElement}
+                <div className={`clearfix ${(this.state.isVisible ? '' : ' hidden')}`}>
+                    {fileUploadElement}
+                    {headerElement}
+                    {contentElement}
+                    {
+                        this.renderFooter(
+                            this.props.page,
+                            this.props.hasMoreResults,
+                            this.props.onNext,
+                            this.props.onPrev,
+                            this.props.onFirstPage,
+                            this.props.isDesignTime,
+                        )
+                    }
+                    <Wait isVisible={state.loading} message={state.loading && state.loading.message} isSmall={true} />
+                </div>
             </div>
-        </div>;
+        );
     }
 
 }

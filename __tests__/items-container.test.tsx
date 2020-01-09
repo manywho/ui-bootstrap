@@ -420,6 +420,10 @@ describe('ItemsContainer component behaviour', () => {
         },
     ];
 
+    beforeEach(() => {
+        globalAny.window.manywho.component.getPageSize = () => 10;
+    });
+
     afterEach(() => {
         componentWrapper.unmount();
     });
@@ -534,6 +538,7 @@ describe('ItemsContainer component behaviour', () => {
     test('Pagination size is passed to child component', () => {
 
         globalAny.window.manywho.utils.isEqual = () => true;
+        globalAny.window.manywho.component.getPageSize = () => 23;
 
         componentWrapper = manyWhoMount({
             objectData: [],
@@ -552,6 +557,7 @@ describe('ItemsContainer component behaviour', () => {
 
         globalAny.window.manywho.utils.isEqual = () => true;
         globalAny.window.manywho.settings.flow = () => 16;
+        globalAny.window.manywho.component.getPageSize = () => 16;
 
         componentWrapper = manyWhoMount({
             objectData: [],
@@ -953,4 +959,11 @@ describe('ItemsContainer component behaviour', () => {
         objectData.sort(componentWrapper.instance().compare('object', true));
         expect(objectData).toEqual(sortingTestData);
     });
+
+    test('Verify sort method not called on null objectData', () => {
+        globalAny.window.manywho.utils.isNullOrWhitespace = () => true;
+        componentWrapper = manyWhoMount({ objectData: null });
+        expect(() => componentWrapper.setState({ search: null, sortedBy: 'test', sortedIsAscending: true })).not.toThrow();
+    });
+
 });
