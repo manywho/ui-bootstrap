@@ -37,11 +37,11 @@ const clearActivePanes = (tabsElement, panesElement) => {
     const paneElements = path(['children'], panesElement);
 
     if (tabElements instanceof HTMLCollection) {
-        Array.from(tabElements).forEach(el => el.classList.remove('active'));
+        [].slice.call(tabElements).forEach(el => el.classList.remove('active'));
     }
 
     if (paneElements instanceof HTMLCollection) {
-        Array.from(paneElements).forEach(el => el.classList.remove('active'));
+        [].slice.call(paneElements).forEach(el => el.classList.remove('active'));
     }
 };
 
