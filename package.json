@@ -115,6 +115,7 @@
         "@boomi/react-file-upload": "^0.2.0",
         "@types/react-maskedinput": "4.0.3",
         "babel-loader": "8.0.5",
+        "core-js": "^3.6.4",
         "create-react-class": "15.6.3",
         "extract-text-webpack-plugin": "4.0.0-beta.0",
         "jquery": "3.4.1",
@@ -125,6 +126,7 @@
         "react": "16.8.6",
         "react-dom": "16.8.6",
         "react-selectize": "3.0.1",
+        "regenerator-runtime": "^0.13.3",
         "tinymce": "^4.8.5"
     }
 }

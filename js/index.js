@@ -3,6 +3,10 @@ import 'script-loader!./lib/010-pollyfills.js';
 // Polyfill for Promises in IE - Can be removed when when support for IE is dropped
 import 'promise-polyfill/src/polyfill';
 
+// polyfills for IE https://github.com/zloirock/core-js#babel
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 import './createClassPatch.ts';
 
 // Lib CSS
