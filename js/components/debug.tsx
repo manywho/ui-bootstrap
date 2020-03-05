@@ -60,7 +60,8 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
         const pathPart = e.currentTarget.getAttribute('data-path-part');
 
         paths[valueElementId] =
-            (`${(paths[valueElementId] || '')} . ${pathPart}`).replace(/^\./gi, '');
+            // `${(paths[valueElementId] || '')}.${pathPart})`.replace(/^\./gi, '');
+            (`${(paths[valueElementId] || '')}.${pathPart}`).replace(/^\./gi, '');
 
         this.setState({
             paths,
@@ -96,7 +97,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
         return (
             <div className="debug-root" key={id}>
                 <div className="debug-root-toggle" id={id} onClick={this.toggleHeader} role="presentation">
-                    <span className={`glyphicon glyphicon-triangle- ${((isExpanded) ? 'bottom' : 'right')}`} />
+                    <span className={`glyphicon glyphicon-triangle-${((isExpanded) ? 'bottom' : 'right')}`} />
                     <h5 className="debug-title">
                         {title}
                     </h5>
@@ -149,6 +150,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
                                         return (
                                             <li key={value[idName]}>
                                                 <button
+                                                    className="btn btn-link btn-sm"
                                                     onClick={this.onBreadcrumbClick}
                                                     data-value-id={value[idName]}
                                                 >
@@ -221,7 +223,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
                     role="presentation"
                 >
 
-                    <span className={`glyphicon glyphicon-triangle-'${((isExpanded) ? 'bottom' : 'right')}`} />
+                    <span className={`glyphicon glyphicon-triangle-${((isExpanded) ? 'bottom' : 'right')}`} />
                     <h5 className="debug-title">Execution Log</h5>
                     <span className="label label-info">{entries.length}</span>
                 </div>
@@ -261,6 +263,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
             const preCommitStateValues =
                 manywho.model.getPreCommitStateValues(this.props.flowKey) || [];
             const stateValues = manywho.model.getStateValues(this.props.flowKey) || [];
+            const frames = manywho.model.getFrames(this.props.flowKey) || [];
             const executionLog = manywho.model.getExecutionLog(this.props.flowKey) || {};
 
             const componentErrors = [];
@@ -287,6 +290,10 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
                 this.renderValues(
                     'State Values', 'statevalues', stateValues, 'developerName',
                     'valueElementId',
+                ),
+                this.renderValues(
+                    'Frames', 'frames', frames, 'flowDeveloperName',
+                    'flowDeveloperName',
                 ),
                 this.renderLogEntries(executionLog.entries || []),
             ];
