@@ -68,6 +68,39 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
         });
     }
 
+    getValueByPath = (obj: any, path: string): any => {
+        let objectData = obj;
+
+        if (!path || path === '') {
+            return objectData;
+        }
+
+        try {
+            const parts = path.split('.');
+
+            for (let i = 0; i < parts.length; i += 1) {
+                let foundKey = null;
+
+                Object.keys(objectData).forEach((key) => {
+                    if (key.toLowerCase() === parts[i].toLowerCase()) {
+                        foundKey = key;
+                    }
+                });
+
+                if (foundKey) {
+                    objectData = obj[foundKey];
+                }
+                else {
+                    objectData = undefined;
+                }
+            }
+            return objectData;
+
+        } catch (ex) {
+            return undefined;
+        }
+    };
+
     toggleValue(e) {
         e.stopPropagation();
 
@@ -123,7 +156,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
     renderValue(path, value, name, idName) {
 
         const isExpanded = this.state.toggle[value[idName]] || false;
-        const properties = manywho.utils.getValueByPath(value, path);
+        const properties = this.getValueByPath(value, path);
 
         const fullPath = `${value[name]} . ${path}`;
 
@@ -263,7 +296,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
             const preCommitStateValues =
                 manywho.model.getPreCommitStateValues(this.props.flowKey) || [];
             const stateValues = manywho.model.getStateValues(this.props.flowKey) || [];
-            const frames = manywho.model.getFrames(this.props.flowKey) || [];
+            const flowFrames = manywho.model.getFrames(this.props.flowKey) || [];
             const executionLog = manywho.model.getExecutionLog(this.props.flowKey) || {};
 
             const componentErrors = [];
@@ -292,7 +325,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
                     'valueElementId',
                 ),
                 this.renderValues(
-                    'Frames', 'frames', frames, 'flowDeveloperName',
+                    'Frames', 'frames', flowFrames, 'flowDeveloperName',
                     'flowDeveloperName',
                 ),
                 this.renderLogEntries(executionLog.entries || []),
