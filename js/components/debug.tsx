@@ -60,7 +60,6 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
         const pathPart = e.currentTarget.getAttribute('data-path-part');
 
         paths[valueElementId] =
-            // `${(paths[valueElementId] || '')}.${pathPart})`.replace(/^\./gi, '');
             (`${(paths[valueElementId] || '')}.${pathPart}`).replace(/^\./gi, '');
 
         this.setState({
@@ -105,7 +104,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
         e.stopPropagation();
 
         const { toggle } = this.state;
-        const valueElementId = e.currentTarget.getAttribute('data-value-id');
+        const valueElementId = e.currentTarget.dataset.valueId;
 
         toggle[valueElementId] = !toggle[valueElementId];
 
