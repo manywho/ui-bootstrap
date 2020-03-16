@@ -227,7 +227,7 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
                                         }
 
                                         return (
-                                            <tr key={value[idName]}>
+                                            <tr key={`${propertyCaption}-${value[idName]}`}>
                                                 <td>{propertyCaption}</td>
                                                 <td>{propertyValue || 'null'}</td>
                                             </tr>
@@ -261,25 +261,27 @@ class DebugViewer extends React.Component<IComponentProps, IDebugViewerState> {
                 </div>
                 <div className={isExpanded ? null : 'hidden'}>
                     <table className="table table-striped">
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>Message</th>
-                            <th>Data</th>
-                        </tr>
-                        {
-                            manywho.utils.convertToArray(entries).map((entry) => {
+                        <tbody>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Message</th>
+                                <th>Data</th>
+                            </tr>
+                            {
+                                manywho.utils.convertToArray(entries).map((entry) => {
 
-                                const timeStamp = new Date(entry.timestamp);
+                                    const timeStamp = new Date(entry.timestamp);
 
-                                return (
-                                    <tr key={entry.timestamp}>
-                                        <td>{timeStamp.toLocaleString()}</td>
-                                        <td>{entry.message}</td>
-                                        { /* TODO: display data */}
-                                    </tr>
-                                );
-                            })
-                        }
+                                    return (
+                                        <tr key={entry.timestamp}>
+                                            <td>{timeStamp.toLocaleString()}</td>
+                                            <td>{entry.message}</td>
+                                            { /* TODO: display data */}
+                                        </tr>
+                                    );
+                                })
+                            }
+                        </tbody>
                     </table>
                 </div>
             </div>
