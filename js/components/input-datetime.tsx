@@ -25,18 +25,6 @@ class InputDateTime extends React.Component<IInputProps, null> {
         this.setPickerDate = this.setPickerDate.bind(this);
     }
 
-    isEmptyDate(date) {
-        if (date === null
-            || date === undefined
-            || date === ''
-            || date.indexOf('01/01/0001') !== -1
-            || date.indexOf('1/1/0001') !== -1
-            || date.indexOf('0001-01-01') !== -1)
-            return true;
-
-        return false;
-    }
-
     format(date) {
         if (this.isDateOnly) {
             return moment({
@@ -174,19 +162,9 @@ class InputDateTime extends React.Component<IInputProps, null> {
                 'MM/DD/YYYY',
             timeZone: 'UTC',
         })
-        .on('dp.change', !this.props.isDesignTime && this.onChange);
+            .on('dp.change', !this.props.isDesignTime && this.onChange);
 
-        if (!this.props.isDesignTime) {
-            if (this.isEmptyDate(this.props.value)) {
-
-                manywho.state.setComponent(
-                    this.props.id, { contentValue: '' }, this.props.flowKey, true,
-                );
-
-            } else {
-                this.setPickerDate(this.props.value);
-            }
-        }
+        this.setPickerDate(this.props.value);
     }
 
     componentWillUnmount() {
