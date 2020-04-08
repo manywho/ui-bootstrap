@@ -12,7 +12,7 @@ import { getHistory } from './history';
 // tslint:disable-next-line
 import Dynamic from './dynamic';
 
-declare var manywho: any;
+declare const manywho: any;
 
 class Main extends React.Component<any, any> {
 
@@ -27,10 +27,30 @@ class Main extends React.Component<any, any> {
     componentDidMount() {
         manywho.utils.removeLoadingIndicator('loader');
 
-        if (manywho.settings.global('syncOnUnload', this.props.flowKey, true))
-            window.addEventListener('beforeunload', (event) => {
-                manywho.engine.sync(this.props.flowKey);
-            });
+        if (manywho.settings.global('syncOnUnload', this.props.flowKey, true)) {
+            window.addEventListener('beforeunload', this.syncFlow, true);
+        }
+    }
+
+    /**
+     * It is required that we clean up event listeners, otherwise
+     * stale sync requests will get sent to the engine for flows
+     * that have previously been torn down
+     */
+    componentWillUnmount() {
+        if (manywho.settings.global('syncOnUnload', this.props.flowKey, true)) {
+            window.removeEventListener('beforeunload', this.syncFlow, true);
+        }
+    }
+
+    /**
+     * This function exists because we do not want to bind an anonymous
+     * function to the beforeunload event listeners, otherwise we cannot remove
+     * the event listener when the component later unmounts since the function
+     * reference does not exist
+     */
+    syncFlow = () => {
+        manywho.engine.sync(this.props.flowKey);
     }
 
     render() {
@@ -68,8 +88,8 @@ class Main extends React.Component<any, any> {
         />;
 
         if (
-            state && 
-            state.loading == null && 
+            state &&
+            state.loading == null &&
             !manywho.utils.isEqual(
                 manywho.model.getInvokeType(this.props.flowKey), 'sync', true,
             )
@@ -91,13 +111,13 @@ class Main extends React.Component<any, any> {
         }
 
         let classNames = 'main';
-        classNames += 
-            (manywho.settings.global('isFullWidth', this.props.flowKey, false)) ? 
-            ' container-fluid full-width' : 
+        classNames +=
+            (manywho.settings.global('isFullWidth', this.props.flowKey, false)) ?
+            ' container-fluid full-width' :
             ' container';
 
         if (
-            manywho.settings.isDebugEnabled(this.props.flowKey) || 
+            manywho.settings.isDebugEnabled(this.props.flowKey) ||
             manywho.settings.global('history', this.props.flowKey)
         ) {
             classNames += ' auto-width';
