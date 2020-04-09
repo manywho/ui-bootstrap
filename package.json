@@ -79,6 +79,9 @@
         "write-file": "1.0.0"
     },
     "jest": {
+        "testPathIgnorePatterns": [
+            "/fixtures/"
+        ],
         "collectCoverage": true,
         "collectCoverageFrom": [
             "**/js/components/*.{ts,tsx}"

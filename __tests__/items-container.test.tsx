@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import { str } from '../test-utils';
+import { objectDataFixture } from './fixtures/objectData.test.fixture';
+import { columnsFixture } from './fixtures/columns.test.fixture';
 
 import ItemsContainer from '../js/components/items-container';
 import Dynamic from '../js/components/dynamic';
@@ -23,6 +25,8 @@ describe('ItemsContainer component behaviour', () => {
         objectDataRequest = null,
         fileDataRequest = null,
         componentType = str(),
+        search = null,
+        pagination = true,
     } = {}) {
 
         const props = {
@@ -36,12 +40,12 @@ describe('ItemsContainer component behaviour', () => {
             componentType,
             attributes: {
                 paginationSize,
-                pagination: true,
+                pagination,
             },
         });
 
         globalAny.window.manywho.state.getComponent = () => ({
-            loading, page,
+            loading, page, search,
         });
 
         globalAny.window.manywho.component.contentTypes = {
@@ -704,6 +708,41 @@ describe('ItemsContainer component behaviour', () => {
             }),
             expect.anything(),
             expect.anything(),
+        );
+    });
+
+    test('objectData gets filtered when search query is in state', () => {
+        globalAny.window.manywho.component.getDisplayColumns = () => columnsFixture;
+        globalAny.window.manywho.formatting.format = contentValue => contentValue;
+
+        componentWrapper = manyWhoMount({
+            objectDataRequest: null,
+            objectData: objectDataFixture,
+            search: 'x',
+            pagination: false,
+        });
+
+        expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
+            expect.objectContaining({
+                objectData: [objectDataFixture[2]],
+            }),
+        );
+    });
+
+    test('objectData set to null when searching on empty table', () => {
+        globalAny.window.manywho.component.getDisplayColumns = () => columnsFixture;
+
+        componentWrapper = manyWhoMount({
+            objectDataRequest: null,
+            objectData: null,
+            search: 'x',
+            pagination: false,
+        });
+
+        expect(componentWrapper.find(Dynamic).prop('props')).toEqual(
+            expect.objectContaining({
+                objectData: null,
+            }),
         );
     });
 

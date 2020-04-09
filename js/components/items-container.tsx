@@ -331,7 +331,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
         if (!model.objectDataRequest && !model.fileDataRequest) {
 
             if (!manywho.utils.isNullOrWhitespace(state.search)) {
-                objectData = model.objectData.filter(
+                objectData = model.objectData ? model.objectData.filter(
                     item => item.properties.filter((prop) => {
                         const matchingColumns = columns.filter(
                             column => column.typeElementPropertyId === prop.typeElementPropertyId && column.isDisplayValue,
@@ -348,7 +348,7 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
 
                         return false;
                     }).length > 0,
-                );
+                ) : model.objectData;
             } else {
                 objectData = model.objectData;
             }

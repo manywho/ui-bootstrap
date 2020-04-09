@@ -20,7 +20,7 @@ const mockDateObject = {
     local() {
         return true;
     },
-    format() { 
+    format() {
         return str();
     },
     year() {
@@ -101,32 +101,17 @@ describe('InputDateTime component behaviour', () => {
     test('Component gets registered', () => {
         componentWrapper = manyWhoMount();
         expect(globalAny.window.manywho.component.register)
-        .toHaveBeenCalledWith('input-datetime', InputDateTime); 
+        .toHaveBeenCalledWith('input-datetime', InputDateTime);
     });
 
     test('The datepicker plugin gets instantiated', () => {
         componentWrapper = manyWhoMount(false, true);
-        expect(globalAny.datetimepickerMock).toHaveBeenCalled(); 
+        expect(globalAny.datetimepickerMock).toHaveBeenCalled();
     });
 
     test('If value prop is a date that datepicker plugin gets called', () => {
         componentWrapper = manyWhoMount(false, true, null, '2018-02-16T00:00:00.0000000+00:00');
         expect(globalAny.datetimepickerMock).toHaveBeenCalled();
-    });
-
-    test('An empty date will return true', () => {
-        componentWrapper = manyWhoMount();
-        const componentWrapperInstance = componentWrapper.instance();
-        expect(componentWrapperInstance.isEmptyDate(null)).toBeTruthy();
-        expect(componentWrapperInstance.isEmptyDate('01/01/0001')).toBeTruthy();
-        expect(componentWrapperInstance.isEmptyDate('1/1/0001')).toBeTruthy();
-        expect(componentWrapperInstance.isEmptyDate('0001-01-01')).toBeTruthy();
-    });
-
-    test('A valid date will return false', () => {
-        componentWrapper = manyWhoMount();
-        const componentWrapperInstance = componentWrapper.instance();
-        expect(componentWrapperInstance.isEmptyDate('07/12/1986')).toBeFalsy();
     });
 
     test('utility function is called to determine if the datepicker plugin should default to the current date', () => {
@@ -148,7 +133,7 @@ describe('InputDateTime component behaviour', () => {
     test('setPickerDate is called with correct null value', () => {
         const mockSetPickerDate = jest.spyOn(InputDateTime.prototype, 'setPickerDate');
 
-        componentWrapper = manyWhoMount(false, false, 'YYYY/MM/DD', '2018/12/25'); 
+        componentWrapper = manyWhoMount(false, false, 'YYYY/MM/DD', '2018/12/25');
         expect(mockSetPickerDate).toHaveBeenCalledWith('2018/12/25');
 
         componentWrapper.setProps({ value: null });
@@ -158,8 +143,8 @@ describe('InputDateTime component behaviour', () => {
     test('make sure backspace doesn\'t clear input', () => {
         const mockSetPickerDate = jest.spyOn(InputDateTime.prototype, 'setPickerDate');
 
-        componentWrapper = manyWhoMount(false, false, 'DD/MM/YYYY', '25/12/2018'); 
-        expect(mockSetPickerDate).toHaveBeenCalledWith('25/12/2018'); 
+        componentWrapper = manyWhoMount(false, false, 'DD/MM/YYYY', '25/12/2018');
+        expect(mockSetPickerDate).toHaveBeenCalledWith('25/12/2018');
 
         componentWrapper.find(InputDateTime).simulate('keydown', {keyCode: 8});
         expect(componentWrapper.find(InputDateTime).props().value).toBeTruthy();
@@ -168,7 +153,7 @@ describe('InputDateTime component behaviour', () => {
     test('setPickerDate is called with correct date value', () => {
         const mockSetPickerDate = jest.spyOn(InputDateTime.prototype, 'setPickerDate');
 
-        componentWrapper = manyWhoMount(false, false, 'YYYY/MM/DD', '2018/12/25'); 
+        componentWrapper = manyWhoMount(false, false, 'YYYY/MM/DD', '2018/12/25');
         expect(mockSetPickerDate).toHaveBeenCalledWith('2018/12/25');
 
         componentWrapper.setProps({ value: '2017/11/24' });
