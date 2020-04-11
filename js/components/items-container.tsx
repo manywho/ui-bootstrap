@@ -165,6 +165,10 @@ class ItemsContainer extends React.Component<IComponentProps, IItemsContainerSta
                 return 0;
             }
 
+            if (!l.contentValue || !r.contentValue) {
+                return 0;
+            }
+
             let result = 0;
             switch (l.contentType.toUpperCase()) {
             case manywho.component.contentTypes.datetime: // Fallthrough
