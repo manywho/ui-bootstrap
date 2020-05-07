@@ -76,19 +76,6 @@ class Input extends React.Component<IComponentProps, null> {
     }
 
     onBlur(e) {
-        let callback = null;
-        const relatedElement = e.relatedTarget;
-
-        if (
-            relatedElement &&
-            (
-                relatedElement.classList.contains('outcome') ||
-                relatedElement.classList.contains('control-label')
-            )
-        ) {
-            callback = () => relatedElement.click();
-        }
-
         manywho.component.handleEvent(
             this,
             manywho.model.getComponent(
@@ -96,7 +83,7 @@ class Input extends React.Component<IComponentProps, null> {
                 this.props.flowKey,
             ),
             this.props.flowKey,
-            callback,
+            null,
         );
     }
 
