@@ -2,6 +2,7 @@ import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
 import { getNotifications } from './notifications';
 import { getNavigation } from './navigation';
+import { getHistoricalNavigation } from './historical-navigation';
 import { getStatus } from './status';
 import { getFooter } from './footer';
 import { getVoting } from './voting';
@@ -57,6 +58,7 @@ class Main extends React.Component<any, any> {
         manywho.log.info('Rendering Main');
 
         const Navigation = getNavigation();
+        const HistoricalNavigation = getHistoricalNavigation();
         const Notifications = getNotifications();
         const Status = getStatus();
         const Footer = getFooter();
@@ -134,6 +136,7 @@ class Main extends React.Component<any, any> {
                 <div className="main-scroller">
                     {(isFixedNav) ? null : navElement}
                     <div className={classNames} onKeyUp={this.onEnter} ref="main">
+                        <HistoricalNavigation flowKey={this.props.flowKey} />
                         <h2 className="page-label">
                             {manywho.model.getLabel(this.props.flowKey)}
                         </h2>

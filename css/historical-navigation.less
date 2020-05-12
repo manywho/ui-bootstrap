@@ -1,0 +1,47 @@
+.mw-bs {
+    .historical-navigation {
+
+        ul {
+            padding-left: 0;
+        }
+
+        li {
+            display: none;
+            list-style: none;
+            margin-right: 0.3em;
+
+            /* Always show the first entry */
+            &:first-child {
+                display: inline;
+            }
+
+            /* Show the last four entries from the end */
+            &:nth-last-child(-n+4) {
+                display: inline;
+            }
+
+            /* Show a separator after each entry except the last */
+            &:not(:last-child):after {
+                content: '»';
+                margin-left: 0.3em;
+                vertical-align: middle;
+            }
+
+            /* Show an ellipsis and extra separator after the first entry */
+            /* but not when it's 5 or less from the end */
+            &:first-child:not(:nth-last-child(-n+5)):after {
+                content: '» ... »';
+                margin-left: 0.3em;
+                vertical-align: middle;
+            }
+
+            button {
+                padding: 0;
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
