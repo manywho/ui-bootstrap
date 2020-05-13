@@ -11,7 +11,7 @@ const navigateToPath = (flowKey, path) => {
 };
 
 /**
- * @description :TODO
+ * @description Renders a list of navigation links to previously visited map elements
  */
 
 const HistoricalNavigation:React.FC<IComponentProps> = ({ flowKey }) => {
