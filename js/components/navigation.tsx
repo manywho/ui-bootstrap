@@ -61,7 +61,15 @@ class Navigation extends React.Component<INavigationProps, null> {
             toggleRef.current.click();
         }
 
-        manywho.engine.navigate(this.props.id, item.id, null, this.props.flowKey);
+        manywho.engine.navigate(this.props.id, item.id, null, this.props.flowKey).then(() => {
+            // Once we've navigated, close all the open navigation items
+            menuRefs.forEach((item) => {
+                if (item.current) {
+                    item.current.classList.remove('open');
+                }
+            });
+        });
+
         return true;
     }
 
