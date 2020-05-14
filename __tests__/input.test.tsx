@@ -180,7 +180,6 @@ describe('Input component behaviour', () => {
         inputWrapper.find('input').simulate('change', { target: { value: 'text' } });
         expect(onchangeSpy).toHaveBeenCalled();
         expect(globalAny.window.manywho.state.getComponent).toHaveBeenCalled();
-        expect(globalAny.window.manywho.validation.validate).toHaveBeenCalled();
         expect(globalAny.window.manywho.state.setComponent).toHaveBeenCalledTimes(2);
     });
 
