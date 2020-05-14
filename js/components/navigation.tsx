@@ -11,6 +11,9 @@ declare const manywho: any;
 const menuRefs = [];
 const toggleRef = React.createRef<HTMLButtonElement>();
 
+// Contains all the open navigation items
+let openRefs: React.RefObject<HTMLLIElement>[] = [];
+
 /**
  * @description The navigation component renders a Bootstrap 3
  * Navbar populated with menu items. Menu items may have children and
@@ -34,6 +37,8 @@ class Navigation extends React.Component<INavigationProps, null> {
         e.stopPropagation();
         e.preventDefault();
         ref.current.classList.toggle('open');
+
+        openRefs.push(ref);
     };
 
     // This is for ensuring dropdown navigation is hidden when
@@ -63,11 +68,13 @@ class Navigation extends React.Component<INavigationProps, null> {
 
         manywho.engine.navigate(this.props.id, item.id, null, this.props.flowKey).then(() => {
             // Once we've navigated, close all the open navigation items
-            menuRefs.forEach((item) => {
-                if (item.current) {
+            openRefs.forEach((item) => {
+                if (item && item.current.classList.contains('open')) {
                     item.current.classList.remove('open');
                 }
             });
+
+            openRefs = [];
         });
 
         return true;
