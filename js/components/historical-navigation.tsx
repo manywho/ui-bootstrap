@@ -13,24 +13,40 @@ const navigateToPath = (flowKey, path) => {
 /**
  * @description Renders a list of navigation links to previously visited map elements
  */
-
 const HistoricalNavigation:React.FC<IComponentProps> = ({ flowKey }) => {
 
+    const [expanded, setExpanded] = React.useState(false);
+
     const navigation = manywho.model.getHistoricalNavigation(flowKey);
+
+    const onEntryClick = (entry) => {
+        setExpanded(false); 
+        navigateToPath(flowKey, entry.path);
+    };
 
     if (navigation && navigation.entries && navigation.entries.length > 0) {
 
         return (
-            <nav className="historical-navigation">
+            <nav className={`historical-navigation${expanded ? ' expanded' : ''}`}>
                 <ul>
                     {
                         navigation.entries.map((entry, index) => (
                             <li key={index}>
-                                <button className="btn btn-link" onClick={() => navigateToPath(flowKey, entry.path)}>
+                                <button className="btn btn-link" onClick={() => onEntryClick(entry)}>
                                 {
                                     entry.mapElementName
                                 }
                                 </button>
+                                {
+                                    index === 0 ? (
+                                        <button 
+                                            className="historical-navigation-expand"
+                                            onClick={() => setExpanded(true)}
+                                        >
+                                            <span>expand</span>
+                                        </button> 
+                                    ): null
+                                }
                             </li>
                         ))
                     }
