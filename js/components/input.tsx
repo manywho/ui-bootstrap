@@ -60,14 +60,6 @@ class Input extends React.Component<IComponentProps, null> {
             );
         }
 
-        const state = manywho.state.getComponent(this.props.id, this.props.flowKey) || {};
-        manywho.state.setComponent(
-            this.props.id,
-            manywho.validation.validate(model, state, this.props.flowKey),
-            this.props.flowKey,
-            true,
-        );
-
         if (model.contentType.toUpperCase() === manywho.component.contentTypes.boolean) {
             this.onBlur(e);
         }
