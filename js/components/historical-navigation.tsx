@@ -40,6 +40,7 @@ const HistoricalNavigation:React.FC<IComponentProps> = ({ flowKey }) => {
                                 {
                                     index === 0 ? (
                                         <button 
+                                            title="expand"
                                             className="historical-navigation-expand"
                                             onClick={() => setExpanded(true)}
                                         >
