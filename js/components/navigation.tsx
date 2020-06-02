@@ -69,7 +69,7 @@ class Navigation extends React.Component<INavigationProps, null> {
         manywho.engine.navigate(this.props.id, item.id, null, this.props.flowKey).then(() => {
             // Once we've navigated, close all the open navigation items
             openRefs.forEach((item) => {
-                if (item && item.current.classList.contains('open')) {
+                if (item && item.current.classList && item.current.classList.contains('open')) {
                     item.current.classList.remove('open');
                 }
             });
