@@ -34,6 +34,7 @@ export default {
     LOGIN: 'mw-login',
     MAIN: 'main',
     MODAL: 'modal',
+    MODAL_CONTAINER: 'modal-container',
     NAVIGATION: 'navigation',
     NOT_FOUND: 'not-found-placeholder',
     NOTIFICATIONS: 'notifications',

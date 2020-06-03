@@ -9,8 +9,7 @@ import { getFeed } from './feed';
 import { getWait } from './wait';
 import { getDebugViewer } from './debug';
 import { getHistory } from './history';
-// tslint:disable-next-line
-import Dynamic from './dynamic';
+import { getModalContainer } from './modal-container';
 
 declare const manywho: any;
 
@@ -65,6 +64,7 @@ class Main extends React.Component<any, any> {
         const Wait = getWait();
         const Debug = getDebugViewer();
         const History = getHistory();
+        const ModalContainer = getModalContainer();
 
         const children = manywho.model.getChildren('root', this.props.flowKey);
         const outcomes = manywho.model.getOutcomes('root', this.props.flowKey);
@@ -170,7 +170,7 @@ class Main extends React.Component<any, any> {
                     staticComponents.map(component => React.createElement(component, { flowKey: this.props.flowKey }))
                 }
                 {
-                    modal ? <Dynamic name={manywho.component.modalContainer} props={modal} /> : null
+                    modal ? <ModalContainer {...modal} /> : null
                 }
             </div>
             {
