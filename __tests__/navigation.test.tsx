@@ -16,19 +16,14 @@ describe('Navigation component behaviour', () => {
     // set to use the wizard styling
     globalAny.window.manywho.settings.global = jest.fn(() => false);
 
+    const props = {
+        isFullWidth: false,
+        isFixed: false,
+    };
+
     function manyWhoMount() {
-
-        const props = {
-            isFullWidth: false,
-            isFixed: false,
-        };
-
         return mount(<Navigation {...props} />);
     }
-
-    afterEach(() => {
-        componentWrapper.unmount();
-    });
 
     test('Component renders without crashing', () => {
         componentWrapper = manyWhoMount();
@@ -103,13 +98,14 @@ describe('Navigation component behaviour', () => {
             },
         }));
 
-        componentWrapper = manyWhoMount();
-        componentWrapper.find('.dropdown-toggle').simulate('click');
+
+        const navWrapper = mount(<Navigation {...props} />);
+        navWrapper.find('.dropdown-toggle').simulate('click');
 
         // Bit hacky, but its because Enzyme cannot find the node
         // by specifying "open" as the selector, as the component is
         // mutatating the dropdown button ref by calling .toggle
-        expect(componentWrapper.html().includes('open')).toBeTruthy();
+        expect(navWrapper.html().includes('open')).toBeTruthy();
     });
 
     test('Dropdown disappears once navigation complete', async () => {
@@ -132,19 +128,19 @@ describe('Navigation component behaviour', () => {
             },
         }));
 
-        componentWrapper = manyWhoMount();
+        const navWrapper = mount(<Navigation {...props} />);
 
         // First, click the navigation dropdown to open it
-        componentWrapper.find('.dropdown-toggle').simulate('click');
+        navWrapper.find('.dropdown-toggle').simulate('click');
 
-        expect(componentWrapper.html().includes('open')).toEqual(true);
+        expect(navWrapper.html().includes('open')).toEqual(true);
 
         // Then we click the navigation item
-        componentWrapper.find('#abc123').simulate('click');
+        navWrapper.find('#abc123').simulate('click');
 
         // Wait until the navigation has finished, then assert the dropdown isn't open anymore
         await new Promise(setImmediate).then(() => {
-            expect(componentWrapper.html().includes('open')).toEqual(false);
+            expect(navWrapper.html().includes('open')).toEqual(false);
         });
     });
 });
