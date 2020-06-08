@@ -5,34 +5,35 @@ import Main from '../js/components/main';
 
 describe('Main component behaviour', () => {
 
-    let componentWrapper;
-
     const globalAny:any = global;
 
-    function manyWhoMount() {
-
-        globalAny.window.manywho.component.mixins = {
-            enterKeyHandler: {
-                onEnter: () => {},
-            },
-        };
-
-        return shallow(<Main />);
-    }
-
-    afterEach(() => {
-        componentWrapper.unmount();
-    });
-
     test('Component renders without crashing', () => {
-        componentWrapper = manyWhoMount();
-        expect(componentWrapper.length).toEqual(1);
+        expect(shallow(<Main />).length).toEqual(1);
     });
 
     test('Component gets registered', () => {
-        componentWrapper = manyWhoMount();
+        shallow(<Main />);
         expect(globalAny.window.manywho.component.register)
         .toHaveBeenCalledWith('main', Main); 
+    });
+
+    test('Modal renders with correct props', () => {
+
+        const model = {
+            title: 'title',
+            content: 'content',
+            flowKey: 'flowKey',
+            onConfirm: 'onConfirm',
+            onCancel: 'onCancel',
+            confirmLabel: 'confirmLabel',
+            cancelLabel: 'cancelLabel',
+        };
+
+        window.manywho.model.getModal = () => model;
+
+        const wrapper = shallow(<Main />);
+
+        expect(wrapper.find('ModalContainer').props()).toEqual(model);
     });
 
 });
