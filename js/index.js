@@ -10,10 +10,10 @@ import 'regenerator-runtime/runtime';
 import './createClassPatch.ts';
 
 // Lib CSS
-import "../css/lib/react-selectize.css";
+import '../css/lib/react-selectize.css';
 
 // Themes
-import "../css/mw-bootstrap.less";
+import '../css/mw-bootstrap.less';
 
 // Services
 import './services/theming.ts';
@@ -39,6 +39,7 @@ import './components/flip.tsx';
 import './components/footer.tsx';
 import './components/group.tsx';
 import './components/hidden.tsx';
+import './components/historical-navigation.tsx';
 import './components/history.tsx';
 import './components/horizontal.tsx';
 import './components/iframe.tsx';

@@ -1,0 +1,85 @@
+.mw-bs {
+    .historical-navigation {
+
+        ul {
+            padding-left: 0;
+        }
+
+        li {
+            display: none;
+            list-style: none;
+            margin-right: 0.3em;
+
+            /* Always show the first entry */
+            &:first-child {
+                display: inline;
+            }
+
+            /* Show the last four entries from the end */
+            &:nth-last-child(-n+4) {
+                display: inline;
+            }
+
+            /* Show a separator after each entry except the last */
+            &:not(:last-child):after {
+                content: '»';
+                margin-left: 0.3em;
+                vertical-align: middle;
+            }
+
+            button {
+                padding: 0;
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+
+            .historical-navigation-expand {
+                border: none;
+                background: none;
+                vertical-align: middle;
+                margin-left: 0.3em;
+
+                /* Replace the text content with an ellipsis */
+                &:before {
+                    content: '» ... »';
+                }
+
+                span {                    
+                    display: none;
+                }
+            }
+
+            /* Do not show the expand button when it's within an entry 5 or less from the end */
+            &:nth-last-child(-n+5) .historical-navigation-expand {
+                display: none;
+            }
+        }
+
+        /* When the list is not expanded do not show a separator after the first entry
+        if it's not within an entry 5 or less from the end
+        because we show the expand button instead */
+        &:not(.expanded) li:first-child:not(:nth-last-child(-n+5)):after {
+            display: none;
+        }
+
+        &.expanded {
+
+            li {
+                display: inline;
+
+                /* Show a separator after first entry because we're now not showing the expand button */
+                &:first-child:after {
+                    content: '»';
+                    margin-left: 0.3em;
+                    vertical-align: middle;
+                }
+            }
+
+            .historical-navigation-expand {
+                display: none;
+            }
+        }
+    }
+}
