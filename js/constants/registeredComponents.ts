@@ -20,6 +20,7 @@ export default {
     GROUP: 'group',
     HIDDEN: 'hidden',
     HISTORY: 'history',
+    HISTORICAL_NAVIGATION: 'historical-navigation',
     HORIZONTAL: 'horizontal_flow',
     IFRAME: 'iframe',
     ITEMS_HEADER: 'mw-items-header',
