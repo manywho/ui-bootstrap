@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { noop, str } from '../test-utils';
+import { noop, str, t, f } from '../test-utils';
 
 import ModalContainer from '../js/components/modal-container';
 
@@ -90,7 +90,51 @@ describe('ModalContainer component behaviour', () => {
         };
 
         const wrapper = shallow(<ModalContainer {...props} />);
-        expect(wrapper.find('.my-input').length).toBe(1);
+        expect(wrapper.exists('.my-input')).toBe(true);
+    });
+
+
+    test('Header is conditionally rendered', () => {
+
+        const props = {
+            title: <h1 className="my-header">Title</h1>,
+        };
+        
+        window.manywho.utils.isNullOrEmpty = f;
+        
+        const wrapper = shallow(<ModalContainer {...props} />);
+        expect(wrapper.exists('.my-header')).toBe(true);
+
+        window.manywho.utils.isNullOrEmpty = t;
+
+        const wrapper2 = shallow(<ModalContainer {...props} />);
+        expect(wrapper2.exists('.my-header')).toBe(false);
+    });
+
+    test('Footer and footer buttons are conditionally rendered', () => {
+
+        const props1 = {};
+
+        const props2 = {
+            onConfirm: noop,
+        };
+
+        const props3 = {
+            onCancel: noop,
+        };
+        
+        const wrapper1 = shallow(<ModalContainer {...props1} />);
+        expect(wrapper1.exists('.modal-footer')).toBe(false);
+
+        const wrapper2 = shallow(<ModalContainer {...props2} />);
+        expect(wrapper2.exists('.modal-footer')).toBe(true);
+        expect(wrapper2.exists('.btn-default')).toBe(false);
+        expect(wrapper2.exists('.btn-primary')).toBe(true);
+
+        const wrapper3 = shallow(<ModalContainer {...props3} />);
+        expect(wrapper3.exists('.modal-footer')).toBe(true);
+        expect(wrapper3.exists('.btn-default')).toBe(true);
+        expect(wrapper3.exists('.btn-primary')).toBe(false);
     });
 
 });
