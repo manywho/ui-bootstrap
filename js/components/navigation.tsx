@@ -11,8 +11,6 @@ declare const manywho: any;
 const menuRefs = [];
 const toggleRef = React.createRef<HTMLButtonElement>();
 
-// Contains all the open navigation items
-let openRefs: React.RefObject<HTMLLIElement>[] = [];
 
 /**
  * @description The navigation component renders a Bootstrap 3
@@ -37,23 +35,17 @@ class Navigation extends React.Component<INavigationProps, null> {
         e.stopPropagation();
         e.preventDefault();
         ref.current.classList.toggle('open');
-
-        openRefs.push(ref);
     };
 
     // This is for ensuring dropdown navigation is hidden when
     // parts of the document other than the dropdown are clicked
-    onDocumentClick = (e) => {
-        menuRefs.forEach((item) => {
-            if (item.current && !item.current.contains(e.target) && item.current.classList.contains('open')) {
-                item.current.classList.toggle('open');
-            }
-        });
+    onDocumentClick = (e: Event) => {
+        this.setSubMenuState(e.target);
     }
 
     // Concerns navigating the Flow if the navigation
     // item clicked has not got a sub menu
-    onClick(item: { isEnabled: boolean; id: string; }) {
+    onClick(e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>, item: { isEnabled: boolean; id: string; }) {
 
         if (!item.isEnabled) {
             return false;
@@ -67,17 +59,19 @@ class Navigation extends React.Component<INavigationProps, null> {
         }
 
         manywho.engine.navigate(this.props.id, item.id, null, this.props.flowKey).then(() => {
-            // Once we've navigated, close all the open navigation items
-            openRefs.forEach((item) => {
-                if (item && item.current.classList && item.current.classList.contains('open')) {
-                    item.current.classList.remove('open');
-                }
-            });
-
-            openRefs = [];
+            this.setSubMenuState(e.target);
         });
 
         return true;
+    }
+
+    // Ensuring that all sub menu items are shut
+    setSubMenuState = (target: EventTarget) => {
+        menuRefs.forEach((item) => {
+            if (item.current && !item.current.contains(target) && item.current.classList.contains('open')) {
+                item.current.classList.toggle('open');
+            }
+        });
     }
 
     getItem(items: any, id: string) {
@@ -161,7 +155,7 @@ class Navigation extends React.Component<INavigationProps, null> {
             } else {
                 element = (
                     <li className={classNames.join(' ')} key={item.id}>
-                        <a href="#" onClick={this.onClick.bind(this, item)} id={item.id}>
+                        <a href="#" onClick={(e: React.MouseEvent<HTMLElement>) => this.onClick(e, item)} id={item.id}>
                             {item.label}
                         </a>
                     </li>
@@ -252,8 +246,8 @@ class Navigation extends React.Component<INavigationProps, null> {
                                     // TODO: Use more accessible elements for navigation items
                                     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
                                     <li
-                                        onClick={this.onClick.bind(this, item)}
-                                        onKeyDown={this.onClick.bind(this, item)}
+                                        onClick={(e: React.MouseEvent<HTMLElement>) => this.onClick(e, item)}
+                                        onKeyDown={(e: React.KeyboardEvent<HTMLElement>) => this.onClick(e, item)}
                                         key={item.id}
                                         id={item.id}
                                         className={className}
