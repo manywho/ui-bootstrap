@@ -8,7 +8,7 @@ declare const manywho: any;
 
 // Holds the refs for each dropdown navigation item
 // so that their open/closed state can be altered
-const menuRefs = [];
+let menuRefs = [];
 const toggleRef = React.createRef<HTMLButtonElement>();
 
 
@@ -40,7 +40,11 @@ class Navigation extends React.Component<INavigationProps, null> {
     // This is for ensuring dropdown navigation is hidden when
     // parts of the document other than the dropdown are clicked
     onDocumentClick = (e: Event) => {
-        this.setSubMenuState(e.target);
+        menuRefs.forEach((item) => {
+            if (item.current && !item.current.contains(e.target) && item.current.classList.contains('open')) {
+                item.current.classList.toggle('open');
+            }
+        });
     }
 
     // Concerns navigating the Flow if the navigation
@@ -58,20 +62,15 @@ class Navigation extends React.Component<INavigationProps, null> {
             toggleRef.current.click();
         }
 
-        manywho.engine.navigate(this.props.id, item.id, null, this.props.flowKey).then(() => {
-            this.setSubMenuState(e.target);
-        });
-
-        return true;
-    }
-
-    // Ensuring that all sub menu items are shut
-    setSubMenuState = (target: EventTarget) => {
-        menuRefs.forEach((item) => {
-            if (item.current && !item.current.contains(target) && item.current.classList.contains('open')) {
-                item.current.classList.toggle('open');
+        menuRefs.forEach((i) => {
+            if (i.current && i.current.classList.contains('open')) {
+                i.current.classList.toggle('open');
             }
         });
+
+        manywho.engine.navigate(this.props.id, item.id, null, this.props.flowKey);
+
+        return true;
     }
 
     getItem(items: any, id: string) {
@@ -168,6 +167,10 @@ class Navigation extends React.Component<INavigationProps, null> {
     }
 
     render() {
+
+        // We need to empty the menu refs, otherwise we are holding onto stale refs
+        menuRefs = [];
+
         const navigation = manywho.model.getNavigation(this.props.id, this.props.flowKey);
 
         if (navigation && navigation.isVisible) {
