@@ -1,5 +1,3 @@
-
-
 import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
@@ -7,8 +5,7 @@ import { getInputDateTime } from './input-datetime';
 import { getInputBoolean } from './input-boolean';
 import { getInputNumber } from './input-number';
 import { getOutcome } from './outcome';
-import { renderOutcomesInOrder } from './utils/CoreUtils';
-
+import { focusInFirstInputElement, renderOutcomesInOrder } from './utils/CoreUtils';
 import '../../css/input.less';
 
 // react-maskedinput v4.0.1 has messed up default exports
@@ -28,6 +25,12 @@ class Input extends React.Component<IComponentProps, null> {
     constructor(props) {
         super(props);
 
+        this.inputRef = null;
+        // we only need to add a reference to the first input if autofocusinput is active
+        if (manywho.settings.global('autofocusinput', this.props.flowKey, null) && this.props.autofocusCandidate === true) {
+            this.inputRef = React.createRef();
+        }
+
         this.onChange = this.onChange.bind(this);
         this.onBlur = this.onBlur.bind(this);
     }
@@ -37,6 +40,10 @@ class Input extends React.Component<IComponentProps, null> {
         if (model && model.attributes && model.attributes.validation) {
             this.validationRegex = new RegExp(model.attributes.validation);
         }
+    }
+
+    componentDidMount() {
+        focusInFirstInputElement(this.inputRef);
     }
 
     onChange(e: any | string | boolean | number | null) {
@@ -129,6 +136,9 @@ class Input extends React.Component<IComponentProps, null> {
             props.onChange = null;
             props.onBlur = null;
             props.isDesignTime = true;
+        }
+        if (this.inputRef !== null) {
+            props.ref = this.inputRef;
         }
 
         if (typeof model.hintValue === 'number' || !manywho.utils.isNullOrWhitespace(model.hintValue)) {

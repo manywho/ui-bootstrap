@@ -2,8 +2,7 @@ import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
-import { renderOutcomesInOrder } from './utils/CoreUtils';
-
+import { focusInFirstInputElement, renderOutcomesInOrder } from './utils/CoreUtils';
 import '../../css/textarea.less';
 
 declare var manywho: any;
@@ -12,10 +11,20 @@ class Textarea extends React.Component<IComponentProps, null> {
 
     constructor(props) {
         super(props);
+        this.textareaRef = null;
+
+        // we only need to add a reference to the first textarea if autofocusinput is active
+        if (manywho.settings.global('autofocusinput', this.props.flowKey, null) && this.props.autofocusCandidate === true) {
+            this.textareaRef = React.createRef();
+        }
 
         this.onChange = this.onChange.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);
         this.onBlur = this.onBlur.bind(this);
+    }
+
+    componentDidMount() {
+        focusInFirstInputElement(this.textareaRef);
     }
 
     onChange(e) {
@@ -91,6 +100,9 @@ class Textarea extends React.Component<IComponentProps, null> {
 
         const outcomeButtons = outcomes && outcomes.map(outcome => <Outcome id={outcome.id} flowKey={this.props.flowKey} />);
 
+        if (this.textareaRef !== null) {
+            props.ref = this.textareaRef;
+        }
         const textArea = (
             <div>
                 <label>
@@ -117,4 +129,3 @@ manywho.component.register(registeredComponents.TEXTAREA, Textarea);
 export const getTextarea = () : typeof Textarea => manywho.component.getByName(registeredComponents.TEXTAREA);
 
 export default Textarea;
-

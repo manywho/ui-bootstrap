@@ -47,3 +47,14 @@ export const renderOutcomesInOrder: IRenderOutcomesInOrder = (element, outcomes,
 
     return resultToRender;
 };
+
+export const focusInFirstInputElement = (reference) => {
+    if (reference !== null && reference !== undefined && window.innerWidth > 768 &&
+        (document.activeElement === undefined || document.activeElement.nodeName === 'BODY')) {
+        reference.current.focus();
+
+        if (reference.current.type && reference.current.type.toLowerCase() === 'text') {
+            reference.current.setSelectionRange(reference.current.value.length, reference.current.value.length);
+        }
+    }
+};
