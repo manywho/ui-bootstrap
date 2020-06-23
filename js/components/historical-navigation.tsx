@@ -24,20 +24,10 @@ const HistoricalNavigation:React.FC<IComponentProps> = ({ flowKey }) => {
         navigateToPath(flowKey, entry.path);
     };
 
-    // When any outcome is clicked we want to collapse the history nav
-    const handleClick = ({ target }) => {           
-        if (target.classList.contains('outcome') || target.closest('.outcome')) {
-            setExpanded(false);
-        }
-    };
-    
+    // When history nav entries change we want to collapse it
     React.useEffect(() => {
-        document.addEventListener('click', handleClick);
-
-        return () => {
-            document.removeEventListener('click', handleClick);
-        };
-    }, [handleClick]);
+        setExpanded(false);
+    }, [navigation ? navigation.entries : null]);
 
     if (navigation && navigation.entries && navigation.entries.length > 0) {
 
