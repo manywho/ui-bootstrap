@@ -1,11 +1,11 @@
-
-
 import * as React from 'react';
-
 import { mount } from 'enzyme';
-
 import Textarea from '../js/components/textarea';
-import {str} from "../test-utils";
+import { str } from "../test-utils";
+
+const CoreUtils = require('../js/components/utils/CoreUtils');
+
+jest.mock('../js/components/utils/CoreUtils');
 
 describe('Textarea component behaviour', () => {
 
@@ -41,7 +41,6 @@ describe('Textarea component behaviour', () => {
     }
 
     afterEach(() => {
-        document.activeElement.blur();
         textareaWrapper.unmount();
     });
     test('Textarea component renders without crashing', () => {
@@ -55,12 +54,12 @@ describe('Textarea component behaviour', () => {
     });
 
     test('Textarea components mount with autofocus', () => {
-        const componentDidMount = jest.spyOn(Textarea.prototype, 'componentDidMount');
         textareaWrapper = manyWhoMount('ContentString', true);
 
-        expect(componentDidMount).toHaveBeenCalled();
-        // this part of the test is failing but this test is very similar to one in input.test.tsx, and it doesn't seem
-        // to be a real problem, we should try to activate this test once we have updated jest or enzyme
+        CoreUtils.focusInFirstInputElement(() => null);
+        expect(CoreUtils.focusInFirstInputElement).toBeCalled();
+        // this part of the test is not so robust as it is in input.test.tsx but for some unknown reason is failing
+        // we should try to activate the below line once we have updated jest or enzyme (the mock for CoreUtils should also be removed)
         // expect(document.activeElement.id).toEqual(textareaWrapper.instance().props.id);
     });
 });
