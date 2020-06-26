@@ -19,7 +19,7 @@ describe('HistoricalNavigation component behaviour', () => {
         .toHaveBeenCalledWith('historical-navigation', HistoricalNavigation); 
     });
 
-    test('Component gets registered', () => {
+    test('navigate is called with correct entry path', () => {
 
         const flowKey = 'xxx';
 
@@ -60,5 +60,76 @@ describe('HistoricalNavigation component behaviour', () => {
 
         componentWrapper.find('ul').childAt(1).find('button').simulate('click');
         expect(navigateSpy).toBeCalledWith(null, null, null, flowKey, entries[1].path);
+    });
+
+    test('Current map element name is displayed when historical navigation entries is empty', () => {
+
+        const flowKey = 'xxx';
+
+        const entries = [];
+
+        jest.spyOn(globalAny.window.manywho.model, 'getHistoricalNavigation').mockImplementation(
+            () => ({ entries }),
+        ); 
+
+        jest.spyOn(globalAny.window.manywho.model, 'getMapElement')
+        .mockImplementationOnce(
+            () => null,
+        )
+        .mockImplementationOnce(
+            () => ({
+                name: 'abc'
+            }),
+        );
+
+        const wrapper1 = shallow(<HistoricalNavigation flowKey={flowKey} />);
+        expect(wrapper1.find('li').length).toBe(0);
+
+        const wrapper2 = shallow(<HistoricalNavigation flowKey={flowKey} />);
+        expect(wrapper2.find('li').length).toBe(1);
+        expect(wrapper2.find('ul').childAt(0).text()).toBe('abc');
+    });
+
+    test('Current map element name is displayed at end of navigation list', () => {
+
+        const flowKey = 'xxx';
+
+        const entries = [
+            {
+                "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
+                "mapElementId": "941d7cc7-dadd-483b-8101-779f1925841a",
+                "mapElementName": "Step 1",
+                "path": [
+                    {
+                        "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
+                        "mapElementId": "941d7cc7-dadd-483b-8101-779f1925841a"
+                    }
+                ]
+            },
+            {
+                "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
+                "mapElementId": "88a2a87f-baf2-4a84-8697-ad616d7daeef",
+                "mapElementName": "Step 2",
+                "path": [
+                    {
+                        "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
+                        "mapElementId": "88a2a87f-baf2-4a84-8697-ad616d7daeef"
+                    }
+                ]
+            }
+        ];
+
+        jest.spyOn(globalAny.window.manywho.model, 'getHistoricalNavigation').mockImplementationOnce(
+            () => ({ entries }),
+        ); 
+
+        jest.spyOn(globalAny.window.manywho.model, 'getMapElement').mockImplementationOnce(
+            () => ({
+                name: 'abc'
+            }),
+        );
+        const wrapper2 = shallow(<HistoricalNavigation flowKey={flowKey} />);
+        expect(wrapper2.find('li').length).toBe(3);
+        expect(wrapper2.find('ul').childAt(2).text()).toBe('abc');
     });
 });

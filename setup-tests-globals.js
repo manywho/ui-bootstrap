@@ -62,6 +62,7 @@ window.manywho = {
         getNotifications: jest.fn(arr),
         getHistory: jest.fn(arr),
         getHistoricalNavigation: jest.fn(obj),
+        getMapElement: jest.fn(obj),
     },
     state: {
         getComponent: jest.fn(),
