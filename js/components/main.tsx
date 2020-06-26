@@ -2,6 +2,7 @@ import * as React from 'react';
 import registeredComponents from '../constants/registeredComponents';
 import { getNotifications } from './notifications';
 import { getNavigation } from './navigation';
+import { getHistoricalNavigation } from './historical-navigation';
 import { getStatus } from './status';
 import { getFooter } from './footer';
 import { getVoting } from './voting';
@@ -9,8 +10,7 @@ import { getFeed } from './feed';
 import { getWait } from './wait';
 import { getDebugViewer } from './debug';
 import { getHistory } from './history';
-// tslint:disable-next-line
-import Dynamic from './dynamic';
+import { getModalContainer } from './modal-container';
 
 declare const manywho: any;
 
@@ -57,6 +57,7 @@ class Main extends React.Component<any, any> {
         manywho.log.info('Rendering Main');
 
         const Navigation = getNavigation();
+        const HistoricalNavigation = getHistoricalNavigation();
         const Notifications = getNotifications();
         const Status = getStatus();
         const Footer = getFooter();
@@ -65,6 +66,7 @@ class Main extends React.Component<any, any> {
         const Wait = getWait();
         const Debug = getDebugViewer();
         const History = getHistory();
+        const ModalContainer = getModalContainer();
 
         const children = manywho.model.getChildren('root', this.props.flowKey);
         const outcomes = manywho.model.getOutcomes('root', this.props.flowKey);
@@ -134,6 +136,7 @@ class Main extends React.Component<any, any> {
                 <div className="main-scroller">
                     {(isFixedNav) ? null : navElement}
                     <div className={classNames} onKeyUp={this.onEnter} ref="main">
+                        <HistoricalNavigation flowKey={this.props.flowKey} />
                         <h2 className="page-label">
                             {manywho.model.getLabel(this.props.flowKey)}
                         </h2>
@@ -170,7 +173,7 @@ class Main extends React.Component<any, any> {
                     staticComponents.map(component => React.createElement(component, { flowKey: this.props.flowKey }))
                 }
                 {
-                    modal ? <Dynamic name={manywho.component.modalContainer} props={modal} /> : null
+                    modal ? <ModalContainer {...modal} /> : null
                 }
             </div>
             {

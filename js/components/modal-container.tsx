@@ -1,65 +1,87 @@
 import * as React from 'react';
+import registeredComponents from '../constants/registeredComponents';
 import IModalContainerProps from '../interfaces/IModalContainerProps';
 
 import '../../css/modal.less';
 
 declare var manywho: any;
 
-class ModalContainer extends React.Component<IModalContainerProps, null> {
+const ModalContainer: React.SFC<IModalContainerProps> = ({
+    title,
+    content,
+    flowKey,
+    onConfirm,
+    onCancel,
+    confirmLabel,
+    cancelLabel,
+}) => {
 
-    onKeyUp = (e) => {
+    const onKeyUp = (e) => {
         if (e.keyCode === 27)
-            manywho.model.setModal(this.props.flowKey, null);
+            manywho.model.setModal(flowKey, null);
     }
 
-    onClickBackdrop = (e) => {
-        manywho.model.setModal(this.props.flowKey, null);
+    // This is not desired behaviour and will be removed
+    const onClickBackdrop = (e) => {
+        manywho.model.setModal(flowKey, null);
     }
 
-    render() {
-        let header = null;
-        let footer = null;
+    let header = null;
+    let footer = null;
 
-        if (!manywho.utils.isNullOrEmpty(this.props.title))
-            header = <div className="modal-header">
-                <div className="modal-title">{this.props.title}</div>
-            </div>;
+    if (!manywho.utils.isNullOrEmpty(title)) {
+        header = (
+            <div className="modal-header">
+                <div className="modal-title">{title}</div>
+            </div>
+        );
+    }
 
-        if (this.props.onConfirm || this.props.onCancel)
-            footer = <div className="modal-footer">
+    if (onConfirm || onCancel) {
+        footer = (
+            <div className="modal-footer">
                 {
-                    this.props.onCancel ? 
-                    <button className="btn btn-default" onClick={this.props.onCancel}>
-                        {this.props.cancelLabel || 'Cancel'}
+                    onCancel ? 
+                    <button className="btn btn-default" onClick={onCancel}>
+                        {cancelLabel || 'Cancel'}
                     </button> : 
                     null
                 }
                 {
-                    this.props.onConfirm ? 
-                    <button className="btn btn-primary" onClick={this.props.onConfirm}>
-                        {this.props.confirmLabel || 'OK'}
+                    onConfirm ? 
+                    <button className="btn btn-primary" onClick={onConfirm}>
+                        {confirmLabel || 'OK'}
                     </button> : 
                     null
                 }                    
-            </div>;
+            </div>
+        );
+    }
 
-        return <div onKeyUp={this.onKeyUp}>
-            <div className="modal-backdrop full-height" onClick={this.onClickBackdrop} />
+    return (
+        <div onKeyUp={onKeyUp}>
+            <div className="modal-backdrop full-height" onClick={onClickBackdrop} />
             <div className="modal show">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         {header}
                         <div className="modal-body">
-                            {this.props.content}
+                            {content}
                         </div>
                         {footer}
                     </div>
                 </div>
             </div>
-        </div>;
-    }
+        </div>
+    );
 }
 
+// Do not remove this as it is a public global and may be relied upon
+// Do not access this component via this property
+// Use the exported getModalContainer function
 manywho.component.modalContainer = ModalContainer;
+
+manywho.component.register(registeredComponents.MODAL_CONTAINER, ModalContainer);
+export const getModalContainer = () : typeof ModalContainer => manywho.component.getByName(registeredComponents.MODAL_CONTAINER) || ModalContainer;
 
 export default ModalContainer;

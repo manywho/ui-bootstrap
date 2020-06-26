@@ -1,14 +1,13 @@
 const path = require('path');
 const fs = require('fs');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { LicenseWebpackPlugin } = require('license-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const pathsToClean = [
     'dist',
-    'build'
+    'build',
 ];
 
 const themeDir = path.resolve(__dirname, 'css/themes/');
@@ -17,59 +16,57 @@ const publicPaths = {
     DEVELOPMENT: 'https://manywho-ui-development.s3.eu-west-2.amazonaws.com/',
     QA: 'https://s3.amazonaws.com/manywho-cdn-react-qa/',
     STAGING: 'https://s3.amazonaws.com/manywho-cdn-react-staging/',
-    PRODUCTION: 'https://assets.manywho.com/'
-}
+    PRODUCTION: 'https://assets.manywho.com/',
+};
 
 const mapPublicPath = (assets, publicPaths) => {
 
-    const assetsKey = typeof assets === 'string' ? assets.toLocaleLowerCase() : null;
-
     switch (assets) {
 
-        case 'local':
-            return publicPaths.LOCAL;
+    case 'local':
+        return publicPaths.LOCAL;
 
-        case 'development':
-            return publicPaths.DEVELOPMENT;
+    case 'development':
+        return publicPaths.DEVELOPMENT;
 
-        case 'qa':
-            return publicPaths.QA;
+    case 'qa':
+        return publicPaths.QA;
 
-        case 'staging':
-            return publicPaths.STAGING;
+    case 'staging':
+        return publicPaths.STAGING;
 
-        case 'production':
-            return publicPaths.PRODUCTION;
+    case 'production':
+        return publicPaths.PRODUCTION;
 
-        default:
-            return publicPaths.PRODUCTION;
+    default:
+        return publicPaths.PRODUCTION;
     }
-}
+};
 
 module.exports.config = {
     entry: {
         'js/flow-ui-bootstrap': './js/index.js',
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js']
+        extensions: ['.tsx', '.ts', '.js'],
     },
     externals: {
-        'react': 'React',
+        react: 'React',
         'react-dom': 'ReactDOM',
-        'jquery': 'jQuery',
-        'numbro': 'numbro',
-        'moment': 'moment',
-        'bootstrap': 'bootstrap',
+        jquery: 'jQuery',
+        numbro: 'numbro',
+        moment: 'moment',
+        bootstrap: 'bootstrap',
         'socket.io-client': 'io',
     },
     output: {
         // Properties added for different environments
     },
     performance: {
-        hints: "warning",
-        assetFilter: function (assetFilename) {
+        hints: 'warning',
+        assetFilter(assetFilename) {
             return assetFilename.endsWith('.js');
-        }
+        },
     },
     stats: {
         // Add asset Information
@@ -88,14 +85,14 @@ module.exports.config = {
         performance: true,
         // Add warnings
         warnings: true,
-    }
+    },
 };
 
 module.exports.plugins = [
     new LicenseWebpackPlugin({
         pattern: /.*/,
         unacceptablePattern: /GPL|MPL|CC|EPL|CDDL|Artistic|OFL|Ms-RL|BSL|AFL|APSL|FDL|CPOL|AML|IPL|W3C|QPL/gi,
-        abortOnUnacceptableLicense: true
+        abortOnUnacceptableLicense: true,
     }),
     new CleanWebpackPlugin(pathsToClean),
     new MiniCssExtractPlugin({
@@ -112,7 +109,7 @@ module.exports.rules = [
     {
         test: /\.tsx?$/,
         use: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
     },
     {
         test: /\.(woff|woff2|eot|ttf|svg|otf)$/,
@@ -120,7 +117,7 @@ module.exports.rules = [
     },
     {
         test: /\.(png|svg|jpg|gif)$/,
-        use: 'file-loader?name=[name].[ext]&outputPath=img'
+        use: 'file-loader?name=[name].[ext]&outputPath=img',
     },
     {
         test: /themes.*\.less$/,
@@ -144,6 +141,7 @@ module.exports.cssPaths = [
     'css/flip.less',
     'css/footer.less',
     'css/group.less',
+    'css/historical-navigation.less',
     'css/history.less',
     'css/iframe.less',
     'css/input.less',
@@ -174,12 +172,12 @@ module.exports.run = (config, defaultDirectory) => (env = {}) => {
     const outputPath = env && env.build ? env.build : defaultDirectory;
     const watch = env && env.watch;
     const analyze = env && env.analyze;
-    const sourcemaps = (env && env.sourcemaps === false) ? false : true; // default to true unless explicitly set to false
+    const sourcemaps = !((env && env.sourcemaps === false)); // default to true unless explicitly set to false
 
-    console.log('Build directory: ', outputPath)
+    console.log('Build directory: ', outputPath);
     console.log('Assets url: ', publicPath);
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
         fs.readdir(themeDir, (err, files) => {
 
@@ -200,15 +198,15 @@ module.exports.run = (config, defaultDirectory) => (env = {}) => {
             });
 
             if (watch) {
-                config.watch = true
+                config.watch = true;
                 config.watchOptions = {
-                    poll: true
+                    poll: true,
                 };
             }
 
             if (analyze) {
                 config.plugins = config.plugins.concat([
-                    new BundleAnalyzerPlugin()
+                    new BundleAnalyzerPlugin(),
                 ]);
             }
 
