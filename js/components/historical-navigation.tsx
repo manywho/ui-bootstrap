@@ -26,8 +26,13 @@ const HistoricalNavigation:React.FC<IComponentProps> = ({ flowKey }) => {
         navigateToPath(flowKey, entry.path);
     };
 
-    if (!isNil(navigation)) {
+    // When history nav entries change we want to collapse it
+    React.useEffect(() => {
+        setExpanded(false);
+    }, [navigation ? navigation.entries : null]);
 
+    if (!isNil(navigation)) {
+      
         return (
             <nav className={`historical-navigation${expanded ? ' expanded' : ''}`}>
                 <ul>
