@@ -47,3 +47,20 @@ export const renderOutcomesInOrder: IRenderOutcomesInOrder = (element, outcomes,
 
     return resultToRender;
 };
+
+/**
+ * @param reference It is a React reference to a DOM element
+ *
+ * @description It sets the focus to the referenced element if the windows width is more than 768 and the focus is in
+ * the document body or undefined. If the element type is text it also unselect the text.
+ */
+export const focusInFirstInputElement = (reference) => {
+    if (reference !== null && reference !== undefined && window.innerWidth > 768 &&
+        (document.activeElement === undefined || document.activeElement.nodeName === 'BODY')) {
+        reference.current.focus();
+
+        if (reference.current.type && reference.current.type.toLowerCase() === 'text') {
+            reference.current.setSelectionRange(reference.current.value.length, reference.current.value.length);
+        }
+    }
+};

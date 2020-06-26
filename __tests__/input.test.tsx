@@ -28,8 +28,8 @@ describe('Input component behaviour', () => {
 
     const globalAny:any = global;
 
-    function manyWhoMount(modelcontentType = 'ContentString', mask = null, isVisible = false,
-        isNullOrWhitespace = null, shallowRender = false, autocomplete = null) {
+    function createManyWhoInput(modelcontentType = 'ContentString', mask = null, isVisible = false,
+        isNullOrWhitespace = null, autocomplete = null, autofocus = false) {
 
         propID = str(5);
         propparentId = str(5);
@@ -73,17 +73,18 @@ describe('Input component behaviour', () => {
         globalAny.window.manywho['model'] = {
             getComponent: jest.fn(() => model),
             getOutcomes: jest.fn(() => []),
-        },
+        };
         globalAny.window.manywho['state'] = {
             getComponent: jest.fn(),
             setComponent: jest.fn(),
-        },
+        };
         globalAny.window.manywho['formatting'] = {
             toMomentFormat: jest.fn(),
             number: jest.fn(),
-        },
-        globalAny.window.manywho.component['contentTypes'] = contentTypes,
-        globalAny.window.manywho.component['handleEvent'] = jest.fn(),
+        };
+        globalAny.window.manywho.settings.global = jest.fn(() => autofocus);
+        globalAny.window.manywho.component['contentTypes'] = contentTypes;
+        globalAny.window.manywho.component['handleEvent'] = jest.fn();
         globalAny.window.manywho['utils'] = {
             isNullOrWhitespace: jest.fn(() => isNullOrWhitespace),
             isNullOrUndefined: jest.fn(),
@@ -96,9 +97,9 @@ describe('Input component behaviour', () => {
             isEqual: jest.fn(_ => true),
         };
 
-        return shallowRender
-            ? shallow(<Input id={propID} parentId={propparentId} flowKey={propflowKey} />)
-            : mount(<Input id={propID} parentId={propparentId} flowKey={propflowKey} />);
+        const props = { autofocusCandidate: autofocus };
+
+        return <Input id={propID} parentId={propparentId} flowKey={propflowKey} {...props} />;
     }
 
     afterEach(() => {
@@ -106,50 +107,50 @@ describe('Input component behaviour', () => {
     });
 
     test('Input component renders without crashing', () => {
-        inputWrapper = manyWhoMount();
+        inputWrapper = mount(createManyWhoInput());
         expect(inputWrapper.length).toEqual(1);
     });
 
     test('Input props are set', () => {
-        inputWrapper = manyWhoMount();
+        inputWrapper = mount(createManyWhoInput());
         expect(inputWrapper.props().id).toEqual(propID);
         expect(inputWrapper.props().parentId).toEqual(propparentId);
         expect(inputWrapper.props().flowKey).toEqual(propflowKey);
     });
 
     test('Component gets registered', () => {
-        inputWrapper = manyWhoMount();
+        inputWrapper = mount(createManyWhoInput());
         expect(globalAny.window.manywho.component.register).toHaveBeenCalled();
     });
 
     test('Default input gets rendered', () => {
-        inputWrapper = manyWhoMount();
+        inputWrapper = mount(createManyWhoInput());
         expect(inputWrapper.find('input').exists()).toEqual(true);
         expect(inputWrapper.find('input').prop('type')).toEqual(model.attributes.type);
     });
 
     test('Datetime input gets rendered', () => {
-        inputWrapper = manyWhoMount('ContentDateTime');
+        inputWrapper = mount(createManyWhoInput('ContentDateTime'));
         expect(inputWrapper.find(InputDateTime).exists()).toEqual(true);
     });
 
     test('Boolean input gets rendered', () => {
-        inputWrapper = manyWhoMount('ContentBoolean');
+        inputWrapper = mount(createManyWhoInput('ContentBoolean'));
         expect(inputWrapper.find(InputBoolean).exists()).toEqual(true);
     });
 
     test('Number input gets rendered', () => {
-        inputWrapper = manyWhoMount('ContentNumber');
+        inputWrapper = mount(createManyWhoInput('ContentNumber'));
         expect(inputWrapper.find(InputNumber).exists()).toEqual(true);
     });
 
     test('Visible Password input gets rendered as password type', () => {
-        inputWrapper = manyWhoMount('ContentPassword', null, true);
+        inputWrapper = mount(createManyWhoInput('ContentPassword', null, true));
         expect(inputWrapper.find('input').prop('type')).toEqual('password');
     });
 
     test('Invisible Password input gets rendered as hidden type', () => {
-        inputWrapper = manyWhoMount('ContentPassword', null, false);
+        inputWrapper = mount(createManyWhoInput('ContentPassword', null, false));
         expect(inputWrapper.find('input').prop('type')).toEqual('hidden');
     });
 
@@ -160,23 +161,23 @@ describe('Input component behaviour', () => {
             }
             return value.replace(/\s/g, '').length < 1;
         };
-        inputWrapper = manyWhoMount('ContentPassword', null, true, isnullorwhitespace);
+        inputWrapper = mount(createManyWhoInput('ContentPassword', null, true, isnullorwhitespace));
         expect(inputWrapper.find('input').prop('autoComplete')).toEqual('new-password');
     });
 
     test('Can override Password input autocomplete', () => {
-        inputWrapper = manyWhoMount('ContentPassword', null, true, null, true, 'override');
+        inputWrapper = shallow(createManyWhoInput('ContentPassword', null, true, null, 'override'));
         expect(inputWrapper.find('input').prop('autoComplete')).toEqual('override');
     });
 
     test('MaskedInput input gets rendered', () => {
-        inputWrapper = manyWhoMount('ContentString', '11:11', true, undefined, true);
+        inputWrapper = shallow(createManyWhoInput('ContentString', '11:11', true, undefined));
         expect(inputWrapper.find(MaskedInput).exists()).toEqual(true);
     });
 
     test('on text input that onChange is triggered', () => {
         const onchangeSpy = jest.spyOn(Input.prototype, 'onChange');
-        inputWrapper = manyWhoMount();
+        inputWrapper = mount(createManyWhoInput());
         inputWrapper.find('input').simulate('change', { target: { value: 'text' } });
         expect(onchangeSpy).toHaveBeenCalled();
         expect(globalAny.window.manywho.state.getComponent).toHaveBeenCalled();
@@ -185,10 +186,29 @@ describe('Input component behaviour', () => {
 
     test('on input blur that onBlur is triggered', () => {
         const onblurSpy = jest.spyOn(Input.prototype, 'onBlur');
-        inputWrapper = manyWhoMount();
+        inputWrapper = mount(createManyWhoInput());
         inputWrapper.find('input').simulate('blur');
         expect(onblurSpy).toHaveBeenCalled();
         expect(globalAny.window.manywho.component.handleEvent).toHaveBeenCalled();
     });
 
+    test('on input mount when autofocusCandidate is activate', () => {
+        const input = createManyWhoInput(
+            'ContentString',
+            null,
+            true,
+            null,
+            null,
+            true,
+        );
+
+        expect(document.activeElement.id).toEqual('');
+        expect(document.activeElement.nodeName).toEqual('BODY');
+
+        inputWrapper = mount(input);
+
+        expect(document.activeElement.id).toEqual(inputWrapper.instance().props.id);
+        expect(document.activeElement.selectionStart).toEqual(0);
+        expect(document.activeElement.selectionEnd).toEqual(0);
+    });
 });
