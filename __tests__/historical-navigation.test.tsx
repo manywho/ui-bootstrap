@@ -28,23 +28,13 @@ describe('HistoricalNavigation component behaviour', () => {
                 "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
                 "mapElementId": "941d7cc7-dadd-483b-8101-779f1925841a",
                 "mapElementName": "Step 1",
-                "path": [
-                    {
-                        "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
-                        "mapElementId": "941d7cc7-dadd-483b-8101-779f1925841a"
-                    }
-                ]
+                "stateEntryId": "169c308f-d585-46d0-80ed-03962dd486a3",
             },
             {
                 "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
                 "mapElementId": "88a2a87f-baf2-4a84-8697-ad616d7daeef",
                 "mapElementName": "Step 2",
-                "path": [
-                    {
-                        "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
-                        "mapElementId": "88a2a87f-baf2-4a84-8697-ad616d7daeef"
-                    }
-                ]
+                "stateEntryId": "269c308f-d585-46d0-80ed-03962dd486a3",
             }
         ];
 
@@ -59,7 +49,7 @@ describe('HistoricalNavigation component behaviour', () => {
         expect(componentWrapper.find('ul').childAt(1).text()).toBe("Step 2");
 
         componentWrapper.find('ul').childAt(1).find('button').simulate('click');
-        expect(navigateSpy).toBeCalledWith(null, null, null, flowKey, entries[1].path);
+        expect(navigateSpy).toBeCalledWith(null, null, null, flowKey, entries[1].stateEntryId);
     });
 
     test('Current map element name is displayed when historical navigation entries is empty', () => {
@@ -99,23 +89,13 @@ describe('HistoricalNavigation component behaviour', () => {
                 "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
                 "mapElementId": "941d7cc7-dadd-483b-8101-779f1925841a",
                 "mapElementName": "Step 1",
-                "path": [
-                    {
-                        "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
-                        "mapElementId": "941d7cc7-dadd-483b-8101-779f1925841a"
-                    }
-                ]
+                "stateEntryId": "169c308f-d585-46d0-80ed-03962dd486a3",
             },
             {
                 "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
                 "mapElementId": "88a2a87f-baf2-4a84-8697-ad616d7daeef",
                 "mapElementName": "Step 2",
-                "path": [
-                    {
-                        "flowId": "369c308f-d585-46d0-80ed-03962dd486a3",
-                        "mapElementId": "88a2a87f-baf2-4a84-8697-ad616d7daeef"
-                    }
-                ]
+                "stateEntryId": "269c308f-d585-46d0-80ed-03962dd486a3",
             }
         ];
 
