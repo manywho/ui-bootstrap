@@ -7,8 +7,8 @@ import '../../css/historical-navigation.less';
 
 declare const manywho: any;
 
-const navigateToPath = (flowKey, path) => {
-    manywho.engine.navigate(null, null, null, flowKey, path);
+const navigateToStateEntry = (flowKey, stateEntryId) => {
+    manywho.engine.navigate(null, null, null, flowKey, stateEntryId);
 };
 
 /**
@@ -23,7 +23,7 @@ const HistoricalNavigation:React.FC<IComponentProps> = ({ flowKey }) => {
 
     const onEntryClick = (entry) => {
         setExpanded(false); 
-        navigateToPath(flowKey, entry.path);
+        navigateToStateEntry(flowKey, entry.stateEntryId);
     };
 
     // When history nav entries change we want to collapse it
