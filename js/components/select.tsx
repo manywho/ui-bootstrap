@@ -16,7 +16,7 @@ interface IDropDownState {
     search?: string;
     isOpen?: boolean;
 }
-/* tslint:disable */
+
 class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
     debouncedOnSearch = null;
