@@ -55,30 +55,9 @@ export const renderOutcomesInOrder: IRenderOutcomesInOrder = (element, outcomes,
  * the document body or undefined. If the element type is text it also unselect the text.
  */
 export const focusInFirstInputElement = (reference) => {
-    // ie11 return document.activeElement === null when the document is not ready, but this method is called in componentDidMount
-    // so it should be always ready
-
-    const internetExplorer11Bug = document.activeElement === null;
-
-    if (internetExplorer11Bug) {
-        // not standard ie method
-        document.body.setActive();
-    }
-
-    if (reference !== null && reference !== undefined &&
-        reference.current !== undefined &&
-        reference.current !== null &&
-        document !== undefined &&
-        document.activeElement.nodeName !== null && (document.activeElement.nodeName === 'BODY' || document.activeElement.nodeName === undefined) &&
-        window.innerWidth > 768) {
-
-        if (internetExplorer11Bug) {
-            // not standard ie methods
-            document.body.setActive();
-            reference.current.setActive();
-        } else {
-            reference.current.focus();
-        }
+    if (reference !== null && reference !== undefined && window.innerWidth > 768 &&
+        (document.activeElement === undefined || document.activeElement.nodeName === 'BODY')) {
+        reference.current.focus();
 
         if (reference.current.type && reference.current.type.toLowerCase() === 'text') {
             reference.current.setSelectionRange(reference.current.value.length, reference.current.value.length);
