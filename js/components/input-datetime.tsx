@@ -8,6 +8,7 @@ import registeredComponents from '../constants/registeredComponents';
 import '../../css/input.less';
 import '../../css/lib/bootstrap-datetimepicker.css';
 import '../lib/100-datetimepicker.js';
+import { focusInFirstInputElement } from './utils/CoreUtils';
 
 declare var manywho: any;
 
@@ -15,10 +16,12 @@ class InputDateTime extends React.Component<IInputProps, null> {
 
     isDateOnly: boolean;
     isTimeOnly: boolean;
+    inputRef: any;
 
     constructor(props: IInputProps) {
         super(props);
 
+        this.inputRef = React.createRef();
         this.isDateOnly = true;
         this.isTimeOnly = false;
 
@@ -78,7 +81,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
     }
 
     setPickerDate(newDate) {
-        const datepickerElement = findDOMNode(this.refs['datepicker']);
+        const datepickerElement = findDOMNode(this.inputRef.current);
         const datepickerInstance = $(datepickerElement).data('DateTimePicker');
 
         let date = moment(
@@ -142,16 +145,16 @@ class InputDateTime extends React.Component<IInputProps, null> {
             if (!this.isDateOnly) {
                 this.isTimeOnly =
                     (customFormat.toLowerCase().indexOf('h') > -1 &&
-                    customFormat.indexOf('m') > -1 ||
-                    customFormat.toLowerCase().indexOf('s') > -1)
+                        customFormat.indexOf('m') > -1 ||
+                        customFormat.toLowerCase().indexOf('s') > -1)
                     &&
                     (customFormat.toLowerCase().indexOf('y') === -1 &&
-                    customFormat.toLowerCase().indexOf('d') === -1 &&
-                    customFormat.indexOf('M') === -1);
+                        customFormat.toLowerCase().indexOf('d') === -1 &&
+                        customFormat.indexOf('M') === -1);
             }
         }
 
-        const datepickerElement = findDOMNode(this.refs['datepicker']);
+        const datepickerElement = findDOMNode(this.inputRef.current);
 
         $(datepickerElement).datetimepicker({
             useCurrent,
@@ -165,11 +168,10 @@ class InputDateTime extends React.Component<IInputProps, null> {
             .on('dp.change', !this.props.isDesignTime && this.onChange);
 
         this.setPickerDate(this.props.value);
-    }
 
-    componentWillUnmount() {
-        if (this.refs['datepicker'])
-            $(findDOMNode(this.refs['datepicker'])).data('DateTimePicker').destroy();
+        if (manywho.settings.global('autofocusinput', this.props.flowKey, null) && this.props.autofocusCandidate === true) {
+            focusInFirstInputElement(this.inputRef);
+        }
     }
 
     componentDidUpdate() {
@@ -179,20 +181,28 @@ class InputDateTime extends React.Component<IInputProps, null> {
         this.setPickerDate(newDate);
     }
 
-    render() {
-        return <input id={this.props.id}
-            placeholder={this.props.placeholder}
-            className="form-control datepicker"
-            ref="datepicker"
-            type="datetime"
-            size={this.props.size}
-            readOnly={this.props.readOnly}
-            disabled={this.props.disabled}
-            required={this.props.required}
-            onBlur={this.props.onBlur}
-            autoComplete={this.props.autoComplete} />;
+    componentWillUnmount() {
+        if (this.inputRef.current)
+            $(findDOMNode(this.inputRef.current)).data('DateTimePicker').destroy();
     }
 
+    render() {
+        return (
+            <input
+                id={this.props.id}
+                placeholder={this.props.placeholder}
+                className="form-control datepicker"
+                ref={this.inputRef}
+                type="datetime"
+                size={this.props.size}
+                readOnly={this.props.readOnly}
+                disabled={this.props.disabled}
+                required={this.props.required}
+                onBlur={this.props.onBlur}
+                autoComplete={this.props.autoComplete}
+            />
+        );
+    }
 }
 
 manywho.component.register(registeredComponents.INPUT_DATETIME, InputDateTime);
