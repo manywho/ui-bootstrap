@@ -5,7 +5,6 @@ interface IComponentProps {
     items?: any[];
     isDesignTime?: boolean;
     children?: any;
-    autofocusCandidate?: boolean;
 }
 
 export default IComponentProps;

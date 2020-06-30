@@ -3,7 +3,6 @@ import IInputProps from '../interfaces/IInputProps';
 import registeredComponents from '../constants/registeredComponents';
 
 import '../../css/input.less';
-import { focusInFirstInputElement } from "./utils/CoreUtils";
 
 declare var manywho: any;
 
@@ -16,14 +15,7 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
     constructor(props: IInputProps) {
         super(props);
 
-        this.inputRef = null;
-
-        // we only need to add a reference to the first input if autofocusinput is active
-        if (manywho.settings.global('autofocusinput', this.props.flowKey, null) && this.props.autofocusCandidate === true) {
-            this.inputRef = React.createRef();
-        }
-
-        this.state = { value: null};
+        this.state = { value: null };
 
         this.onChange = this.onChange.bind(this);
     }
@@ -70,10 +62,6 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
         });
     }
 
-    componentDidMount() {
-        focusInFirstInputElement(this.inputRef);
-    }
-
     componentWillReceiveProps(nextProps) {
         if (
             !manywho.utils.isNullOrUndefined(nextProps.value) && 
@@ -103,31 +91,22 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
             if (!manywho.utils.isNullOrUndefined(model.attributes.step))
                 step = model.attributes.step;
         }
-        const props: any = {};
-        if (this.inputRef !== null) {
-            props.ref = this.inputRef;
-        }
 
-        return (
-            <input
-                id={this.props.id}
-                value={this.state.value}
-                placeholder={this.props.placeholder}
-                className="form-control"
-                type="number"
-                style={style}
-                max={max}
-                min={min}
-                step={step}
-                readOnly={this.props.readOnly}
-                disabled={this.props.disabled}
-                required={this.props.required}
-                onChange={!this.props.isDesignTime && this.onChange}
-                onBlur={this.props.onBlur}
-                autoComplete={this.props.autocomplete}
-                {...props}
-            />
-        );
+        return <input id={this.props.id}
+            value={this.state.value}
+            placeholder={this.props.placeholder}
+            className="form-control"
+            type="number"
+            style={style}
+            max={max}
+            min={min}
+            step={step}
+            readOnly={this.props.readOnly}
+            disabled={this.props.disabled}
+            required={this.props.required}
+            onChange={!this.props.isDesignTime && this.onChange}
+            onBlur={this.props.onBlur}
+            autoComplete={this.props.autocomplete} />;
     }
 
 }
