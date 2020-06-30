@@ -40,13 +40,21 @@ describe('Navigation component behaviour', () => {
         globalAny.window.manywho.model.getNavigation.mockImplementation(() => ({
             isVisible: true,
             items: {
-                test1: {
-                    items: null,
-                },
-                test2: {
+                parent: {
+                    id: 'parent',
                     items: {
-                        test3: {
+                        test1: {
+                            id: 'test1',
                             items: null,
+                        },
+                        test2: {
+                            id: 'test2',
+                            items: {
+                                test3: {
+                                    id: 'test3',
+                                    items: null,
+                                },
+                            },
                         },
                     },
                 },
@@ -62,15 +70,24 @@ describe('Navigation component behaviour', () => {
         globalAny.window.manywho.model.getNavigation.mockImplementation(() => ({
             isVisible: true,
             items: {
-                test1: {
-                    items: null,
-                },
-                test2: {
+                parent: {
+                    id: 'parent',
                     items: {
-                        test3: {
+                        test1: {
+                            id: 'test1',
+                            items: null,
+                        },
+                        test2: {
+                            id: 'test2',
                             items: {
-                                test4: {
-                                    items: null,
+                                test3: {
+                                    id: 'test3',
+                                    items: {
+                                        test4: {
+                                            id: 'test4',
+                                            items: null,
+                                        },
+                                    },
                                 },
                             },
                         },
@@ -88,9 +105,11 @@ describe('Navigation component behaviour', () => {
         globalAny.window.manywho.model.getNavigation.mockImplementation(() => ({
             isVisible: true,
             items: {
-                test2: {
+                parent: {
+                    id: 'parent',
                     items: {
-                        test3: {
+                        test2: {
+                            id: 'test2',
                             items: null,
                         },
                     },
@@ -118,6 +137,7 @@ describe('Navigation component behaviour', () => {
             isVisible: true,
             items: {
                 parent: {
+                    id: 'parent',
                     items: {
                         sub1: {
                             id: 'abc123',
