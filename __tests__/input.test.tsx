@@ -29,7 +29,7 @@ describe('Input component behaviour', () => {
     const globalAny:any = global;
 
     function manyWhoMount(modelcontentType = 'ContentString', mask = null, isVisible = false,
-        isNullOrWhitespace = null, shallowRender = false, autocomplete = null, autofocus = false) {
+        isNullOrWhitespace = null, shallowRender = false, autocomplete = null) {
 
         propID = str(5);
         propparentId = str(5);
@@ -73,18 +73,17 @@ describe('Input component behaviour', () => {
         globalAny.window.manywho['model'] = {
             getComponent: jest.fn(() => model),
             getOutcomes: jest.fn(() => []),
-        };
+        },
         globalAny.window.manywho['state'] = {
             getComponent: jest.fn(),
             setComponent: jest.fn(),
-        };
+        },
         globalAny.window.manywho['formatting'] = {
             toMomentFormat: jest.fn(),
             number: jest.fn(),
-        };
-        globalAny.window.manywho.settings.global = jest.fn(() => autofocus);
-        globalAny.window.manywho.component['contentTypes'] = contentTypes;
-        globalAny.window.manywho.component['handleEvent'] = jest.fn();
+        },
+        globalAny.window.manywho.component['contentTypes'] = contentTypes,
+        globalAny.window.manywho.component['handleEvent'] = jest.fn(),
         globalAny.window.manywho['utils'] = {
             isNullOrWhitespace: jest.fn(() => isNullOrWhitespace),
             isNullOrUndefined: jest.fn(),
@@ -97,15 +96,12 @@ describe('Input component behaviour', () => {
             isEqual: jest.fn(_ => true),
         };
 
-        const props = { autofocusCandidate: autofocus };
-
         return shallowRender
             ? shallow(<Input id={propID} parentId={propparentId} flowKey={propflowKey} />)
-            : mount(<Input id={propID} parentId={propparentId} flowKey={propflowKey} {...props} />);
+            : mount(<Input id={propID} parentId={propparentId} flowKey={propflowKey} />);
     }
 
     afterEach(() => {
-        document.activeElement.blur();
         inputWrapper.unmount();
     });
 
@@ -195,20 +191,4 @@ describe('Input component behaviour', () => {
         expect(globalAny.window.manywho.component.handleEvent).toHaveBeenCalled();
     });
 
-    test('on input mount when autofocusCandidate is activate', () => {
-        const componentDidMount = jest.spyOn(Input.prototype, 'componentDidMount');
-        inputWrapper = manyWhoMount(
-            'ContentString',
-            null,
-            true,
-            null,
-            false,
-            null,
-            true,
-        );
-        expect(componentDidMount).toHaveBeenCalled();
-        expect(document.activeElement.id).toEqual(inputWrapper.instance().props.id);
-        expect(document.activeElement.selectionStart).toEqual(0);
-        expect(document.activeElement.selectionEnd).toEqual(0);
-    });
 });
