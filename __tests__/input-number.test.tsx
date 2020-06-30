@@ -6,10 +6,6 @@ import { mount } from 'enzyme';
 
 import InputNumber from '../js/components/input-number';
 
-const CoreUtils = require('../js/components/utils/CoreUtils');
-
-jest.mock('../js/components/utils/CoreUtils');
-
 jest.useFakeTimers();
 
 describe('Number input component behaviour', () => {
@@ -31,7 +27,6 @@ describe('Number input component behaviour', () => {
         format: str(5),
         isDesignTime: false,
         autocomplete: str(5),
-        autofocusCandidate: true,
     };
 
     const modelAttrs = {
@@ -70,9 +65,6 @@ describe('Number input component behaviour', () => {
         globalAny.window.manywho['state'] = {
             setComponent: jest.fn(),
         };
-
-        // autofocus
-        globalAny.window.manywho.settings.global = jest.fn(() => true);
 
         return mount(<InputNumber {...props} />);
     }
@@ -169,15 +161,5 @@ describe('Number input component behaviour', () => {
             props.flowKey,
             true,
         );
-    });
-
-    test('Input Number components mount with autofocus', () => {
-        numberInputWrapper = manyWhoMount();
-
-        CoreUtils.focusInFirstInputElement(() => null);
-        expect(CoreUtils.focusInFirstInputElement).toBeCalled();
-        // this part of the test is not so robust as it is in input.test.tsx but for some unknown reason is failing
-        // we should try to activate the below line once we have updated jest or enzyme (the mock for CoreUtils should also be removed)
-        // expect(document.activeElement.id).toEqual(numberInputWrapper.instance().props.id);
     });
 });
