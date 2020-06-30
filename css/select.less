@@ -54,16 +54,21 @@
             border: none;
             border-left: 1px solid #c9e6f2;
             padding: 2px 5px 4px;
+            .react-selectize-reset-button path {
+                stroke: #08c;
+                transition: stroke 0.5s 0s ease;
+            }
         }
 
         .item-remove:hover {
             background: #ddeff7;
-            color: #0077b3;
+            .react-selectize-reset-button path {
+                stroke: #c0392b;
+            }
         }
 
         .item-remove:active {
             background: #b9eaff;
-            color: #002538;
         }
     }
 
