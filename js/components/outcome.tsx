@@ -145,10 +145,6 @@ class Outcome extends React.Component<IOutcomeProps, null> {
             manywho.component.onOutcome(model, null, this.props.flowKey);
     }
 
-    shouldComponentUpdate(nextProps: any, nextState) {
-        return this.props.id !== nextProps.id;
-    }
-
     render() {
         manywho.log.info('Rendering Outcome: ' + this.props.id);
 
