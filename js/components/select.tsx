@@ -351,7 +351,21 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
         const selectElement =
             model.isMultiSelect ?
-                <MultiSelect {...props} /> :
+                (
+                    <MultiSelect
+                        renderValue={(item) => (
+                            <div className="simple-value">
+                                <span className="item-label">{item.label}</span>
+                                <button className="item-remove" onClick={() => this.props.select(item.value)}>
+                                    <svg class="react-selectize-reset-button" focusable="false" width="8px" height="8px">
+                                        <path d="M0 0 L8 8 M8 0 L 0 8"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        )}
+                        {...props}
+                    />
+                 ) :
                 <SimpleSelect {...props} />;
 
         let refreshButton = null;

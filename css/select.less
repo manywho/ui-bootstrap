@@ -44,6 +44,32 @@
             border-top-left-radius: 0;
         }
 
+        .item-label {
+            margin-left:4px;
+            margin-right:4px;
+        }
+
+        .item-remove {
+            background: #f2f9fc;
+            border: none;
+            border-left: 1px solid #c9e6f2;
+            padding: 2px 5px 4px;
+            .react-selectize-reset-button path {
+                stroke: #08c;
+                transition: stroke 0.5s 0s ease;
+            }
+        }
+
+        .item-remove:hover {
+            background: #ddeff7;
+            .react-selectize-reset-button path {
+                stroke: #c0392b;
+            }
+        }
+
+        .item-remove:active {
+            background: #b9eaff;
+        }
     }
 
     .mw-select .outcome {
