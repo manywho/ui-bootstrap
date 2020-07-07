@@ -335,7 +335,14 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                 let values = null;
 
                 if (internalIds && internalIds.length > 0) {
-                    values = this.state.options.filter(option => internalIds.indexOf(option.value.internalId) !== -1);
+                    // Out of all available options only show
+                    values = this.state.options.filter(option =>
+                        // options that are selected by internalId
+                        internalIds.indexOf(option.value.internalId) !== -1 &&
+                        // and options that don't have null labels
+                        // (this fixes an issue where the engine returns a null labelled selected entry initially)
+                        !manywho.utils.isNullOrWhitespace(option.label)
+                    );
                 }
 
                 if (values) {
@@ -356,7 +363,10 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                         renderValue={(item) => (
                             <div className="simple-value">
                                 <span className="item-label">{item.label}</span>
-                                <button className="item-remove" onClick={() => this.props.select(item.value)}>
+                                <button className="item-remove" onClick={() => {
+                                        event.preventDefault(); 
+                                        this.props.select(item.value);
+                                }}>
                                     <svg class="react-selectize-reset-button" focusable="false" width="8px" height="8px">
                                         <path d="M0 0 L8 8 M8 0 L 0 8"></path>
                                     </svg>
