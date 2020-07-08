@@ -1,4 +1,5 @@
 ﻿import * as React from 'react';
+import * as $ from 'jquery';
 import { findDOMNode } from 'react-dom';
 import { MultiSelect, SimpleSelect } from 'react-selectize';
 import registeredComponents from '../constants/registeredComponents';
@@ -173,6 +174,20 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
     onOpenChange(isOpen) {
         if (!this.props.isLoading) {
             this.setState({ isOpen });
+            
+            const select = (findDOMNode(this) as HTMLElement);
+            const mainScroller = (select).closest('.main-scroller');
+
+            // innerHeight - offsetTop gives us the space available underneath the select box
+            const documentSpaceUnderDropdown = window.innerHeight - select.offsetTop;
+            // every bit we've scrolled down give us more space under the dropdown
+            const viewSpaceUnderDropdown = documentSpaceUnderDropdown + mainScroller.scrollTop;
+            
+            // The dropdown is 200px in height and scrolls if more is available
+            // The select box node also includes the type-able input which can vary in height
+            // If we have more than enough space to render downwards, we do that (1)
+            // Otherwise we render upwards (-1)
+            this.setState({ dropdownDirection: viewSpaceUnderDropdown < 215 + select.offsetHeight ? -1 : 1 });
         }
     }
 
@@ -240,7 +255,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
     }
 
     /**
-     * Merge our two options arrays perserving the order
+     * Merge our two options arrays preserving the order
      *
      * In the event of a duplicate the newOption should replace the existing option
      *
@@ -356,27 +371,30 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             }
         }
 
-        const selectElement =
-            model.isMultiSelect ?
-                (
-                    <MultiSelect
-                        renderValue={(item) => (
-                            <div className="simple-value">
-                                <span className="item-label">{item.label}</span>
-                                <button className="item-remove" onClick={() => {
-                                        event.preventDefault(); 
-                                        this.props.select(item.value);
-                                }}>
-                                    <svg class="react-selectize-reset-button" focusable="false" width="8px" height="8px">
-                                        <path d="M0 0 L8 8 M8 0 L 0 8"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        )}
-                        {...props}
-                    />
-                 ) :
-                <SimpleSelect {...props} />;
+        let selectElement = null;
+
+        if (model.isMultiSelect) {
+            props.dropdownDirection=this.state.dropdownDirection;
+            props.renderValue=(item) => (
+                <div className="simple-value">
+                    <span className="item-label">{item.label}</span>
+                    <button
+                        className="item-remove"
+                        onMouseDown={e => {
+                            this.props.select(item.value);
+                            e.stopPropagation();
+                        }}
+                    >
+                        <svg className="react-selectize-reset-button" focusable="false" width="8px" height="8px">
+                            <path d="M0 0 L8 8 M8 0 L 0 8"></path>
+                        </svg>
+                    </button>
+                </div>
+            );
+            selectElement = <MultiSelect {...props} />
+        } else {
+            selectElement =  <SimpleSelect {...props} />;
+        }
 
         let refreshButton = null;
         if (model.objectDataRequest || model.fileDataRequest) {
@@ -431,13 +449,25 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             widthClassName = 'width-specified';
         }
 
+        // Capturing the clear button presses as they are skipped by the component
+        var clearSelection = (e) => {
+            if ($(e.target).closest('.react-selectize-reset-button-container').length > 0) {
+                this.props.clearSelection();
+            }
+        };
+
         const comboBox = (
             <div className={className} id={this.props.id}>
                 <label>
                     {model.label}
                     {checkBooleanString(model.isRequired) ? <span className="input-required"> * </span> : null}
                 </label>
-                <div style={style} className={widthClassName}>
+                <div
+                    style={style}
+                    className={widthClassName}
+                    onMouseDown={clearSelection}
+                    onMouseUp={clearSelection}
+                >
                     {selectElement}
                     {refreshButton}
                 </div>
