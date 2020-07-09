@@ -188,7 +188,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             // every bit we've scrolled down give us more space under the dropdown
             const viewSpaceUnderDropdown = documentSpaceUnderDropdown + mainScroller.scrollTop;
             
-            // The dropdown is 200px in height and scrolls if more is available
+            // The dropdown is 200px in height and scrolls if more is available (215px is what the docs suggest)
             // The select box node also includes the type-able input which can vary in height
             // If we have more than enough space to render downwards, we do that (1)
             // Otherwise we render upwards (-1)
