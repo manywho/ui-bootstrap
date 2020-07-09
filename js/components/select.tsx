@@ -39,6 +39,11 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
 
         this.debouncedOnSearch = manywho.utils.debounce(this.props.onSearch, 750);
         this.debouncedOnScroll = manywho.utils.debounce(this.isScrollLimit, 100);
+
+        // This is a DOM element ref that can be used to interact with the DOM
+        this.comboBoxRef = React.createRef();
+        // This is a Component ref to interact with the react-selectize component
+        this.selectizeRef = React.createRef();
     }
 
     componentWillMount() {
@@ -47,7 +52,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
     }
 
     componentDidMount() {
-        (findDOMNode(this) as HTMLElement).querySelector('input').classList.add('prevent-submit-on-enter');
+        this.comboBoxRef.current.querySelector('input').classList.add('prevent-submit-on-enter');
     }
 
     componentWillReceiveProps(nextProps) {
@@ -175,7 +180,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         if (!this.props.isLoading) {
             this.setState({ isOpen });
             
-            const select = (findDOMNode(this) as HTMLElement);
+            const select = this.comboBoxRef.current;
             const mainScroller = (select).closest('.main-scroller');
 
             // innerHeight - offsetTop gives us the space available underneath the select box
@@ -201,11 +206,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         this.setState({ isOpen: false });
     }
 
-    onWindowBlur = (e) => {
-        if (this && this.refs && this.refs['select']) {
-            (this.refs['select'] as any).blur();
-        }
-    }
+    onWindowBlur = () => this.selectizeRef.current.blur();
 
     getOptions(objectData) {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
@@ -306,7 +307,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             open: this.state.isOpen,
             theme: 'default',
             placeholder: model.hintValue,
-            ref: 'select',
+            ref: this.selectizeRef,
         };
 
         if (!this.props.isDesignTime) {
@@ -457,7 +458,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         };
 
         const comboBox = (
-            <div className={className} id={this.props.id}>
+            <div className={className} id={this.props.id} ref={this.comboBoxRef}>
                 <label>
                     {model.label}
                     {checkBooleanString(model.isRequired) ? <span className="input-required"> * </span> : null}
