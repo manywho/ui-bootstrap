@@ -375,8 +375,8 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         let selectElement = null;
 
         if (model.isMultiSelect) {
-            props.dropdownDirection=this.state.dropdownDirection;
-            props.renderValue=(item) => (
+            props.dropdownDirection = this.state.dropdownDirection;
+            props.renderValue = (item) => (
                 <div className="simple-value">
                     <span className="item-label">{item.label}</span>
                     <button
@@ -394,7 +394,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             );
             selectElement = <MultiSelect {...props} />
         } else {
-            selectElement =  <SimpleSelect {...props} />;
+            selectElement = <SimpleSelect {...props} />;
         }
 
         let refreshButton = null;
