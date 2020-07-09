@@ -181,12 +181,12 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             this.setState({ isOpen });
             
             const select = this.comboBoxRef.current;
-            const mainScroller = (select).closest('.main-scroller');
+            const mainScroller = $(select).closest('.main-scroller');
 
             // innerHeight - offsetTop gives us the space available underneath the select box
             const documentSpaceUnderDropdown = window.innerHeight - select.offsetTop;
             // every bit we've scrolled down give us more space under the dropdown
-            const viewSpaceUnderDropdown = documentSpaceUnderDropdown + mainScroller.scrollTop;
+            const viewSpaceUnderDropdown = documentSpaceUnderDropdown + mainScroller.scrollTop();
             
             // The dropdown is 200px in height and scrolls if more is available (215px is what the docs suggest)
             // The select box node also includes the type-able input which can vary in height
@@ -450,25 +450,13 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
             widthClassName = 'width-specified';
         }
 
-        // Capturing the clear button presses as they are skipped by the component
-        var clearSelection = (e) => {
-            if ($(e.target).closest('.react-selectize-reset-button-container').length > 0) {
-                this.props.clearSelection();
-            }
-        };
-
         const comboBox = (
             <div className={className} id={this.props.id} ref={this.comboBoxRef}>
                 <label>
                     {model.label}
                     {checkBooleanString(model.isRequired) ? <span className="input-required"> * </span> : null}
                 </label>
-                <div
-                    style={style}
-                    className={widthClassName}
-                    onMouseDown={clearSelection}
-                    onMouseUp={clearSelection}
-                >
+                <div style={style} className={widthClassName}>
                     {selectElement}
                     {refreshButton}
                 </div>
