@@ -164,6 +164,12 @@ class InputDateTime extends React.Component<IInputProps, null> {
         })
             .on('dp.change', !this.props.isDesignTime && this.onChange);
 
+        // Seems that the Bootstrap datepicker ignores Reacts
+        // autoFocus attribute... so will have to manually open the picker
+        if (model.autoFocus) {
+            $(datepickerElement).data('DateTimePicker').show();
+        }
+
         this.setPickerDate(this.props.value);
     }
 
@@ -180,6 +186,7 @@ class InputDateTime extends React.Component<IInputProps, null> {
     }
 
     render() {
+        const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
         return <input id={this.props.id}
             placeholder={this.props.placeholder}
             className="form-control datepicker"
@@ -190,7 +197,9 @@ class InputDateTime extends React.Component<IInputProps, null> {
             disabled={this.props.disabled}
             required={this.props.required}
             onBlur={this.props.onBlur}
-            autoComplete={this.props.autoComplete} />;
+            autoComplete={this.props.autoComplete}
+            autoFocus={model.autoFocus}
+        />;
     }
 
 }
