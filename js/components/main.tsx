@@ -89,16 +89,6 @@ class Main extends React.Component<any, any> {
             isFullWidth={manywho.settings.global('isFullWidth', this.props.flowKey, false)}
         />;
 
-        if (
-            state &&
-            state.loading == null &&
-            !manywho.utils.isEqual(
-                manywho.model.getInvokeType(this.props.flowKey), 'sync', true,
-            )
-        ) {
-            manywho.component.focusInput(this.props.flowKey);
-        }
-
         let outcomeElements = manywho.component.getOutcomes(outcomes, this.props.flowKey);
         let fixedFooter = null;
 

@@ -63,6 +63,7 @@ class Textarea extends React.Component<IComponentProps, null> {
             disabled: !model.isEnabled,
             required: model.isRequired,
             readOnly: !model.isEditable,
+            autoFocus: model.autoFocus,
         };
 
         if (!this.props.isDesignTime) {
