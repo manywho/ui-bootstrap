@@ -472,7 +472,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         );
 
         return (
-            <div>
+            <div className={className}>
                 {renderOutcomesInOrder(comboBox, outcomeButtons, this.props.outcomes, model.isVisible)}
             </div>
         );

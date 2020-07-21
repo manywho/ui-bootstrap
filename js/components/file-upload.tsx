@@ -78,34 +78,45 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
     manywho.log.info(`Rendering File Upload: ${props.id}`);
 
     const fileUploadComponent = (
-        <FileUpload
-            id={props.id}
-            multiple={manywho.utils.isNullOrUndefined(props.multiple) ? model.isMultiSelect : props.multiple}
-            upload={(files, progress) => Promise.resolve(props.upload(
-                props.flowKey,
-                null, // this param (FileData) kept for backwards compatibility
-                progress,
-                files,
-                model && model.fileDataRequest
-                    ? model.fileDataRequest
-                    : null,
-            ))}
-            uploadCaption={props.uploadCaption}
-            uploadComplete={response => uploadComplete(response, props.id, props.flowKey, props.uploadComplete)}
-            smallInputs={props.smallInputs}
-            isUploadVisible={props.isUploadVisible}
-            isAutoUpload={model.attributes && model.attributes.isAutoUpload ? model.attributes.isAutoUpload.toLowerCase() === 'true' : false}
-            label={model.label}
-            isRequired={model.isRequired}
-            validationMessage={state.validationMessage || model.validationMessage}
-            isVisible={model.isVisible}
-            isValid={state.isValid && model.isValid} // If client-side validation is disabled state.isValid is true. See IValidationResult.
-            hintValue={model.hintValue === ''
-                ? manywho.settings.global('localization.fileUploadMessage', props.flowKey)
-                : model.hintValue}
-            helpInfo={model.helpInfo}
-            disabled={props.isDesignTime}
-        />
+        <div 
+            className={(
+                manywho.styling.getClasses(
+                    props.parentId,
+                    props.id,
+                    'file_upload',
+                    props.flowKey,
+                )
+            ).join(' ')}
+        >
+            <FileUpload
+                id={props.id}
+                multiple={manywho.utils.isNullOrUndefined(props.multiple) ? model.isMultiSelect : props.multiple}
+                upload={(files, progress) => Promise.resolve(props.upload(
+                    props.flowKey,
+                    null, // this param (FileData) kept for backwards compatibility
+                    progress,
+                    files,
+                    model && model.fileDataRequest
+                        ? model.fileDataRequest
+                        : null,
+                ))}
+                uploadCaption={props.uploadCaption}
+                uploadComplete={response => uploadComplete(response, props.id, props.flowKey, props.uploadComplete)}
+                smallInputs={props.smallInputs}
+                isUploadVisible={props.isUploadVisible}
+                isAutoUpload={model.attributes && model.attributes.isAutoUpload ? model.attributes.isAutoUpload.toLowerCase() === 'true' : false}
+                label={model.label}
+                isRequired={model.isRequired}
+                validationMessage={state.validationMessage || model.validationMessage}
+                isVisible={model.isVisible}
+                isValid={state.isValid && model.isValid} // If client-side validation is disabled state.isValid is true. See IValidationResult.
+                hintValue={model.hintValue === ''
+                    ? manywho.settings.global('localization.fileUploadMessage', props.flowKey)
+                    : model.hintValue}
+                helpInfo={model.helpInfo}
+                disabled={props.isDesignTime}
+            />
+        </div>
     );
 
     return (
