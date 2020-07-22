@@ -76,7 +76,7 @@ class InputNumber extends React.Component<IInputProps, IInputNumberState> {
     render() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
 
-        const style = { width: 30 + (15 * model.size) + 'px' };
+        const style = { maxWidth: 30 + (15 * model.size) + 'px' };
         let max = (Math.pow(10, Math.min(model.maxSize, 17))) - 1;
         let min = (Math.pow(10, Math.min(model.maxSize, 17)) * -1) + 1;
         let step = 1;
