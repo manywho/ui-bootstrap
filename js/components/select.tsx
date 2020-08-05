@@ -451,7 +451,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         }
 
         const comboBox = (
-            <div className={className} id={this.props.id} ref={this.comboBoxRef}>
+            <div id={this.props.id} ref={this.comboBoxRef}>
                 <label>
                     {model.label}
                     {checkBooleanString(model.isRequired) ? <span className="input-required"> * </span> : null}
@@ -472,7 +472,7 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
         );
 
         return (
-            <div>
+            <div className={className}>
                 {renderOutcomesInOrder(comboBox, outcomeButtons, this.props.outcomes, model.isVisible)}
             </div>
         );

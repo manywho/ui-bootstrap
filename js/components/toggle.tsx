@@ -114,7 +114,7 @@ class Toggle extends React.Component<IComponentProps, IToggleState> {
         );
 
         return (
-            <div>
+            <div className={className}>
                 {renderOutcomesInOrder(toggle, outcomeElements, outcomes, model.isVisible)}
             </div>
         );
