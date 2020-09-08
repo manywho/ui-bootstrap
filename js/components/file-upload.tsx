@@ -80,6 +80,18 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
     const fileUploadComponent = (
         <FileUpload
             id={props.id}
+            className={
+                props.id ?
+                    (
+                        manywho.styling.getClasses(
+                            props.parentId,
+                            props.id,
+                            'file_upload',
+                            props.flowKey,
+                        )
+                    ).join(' ') :
+                    null
+            }
             multiple={manywho.utils.isNullOrUndefined(props.multiple) ? model.isMultiSelect : props.multiple}
             upload={(files, progress) => Promise.resolve(props.upload(
                 props.flowKey,

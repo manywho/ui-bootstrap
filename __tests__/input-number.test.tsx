@@ -107,7 +107,7 @@ describe('Number input component behaviour', () => {
         expect(input.prop('step')).toEqual(custModelAttrs.step);
     });
 
-    test('Correct width styling are in input props', () => {
+    test('Correct maxWidth style is in input props', () => {
         const size = 10;
         numberInputWrapper = manyWhoMount(
             size,
@@ -115,7 +115,7 @@ describe('Number input component behaviour', () => {
 
         const input = numberInputWrapper.find('input');
 
-        expect(input.prop('style')).toEqual({ width: '180px' });
+        expect(input.prop('style')).toEqual({ maxWidth: '180px' });
     });
 
     test('Correct default min, max, step based on maxsize in input props', () => {

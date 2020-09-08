@@ -115,7 +115,7 @@
     },
     "dependencies": {
         "@babel/plugin-transform-react-jsx": "7.3.0",
-        "@boomi/react-file-upload": "^0.3.0",
+        "@boomi/react-file-upload": "^0.4.0",
         "@types/react-maskedinput": "4.0.3",
         "babel-loader": "8.0.5",
         "core-js": "^3.6.4",

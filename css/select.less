@@ -2,84 +2,97 @@
 
     .mw-select {
 
-        & > div {
-            display: flex;
+        margin-bottom: 0px;
+
+        .outcome {
+            margin-bottom: 1em !important;
         }
 
         &.has-error .resizable-input {
             box-shadow: none;
         }
 
-        .width-specified .react-selectize.default.root-node {
-            width: 100%;
-        }
+        & > div {
 
-        .react-selectize.default.root-node {
-            width: 300px;
-        }
+            margin-bottom: 15px;
 
-        .react-selectize.root-node .react-selectize-control .react-selectize-reset-button-container {
-            margin-left: 1em;
-        }
-
-        .react-selectize.default.root-node .react-selectize-control {
-            border-radius: 0;
-        }
-
-        .react-selectize.dropdown-menu.default.flipped {
-            top: auto;
-            bottom: 100%;
-        }
-
-        .react-selectize.dropdown-menu.default:not(.flipped) {
-            border-radius: 0;
-        }
-
-        .simple-select.react-selectize.default.root-node:not(.open).disabled .react-selectize-control {
-            background: #efefef;
-        }
-
-        .simple-select.react-selectize.default.root-node:not(.open) .react-selectize-control {
-            background: #ffffff;
-        }
-
-        .refresh-button {
-            border-bottom-left-radius: 0;
-            border-left: 0;
-            border-top-left-radius: 0;
-        }
-
-        .item-label {
-            margin-left:4px;
-            margin-right:4px;
-        }
-
-        .item-remove {
-            background: #f2f9fc;
-            border: none;
-            border-left: 1px solid #c9e6f2;
-            padding: 2px 5px 4px;
-            .react-selectize-reset-button path {
-                stroke: #08c;
-                transition: stroke 0.5s 0s ease;
+            & > div {
+                display: flex;
             }
-        }
 
-        .item-remove:hover {
-            background: #ddeff7;
-            .react-selectize-reset-button path {
-                stroke: #c0392b;
+            .width-specified .react-selectize.default.root-node {
+                width: 100%;
             }
+
+            .react-selectize.default.root-node {
+                width: 300px;
+            }
+
+            .react-selectize.root-node .react-selectize-control .react-selectize-reset-button-container {
+                margin-left: 1em;
+            }
+
+            .react-selectize.default.root-node .react-selectize-control {
+                border-radius: 0;
+            }
+
+            .react-selectize.dropdown-menu.default.flipped {
+                top: auto;
+                bottom: 100%;
+            }
+
+            .react-selectize.dropdown-menu.default:not(.flipped) {
+                border-radius: 0;
+            }
+
+            .simple-select.react-selectize.default.root-node:not(.open).disabled .react-selectize-control {
+                background: #efefef;
+            }
+
+            .simple-select.react-selectize.default.root-node:not(.open) .react-selectize-control {
+                background: #ffffff;
+            }
+
+            .refresh-button {
+                border-bottom-left-radius: 0;
+                border-left: 0;
+                border-top-left-radius: 0;
+            }
+
+            .item-label {
+                margin-left:4px;
+                margin-right:4px;
+            }
+
+            .item-remove {
+                background: #f2f9fc;
+                border: none;
+                border-left: 1px solid #c9e6f2;
+                padding: 2px 5px 4px;
+                .react-selectize-reset-button path {
+                    stroke: #08c;
+                    transition: stroke 0.5s 0s ease;
+                }
+            }
+
+            .item-remove:hover {
+                background: #ddeff7;
+                .react-selectize-reset-button path {
+                    stroke: #c0392b;
+                }
+            }
+
+            .item-remove:active {
+                background: #b9eaff;
+            }
+
+            .outcome {
+                margin-right: 1em !important;
+                margin-top: 1em;
+            }
+
         }
 
-        .item-remove:active {
-            background: #b9eaff;
-        }
-    }
-
-    .mw-select .outcome {
-      margin-right: 1em !important;
-      margin-top: 1em;
     }
 
 }
