@@ -100,9 +100,9 @@ class Toggle extends React.Component<IComponentProps, IToggleState> {
             style = { background };
 
         const toggle = (
-            <div className={className} id={this.props.id}>
+            <div id={this.props.id}>
                 <label>{model.label}</label>
-                <div>
+                <div className="toggle-button">
                     <label>
                         <input {...props} />
                         <div className={sliderClassName} style={style} />
