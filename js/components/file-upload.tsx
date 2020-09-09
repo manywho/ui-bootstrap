@@ -93,15 +93,23 @@ const FileUploadWrapper: React.SFC<IFileUploadProps> = (props) => {
                     null
             }
             multiple={manywho.utils.isNullOrUndefined(props.multiple) ? model.isMultiSelect : props.multiple}
-            upload={(files, progress) => Promise.resolve(props.upload(
-                props.flowKey,
-                null, // this param (FileData) kept for backwards compatibility
-                progress,
-                files,
-                model && model.fileDataRequest
-                    ? model.fileDataRequest
-                    : null,
-            ))}
+            upload={(files, progress) => {
+                // Construct some form data, for backwards compatibility
+                const formData = new FormData();
+                files && files.forEach((file, i) => {
+                    formData.append(`FileData${i}`, file);
+                });
+
+                return Promise.resolve(props.upload(
+                    props.flowKey,
+                    formData,
+                    progress,
+                    files,
+                    model && model.fileDataRequest
+                        ? model.fileDataRequest
+                        : null,
+                ))
+            }}
             uploadCaption={props.uploadCaption}
             uploadComplete={response => uploadComplete(response, props.id, props.flowKey, props.uploadComplete)}
             smallInputs={props.smallInputs}

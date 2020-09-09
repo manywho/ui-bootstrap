@@ -4,17 +4,19 @@ import * as $ from 'jquery';
 import 'jquery-textcomplete';
 import registeredComponents from '../constants/registeredComponents';
 import IFeedInputProps from '../interfaces/IFeedInputProps';
+import fileUpload from './file-upload';
 
 interface IFeedInputState {
+    attachedFiles: any[];
     mentionedUsers: any;
 }
 
 class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
-
     constructor(props) {
         super(props);
 
         this.state = {
+            attachedFiles: [],
             mentionedUsers: {},
         };
     }
@@ -41,7 +43,7 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
                 textAreaElement.value,
                 this.props.messageId,
                 this.state.mentionedUsers,
-                response && response.files,
+                this.state.attachedFiles,
             );
 
         })
@@ -106,41 +108,56 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
 
         const FileUpload: typeof fileUpload = manywho.component.getByName(registeredComponents.FILE_UPLOAD);
 
-        let fileUpload = null;
+        let fileUploadComponent = null;
 
         if (this.props.isAttachmentsEnabled) {
 
             const fileUploadProps = {
                 flowKey: this.props.flowKey,
                 multiple: true,
-                upload: manywho.social.attachFiles,
+                upload: (flowKey: string, _: FormData, onProgress: EventListenerOrEventListenerObject, files: File[], fileDataRequest: any) => {
+                    // Construct some form data, for backwards compatibility
+                    const formData = new FormData();
+                    files && files.forEach((file, i) => {
+                        formData.append(`FileData${i}`, file);
+                    });
+
+                    manywho.social.attachFiles(flowKey, formData, onProgress)
+                        .then(response => {
+                            this.setState({
+                                attachedFiles: response.files
+                            })
+                        })
+                },
                 smallInputs: true,
                 isChildComponent: true,
-                isUploadVisible: false,
+                isUploadVisible: true,
                 id: this.props.id,
                 browseCaption: 'Attach Files',
-                ref: 'files',
             };
 
-            fileUpload = <FileUpload {...fileUploadProps} />;
+            fileUploadComponent = <FileUpload {...fileUploadProps} />;
         }
 
-        return <div className={'feed-post clearfix'}>
-            <div className={'feed-post-text'}>
-                <textarea
-                    className={'form-control feed-message-text'}
-                    rows={2}
-                    onKeyPress={this.onKeyPress}
-                    defaultValue={''}
-                    ref={'textarea'} />
-                {fileUpload}
+        return (
+            <div className={ 'feed-post clearfix' }>
+                <div className={ 'feed-post-text' }>
+                    <textarea
+                        className={ 'form-control feed-message-text' }
+                        rows={ 2 }
+                        onKeyPress={ this.onKeyPress }
+                        defaultValue={ '' }
+                        ref={ 'textarea' } />
+
+                    { fileUploadComponent }
+                </div>
+                <button
+                    className={ 'btn btn-sm btn-primary feed-post-send' }
+                    onClick={ this.send }>
+                    { this.props.caption }
+                </button>
             </div>
-            <button
-                className={'btn btn-sm btn-primary feed-post-send'}
-                onClick={this.send}>
-                {this.props.caption}
-            </button>
-        </div>;
+        );
     }
 }
 
