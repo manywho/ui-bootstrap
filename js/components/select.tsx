@@ -7,6 +7,7 @@ import IItemsComponentProps from '../interfaces/IItemsComponentProps';
 import { getOutcome } from './outcome';
 import { checkBooleanString } from './utils/DataUtils';
 import { renderOutcomesInOrder } from './utils/CoreUtils';
+import { uniqWith } from 'ramda'; 
 
 import '../../css/select.less';
 
@@ -72,7 +73,8 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                 nextProps.page > 1 &&
                 this.state.options.length < nextProps.limit * nextProps.page
             ) {
-                options = this.addOptions(this.state.options, this.getOptions(nextPropsObjectData));
+                // add next page of options to end
+                options = this.addOptions(this.state.options, this.getOptions(nextPropsObjectData), true);
                 this.setState({ isOpen: true });
 
                 const index = this.state.options.length + 1;
@@ -85,11 +87,13 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
                     dropdown.scrollTop = scrollTarget.offsetTop;
                 });
             } else {
-                options = this.addOptions(options, this.getOptions(nextPropsObjectData));
+                // replace options
+                options = this.addOptions(this.getOptions(nextPropsObjectData), options, false);
             }
 
             if (state && state.objectData) {
-                options = this.addOptions(options, this.getOptions(state.objectData));
+                // add selected options to start
+                options = this.addOptions(options, this.getOptions(state.objectData), false);
             }
 
             this.setState({ options });
@@ -264,14 +268,31 @@ class Select extends React.Component<IItemsComponentProps, IDropDownState> {
      *
      * @param {Array} existingOptions current list of options
      * @param {Array} newOptions extra options to append or replace. These new options may be the next page or the selected item(s).
+     * @param {Boolean} append true for appending newOptions to existingOptions, otherwise they will prepended and reversed.
      */
-    addOptions(existingOptions, newOptions) {
+    addOptions(existingOptions, newOptions, append) {
+        if (append) {
+            // Append the next page of options
+            // Reverse the list before so newOptions replaces existingOptions for duplicates. Reverse again after to restore original order
+            return this.removeDuplicateOptions([...existingOptions, ...newOptions].reverse()).reverse();
+        }
+        // Prepend the selected item(s) in reverse order
+        return this.removeDuplicateOptions([...newOptions.reverse(), ...existingOptions]);
+    }
 
-        return [...existingOptions, ...newOptions]
-            .reverse() // Promote new options to take precedence over existing options
-            .filter((item, pos, arr) => arr
-                .findIndex(item2 => ((item2.value.externalId && item2.value.externalId === item.value.externalId) ||
-                    item2.value.internalId === item.value.internalId)) === pos);
+    /**
+     * Returns a list of unique option from the given list, only the first occurrence will remain
+     * 
+     * Match on `externalId` or the `internalId` because when offline there is no externalId
+     * 
+     * @param {Array} options list of options which duplicates will be removed from
+     * @return {Array} the given list of options with duplicates removed
+     */
+    removeDuplicateOptions(options) {
+        return uniqWith(
+            (a, b) => ((a.value.externalId && a.value.externalId === b.value.externalId) || 
+            a.value.internalId === b.value.internalId)
+        )(options);
     }
 
     isScrollLimit(e) {
