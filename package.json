@@ -120,6 +120,7 @@
         "babel-loader": "8.0.5",
         "core-js": "^3.6.4",
         "create-react-class": "15.6.3",
+        "dompurify": "^2.1.1",
         "extract-text-webpack-plugin": "4.0.0-beta.0",
         "jquery": "3.4.1",
         "lint": "1.1.2",

@@ -4,6 +4,7 @@ import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
 import { renderOutcomesInOrder } from './utils/CoreUtils';
+import DOMPurify from 'dompurify';
 
 declare var manywho: any;
 
@@ -56,7 +57,7 @@ class Presentation extends React.Component<IComponentProps, null> {
         const presentationField = (
             <div>
                 <label>{model.label}</label>
-                <div ref="content" dangerouslySetInnerHTML={{ __html: html }} />
+                <div ref="content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
                 <span className="help-block">
                     {model.validationMessage || state.validationMessage}
                 </span>
