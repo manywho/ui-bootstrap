@@ -4,7 +4,11 @@ import registeredComponents from '../constants/registeredComponents';
 import IComponentProps from '../interfaces/IComponentProps';
 import { getOutcome } from './outcome';
 import { renderOutcomesInOrder } from './utils/CoreUtils';
-import DOMPurify from 'dompurify';
+
+// Can't use import otherwise the Jest tests fail to find DOMPurify
+const createDOMPurify = require('dompurify');
+
+const DOMPurify = createDOMPurify(window);
 
 declare var manywho: any;
 

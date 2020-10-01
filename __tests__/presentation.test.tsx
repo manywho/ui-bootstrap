@@ -42,21 +42,23 @@ describe('Presentation component behaviour', () => {
     test('DOMPurify removes dangerous scripting', () => {
 
         globalAny.window.manywho.utils.isNullOrUndefined = () => false;
-        globalAny.window.manywho.model.getComponent = () => ({ visible: true, content: '<img src="x" onerror="alert(1)" />' });
+        globalAny.window.manywho.model.getComponent = () => ({ visible: true, content: '<img src="x" onerror="alert(1)">' });
         globalAny.window.manywho.settings.global = () => false;
+        console.error = jest.fn();
 
         componentWrapper = manyWhoMount({ id: 'test', flowKey: 'a' });
-        expect(componentWrapper.instance().forTestingOnly()).toEqual('<img src="x" />');
+        expect(componentWrapper.instance().forTestingOnly()).toEqual('<img src="x">');
+        expect(console.error).toHaveBeenCalled();
     });
 
     test('DOMPurify leaves dangerous scripting with option enabled', () => {
 
         globalAny.window.manywho.utils.isNullOrUndefined = () => false;
-        globalAny.window.manywho.model.getComponent = () => ({ visible: true, content: '<img src="x" onerror="alert(1)" />' });
+        globalAny.window.manywho.model.getComponent = () => ({ visible: true, content: '<img src="x" onerror="alert(1)">' });
         globalAny.window.manywho.settings.global = () => true; // Don't purify
 
         componentWrapper = manyWhoMount({ id: 'test', flowKey: 'a' });
-        expect(componentWrapper.instance().forTestingOnly()).toEqual('<img src="x" onerror="alert(1)" />');
+        expect(componentWrapper.instance().forTestingOnly()).toEqual('<img src="x" onerror="alert(1)">');
     });
 
 });
