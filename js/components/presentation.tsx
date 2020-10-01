@@ -10,6 +10,8 @@ declare var manywho: any;
 
 class Presentation extends React.Component<IComponentProps, null> {
 
+    html = null;
+
     replaceContent() {
         const node = findDOMNode(this.refs.content);
 
@@ -22,6 +24,12 @@ class Presentation extends React.Component<IComponentProps, null> {
 
     componentDidUpdate() { this.replaceContent(); }
     componentDidMount() { this.replaceContent(); }
+
+    // Enzyme/Jest do not render dangerouslySetInnerHTML with mount or shallow, so to allow
+    // testing provide access to the rendered html
+    forTestingOnly() {
+        return this.html;
+    }
 
     render() {
         const model = manywho.model.getComponent(this.props.id, this.props.flowKey);
@@ -46,11 +54,11 @@ class Presentation extends React.Component<IComponentProps, null> {
             className += ' hidden';
         }
 
-        let html = model.content;
+        this.html = model.content;
 
-        if (!manywho.utils.isNullOrUndefined(html)) {
+        if (!manywho.utils.isNullOrUndefined(this.html)) {
             // Undo some escaping applied by the API.
-            html = html.replace(/&quot;/g, '\"')
+            this.html = this.html.replace(/&quot;/g, '\"')
                 .replace(/&#39;/g, '\'')
                 .replace(/&lt;/g, '<')
                 .replace(/&gt;/g, '>')
@@ -59,11 +67,11 @@ class Presentation extends React.Component<IComponentProps, null> {
             // By default, strip any dangerous Javascript with an optional config to allow/disallow certain
             // tags or attributes.
             if (!manywho.settings.global('allow-scripting', this.props.flowKey, false)) {
-                html = DOMPurify.sanitize(html, manywho.settings.global('allow-scripting-configuration', this.props.flowKey, null));
+                this.html = DOMPurify.sanitize(this.html, manywho.settings.global('allow-scripting-configuration', this.props.flowKey, null));
                 if (DOMPurify.removed && DOMPurify.removed.length > 0) {
                     // Notify someone so we can identify Flows that have been affected, which
                     // may not be desirable for some customers.
-                    console.error(`Scripting removed from presentation: ${this.props.id}, ${model.developerName} Content: ${model.content}`);
+                    console.error(`Scripting removed from Presentation: ${this.props.id}, Name: ${model.developerName} Content: ${model.content}`);
                 }
             }
         }
@@ -71,7 +79,7 @@ class Presentation extends React.Component<IComponentProps, null> {
         const presentationField = (
             <div>
                 <label>{model.label}</label>
-                <div ref="content" dangerouslySetInnerHTML={{ __html: html }} />
+                <div ref="content" dangerouslySetInnerHTML={{ __html: this.html }} />
                 <span className="help-block">
                     {model.validationMessage || state.validationMessage}
                 </span>
