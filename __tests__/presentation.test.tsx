@@ -11,7 +11,6 @@ describe('Presentation component behaviour', () => {
 
     function manyWhoMount(props) {
 
-        globalAny.window.manywho.utils.isNullOrUndefined = () => false;
         return mount(<Presentation {...props} />);
     }
 
@@ -32,6 +31,7 @@ describe('Presentation component behaviour', () => {
 
     test('Simple render', () => {
 
+        globalAny.window.manywho.utils.isNullOrUndefined = () => false;
         globalAny.window.manywho.model.getComponent = () => ({ visible: true, content: 'test content' });
         globalAny.window.manywho.settings.global = () => false;
 
@@ -41,6 +41,7 @@ describe('Presentation component behaviour', () => {
 
     test('DOMPurify removes dangerous scripting', () => {
 
+        globalAny.window.manywho.utils.isNullOrUndefined = () => false;
         globalAny.window.manywho.model.getComponent = () => ({ visible: true, content: '<img src="x" onerror="alert(1)" />' });
         globalAny.window.manywho.settings.global = () => false;
 
@@ -50,6 +51,7 @@ describe('Presentation component behaviour', () => {
 
     test('DOMPurify leaves dangerous scripting with option enabled', () => {
 
+        globalAny.window.manywho.utils.isNullOrUndefined = () => false;
         globalAny.window.manywho.model.getComponent = () => ({ visible: true, content: '<img src="x" onerror="alert(1)" />' });
         globalAny.window.manywho.settings.global = () => true; // Don't purify
 
