@@ -42,22 +42,36 @@ class Presentation extends React.Component<IComponentProps, null> {
             this.props.flowKey,
         ).join(' ');
 
-        if (model.isVisible === false)
+        if (model.isVisible === false) {
             className += ' hidden';
+        }
 
         let html = model.content;
 
-        if (!manywho.utils.isNullOrUndefined(html))
+        if (!manywho.utils.isNullOrUndefined(html)) {
+            // Undo some escaping applied by the API.
             html = html.replace(/&quot;/g, '\"')
                 .replace(/&#39;/g, '\'')
                 .replace(/&lt;/g, '<')
                 .replace(/&gt;/g, '>')
                 .replace(/&amp;/g, '&');
 
+            // By default, strip any dangerous Javascript with an optional config to allow/disallow certain
+            // tags or attributes.
+            if (!manywho.settings.global('allow-scripting', this.props.flowKey, false)) {
+                html = DOMPurify.sanitize(html, manywho.settings.global('allow-scripting-configuration', this.props.flowKey, null));
+                if (DOMPurify.removed && DOMPurify.removed.length > 0) {
+                    // Notify someone so we can identify Flows that have been affected, which
+                    // may not be desirable for some customers.
+                    console.error(`Scripting removed from presentation: ${this.props.id}, ${model.developerName} Content: ${model.content}`);
+                }
+            }
+        }
+
         const presentationField = (
             <div>
                 <label>{model.label}</label>
-                <div ref="content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html) }} />
+                <div ref="content" dangerouslySetInnerHTML={{ __html: html }} />
                 <span className="help-block">
                     {model.validationMessage || state.validationMessage}
                 </span>
