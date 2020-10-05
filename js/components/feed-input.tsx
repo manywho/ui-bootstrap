@@ -125,7 +125,16 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
                     }
 
                     manywho.social.attachFiles(flowKey, formData, onProgress)
-                        .then(response => this.setState({ attachedFiles: response.files }));
+                        .then(response => this.setState({ attachedFiles: response.files }))
+                        .catch((error) => {
+                            manywho.model.addNotification(flowKey, {
+                                message: error.message,
+                                position: 'center',
+                                type: 'danger',
+                                timeout: '0',
+                                dismissible: true,
+                            });
+                        });
                 },
                 smallInputs: true,
                 isChildComponent: true,
