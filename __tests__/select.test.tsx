@@ -317,7 +317,7 @@ describe('Select input component behaviour', () => {
                 properties: [
                     {
                         typeElementPropertyId,
-                        contentValue: str(10),
+                        contentValue: 'Page 1 Value',
                         contentFormat: '',
                         contentType: 'ContentString',
                         developerName: 'value',
@@ -336,7 +336,7 @@ describe('Select input component behaviour', () => {
                 properties: [
                     {
                         typeElementPropertyId,
-                        contentValue: str(10),
+                        contentValue: 'Page 2 Value',
                         contentFormat: '',
                         contentType: 'ContentString',
                         developerName: 'value',
@@ -354,6 +354,7 @@ describe('Select input component behaviour', () => {
 
         selectWrapper.setProps({ isLoading: false, objectData: pageTwoObjData, page: 2 });
         expect(selectWrapper.state().options.length).toEqual(2);
+        expect(selectWrapper.state().options.map(option => option.label)).toEqual(['Page 1 Value','Page 2 Value']);
         expect(selectWrapper.state().isOpen).toBeTruthy();
     });
 
@@ -393,6 +394,52 @@ describe('Select input component behaviour', () => {
         const selectWrapperInstance = selectWrapper.instance();
         selectWrapperInstance.isScrollLimit(event);
         expect(props.onNext).toHaveBeenCalled();
+    });
+
+    test('when addOptions is called with items selected, selected items are reversed and prepended', () => {
+        const typeElementPropertyId = str(10);
+        const developerName = str();
+        
+        const contentValues = [];
+        const existingOptions = [];
+        // add 3 items to the combo box list: A,B,C,D
+        for (let i = 0; i < 4; i++) {
+            contentValues.push(str());
+            existingOptions.push({ 
+                value: {
+                    developerName,
+                    externalId: str(),
+                    internalId: str(),
+                    isSelected: false,
+                    properties: [
+                        {
+                            typeElementPropertyId,
+                            contentValue: contentValues[contentValues.length - 1],
+                            contentFormat: '',
+                            contentType: 'ContentString',
+                            developerName: 'value',
+                            externalId: str(10),
+                        },
+                    ],
+                },
+                label: contentValues[contentValues.length - 1]
+            });
+        }
+        // add 2 of those 4 items to the selected list: B,C
+        const selectedOptions = [existingOptions[1], existingOptions[2]];
+        selectedOptions.forEach(selectedOption => {
+            selectedOption.value.isSelected = true
+        });
+        
+        selectWrapper = manyWhoMount();
+        const selectWrapperInstance = selectWrapper.instance();
+        // call addOptions with existing list A,B,C,D. and a selected list B,C
+        const resultContentValues = selectWrapperInstance
+            .addOptions(existingOptions, selectedOptions, false)
+            .map(option => option.label);
+        
+        // expect C,B,A,D as B,C is reversed and prepended to A,B,C,D. then duplicates removed
+        expect(resultContentValues).toEqual([contentValues[2],contentValues[1],contentValues[0],contentValues[3]]);
     });
     
 });
