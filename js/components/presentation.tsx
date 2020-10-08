@@ -68,10 +68,11 @@ class Presentation extends React.Component<IComponentProps, null> {
                 .replace(/&gt;/g, '>')
                 .replace(/&amp;/g, '&');
 
-            // By default, strip any dangerous Javascript with an optional config to allow/disallow certain
-            // tags or attributes.
-            if (!manywho.settings.global('allow-scripting', this.props.flowKey, false)) {
-                this.html = DOMPurify.sanitize(this.html, manywho.settings.global('allow-scripting-configuration', this.props.flowKey, null));
+            // By default, do not strip any dangerous Javascript, to avoid breaking existing Flows without this Player setting
+            // The default player, for new customers/flows, will have this setting enabled by default.
+            // Allow an optional DOMPurify config to allow/disallow certain tags or attributes.
+            if (manywho.settings.global('disableScripting', this.props.flowKey, false)) {
+                this.html = DOMPurify.sanitize(this.html, manywho.settings.global('disableScriptingConfiguration', this.props.flowKey, null));
                 if (DOMPurify.removed && DOMPurify.removed.length > 0) {
                     // Notify someone so we can identify Flows that have been affected, which
                     // may not be desirable for some customers.

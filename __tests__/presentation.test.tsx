@@ -43,7 +43,7 @@ describe('Presentation component behaviour', () => {
 
         globalAny.window.manywho.utils.isNullOrUndefined = () => false;
         globalAny.window.manywho.model.getComponent = () => ({ visible: true, content: '<img src="x" onerror="alert(1)">' });
-        globalAny.window.manywho.settings.global = () => false;
+        globalAny.window.manywho.settings.global = () => true; // Fake Player setting, disableScripting == true
         console.error = jest.fn();
 
         componentWrapper = manyWhoMount({ id: 'test', flowKey: 'a' });
@@ -51,11 +51,11 @@ describe('Presentation component behaviour', () => {
         expect(console.error).toHaveBeenCalled();
     });
 
-    test('DOMPurify leaves dangerous scripting with option enabled', () => {
+    test('DOMPurify leaves dangerous scripting with option disabled', () => {
 
         globalAny.window.manywho.utils.isNullOrUndefined = () => false;
         globalAny.window.manywho.model.getComponent = () => ({ visible: true, content: '<img src="x" onerror="alert(1)">' });
-        globalAny.window.manywho.settings.global = () => true; // Don't purify
+        globalAny.window.manywho.settings.global = () => false; // Fake Player setting, disableScripting == false
 
         componentWrapper = manyWhoMount({ id: 'test', flowKey: 'a' });
         expect(componentWrapper.instance().forTestingOnly()).toEqual('<img src="x" onerror="alert(1)">');
