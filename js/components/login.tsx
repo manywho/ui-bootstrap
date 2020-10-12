@@ -86,7 +86,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                 this.setState({
                     loading: null,
                     password: '',
-                    faults: error.responseText,
+                    faults: typeof error.responseJSON === 'string' ? error.responseJSON : error.responseText,
                 });
             });
 
