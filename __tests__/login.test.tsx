@@ -30,8 +30,13 @@ describe('Login component behaviour', () => {
 
     const mockSuccess = 'mockSuccess';
 
-    const mockFailWithObjectJSON = {
+    const mockFailWithObjectNoMessageJSON = {
         responseJSON: { json: true },
+        responseText: 'responseTextError',
+    }
+
+    const mockFailWithObjectMessageJSON = {
+        responseJSON: { message: 'responseJSONMessage' },
         responseText: 'responseTextError',
     }
 
@@ -44,8 +49,12 @@ describe('Login component behaviour', () => {
         then: (thenFunction) => { thenFunction(mockSuccess); return ({ fail: () => {} }) },
     });
 
-    const mockFailWithObjectJSONAjax = () => ({
-        then: () => ({ fail: (failFunction) => failFunction(mockFailWithObjectJSON) }),
+    const mockFailWithObjectNoMessageJSONAjax = () => ({
+        then: () => ({ fail: (failFunction) => failFunction(mockFailWithObjectNoMessageJSON) }),
+    });
+
+    const mockFailWithObjectMessageJSONAjax = () => ({
+        then: () => ({ fail: (failFunction) => failFunction(mockFailWithObjectMessageJSON) }),
     });
 
     const mockFailWithStringJSONAjax = () => ({
@@ -204,8 +213,8 @@ describe('Login component behaviour', () => {
         expect(componentWrapper.state('faults')).toBe(mockFailWithStringJSON.responseJSON);
     });
 
-    test('When OnSubmit login fails, and the error responseJSON is not a string, the responseText is displayed', () => {
-        globalAny.window.manywho.ajax = { login: jest.fn(mockFailWithObjectJSONAjax) };
+    test('When OnSubmit login fails, and the error responseJSON is not a string, but responseJSON.message is, then responseJSON.message is displayed', () => {
+        globalAny.window.manywho.ajax = { login: jest.fn(mockFailWithObjectMessageJSONAjax) };
         
         componentWrapper = manyWhoMount();
         
@@ -231,7 +240,37 @@ describe('Login component behaviour', () => {
 
         expect(componentWrapper.state('loading')).toBe(null);
         expect(componentWrapper.state('password')).toBe('');
-        expect(componentWrapper.state('faults')).toBe(mockFailWithObjectJSON.responseText);
+        expect(componentWrapper.state('faults')).toBe(mockFailWithObjectMessageJSON.responseJSON.message);
+    });
+
+    test('When OnSubmit login fails, and the error responseJSON is not a string, and responseJSON.message also isn\'t, then responseText is displayed', () => {
+        globalAny.window.manywho.ajax = { login: jest.fn(mockFailWithObjectNoMessageJSONAjax) };
+        
+        componentWrapper = manyWhoMount();
+        
+        const username = 'test@example.com';
+        const password = 'test';
+        
+        componentWrapper.instance().setState({
+            username,
+            password
+        });
+        
+        componentWrapper.instance().onSubmit();
+
+        expect(globalAny.window.manywho.ajax.login).toHaveBeenCalledWith(
+            props.loginUrl,
+            username,
+            password,
+            null,
+            null,
+            props.stateId,
+            tenantId,
+        );
+
+        expect(componentWrapper.state('loading')).toBe(null);
+        expect(componentWrapper.state('password')).toBe('');
+        expect(componentWrapper.state('faults')).toBe(mockFailWithObjectNoMessageJSON.responseText);
     });
 
 });
