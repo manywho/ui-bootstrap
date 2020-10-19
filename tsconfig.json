@@ -7,6 +7,10 @@
         "jsx": "react",
         "lib": ["dom", "es6", "es2015"],
         "moduleResolution": "node" ,
-        "noUnusedLocals": true      
-    }
+        "noEmit": true,
+        "noUnusedLocals": true
+    },
+    "include": [
+        "js"
+    ]
 }
