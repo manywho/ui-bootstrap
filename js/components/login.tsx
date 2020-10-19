@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
+import { path } from 'ramda'; 
 import registeredComponents from '../constants/registeredComponents';
 import ILoginProps from '../interfaces/ILoginProps';
 import { getWait } from './wait';
@@ -86,7 +87,9 @@ class Login extends React.Component<ILoginProps, ILoginState> {
                 this.setState({
                     loading: null,
                     password: '',
-                    faults: error.responseText,
+                    faults: typeof path(['responseJSON'], error) === 'string' ? error.responseJSON :
+                        manywho.utils.isNullOrWhitespace(path(['responseJSON', 'message'], error)) === false ? error.responseJSON.message : 
+                        path(['responseText'], error)
                 });
             });
 
