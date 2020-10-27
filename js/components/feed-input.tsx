@@ -67,11 +67,8 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
         const textAreaElement: any = this.textareaRef.current;
 
         if (this.fileUploadRef && fileUploadElement && fileUploadElement.state.fileNames.length > 0) {
-
             deferred = fileUploadElement.onUpload();
-
         } else {
-
             deferred = $.Deferred();
             deferred.resolve();
         }
@@ -85,6 +82,7 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
             textAreaElement.value = '';
             this.setState({
                 mentionedUsers: {},
+                attachedFiles: [], // empty attached files also so we don't try to send them again in the next message
             });
         });
     }
@@ -125,10 +123,10 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
                     }
 
                     manywho.social.attachFiles(flowKey, formData, onProgress)
-                        .then(response => this.setState({ attachedFiles: response.files }))
-                        .catch((error) => {
+                        .done(response => this.setState({ attachedFiles: response.files }))
+                        .fail((xhr) => {
                             manywho.model.addNotification(flowKey, {
-                                message: error.message,
+                                message: `File upload failed! Error code: ${xhr.status} - ${xhr.statusText}`,
                                 position: 'center',
                                 type: 'danger',
                                 timeout: '0',
