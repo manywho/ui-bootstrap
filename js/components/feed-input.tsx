@@ -1,58 +1,91 @@
 import * as React from 'react';
-import { findDOMNode } from 'react-dom';
 import * as $ from 'jquery';
 import 'jquery-textcomplete';
 import registeredComponents from '../constants/registeredComponents';
 import IFeedInputProps from '../interfaces/IFeedInputProps';
+import fileUpload from './file-upload';
 
 interface IFeedInputState {
+    attachedFiles: any[];
     mentionedUsers: any;
 }
 
 class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
-
     constructor(props) {
         super(props);
 
         this.state = {
+            attachedFiles: [],
             mentionedUsers: {},
         };
+
+        this.textareaRef = React.createRef();
+        this.fileUploadRef = React.createRef();
+    }
+
+    componentDidMount() {
+
+        const textarea = this.textareaRef.current;
+        const { flowKey } = this.props;
+
+        ((instance) => {
+            $(textarea).textcomplete(
+                [{
+                    match: /@([A-Za-z]{2,})$/,
+                    index: 1,
+                    search(term, callback) {
+
+                        manywho.social.getUsers(flowKey, term)
+                            .done(response => callback(response || []))
+                            .fail(() => callback([]));
+
+                    },
+                    template(value) {
+
+                        return `<img src="${value.avatarUrl}" alt="avatar"> ${value.fullName}`;
+
+                    },
+                    replace(value) {
+
+                        const { mentionedUsers } = instance.state;
+                        mentionedUsers[value.id] = value;
+
+                        instance.setState({ mentionedUsers });
+
+                        return `@[${value.fullName}] `;
+                    },
+                }],
+                { appendTo: $('.mw-bs') },
+            );
+        })(this);
     }
 
     send = () => {
 
         let deferred = null;
-        const fileUploadElement = (this.refs.files as any);
-        const textAreaElement = (this.refs.textarea as any);
+        const fileUploadElement: any = this.fileUploadRef.current;
+        const textAreaElement: any = this.textareaRef.current;
 
-        if (this.refs.files && fileUploadElement.state.fileNames.length > 0) {
-
+        if (this.fileUploadRef && fileUploadElement && fileUploadElement.state.fileNames.length > 0) {
             deferred = fileUploadElement.onUpload();
-
         } else {
-
             deferred = $.Deferred();
             deferred.resolve();
         }
 
-        deferred.done((response) => {
-
-            return this.props.send(
-                textAreaElement.value,
-                this.props.messageId,
-                this.state.mentionedUsers,
-                response && response.files,
-            );
-
-        })
-            .then(() => {
-                textAreaElement.value = '';
-                this.setState({
-                    mentionedUsers: {},
-                });
+        deferred.done(() => this.props.send(
+            textAreaElement.value,
+            this.props.messageId,
+            this.state.mentionedUsers,
+            this.state.attachedFiles,
+        )).then(() => {
+            textAreaElement.value = '';
+            this.setState({
+                mentionedUsers: {},
+                attachedFiles: [], // empty attached files also so we don't try to send them again in the next message
             });
+        });
     }
-
 
     onKeyPress = (e) => {
 
@@ -65,82 +98,74 @@ class FeedInput extends React.Component<IFeedInputProps, IFeedInputState> {
         }
     }
 
-    componentDidMount() {
+    private textareaRef: React.RefObject<any>;
 
-        const textarea = (this.refs.textarea as any);
-        const flowKey = this.props.flowKey;
-
-        ((instance) => {
-            $(findDOMNode(textarea)).textcomplete(
-                [{
-                    match: /@([A-Za-z]{2,})$/,
-                    index: 1,
-                    search(term, callback) {
-
-                        manywho.social.getUsers(flowKey, term)
-                            .done(response => callback(response || []))
-                            .fail(response => callback([]));
-
-                    },
-                    template(value) {
-
-                        return '<img src="' + value.avatarUrl + '"></img> ' + value.fullName;
-
-                    },
-                    replace(value) {
-
-                        const mentionedUsers = instance.state.mentionedUsers;
-                        mentionedUsers[value.id] = value;
-
-                        instance.setState({ mentionedUsers });
-
-                        return '@[' + value.fullName + '] ';
-                    },
-                }],
-                { appendTo: $('.mw-bs') },
-            );
-        })(this);
-    }
+    private fileUploadRef: React.RefObject<any>;
 
     render() {
 
         const FileUpload: typeof fileUpload = manywho.component.getByName(registeredComponents.FILE_UPLOAD);
 
-        let fileUpload = null;
+        let fileUploadComponent = null;
 
         if (this.props.isAttachmentsEnabled) {
 
             const fileUploadProps = {
                 flowKey: this.props.flowKey,
                 multiple: true,
-                upload: manywho.social.attachFiles,
+                upload: (flowKey: string, _: FormData, onProgress: EventListenerOrEventListenerObject, files: File[]) => {
+                    // Construct some form data, for backwards compatibility
+                    const formData = new FormData();
+                    if (files) {
+                        files.forEach((file, i) => {
+                            formData.append(`FileData${i}`, file);
+                        });
+                    }
+
+                    manywho.social.attachFiles(flowKey, formData, onProgress)
+                        .done(response => this.setState({ attachedFiles: response.files }))
+                        .fail((xhr) => {
+                            manywho.model.addNotification(flowKey, {
+                                message: `File upload failed! Error code: ${xhr.status} - ${xhr.statusText}`,
+                                position: 'center',
+                                type: 'danger',
+                                timeout: '0',
+                                dismissible: true,
+                            });
+                        });
+                },
                 smallInputs: true,
                 isChildComponent: true,
-                isUploadVisible: false,
+                isUploadVisible: true,
                 id: this.props.id,
                 browseCaption: 'Attach Files',
-                ref: 'files',
+                ref: this.fileUploadRef,
             };
 
-            fileUpload = <FileUpload {...fileUploadProps} />;
+            fileUploadComponent = <FileUpload {...fileUploadProps} />;
         }
 
-        return <div className={'feed-post clearfix'}>
-            <div className={'feed-post-text'}>
-                <textarea
-                    className={'form-control feed-message-text'}
-                    rows={2}
-                    onKeyPress={this.onKeyPress}
-                    defaultValue={''}
-                    ref={'textarea'} />
-                {fileUpload}
+        return (
+            <div className="feed-post clearfix">
+                <div className="feed-post-text">
+                    <textarea
+                        className="form-control feed-message-text"
+                        rows={2}
+                        onKeyPress={this.onKeyPress}
+                        defaultValue=""
+                        ref={this.textareaRef}
+                    />
+
+                    { fileUploadComponent }
+                </div>
+                <button
+                    className="btn btn-sm btn-primary feed-post-send"
+                    onClick={this.send}
+                >
+                    {this.props.caption}
+                </button>
             </div>
-            <button
-                className={'btn btn-sm btn-primary feed-post-send'}
-                onClick={this.send}>
-                {this.props.caption}
-            </button>
-        </div>;
+        );
     }
 }
 

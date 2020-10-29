@@ -5,7 +5,7 @@ interface IFileUploadProps extends IComponentProps {
     multiple: boolean;
     id?: string;
     isDesignTime?: boolean;
-    upload?: Function;
+    upload?: (flowKey: string, formData: FormData, onProgress: ({ lengthComputable, loaded, total }) => void, files: File[], fileDataRequest: any) => Promise<any>;
     uploadCaption?: string;
     isChildComponent?: boolean;
     uploadComplete?: Function;
