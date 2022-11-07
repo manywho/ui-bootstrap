@@ -64,7 +64,7 @@
         "react-dropzone": "4.2.10",
         "react-maskedinput": "4.0.1",
         "react-motion": "0.5.2",
-        "react-test-renderer": "16.8.6",
+        "react-test-renderer": "16.9.0",
         "react-transition-group": "1.2.1",
         "script-loader": "0.7.2",
         "string-replace-loader": "2.2.0",
